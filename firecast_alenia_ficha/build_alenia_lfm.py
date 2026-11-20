@@ -283,7 +283,7 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "1.5";
+local PLUGIN_VERSION = "1.6";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
 
@@ -1057,6 +1057,7 @@ local function verificarEAtualizarPlugin(forcarReinstalacao)
                     abrirLinkExterno(BIBLIOTECA_URL);
                     return;
                 end;
+                pcall(function() stream.position = 0; end);
                 local okCall, okInst, errMsg = pcall(PluginsMod.installPlugin, stream, not forcarReinstalacao);
                 if okCall and okInst then
                     sheet.pluginVersaoAtual = "v" .. verRemota .. " (reabra)";
@@ -1113,8 +1114,7 @@ local function verificarEAtualizarPlugin(forcarReinstalacao)
             else
                 sheet.statusAtualizacao = "Baixando pacote de atualizacao...";
             end;
-        end,
-        "ignoreCache"
+        end
     );
 end;
 """
@@ -1300,7 +1300,7 @@ def build_lfm() -> str:
         "0", "0", "0", "0", "0",
         "1", "0", "25", "0",
         "0", "0",
-        "v1.5", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "v1.6", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])

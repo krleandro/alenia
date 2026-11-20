@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module sdkVersion="3.7b">
     <id>br.com.alenia.rpg_oficial</id>
-    <version>1.5</version>
+    <version>1.6</version>
     <info lang="pt-BR">
         <name>Alenia RPG — Ficha Oficial (d20 v2.0)</name>
         <description>Ficha oficial automatizada do sistema Alenia RPG (Edição Revisada v2.0), desenvolvida por Mestre Carlos: 36 Kits Universais com Dado de Vida (1d6 a 1d12), Subir Nível e Descansos automatizados, definição de CD nos testes (campo rápido ou pergunta ao rolar), Defesa do Alvo em ataques, dano corpo a corpo com bônus de Força automático, graduação numérica livre de perícias com grau automático, Múltiplas Ações Storyteller, críticos por arma, Golpe Devastador e atualizador automático integrado.</description>
