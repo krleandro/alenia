@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module sdkVersion="3.7b">
     <id>br.com.alenia.rpg_oficial</id>
-    <version>1.2</version>
+    <version>1.3</version>
     <info lang="pt-BR">
         <name>Alenia RPG — Ficha Oficial (d20 v2.0)</name>
-        <description>Ficha oficial automatizada do sistema Alenia RPG (Edição Revisada v2.0): 36 Kits Universais com Dado de Vida (1d6 a 1d12), botão Subir Nível (1dX+CON), rolagem inicial 4d6 com trava, 34 perícias + perícias livres ilimitadas (+3/+8/+12 com custos 2/7/17 e travas de patamar), Defesa situacional (Aparar/Esquiva), Múltiplas Ações Storyteller com trava por treino, críticos por arma e teste de Golpe Devastador (&gt;2/3 PV).</description>
+        <description>Ficha oficial automatizada do sistema Alenia RPG (Edição Revisada v2.0): 36 Kits Universais com Dado de Vida (1d6 a 1d12), botão Subir Nível (1dX+CON), rolagem inicial 4d6 com trava, 34 perícias + perícias livres ilimitadas com graduação numérica livre (+0, +1, +2, +3...) e classificação automática de grau (Destreinado / Iniciante / Treinado / Especialista / Mestre), Defesa situacional, Múltiplas Ações Storyteller com trava por treino, críticos por arma e teste de Golpe Devastador (&gt;2/3 PV).</description>
         <author>Alenia RPG</author>
         <site>https://firecast.app</site>
         <contact>Alenia RPG</contact>

@@ -35,7 +35,7 @@ BOOKS = [
         "title": "Livro de Regras",
         "subtitle": "Sistema d20 Sombrio • 44 Talentos em Árvores, Combate Tático & Rituais",
         "epigraph": "“O aço quebra, os reis sangram e o mar engole até os mais sábios.”",
-        "desc": "Regras revisadas v2.0: 4d6, Atributos Especiais por Feitos, DV por Kit (1d6–1d12), perícias recalibradas (+3/+8/+12 com travas), Defesa situacional, Múltiplas Ações blindadas, 44 Talentos (Marciais, Exploração, Sociais e Mentais com pré-requisitos), preços e rituais.",
+        "desc": "Regras revisadas v2.0: 4d6, Atributos Especiais por Feitos, DV por Kit (1d6–1d12), graduação livre de perícias (+0, +1, +2...) com grau automático, Defesa situacional, Múltiplas Ações blindadas, 44 Talentos (Marciais, Exploração, Sociais e Mentais com pré-requisitos), preços e rituais.",
         "cover_map": "assets/capa_01_regras.jpg",
         "gm_only": False,
     },
@@ -2508,7 +2508,7 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">7 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • Ficha Firecast v1.2</div>
+        <div class="cover-subtitle">7 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Ficha Firecast v1.3</div>
         <div class="cover-rule"></div>
         <figure class="atlas-plate" style="margin:14px 0 0; width:100%;">
             <img src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Mapa-Múndi de Alenia"/>

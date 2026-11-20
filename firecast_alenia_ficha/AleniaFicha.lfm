@@ -243,13 +243,36 @@ local function rolarSubirNivelPV()
     end;
 end;
 
--- Custos v2.0: Treinado (+3)=2, Especialista (+8)=7 (Niv 5+), Mestre (+12)=17 (Niv 11+)
+-- Graduacao numerica livre (+0, +1, +2, +3...) com classificacao automatica de grau:
+-- 0 = Destreinado | 1-2 = Iniciante | 3-7 = Treinado | 8-11 = Especialista (Niv 5+) | 12+ = Mestre (Niv 11+)
+local function nomeGrau(grau, nivel)
+    local g = math.floor(num(grau, 0));
+    local niv = math.floor(num(nivel, 1));
+    if g >= 12 then
+        if niv < 11 then return "Mestre (N11+)"; end;
+        return "Mestre";
+    elseif g >= 8 then
+        if niv < 5 then return "Espec. (N5+)"; end;
+        return "Especialista";
+    elseif g >= 3 then
+        return "Treinado";
+    elseif g >= 1 then
+        return "Iniciante";
+    else
+        return "Destreinado";
+    end;
+end;
+
+-- Custo progressivo por graduacao: 1-7 = 1 pt cada | 8-11 = 2 pts cada | 12+ = 3 pts cada
 local function custoGrau(grau)
-    local g = num(grau, 0);
-    if g >= 12 then return 17;
-    elseif g >= 8 then return 7;
-    elseif g >= 3 then return 2;
-    else return 0; end;
+    local g = math.max(0, math.floor(num(grau, 0)));
+    if g <= 7 then
+        return g;
+    elseif g <= 11 then
+        return 7 + (g - 7) * 2;
+    else
+        return 15 + (g - 11) * 3;
+    end;
 end;
 
 recalcularFicha = function()
@@ -314,7 +337,7 @@ recalcularFicha = function()
     local forRaw = num(sheet.forca, 10);
     sheet.cargaMax = tostring(forRaw * 5) .. " kg";
 
-    -- Desconta 2 pts gratuitos das pericias iniciais do Kit atual
+    -- Desconta 3 pts gratuitos das pericias iniciais (+3) do Kit atual
     local kitGratis = {};
     for i = 1, #kit.pericias do kitGratis[kit.pericias[i]] = true; end;
 
@@ -325,8 +348,9 @@ recalcularFicha = function()
         local outros = num(sheet[sk.field .. "_outros"], 0);
         local tot = getMod(sk.attr) + grau + outros;
         sheet[sk.field .. "_total"] = fmtMod(tot);
+        sheet[sk.field .. "_rank"] = nomeGrau(grau, nivel);
         local c = custoGrau(grau);
-        if kitGratis[sk.field] and c >= 2 then c = c - 2; end;
+        if kitGratis[sk.field] then c = math.max(0, c - 3); end;
         ptsGastos = ptsGastos + c;
     end;
 
@@ -409,8 +433,10 @@ end;
 
 local function rolarPericia(fieldId, nomePer, attrField)
     if sheet == nil then return; end;
-    local tot = getMod(attrField) + num(sheet[fieldId .. "_grau"], 0) + num(sheet[fieldId .. "_outros"], 0);
-    rolarD20("Pericia: " .. nomePer, tot, "");
+    local g = num(sheet[fieldId .. "_grau"], 0);
+    local tot = getMod(attrField) + g + num(sheet[fieldId .. "_outros"], 0);
+    local rk = nomeGrau(g, sheet.nivel);
+    rolarD20("Pericia: " .. nomePer .. " (+" .. tostring(g) .. " — " .. rk .. ")", tot, "");
 end;
 
 local function maxAcoesPorGrau(grau)
@@ -557,6 +583,7 @@ end;
 atualizarPaginaCustomSkills = function()
     if sheet == nil then return; end;
     sheet._updatingCustom = true;
+    local niv = math.max(1, math.min(30, math.floor(num(sheet.nivel, 1))));
     for i = 1, 10 do
         local node = getCustomSlotNode(i);
         local nome = (node ~= nil and node.nome) or "";
@@ -566,6 +593,7 @@ atualizarPaginaCustomSkills = function()
         sheet["csk" .. i .. "_nome"] = nome;
         sheet["csk" .. i .. "_attr"] = attr;
         sheet["csk" .. i .. "_grau"] = tostring(grau);
+        sheet["csk" .. i .. "_rank"] = nomeGrau(grau, niv);
         sheet["csk" .. i .. "_outros"] = tostring(outros);
         local tot = getMod(attr) + num(grau, 0) + num(outros, 0);
         sheet["csk" .. i .. "_total"] = fmtMod(tot);
@@ -577,10 +605,12 @@ local function salvarCustomSlot(slotIdx)
     if sheet == nil or sheet._updatingCustom then return; end;
     local node = getCustomSlotNode(slotIdx);
     if node == nil then return; end;
+    local niv = math.max(1, math.min(30, math.floor(num(sheet.nivel, 1))));
     node.nome = sheet["csk" .. slotIdx .. "_nome"] or "";
     node.attr = sheet["csk" .. slotIdx .. "_attr"] or "inteligencia";
     node.grau = sheet["csk" .. slotIdx .. "_grau"] or "0";
     node.outros = sheet["csk" .. slotIdx .. "_outros"] or "0";
+    sheet["csk" .. slotIdx .. "_rank"] = nomeGrau(node.grau, niv);
     local tot = getMod(node.attr) + num(node.grau, 0) + num(node.outros, 0);
     sheet["csk" .. slotIdx .. "_total"] = fmtMod(tot);
 end;
@@ -600,7 +630,8 @@ local function rolarCustomSkill(slotIdx)
     local attr = sheet["csk" .. slotIdx .. "_attr"] or "inteligencia";
     local grau = num(sheet["csk" .. slotIdx .. "_grau"], 0);
     local outros = num(sheet["csk" .. slotIdx .. "_outros"], 0);
-    rolarD20("Pericia Livre: " .. nome, getMod(attr) + grau + outros, "");
+    local rk = nomeGrau(grau, sheet.nivel);
+    rolarD20("Pericia Livre: " .. nome .. " (+" .. tostring(grau) .. " — " .. rk .. ")", getMod(attr) + grau + outros, "");
 end;
 
     ]]></script>
@@ -794,7 +825,7 @@ end;
 
                         <!-- PAINEL AUTOMATICO DE EVOLUCAO -->
                         <rectangle left="6" top="684" width="1036" height="162" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="1012" height="24" text="EVOLUCAO v2.0 (PV = 1dX+CON/niv | Pericias: Recruta 1x, Lenda 1.5x, Epico 2x | Custos: Tr 2, Esp 7 [N5+], Mst 17 [N11+])" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                            <label left="12" top="10" width="1012" height="24" text="EVOLUCAO v2.0 (PV = 1dX+CON/niv | Pericias: Recruta 1x, Lenda 1.5x, Epico 2x | Graduacao: 1-7 [1p], 8-11 [2p, N5+], 12+ [3p, N11+])" fontColor="#D9B96A" fontSize="12" fontStyle="bold"/>
 
                             <rectangle left="12" top="42" width="194" height="106" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
                                 <label left="4" top="8" width="186" height="20" text="PV MEDIO SUGERIDO" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
@@ -811,7 +842,7 @@ end;
                             <rectangle left="420" top="42" width="194" height="106" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
                                 <label left="4" top="8" width="186" height="20" text="PTS PERICIA GASTOS" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
                                 <label left="4" top="32" width="186" height="38" field="periciasGastas" fontColor="#EAE4D6" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
-                                <label left="4" top="76" width="186" height="20" text="Tr:2 / Esp:7 / Mst:17" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                                <label left="4" top="76" width="186" height="20" text="1-7:1p | 8-11:2p | 12+:3p" fontColor="#A6AEBF" fontSize="11" horzTextAlign="center"/>
                             </rectangle>
 
                             <rectangle left="624" top="42" width="194" height="106" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
@@ -999,362 +1030,466 @@ end;
                 <scrollBox align="client">
                     <layout left="0" top="0" width="1056" height="1280">
                         <rectangle left="6" top="6" width="1036" height="784" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="690" height="24" text="34 PERICIAS (Tr +3 [2p] | Esp +8 [7p, Niv 5+] | Mst +12 [17p, Niv 11+])" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
-                            <label left="704" top="10" width="176" height="24" text="Pts Gastos / Sugeridos:" fontColor="#A6AEBF" fontSize="13" horzTextAlign="trailing" vertTextAlign="center"/>
+                            <label left="12" top="10" width="710" height="24" text="34 PERICIAS — GRADUACAO LIVRE (0 Destr | 1-2 Inic | 3-7 Trein | 8-11 Espec N5+ | 12+ Mestre N11+)" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                            <label left="724" top="10" width="156" height="24" text="Pts Gastos / Sugeridos:" fontColor="#A6AEBF" fontSize="12" horzTextAlign="trailing" vertTextAlign="center"/>
                             <label left="884" top="10" width="56" height="24" field="periciasGastas" fontColor="#EAE4D6" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
                             <label left="940" top="10" width="16" height="24" text="/" fontColor="#A6AEBF" fontSize="15" horzTextAlign="center" vertTextAlign="center"/>
                             <label left="956" top="10" width="64" height="24" field="periciasSugeridas" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
 
-                            <label left="18" top="38" width="180" height="18" text="PERICIA" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
-                            <label left="200" top="38" width="40" height="18" text="ATTR" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="244" top="38" width="122" height="18" text="GRAU" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="370" top="38" width="40" height="18" text="OUT" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="414" top="38" width="42" height="18" text="TOT" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="16" top="38" width="168" height="18" text="PERICIA" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <label left="186" top="38" width="34" height="18" text="ATTR" fontColor="#A6AEBF" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="222" top="38" width="42" height="18" text="GRAD" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="266" top="38" width="96" height="18" text="GRAU AUTO" fontColor="#A6AEBF" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="366" top="38" width="40" height="18" text="OUT" fontColor="#A6AEBF" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="410" top="38" width="44" height="18" text="TOT" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
 
-                            <label left="530" top="38" width="180" height="18" text="PERICIA" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
-                            <label left="712" top="38" width="40" height="18" text="ATTR" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="756" top="38" width="122" height="18" text="GRAU" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="882" top="38" width="40" height="18" text="OUT" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="926" top="38" width="42" height="18" text="TOT" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="528" top="38" width="168" height="18" text="PERICIA" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <label left="698" top="38" width="34" height="18" text="ATTR" fontColor="#A6AEBF" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="734" top="38" width="42" height="18" text="GRAD" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="778" top="38" width="96" height="18" text="GRAU AUTO" fontColor="#A6AEBF" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="878" top="38" width="40" height="18" text="OUT" fontColor="#A6AEBF" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="922" top="38" width="44" height="18" text="TOT" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
 
                             
             <rectangle left="10" top="60" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Armas Brancas" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_armas_brancas_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_armas_brancas_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_armas_brancas_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Armas Brancas" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="FOR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_armas_brancas_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_armas_brancas_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_armas_brancas_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_armas_brancas_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_armas_brancas", "Armas Brancas", "forca");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="102" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Armas a Distancia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_armas_dist_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_armas_dist_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_armas_dist_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Armas a Distancia" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="DES" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_armas_dist_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_armas_dist_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_armas_dist_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_armas_dist_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_armas_dist", "Armas a Distancia", "destreza");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="144" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Luta Desarmada" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_luta_desarm_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_luta_desarm_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_luta_desarm_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Luta Desarmada" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="FOR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_luta_desarm_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_luta_desarm_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_luta_desarm_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_luta_desarm_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_luta_desarm", "Luta Desarmada", "forca");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="186" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Aparar" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_aparar_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_aparar_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_aparar_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Aparar" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="FOR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_aparar_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_aparar_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_aparar_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_aparar_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_aparar", "Aparar", "forca");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="228" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Esquiva" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_esquiva_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_esquiva_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_esquiva_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Esquiva" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="DES" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_esquiva_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_esquiva_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_esquiva_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_esquiva_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_esquiva", "Esquiva", "destreza");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="270" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Escudos" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_escudos_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_escudos_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_escudos_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Escudos" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="FOR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_escudos_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_escudos_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_escudos_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_escudos_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_escudos", "Escudos", "forca");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="312" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Atletismo" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_atletismo_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_atletismo_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_atletismo_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Atletismo" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="FOR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_atletismo_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_atletismo_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_atletismo_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_atletismo_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_atletismo", "Atletismo", "forca");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="354" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Acrobacia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_acrobacia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_acrobacia_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_acrobacia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Acrobacia" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="DES" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_acrobacia_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_acrobacia_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_acrobacia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_acrobacia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_acrobacia", "Acrobacia", "destreza");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="396" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Furtividade" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_furtividade_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_furtividade_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_furtividade_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Furtividade" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="DES" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_furtividade_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_furtividade_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_furtividade_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_furtividade_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_furtividade", "Furtividade", "destreza");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="438" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Escalada" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_escalada_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_escalada_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_escalada_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Escalada" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="FOR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_escalada_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_escalada_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_escalada_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_escalada_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_escalada", "Escalada", "forca");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="480" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Natacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_natacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_natacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_natacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Natacao" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="FOR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_natacao_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_natacao_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_natacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_natacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_natacao", "Natacao", "forca");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="522" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Cavalgar" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_cavalgar_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_cavalgar_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_cavalgar_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Cavalgar" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="DES" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_cavalgar_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_cavalgar_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_cavalgar_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_cavalgar_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_cavalgar", "Cavalgar", "destreza");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="564" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Sobrevivencia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_sobrevivencia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_sobrevivencia_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_sobrevivencia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Sobrevivencia" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="SAB" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_sobrevivencia_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_sobrevivencia_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_sobrevivencia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_sobrevivencia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_sobrevivencia", "Sobrevivencia", "sabedoria");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="606" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Navegacao e Nautica" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_navegacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_navegacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_navegacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Navegacao e Nautica" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="SAB" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_navegacao_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_navegacao_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_navegacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_navegacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_navegacao", "Navegacao e Nautica", "sabedoria");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="648" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Percepcao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_percepcao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_percepcao_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_percepcao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Percepcao" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="SAB" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_percepcao_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_percepcao_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_percepcao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_percepcao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_percepcao", "Percepcao", "sabedoria");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="690" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Investigacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_investigacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_investigacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_investigacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Investigacao" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="INT" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_investigacao_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_investigacao_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_investigacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_investigacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_investigacao", "Investigacao", "inteligencia");]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="732" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Disfarce" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_disfarce_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_disfarce_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_disfarce_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Disfarce" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="CAR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_disfarce_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_disfarce_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_disfarce_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_disfarce_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_disfarce", "Disfarce", "carisma");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="60" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Ladinagem e Fechaduras" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_ladinagem_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_ladinagem_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_ladinagem_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Ladinagem e Fechaduras" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="DES" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_ladinagem_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_ladinagem_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_ladinagem_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_ladinagem_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_ladinagem", "Ladinagem e Fechaduras", "destreza");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="102" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Prestidigitacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_prestidig_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_prestidig_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_prestidig_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Prestidigitacao" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="DES" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_prestidig_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_prestidig_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_prestidig_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_prestidig_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_prestidig", "Prestidigitacao", "destreza");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="144" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Persuasao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_persuasao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_persuasao_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_persuasao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Persuasao" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="CAR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_persuasao_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_persuasao_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_persuasao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_persuasao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_persuasao", "Persuasao", "carisma");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="186" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Enganacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_enganacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_enganacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_enganacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Enganacao" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="CAR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_enganacao_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_enganacao_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_enganacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_enganacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_enganacao", "Enganacao", "carisma");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="228" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Intimidacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_intimidacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_intimidacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_intimidacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Intimidacao" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="CAR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_intimidacao_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_intimidacao_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_intimidacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_intimidacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_intimidacao", "Intimidacao", "carisma");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="270" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Intuicao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_intuicao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_intuicao_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_intuicao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Intuicao" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="SAB" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_intuicao_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_intuicao_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_intuicao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_intuicao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_intuicao", "Intuicao", "sabedoria");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="312" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Etiqueta e Corte" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_etiqueta_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_etiqueta_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_etiqueta_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Etiqueta e Corte" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="CAR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_etiqueta_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_etiqueta_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_etiqueta_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_etiqueta_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_etiqueta", "Etiqueta e Corte", "carisma");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="354" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Barganha e Comercio" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_barganha_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_barganha_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_barganha_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Barganha e Comercio" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="CAR" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_barganha_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_barganha_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_barganha_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_barganha_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_barganha", "Barganha e Comercio", "carisma");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="396" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Medicina e Cirurgia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_medicina_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_medicina_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_medicina_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Medicina e Cirurgia" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="INT" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_medicina_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_medicina_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_medicina_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_medicina_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_medicina", "Medicina e Cirurgia", "inteligencia");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="438" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Alquimia e Venenos" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_alquimia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_alquimia_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_alquimia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Alquimia e Venenos" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="INT" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_alquimia_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_alquimia_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_alquimia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_alquimia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_alquimia", "Alquimia e Venenos", "inteligencia");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="480" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Forja e Metalurgia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_forja_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_forja_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_forja_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Forja e Metalurgia" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="INT" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_forja_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_forja_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_forja_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_forja_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_forja", "Forja e Metalurgia", "inteligencia");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="522" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Engenharia e Mecanica" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_engenharia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_engenharia_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_engenharia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Engenharia e Mecanica" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="INT" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_engenharia_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_engenharia_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_engenharia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_engenharia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_engenharia", "Engenharia e Mecanica", "inteligencia");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="564" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Herbalismo e Natureza" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_herbalismo_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_herbalismo_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_herbalismo_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Herbalismo e Natureza" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="SAB" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_herbalismo_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_herbalismo_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_herbalismo_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_herbalismo_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_herbalismo", "Herbalismo e Natureza", "sabedoria");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="606" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Historia e Lendas" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_historia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_historia_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_historia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Historia e Lendas" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="INT" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_historia_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_historia_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_historia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_historia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_historia", "Historia e Lendas", "inteligencia");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="648" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Geografia e Cartografia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_geografia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_geografia_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_geografia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Geografia e Cartografia" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="INT" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_geografia_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_geografia_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_geografia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_geografia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_geografia", "Geografia e Cartografia", "inteligencia");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="690" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Idiomas e Cifras" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_idiomas_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_idiomas_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_idiomas_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Idiomas e Cifras" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="INT" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_idiomas_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_idiomas_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_idiomas_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_idiomas_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_idiomas", "Idiomas e Cifras", "inteligencia");]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="732" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="Religiao e Ocultismo" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="per_religiao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="per_religiao_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="per_religiao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="Religiao e Ocultismo" fontColor="#EAE4D6" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="SAB" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="per_religiao_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="per_religiao_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="per_religiao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="per_religiao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("per_religiao", "Religiao e Ocultismo", "sabedoria");]]></event>
                 </button>
             </rectangle>
@@ -1373,102 +1508,132 @@ end;
 
                             
             <rectangle left="10" top="70" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk1_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk1_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk1_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk1_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk1_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk1_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk1_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk1_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk1_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk1_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk1_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(1);]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="112" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk2_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk2_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk2_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk2_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk2_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk2_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk2_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk2_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk2_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk2_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk2_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(2);]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="154" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk3_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk3_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk3_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk3_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk3_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk3_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk3_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk3_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk3_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk3_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk3_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(3);]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="196" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk4_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk4_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk4_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk4_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk4_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk4_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk4_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk4_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk4_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk4_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk4_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(4);]]></event>
                 </button>
             </rectangle>
             <rectangle left="10" top="238" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk5_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk5_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk5_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk5_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk5_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk5_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk5_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk5_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk5_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk5_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk5_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(5);]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="70" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk6_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk6_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk6_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk6_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk6_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk6_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk6_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk6_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk6_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk6_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk6_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(6);]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="112" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk7_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk7_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk7_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk7_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk7_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk7_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk7_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk7_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk7_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk7_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk7_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(7);]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="154" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk8_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk8_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk8_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk8_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk8_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk8_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk8_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk8_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk8_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk8_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk8_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(8);]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="196" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk9_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk9_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk9_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk9_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk9_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk9_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk9_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk9_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk9_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk9_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk9_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(9);]]></event>
                 </button>
             </rectangle>
             <rectangle left="522" top="238" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk10_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk10_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk10_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk10_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk10_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk10_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk10_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk10_grau" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk10_rank" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk10_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk10_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill(10);]]></event>
                 </button>
             </rectangle>

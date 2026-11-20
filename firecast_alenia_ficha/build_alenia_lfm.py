@@ -440,13 +440,36 @@ local function rolarSubirNivelPV()
     end;
 end;
 
--- Custos v2.0: Treinado (+3)=2, Especialista (+8)=7 (Niv 5+), Mestre (+12)=17 (Niv 11+)
+-- Graduacao numerica livre (+0, +1, +2, +3...) com classificacao automatica de grau:
+-- 0 = Destreinado | 1-2 = Iniciante | 3-7 = Treinado | 8-11 = Especialista (Niv 5+) | 12+ = Mestre (Niv 11+)
+local function nomeGrau(grau, nivel)
+    local g = math.floor(num(grau, 0));
+    local niv = math.floor(num(nivel, 1));
+    if g >= 12 then
+        if niv < 11 then return "Mestre (N11+)"; end;
+        return "Mestre";
+    elseif g >= 8 then
+        if niv < 5 then return "Espec. (N5+)"; end;
+        return "Especialista";
+    elseif g >= 3 then
+        return "Treinado";
+    elseif g >= 1 then
+        return "Iniciante";
+    else
+        return "Destreinado";
+    end;
+end;
+
+-- Custo progressivo por graduacao: 1-7 = 1 pt cada | 8-11 = 2 pts cada | 12+ = 3 pts cada
 local function custoGrau(grau)
-    local g = num(grau, 0);
-    if g >= 12 then return 17;
-    elseif g >= 8 then return 7;
-    elseif g >= 3 then return 2;
-    else return 0; end;
+    local g = math.max(0, math.floor(num(grau, 0)));
+    if g <= 7 then
+        return g;
+    elseif g <= 11 then
+        return 7 + (g - 7) * 2;
+    else
+        return 15 + (g - 11) * 3;
+    end;
 end;
 
 recalcularFicha = function()
@@ -511,7 +534,7 @@ recalcularFicha = function()
     local forRaw = num(sheet.forca, 10);
     sheet.cargaMax = tostring(forRaw * 5) .. " kg";
 
-    -- Desconta 2 pts gratuitos das pericias iniciais do Kit atual
+    -- Desconta 3 pts gratuitos das pericias iniciais (+3) do Kit atual
     local kitGratis = {};
     for i = 1, #kit.pericias do kitGratis[kit.pericias[i]] = true; end;
 
@@ -522,8 +545,9 @@ recalcularFicha = function()
         local outros = num(sheet[sk.field .. "_outros"], 0);
         local tot = getMod(sk.attr) + grau + outros;
         sheet[sk.field .. "_total"] = fmtMod(tot);
+        sheet[sk.field .. "_rank"] = nomeGrau(grau, nivel);
         local c = custoGrau(grau);
-        if kitGratis[sk.field] and c >= 2 then c = c - 2; end;
+        if kitGratis[sk.field] then c = math.max(0, c - 3); end;
         ptsGastos = ptsGastos + c;
     end;
 
@@ -606,8 +630,10 @@ end;
 
 local function rolarPericia(fieldId, nomePer, attrField)
     if sheet == nil then return; end;
-    local tot = getMod(attrField) + num(sheet[fieldId .. "_grau"], 0) + num(sheet[fieldId .. "_outros"], 0);
-    rolarD20("Pericia: " .. nomePer, tot, "");
+    local g = num(sheet[fieldId .. "_grau"], 0);
+    local tot = getMod(attrField) + g + num(sheet[fieldId .. "_outros"], 0);
+    local rk = nomeGrau(g, sheet.nivel);
+    rolarD20("Pericia: " .. nomePer .. " (+" .. tostring(g) .. " — " .. rk .. ")", tot, "");
 end;
 
 local function maxAcoesPorGrau(grau)
@@ -754,6 +780,7 @@ end;
 atualizarPaginaCustomSkills = function()
     if sheet == nil then return; end;
     sheet._updatingCustom = true;
+    local niv = math.max(1, math.min(30, math.floor(num(sheet.nivel, 1))));
     for i = 1, 10 do
         local node = getCustomSlotNode(i);
         local nome = (node ~= nil and node.nome) or "";
@@ -763,6 +790,7 @@ atualizarPaginaCustomSkills = function()
         sheet["csk" .. i .. "_nome"] = nome;
         sheet["csk" .. i .. "_attr"] = attr;
         sheet["csk" .. i .. "_grau"] = tostring(grau);
+        sheet["csk" .. i .. "_rank"] = nomeGrau(grau, niv);
         sheet["csk" .. i .. "_outros"] = tostring(outros);
         local tot = getMod(attr) + num(grau, 0) + num(outros, 0);
         sheet["csk" .. i .. "_total"] = fmtMod(tot);
@@ -774,10 +802,12 @@ local function salvarCustomSlot(slotIdx)
     if sheet == nil or sheet._updatingCustom then return; end;
     local node = getCustomSlotNode(slotIdx);
     if node == nil then return; end;
+    local niv = math.max(1, math.min(30, math.floor(num(sheet.nivel, 1))));
     node.nome = sheet["csk" .. slotIdx .. "_nome"] or "";
     node.attr = sheet["csk" .. slotIdx .. "_attr"] or "inteligencia";
     node.grau = sheet["csk" .. slotIdx .. "_grau"] or "0";
     node.outros = sheet["csk" .. slotIdx .. "_outros"] or "0";
+    sheet["csk" .. slotIdx .. "_rank"] = nomeGrau(node.grau, niv);
     local tot = getMod(node.attr) + num(node.grau, 0) + num(node.outros, 0);
     sheet["csk" .. slotIdx .. "_total"] = fmtMod(tot);
 end;
@@ -797,7 +827,8 @@ local function rolarCustomSkill(slotIdx)
     local attr = sheet["csk" .. slotIdx .. "_attr"] or "inteligencia";
     local grau = num(sheet["csk" .. slotIdx .. "_grau"], 0);
     local outros = num(sheet["csk" .. slotIdx .. "_outros"], 0);
-    rolarD20("Pericia Livre: " .. nome, getMod(attr) + grau + outros, "");
+    local rk = nomeGrau(grau, sheet.nivel);
+    rolarD20("Pericia Livre: " .. nome .. " (+" .. tostring(grau) .. " — " .. rk .. ")", getMod(attr) + grau + outros, "");
 end;
 """
     return lua
@@ -918,12 +949,15 @@ def build_lfm() -> str:
         ty = 60 + row * 42
         skill_rows.append(f'''
             <rectangle left="{lx}" top="{ty}" width="504" height="38" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="3" yradius="3">
-                <label left="8" top="4" width="180" height="30" text="{sname}" fontColor="{TEXT_MAIN}" fontSize="14" vertTextAlign="center"/>
-                <label left="190" top="4" width="40" height="30" text="{attr_short[sattr]}" fontColor="{TEXT_MUTED}" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
-                <comboBox left="234" top="4" width="122" height="30" field="{fid}_grau" items="{xml_attr(grau_items)}" values="{xml_attr(grau_values)}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="{fid}_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="{fid}_total" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <label left="6" top="4" width="168" height="30" text="{sname}" fontColor="{TEXT_MAIN}" fontSize="13" vertTextAlign="center"/>
+                <label left="176" top="4" width="34" height="30" text="{attr_short[sattr]}" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="212" top="4" width="42" height="30" field="{fid}_grau" type="number" horzTextAlign="center" fontColor="{TEXT_MAIN}" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="{fid}_rank" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="{fid}_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="{fid}_total" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarPericia("{fid}", "{sname}", "{sattr}");]]></event>
                 </button>
             </rectangle>''')
@@ -936,12 +970,15 @@ def build_lfm() -> str:
         ty = 70 + row * 42
         custom_rows.append(f'''
             <rectangle left="{lx}" top="{ty}" width="504" height="38" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="3" yradius="3">
-                <edit left="4" top="4" width="156" height="30" field="csk{i}_nome" textPrompt="Nova Pericia..." fontSize="13"/>
-                <comboBox left="164" top="4" width="66" height="30" field="csk{i}_attr" items="{xml_attr(attr_items)}" values="{xml_attr(attr_values)}" fontSize="13"/>
-                <comboBox left="234" top="4" width="122" height="30" field="csk{i}_grau" items="{xml_attr(grau_items)}" values="{xml_attr(grau_values)}" fontSize="13"/>
-                <edit left="360" top="4" width="40" height="30" field="csk{i}_outros" type="number" horzTextAlign="center" fontSize="14"/>
-                <label left="404" top="4" width="42" height="30" field="csk{i}_total" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                <edit left="4" top="4" width="144" height="30" field="csk{i}_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="150" top="4" width="60" height="30" field="csk{i}_attr" items="{xml_attr(attr_items)}" values="{xml_attr(attr_values)}" fontSize="12"/>
+                <edit left="212" top="4" width="42" height="30" field="csk{i}_grau" type="number" horzTextAlign="center" fontColor="{TEXT_MAIN}" fontSize="14" fontStyle="bold"/>
+                <rectangle left="256" top="5" width="96" height="28" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="3" yradius="3">
+                    <label align="client" field="csk{i}_rank" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <edit left="356" top="4" width="40" height="30" field="csk{i}_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="400" top="4" width="44" height="30" field="csk{i}_total" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="448" top="4" width="50" height="30" text="d20" fontSize="13">
                     <event name="onClick"><![CDATA[rolarCustomSkill({i});]]></event>
                 </button>
             </rectangle>''')
@@ -1085,7 +1122,7 @@ def build_lfm() -> str:
 
                         <!-- PAINEL AUTOMATICO DE EVOLUCAO -->
                         <rectangle left="6" top="684" width="1036" height="162" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="1012" height="24" text="EVOLUCAO v2.0 (PV = 1dX+CON/niv | Pericias: Recruta 1x, Lenda 1.5x, Epico 2x | Custos: Tr 2, Esp 7 [N5+], Mst 17 [N11+])" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
+                            <label left="12" top="10" width="1012" height="24" text="EVOLUCAO v2.0 (PV = 1dX+CON/niv | Pericias: Recruta 1x, Lenda 1.5x, Epico 2x | Graduacao: 1-7 [1p], 8-11 [2p, N5+], 12+ [3p, N11+])" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold"/>
 
                             <rectangle left="12" top="42" width="194" height="106" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
                                 <label left="4" top="8" width="186" height="20" text="PV MEDIO SUGERIDO" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
@@ -1102,7 +1139,7 @@ def build_lfm() -> str:
                             <rectangle left="420" top="42" width="194" height="106" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
                                 <label left="4" top="8" width="186" height="20" text="PTS PERICIA GASTOS" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
                                 <label left="4" top="32" width="186" height="38" field="periciasGastas" fontColor="{TEXT_MAIN}" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
-                                <label left="4" top="76" width="186" height="20" text="Tr:2 / Esp:7 / Mst:17" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="center"/>
+                                <label left="4" top="76" width="186" height="20" text="1-7:1p | 8-11:2p | 12+:3p" fontColor="{TEXT_MUTED}" fontSize="11" horzTextAlign="center"/>
                             </rectangle>
 
                             <rectangle left="624" top="42" width="194" height="106" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
@@ -1210,23 +1247,25 @@ def build_lfm() -> str:
                 <scrollBox align="client">
                     <layout left="0" top="0" width="1056" height="1280">
                         <rectangle left="6" top="6" width="1036" height="784" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="690" height="24" text="34 PERICIAS (Tr +3 [2p] | Esp +8 [7p, Niv 5+] | Mst +12 [17p, Niv 11+])" fontColor="{TEXT_GOLD}" fontSize="14" fontStyle="bold"/>
-                            <label left="704" top="10" width="176" height="24" text="Pts Gastos / Sugeridos:" fontColor="{TEXT_MUTED}" fontSize="13" horzTextAlign="trailing" vertTextAlign="center"/>
+                            <label left="12" top="10" width="710" height="24" text="34 PERICIAS — GRADUACAO LIVRE (0 Destr | 1-2 Inic | 3-7 Trein | 8-11 Espec N5+ | 12+ Mestre N11+)" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
+                            <label left="724" top="10" width="156" height="24" text="Pts Gastos / Sugeridos:" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="trailing" vertTextAlign="center"/>
                             <label left="884" top="10" width="56" height="24" field="periciasGastas" fontColor="{TEXT_MAIN}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
                             <label left="940" top="10" width="16" height="24" text="/" fontColor="{TEXT_MUTED}" fontSize="15" horzTextAlign="center" vertTextAlign="center"/>
                             <label left="956" top="10" width="64" height="24" field="periciasSugeridas" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
 
-                            <label left="18" top="38" width="180" height="18" text="PERICIA" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
-                            <label left="200" top="38" width="40" height="18" text="ATTR" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="244" top="38" width="122" height="18" text="GRAU" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="370" top="38" width="40" height="18" text="OUT" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="414" top="38" width="42" height="18" text="TOT" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="16" top="38" width="168" height="18" text="PERICIA" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
+                            <label left="186" top="38" width="34" height="18" text="ATTR" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="222" top="38" width="42" height="18" text="GRAD" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="266" top="38" width="96" height="18" text="GRAU AUTO" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="366" top="38" width="40" height="18" text="OUT" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="410" top="38" width="44" height="18" text="TOT" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
 
-                            <label left="530" top="38" width="180" height="18" text="PERICIA" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
-                            <label left="712" top="38" width="40" height="18" text="ATTR" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="756" top="38" width="122" height="18" text="GRAU" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="882" top="38" width="40" height="18" text="OUT" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="926" top="38" width="42" height="18" text="TOT" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="528" top="38" width="168" height="18" text="PERICIA" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
+                            <label left="698" top="38" width="34" height="18" text="ATTR" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="734" top="38" width="42" height="18" text="GRAD" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="778" top="38" width="96" height="18" text="GRAU AUTO" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="878" top="38" width="40" height="18" text="OUT" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="922" top="38" width="44" height="18" text="TOT" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
 
                             {"".join(skill_rows)}
                         </rectangle>

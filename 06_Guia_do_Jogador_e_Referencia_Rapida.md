@@ -20,7 +20,7 @@ Sua cidade natal define sua cultura, sotaque e sobrenome de bastardo (se aplicá
 ### 3. Crie Seu Personagem em 6 Passos (Na Ficha do Firecast)
 1. **Rolar Atributos**: abra a ficha **`Alenia RPG`** no Firecast e clique em **"Rolar Atributos Iniciais (4d6 descarta menor)"** *(funciona apenas com os 6 campos vazios e anuncia os dados no chat)*. Regra opcional: compra de 27 pts.
 2. **Escolher um Kit Universal**: selecione entre os **36 Ofícios** (ou *Sem Kit*) e clique em **"Aplicar Kit"**. A ficha preenche automaticamente seu **Dado de Vida (`1d6` a `1d12`)**, perícias iniciais (`+3`), habilidade do ofício, equipamento e eventual Atributo Especial.
-3. **Distribuir Perícias Extras**: gaste seus pontos livres iniciais em qualquer uma das **34 perícias** ou crie **Perícias Livres** na Aba 3 (`Treinado +3` custa `2 pts`; `Especialista +8` exige Nív. 5+; `Mestre +12` exige Nív. 11+).
+3. **Distribuir Perícias Extras**: gaste seus pontos livres iniciais em qualquer uma das **34 perícias** ou crie **Perícias Livres** na Aba 3 — digite a graduação numérica livremente (`+1, +2, +3, +4, +5...`) e a ficha classifica automaticamente o grau (`0` Destreinado, `1–2` Iniciante, `3–7` Treinado [`1 pt/grad.`], `8–11` Especialista [`2 pts/grad.`, Nív. 5+], `12+` Mestre [`3 pts/grad.`, Nív. 11+]).
 4. **Conferir PV e Defesas**: seu PV inicial é **`Máximo do DV + CON bruto`**. Anote sua armadura e escudo na Aba 2 (lembre: armaduras dão **Defesa**, nunca RD).
 5. **Equipar Armas**: cadastre suas armas na Aba 2 com dano, **Margem** e **Multiplicador de Crítico** (`19–20/×2`, `20/×3`, etc.).
 6. **Definir Objetivo**: escreva na Aba 5 o que move seu explorador (prata, dívida, pesquisa, honra ou segredo) e um vínculo com outro personagem do grupo.
@@ -30,7 +30,7 @@ Sua cidade natal define sua cultura, sotaque e sobrenome de bastardo (se aplicá
 ## Parte II — Referência Rápida de Mesa (Escudo)
 
 ### Fórmulas Essenciais
-- **Teste de Perícia**: `1d20 + Mod. Atributo + Grau (+0 / +3 / +8 / +12) + Outros` *(CDs: `10` Fácil, `15` Moderada, `20` Difícil, `25` Muito Difícil, `30` Lendária)*.
+- **Teste de Perícia**: `1d20 + Mod. Atributo + Graduação Livre (+0, +1, +2...) + Outros` *(CDs: `10` Fácil, `15` Moderada, `20` Difícil, `25` Muito Difícil, `30` Lendária)*.
 - **Iniciativa**: `1d20 + Mod(DES) + ⌊Grau em Percepção / 3⌋`.
 - **Defesa Corpo a Corpo (Aparar)**: `10 + Mod(DES) + Armadura + Escudo + Aparar`.
 - **Defesa contra Projéteis (Esquiva)**: `10 + Mod(DES) + Armadura + Escudo + Esquiva`.

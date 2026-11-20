@@ -73,17 +73,18 @@ $$\text{Resultado} = 1\text{d}20 + \text{Modificador do Atributo} + \text{Grau d
 | **25** | Muito Difícil | Cruzar o Mar dos Corais sob tempestade, decifrar inscrição de Kelgore |
 | **30** | Lendária / Extrema | Trabalhar adamante puro em campo, sobreviver a tempestade em Incognito |
 
-### Graus de Treino, Custos e Travas de Patamar
-Para preservar **Mestre (`+12`)** como uma autoridade genuinamente rara em toda Alenia (evitando que personagens dominem todas as perícias cedo demais), a evolução exige tanto pontos acumulados quanto maturidade de patamar:
+### Graduação Livre, Graus Automáticos e Travas de Patamar
+Em Alenia, as perícias evoluem por **graduação numérica contínua** (`+0, +1, +2, +3, +4, +5...` — você **não** fica preso a saltos fixos). Conforme os pontos investidos na perícia, a ficha classifica automaticamente o **Grau de Domínio** do personagem, usado como referência para pré-requisitos de Talentos, *Defesa Total* e travas de *Múltiplas Ações*:
 
-| Grau de Treino | Bônus | Custo para Subir | Custo Acumulado | Requisito Mínimo |
+| Grau Automático | Graduação (Bônus) | Custo por Graduação | Custo Acumulado (Mínimo) | Requisito Mínimo |
 | :--- | :---: | :---: | :---: | :--- |
 | **Destreinado** | `+0` | `—` | `0 pts` | Nenhum |
-| **Treinado** | `+3` | `2 pts` | `2 pts` | Nível 1+ *(ou gratuito pelo Kit inicial)* |
-| **Especialista** | `+8` | `+5 pts` | `7 pts` | **Nível 5+** *(veterano reconhecido)* |
-| **Mestre** | `+12` | `+10 pts` | `17 pts` | **Nível 11+ (Patamar Lenda)** *(ou Feito excepcional aprovado pelo Mestre)* |
+| **Iniciante** | `+1` a `+2` | `1 pt / grad.` | `1 a 2 pts` | Nenhum *(ainda não cumpre pré-requisito "Treinado")* |
+| **Treinado** | `+3` a `+7` | `1 pt / grad.` | `3 a 7 pts` | Nível 1+ *(Kit inicial começa em `+3` gratuito)* |
+| **Especialista** | `+8` a `+11` | `2 pts / grad.` | `9 a 15 pts` | **Nível 5+** *(veterano reconhecido)* |
+| **Mestre** | `+12+` | `3 pts / grad.` | `18+ pts` | **Nível 11+ (Patamar Lenda)** *(ou Feito excepcional aprovado pelo Mestre)* |
 
-*(Nota: Perícias recebidas como **Treinado (`+3`)** pelo Kit inicial contam como já tendo os `2 pts` pagos — elevar uma delas para Especialista no Nív. 5+ custa `+5 pts`, e depois para Mestre no Nív. 11+ custa `+10 pts`.)*
+*(Nota: Perícias recebidas como **Treinado (`+3`)** pelo Kit inicial já contam com os `3 pts` iniciais pagos — subir uma delas para `+4` custa `1 pt`; chegar a `+7` custa `+4 pts`; subir para `+8` [Especialista, Nív. 5+] custa `+2 pts` adicionais, e assim por diante.)*
 
 ### Pontos de Perícia (Uniforme e Equilibrado)
 Em todas as fórmulas de perícia, aplica-se sempre a proteção **`máx(0, Mod. INT)`**, garantindo que Inteligência baixa nunca reduza o ganho abaixo da base do Kit:
@@ -91,7 +92,7 @@ Em todas as fórmulas de perícia, aplica-se sempre a proteção **`máx(0, Mod.
 - **Ao Subir de Nível**: recebe `máx(1, ⌊(Base do Kit + máx(0, Mod. INT) × Mult. INT) × Fator de Patamar⌋)` pontos de perícia.
 - **Sem Kit (Média Padrão)**: `Base = 1`, `Mult. INT = 0,75`, `DV = 1d8`.
 
-*(Exemplo de calibração: um **Erudito** com `INT 18 (+4)`, `Base 2`, `Mult. INT 1,25` recebe `7 pts` no Nív. 1 e `7 pts/nível` em Recruta. No Nív. 10 terá ~70 pts totais — suficientes para ~4 Especialistas e ~12 perícias treinadas, sem nenhum Mestre precoce. No Nív. 20, somando o patamar Lenda `1,5×`, alcançará **4 a 6 Maestrias (`+12`)** genuínas, mantendo especialização real mesmo até o Nív. 30!)*
+*(Exemplo de calibração: um **Erudito** com `INT 18 (+4)`, `Base 2`, `Mult. INT 1,25` recebe `7 pts` no Nív. 1 e `7 pts/nível` em Recruta. No Nív. 10 terá ~70 pts totais — podendo distribuir graduações livres como `+5`, `+7` ou `+9` entre dezenas de perícias sem criar nenhum Mestre precoce. No Nív. 20, somando o patamar Lenda `1,5×`, alcançará **4 a 6 Maestrias (`+12+`)** genuínas, mantendo especialização real mesmo até o Nív. 30!)*
 
 ### Lista Oficial de Perícias (34 Perícias + Perícias Livres Ilimitadas)
 Além das **34 perícias oficiais** abaixo, o jogador pode criar **quantas perícias personalizadas quiser** na ficha do Firecast (ex.: *Forja de Adamante*, *Pilotagem nos Corais*, *Dialeto de Yõketsu*), seguindo os mesmos custos e travas de patamar:
@@ -162,11 +163,11 @@ $$\text{Defesa} = 10 + \text{Mod(DES)} + \text{Bônus de Armadura} + \text{Bônu
 
 ### Múltiplas Ações (Regra Storyteller — Com Trava de Treino)
 Um combatente pode dividir sua Ação Principal em **`N` ataques** (ou ações físicas rápidas equivalentes — nunca multiplicando Movimento nem Reação, e não aplicável a bestas sem recarga rápida):
-1. **Limite Máximo de `N` pelo Grau de Treino na Perícia Usada**:
-   - **Destreinado (`+0`)**: máximo **`1` ação** (não pode dividir).
-   - **Treinado (`+3`)**: máximo **`2` ações**.
-   - **Especialista (`+8`)**: máximo **`3` ações**.
-   - **Mestre (`+12`)**: máximo **`4` ações**.
+1. **Limite Máximo de `N` pelo Grau Automático na Perícia Usada**:
+   - **Destreinado / Iniciante (`+0` a `+2`)**: máximo **`1` ação** (não pode dividir).
+   - **Treinado (`+3` a `+7`)**: máximo **`2` ações**.
+   - **Especialista (`+8` a `+11`)**: máximo **`3` ações**.
+   - **Mestre (`+12+`)**: máximo **`4` ações**.
 2. **Fórmula do Bônus por Ação** *(para `N ≥ 2`)*:
 $$\text{Bônus por Ação} = \left\lfloor \frac{\text{Bônus Total de Ataque}}{N} \right\rfloor - N$$
 3. **Regra Anti-Abuso (Bônus Mínimo)**: você só pode declarar `N` ações se o `Bônus por Ação` resultante for **`≥ 0`** (se ficar negativo, reduza `N`). Isso impede "pesca de 20 natural" com dezenas de ataques sem habilidade real.
