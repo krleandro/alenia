@@ -283,10 +283,9 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "1.4";
+local PLUGIN_VERSION = "1.5";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
-local REPO_URL = "https://github.com/krleandro/alenia";
 
 local recalcularFicha;
 local atualizarPaginaCustomSkills;
@@ -330,8 +329,9 @@ local function enviarChatOuMsg(texto)
     end;
 end;
 
-local function rolarD20(titulo, modTotal, detalheExtra)
+local function executarRolagemD20(titulo, modTotal, detalheExtra, cdUsada)
     if sheet == nil then return; end;
+    local cd = math.max(0, math.floor(num(cdUsada, 0)));
     local modStr = "";
     if modTotal >= 0 then
         modStr = " + " .. tostring(modTotal);
@@ -340,12 +340,14 @@ local function rolarD20(titulo, modTotal, detalheExtra)
     end;
     local rolagem = Firecast.interpretarRolagem("1d20" .. modStr);
     local nomeChar = sheet.nome or "Explorador";
-    local cabecalho = "[" .. nomeChar .. "] " .. titulo;
+    local sufixoCD = (cd > 0) and (" [CD " .. tostring(cd) .. "]") or "";
+    local cabecalho = "[" .. nomeChar .. "] " .. titulo .. sufixoCD;
     local mesa = Firecast.getMesaDe(sheet);
     if mesa ~= nil and mesa.activeChat ~= nil then
         mesa.activeChat:rolarDados(rolagem, cabecalho,
             function(rolado)
                 local d20Nat = nil;
+                local total = (rolado ~= nil and rolado.resultado) or 0;
                 if rolado ~= nil and rolado.ops ~= nil then
                     for i = 1, #rolado.ops do
                         local op = rolado.ops[i];
@@ -355,18 +357,107 @@ local function rolarD20(titulo, modTotal, detalheExtra)
                         end;
                     end;
                 end;
+                local msgRes = "";
                 if d20Nat == 20 then
-                    mesa.activeChat:enviarMensagem("[20 NATURAL] Sucesso Critico de " .. nomeChar .. " em " .. titulo .. "!");
+                    msgRes = "[20 NATURAL — SUCESSO CRITICO!] " .. nomeChar .. " em " .. titulo .. " (Total " .. tostring(total) .. (cd > 0 and (" vs CD " .. tostring(cd)) or "") .. ")!";
                 elseif d20Nat == 1 then
-                    mesa.activeChat:enviarMensagem("[1 NATURAL] Falha Critica de " .. nomeChar .. " em " .. titulo .. "!");
-                elseif detalheExtra ~= nil and detalheExtra ~= "" then
+                    msgRes = "[1 NATURAL — FALHA CRITICA!] " .. nomeChar .. " em " .. titulo .. " (Total " .. tostring(total) .. (cd > 0 and (" vs CD " .. tostring(cd)) or "") .. ")!";
+                elseif cd > 0 then
+                    local diff = total - cd;
+                    if diff >= 0 then
+                        msgRes = "[SUCESSO!] " .. nomeChar .. " passou em " .. titulo .. " (" .. tostring(total) .. " vs CD " .. tostring(cd) .. " | margem +" .. tostring(diff) .. ").";
+                    else
+                        msgRes = "[FALHA!] " .. nomeChar .. " falhou em " .. titulo .. " (" .. tostring(total) .. " vs CD " .. tostring(cd) .. " | faltaram " .. tostring(math.abs(diff)) .. ").";
+                    end;
+                end;
+                if msgRes ~= "" then
+                    mesa.activeChat:enviarMensagem(msgRes);
+                end;
+                if detalheExtra ~= nil and detalheExtra ~= "" then
                     mesa.activeChat:enviarMensagem(detalheExtra);
                 end;
             end);
     else
         rolagem:rolarLocalmente();
-        showMessage(cabecalho .. "\nResultado: " .. tostring(rolagem.resultado));
+        local res = rolagem.resultado;
+        local statusTxt = "";
+        if cd > 0 then
+            statusTxt = (res >= cd) and ("\n[SUCESSO! " .. tostring(res) .. " vs CD " .. tostring(cd) .. "]") or ("\n[FALHA! " .. tostring(res) .. " vs CD " .. tostring(cd) .. "]");
+        end;
+        showMessage(cabecalho .. "\nResultado: " .. tostring(res) .. statusTxt);
     end;
+end;
+
+local function rolarD20(titulo, modTotal, detalheExtra, cdFixa)
+    if sheet == nil then return; end;
+    if cdFixa ~= nil then
+        executarRolagemD20(titulo, modTotal, detalheExtra, cdFixa);
+        return;
+    end;
+    if sheet.perguntarCD == true and DialogsMod ~= nil and type(DialogsMod.inputQuery) == "function" then
+        local atualCD = tostring(sheet.cdTeste or "15");
+        if atualCD == "" or atualCD == "0" then atualCD = "15"; end;
+        DialogsMod.inputQuery(
+            "Dificuldade do Teste (CD)",
+            "Informe a CD para " .. titulo .. " (0 ou vazio = rolagem livre):",
+            atualCD,
+            function(valorDigitado)
+                local cdNum = math.max(0, math.floor(num(valorDigitado, 0)));
+                sheet.cdTeste = tostring(cdNum);
+                executarRolagemD20(titulo, modTotal, detalheExtra, cdNum);
+            end,
+            function() end,
+            true
+        );
+    else
+        executarRolagemD20(titulo, modTotal, detalheExtra, num(sheet.cdTeste, 0));
+    end;
+end;
+
+local function descansoCurto()
+    if sheet == nil then return; end;
+    local dv = math.max(4, math.floor(num(sheet.kitDvFaces, 8)));
+    local mCon = getMod("constituicao");
+    local modStr = (mCon >= 0) and (" + " .. tostring(mCon)) or (" - " .. tostring(math.abs(mCon)));
+    local expr = "1d" .. tostring(dv) .. modStr;
+    local rolagem = Firecast.interpretarRolagem(expr);
+    local nomeChar = sheet.nome or "Explorador";
+    local titulo = "[" .. nomeChar .. "] Descanso Curto — Recuperar PV (" .. expr .. ")";
+
+    local function aplicarCura(val)
+        local cura = math.max(1, val);
+        local pvM = math.max(1, num(sheet.pvMax, 1));
+        local pvA = num(sheet.pvAtual, 0);
+        local novo = math.min(pvM, pvA + cura);
+        sheet.pvAtual = tostring(novo);
+        return cura, novo, pvM;
+    end;
+
+    local mesa = Firecast.getMesaDe(sheet);
+    if mesa ~= nil and mesa.activeChat ~= nil then
+        mesa.activeChat:rolarDados(rolagem, titulo,
+            function(rolado)
+                if rolado ~= nil then
+                    local cura, novo, pvM = aplicarCura(rolado.resultado);
+                    mesa.activeChat:enviarMensagem("[" .. nomeChar .. "] Descanso Curto (1h): recuperou +" .. tostring(cura) .. " PV (PV Atual: " .. tostring(novo) .. "/" .. tostring(pvM) .. ").");
+                end;
+            end);
+    else
+        rolagem:rolarLocalmente();
+        local cura, novo, pvM = aplicarCura(rolagem.resultado);
+        showMessage(titulo .. "\nRecuperou +" .. tostring(cura) .. " PV (" .. tostring(novo) .. "/" .. tostring(pvM) .. ")");
+    end;
+end;
+
+local function descansoLongo()
+    if sheet == nil then return; end;
+    local pvM = math.max(1, num(sheet.pvMax, 1));
+    local cura = math.ceil(pvM * 0.5);
+    local pvA = num(sheet.pvAtual, 0);
+    local novo = math.min(pvM, pvA + cura);
+    sheet.pvAtual = tostring(novo);
+    local nomeChar = sheet.nome or "Explorador";
+    enviarChatOuMsg("[" .. nomeChar .. "] Descanso Longo (8h em abrigo seguro): recuperou +" .. tostring(cura) .. " PV (50% do PV Max — Atual: " .. tostring(novo) .. "/" .. tostring(pvM) .. ") e reduziu 1 nivel de Exaustao.");
 end;
 
 local function rolarAtributosIniciais()
@@ -691,6 +782,8 @@ local function rolarArma(idx)
     end;
 
     local nomeChar = sheet.nome or "Explorador";
+    local defAlvo = math.max(0, math.floor(num(sheet.defesaAlvo, 0)));
+    local sufixoDef = (defAlvo > 0) and (" [vs Def " .. tostring(defAlvo) .. "]") or "";
     local mesa = Firecast.getMesaDe(sheet);
 
     for k = 1, nAcoes do
@@ -703,11 +796,12 @@ local function rolarArma(idx)
         else modStr = " - " .. tostring(math.abs(bonusFinal)); end;
 
         local rolagem = Firecast.interpretarRolagem("1d20" .. modStr);
-        local titulo = "[" .. nomeChar .. "] Ataque com " .. nomeArma .. sufixo;
+        local titulo = "[" .. nomeChar .. "] Ataque com " .. nomeArma .. sufixo .. sufixoDef;
         if mesa ~= nil and mesa.activeChat ~= nil then
             mesa.activeChat:rolarDados(rolagem, titulo,
                 function(rolado)
                     local d20Nat = nil;
+                    local total = (rolado ~= nil and rolado.resultado) or 0;
                     if rolado ~= nil and rolado.ops ~= nil then
                         for i = 1, #rolado.ops do
                             local op = rolado.ops[i];
@@ -717,17 +811,27 @@ local function rolarArma(idx)
                             end;
                         end;
                     end;
-                    if d20Nat ~= nil then
-                        if d20Nat >= margem then
-                            mesa.activeChat:enviarMensagem("[CRITICO! Dado " .. tostring(d20Nat) .. " | Margem " .. tostring(margem) .. "-20] " .. nomeArma .. " multiplica (arma + attr + fixo) por x" .. tostring(mult) .. "!");
-                        elseif d20Nat == 1 then
-                            mesa.activeChat:enviarMensagem("[FALHA CRITICA! 1 Natural] Abertura tatica ou complicacao com " .. nomeArma .. "!");
+                    local acertou = (defAlvo == 0) or (d20Nat == 20) or (d20Nat ~= 1 and total >= defAlvo);
+                    if d20Nat == 1 then
+                        mesa.activeChat:enviarMensagem("[FALHA CRITICA! 1 Natural] Erro automatico e abertura tatica com " .. nomeArma .. "!");
+                    elseif d20Nat ~= nil and d20Nat >= margem and acertou then
+                        mesa.activeChat:enviarMensagem("[ACERTO CRITICO! Dado " .. tostring(d20Nat) .. " | Total " .. tostring(total) .. (defAlvo > 0 and (" vs Def " .. tostring(defAlvo)) or "") .. "] " .. nomeArma .. " multiplica (dados + FOR/fixo) por x" .. tostring(mult) .. "!");
+                    elseif defAlvo > 0 then
+                        if acertou then
+                            mesa.activeChat:enviarMensagem("[ACERTOU!] " .. nomeArma .. " atingiu (" .. tostring(total) .. " vs Def " .. tostring(defAlvo) .. "). Role o dano!");
+                        else
+                            mesa.activeChat:enviarMensagem("[ERROU!] " .. nomeArma .. " nao superou a Defesa (" .. tostring(total) .. " vs Def " .. tostring(defAlvo) .. ").");
                         end;
                     end;
                 end);
         else
             rolagem:rolarLocalmente();
-            showMessage(titulo .. "\nResultado: " .. tostring(rolagem.resultado));
+            local res = rolagem.resultado;
+            local infoDef = "";
+            if defAlvo > 0 then
+                infoDef = (res >= defAlvo) and ("\n[ACERTOU vs Def " .. tostring(defAlvo) .. "]") or ("\n[ERROU vs Def " .. tostring(defAlvo) .. "]");
+            end;
+            showMessage(titulo .. "\nResultado: " .. tostring(res) .. infoDef);
         end;
     end;
 end;
@@ -738,9 +842,14 @@ local function rolarDanoArma(idx, isCrit)
     if nomeArma == nil or nomeArma == "" then nomeArma = "Arma " .. tostring(idx); end;
     local dado = sheet["arma" .. idx .. "_dano"];
     if dado == nil or dado == "" then dado = "1d6"; end;
-    local aAttr = sheet["arma" .. idx .. "_attr"] or "forca";
-    local modDano = getMod(aAttr) + num(sheet["arma" .. idx .. "_danoExtra"], 0);
+    local aPer = sheet["arma" .. idx .. "_per"] or "per_armas_brancas";
+    local danoExtra = num(sheet["arma" .. idx .. "_danoExtra"], 0);
     local mult = num(sheet["arma" .. idx .. "_mult"], 2);
+
+    -- Armas corpo a corpo (Armas Brancas e Luta Desarmada) SEMPRE somam Mod(FOR) no dano!
+    local isCorpoACorpo = (aPer == "per_armas_brancas") or (aPer == "per_luta_desarm");
+    local modFor = isCorpoACorpo and getMod("forca") or 0;
+    local modDano = modFor + danoExtra;
 
     local expr = dado;
     if modDano > 0 then expr = expr .. " + " .. tostring(modDano);
@@ -752,19 +861,20 @@ local function rolarDanoArma(idx, isCrit)
 
     local rolagem = Firecast.interpretarRolagem(expr);
     local nomeChar = sheet.nome or "Explorador";
+    local notaFor = isCorpoACorpo and (" [FOR " .. fmtMod(modFor) .. "]") or " [Distancia]";
     local tag = isCrit and ("DANO CRITICO (x" .. tostring(mult) .. ") — ") or "Dano — ";
-    local titulo = "[" .. nomeChar .. "] " .. tag .. nomeArma;
+    local titulo = "[" .. nomeChar .. "] " .. tag .. nomeArma .. notaFor;
     local mesa = Firecast.getMesaDe(sheet);
     if mesa ~= nil and mesa.activeChat ~= nil then
         mesa.activeChat:rolarDados(rolagem, titulo,
             function(rolado)
                 if rolado ~= nil then
-                    mesa.activeChat:enviarMensagem("Lembrete: se o dano (" .. tostring(rolado.resultado) .. ") superar 2/3 do PV Maximo do alvo, ele faz teste de CON ou sofre MORTE INSTANTANEA! (Dados bonus como veneno/Oportunista somam apos o critico.)");
+                    mesa.activeChat:enviarMensagem("Dano total (" .. expr .. "): " .. tostring(rolado.resultado) .. " | Lembrete: se superar 2/3 do PV Maximo do alvo, ele faz teste de CON ou sofre MORTE INSTANTANEA! (Dados extras como veneno/Oportunista somam apos o critico.)");
                 end;
             end);
     else
         rolagem:rolarLocalmente();
-        showMessage(titulo .. "\nResultado: " .. tostring(rolagem.resultado));
+        showMessage(titulo .. "\nFormula: " .. expr .. "\nResultado: " .. tostring(rolagem.resultado));
     end;
 end;
 
@@ -901,19 +1011,19 @@ local function verificarEAtualizarPlugin(forcarReinstalacao)
 
     if InternetMod == nil or type(InternetMod.download) ~= "function" then
         sheet.statusAtualizacao = "Modulo de internet indisponivel neste ambiente.";
-        showMessage("Nao foi possivel acessar a internet pelo Firecast.\nBaixe manualmente em:\n" .. PLUGIN_RPK_URL);
+        showMessage("Nao foi possivel acessar a internet pelo Firecast.\nBaixe a versao mais recente na Biblioteca Online:\n" .. BIBLIOTECA_URL);
         return;
     end;
 
-    sheet.statusAtualizacao = "Verificando atualizacoes no GitHub oficial...";
+    sheet.statusAtualizacao = "Verificando atualizacoes oficiais...";
     local urlCheck = PLUGIN_RPK_URL .. "?t=" .. tostring(os.time());
 
     InternetMod.download(
         urlCheck,
         function(stream, contentType)
             if stream == nil then
-                sheet.statusAtualizacao = "Falha: resposta vazia do GitHub.";
-                showMessage("Nao foi possivel ler o pacote de atualizacao do GitHub.");
+                sheet.statusAtualizacao = "Falha: resposta vazia do servidor de atualizacoes.";
+                showMessage("Nao foi possivel ler o pacote de atualizacao.");
                 return;
             end;
 
@@ -924,16 +1034,16 @@ local function verificarEAtualizarPlugin(forcarReinstalacao)
             end;
 
             if details == nil or details.version == nil then
-                sheet.statusAtualizacao = "Pacote remoto invalido ou ainda nao publicado no GitHub.";
+                sheet.statusAtualizacao = "Pacote remoto invalido ou indisponivel no momento.";
                 if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
                     DialogsMod.confirmYesNo(
-                        "Nao foi possivel inspecionar o arquivo .rpk no GitHub.\nDeseja abrir o repositorio no navegador para verificar manualmente?",
+                        "Nao foi possivel inspecionar o pacote de atualizacao agora.\nDeseja abrir a Biblioteca Online de Alenia no navegador?",
                         function(sim)
-                            if sim then abrirLinkExterno(REPO_URL); end;
+                            if sim then abrirLinkExterno(BIBLIOTECA_URL); end;
                         end
                     );
                 else
-                    showMessage("Nao foi possivel inspecionar o .rpk remoto. Verifique em:\n" .. REPO_URL);
+                    showMessage("Nao foi possivel inspecionar o pacote remoto. Acesse:\n" .. BIBLIOTECA_URL);
                 end;
                 return;
             end;
@@ -943,8 +1053,8 @@ local function verificarEAtualizarPlugin(forcarReinstalacao)
 
             local function instalarAgora()
                 if PluginsMod == nil or type(PluginsMod.installPlugin) ~= "function" then
-                    sheet.statusAtualizacao = "Instalacao automatica indisponivel; abrindo download no navegador...";
-                    abrirLinkExterno(PLUGIN_RPK_URL);
+                    sheet.statusAtualizacao = "Instalacao automatica indisponivel; abrindo Biblioteca Online...";
+                    abrirLinkExterno(BIBLIOTECA_URL);
                     return;
                 end;
                 local okCall, okInst, errMsg = pcall(PluginsMod.installPlugin, stream, not forcarReinstalacao);
@@ -957,13 +1067,13 @@ local function verificarEAtualizarPlugin(forcarReinstalacao)
                     sheet.statusAtualizacao = "Falha ao instalar automaticamente (" .. detalhe .. ").";
                     if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
                         DialogsMod.confirmYesNo(
-                            "Nao foi possivel instalar automaticamente (" .. detalhe .. ").\nDeseja baixar o arquivo .rpk diretamente no navegador?",
+                            "Nao foi possivel instalar automaticamente (" .. detalhe .. ").\nDeseja abrir a Biblioteca Online para baixar o plugin?",
                             function(sim)
-                                if sim then abrirLinkExterno(PLUGIN_RPK_URL); end;
+                                if sim then abrirLinkExterno(BIBLIOTECA_URL); end;
                             end
                         );
                     else
-                        showMessage("Falha ao instalar (" .. detalhe .. "). Baixe em:\n" .. PLUGIN_RPK_URL);
+                        showMessage("Falha ao instalar (" .. detalhe .. "). Baixe pela Biblioteca Online:\n" .. BIBLIOTECA_URL);
                     end;
                 end;
             end;
@@ -972,7 +1082,7 @@ local function verificarEAtualizarPlugin(forcarReinstalacao)
                 sheet.statusAtualizacao = "Nova versao encontrada: v" .. verRemota .. " (atual: v" .. verLocal .. ").";
                 if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
                     DialogsMod.confirmYesNo(
-                        "Nova versao da ficha Alenia RPG disponivel!\n\nVersao instalada: v" .. verLocal .. "\nNova versao no GitHub: v" .. verRemota .. "\n\nDeseja baixar e atualizar a ficha automaticamente agora mesmo?",
+                        "Nova versao da ficha Alenia RPG disponivel!\n\nVersao instalada: v" .. verLocal .. "\nNova versao disponivel: v" .. verRemota .. "\n\nDeseja baixar e atualizar a ficha automaticamente agora mesmo?",
                         function(sim)
                             if sim then
                                 instalarAgora();
@@ -994,14 +1104,14 @@ local function verificarEAtualizarPlugin(forcarReinstalacao)
         end,
         function(errorMsg)
             sheet.statusAtualizacao = "Erro de conexao ao verificar atualizacoes: " .. tostring(errorMsg);
-            showMessage("Nao foi possivel conectar ao GitHub para verificar atualizacoes.\nDetalhe: " .. tostring(errorMsg));
+            showMessage("Nao foi possivel conectar ao servidor para verificar atualizacoes.\nDetalhe: " .. tostring(errorMsg));
         end,
         function(downloadedBytes, totalBytes)
             if totalBytes ~= nil and totalBytes > 0 then
                 local pct = math.min(100, math.floor((downloadedBytes / totalBytes) * 100));
-                sheet.statusAtualizacao = "Baixando pacote de atualizacao do GitHub... (" .. tostring(pct) .. "%)";
+                sheet.statusAtualizacao = "Baixando pacote de atualizacao... (" .. tostring(pct) .. "%)";
             else
-                sheet.statusAtualizacao = "Baixando pacote de atualizacao do GitHub...";
+                sheet.statusAtualizacao = "Baixando pacote de atualizacao...";
             end;
         end,
         "ignoreCache"
@@ -1180,6 +1290,7 @@ def build_lfm() -> str:
         "rdEspecial", "defesaOutros", "iniciativaOutros", "multiAcoes",
         "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre",
         "customSkillPage", "moedasOuro", "moedasPrata", "moedasCobre",
+        "cdTeste", "defesaAlvo",
         "pluginVersaoAtual", "statusAtualizacao"
     ]
     def_values = [
@@ -1188,7 +1299,8 @@ def build_lfm() -> str:
         "0", "0", "0", "1",
         "0", "0", "0", "0", "0",
         "1", "0", "25", "0",
-        "v1.4", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "0", "0",
+        "v1.5", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -1212,33 +1324,61 @@ def build_lfm() -> str:
     ]]></script>
 
     <rectangle align="client" color="{BG_MAIN}">
-        <!-- CABECALHO FIXO AMPLIADO -->
-        <rectangle align="top" height="112" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" margins="{{left=6, right=6, top=6, bottom=4}}" xradius="6" yradius="6">
+        <!-- CABECALHO FIXO AMPLIADO + BARRA RAPIDA DE CD & DESCANSO -->
+        <rectangle align="top" height="148" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" margins="{{left=6, right=6, top=6, bottom=4}}" xradius="6" yradius="6">
             <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.0" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
             <label left="278" top="6" width="170" height="24" field="patamarTexto" fontColor="{TEXT_CRIMSON}" fontSize="14" fontStyle="bold"/>
             <label left="452" top="6" width="352" height="24" field="kitNomeAtual" fontColor="{TEXT_MUTED}" fontSize="14"/>
             <label left="810" top="6" width="220" height="24" text="Golpe Devastador (&gt;2/3):" fontColor="{TEXT_CRIMSON}" fontSize="13" horzTextAlign="trailing"/>
 
-            <label left="12" top="34" width="240" height="18" text="NOME DO PERSONAGEM" fontColor="{TEXT_MUTED}" fontSize="12"/>
-            <edit left="12" top="54" width="246" height="40" field="nome" textPrompt="Nome do explorador..." fontColor="{TEXT_MAIN}" fontSize="16" fontStyle="bold"/>
+            <label left="12" top="32" width="240" height="18" text="NOME DO PERSONAGEM" fontColor="{TEXT_MUTED}" fontSize="12"/>
+            <edit left="12" top="52" width="246" height="40" field="nome" textPrompt="Nome do explorador..." fontColor="{TEXT_MAIN}" fontSize="16" fontStyle="bold"/>
 
-            <label left="268" top="34" width="240" height="18" text="ORIGEM / CIDADE NATAL" fontColor="{TEXT_MUTED}" fontSize="12"/>
-            <edit left="268" top="54" width="236" height="40" field="origem" textPrompt="Altavanne, Baldbella, OX..." fontColor="{TEXT_MAIN}" fontSize="15"/>
+            <label left="268" top="32" width="240" height="18" text="ORIGEM / CIDADE NATAL" fontColor="{TEXT_MUTED}" fontSize="12"/>
+            <edit left="268" top="52" width="236" height="40" field="origem" textPrompt="Altavanne, Baldbella, OX..." fontColor="{TEXT_MAIN}" fontSize="15"/>
 
-            <label left="514" top="34" width="76" height="18" text="NIVEL" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-            <edit left="514" top="54" width="76" height="40" field="nivel" type="number" fontColor="{TEXT_GOLD}" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
+            <label left="514" top="32" width="76" height="18" text="NIVEL" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+            <edit left="514" top="52" width="76" height="40" field="nivel" type="number" fontColor="{TEXT_GOLD}" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
 
-            <label left="600" top="34" width="164" height="18" text="PV (ATUAL / MAX)" fontColor="{TEXT_CRIMSON}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-            <edit left="600" top="54" width="74" height="40" field="pvAtual" type="number" fontColor="{TEXT_MAIN}" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
-            <label left="674" top="54" width="16" height="40" text="/" fontColor="{TEXT_MUTED}" fontSize="18" horzTextAlign="center" vertTextAlign="center"/>
-            <edit left="690" top="54" width="74" height="40" field="pvMax" type="number" fontColor="{TEXT_CRIMSON}" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
+            <label left="600" top="32" width="164" height="18" text="PV (ATUAL / MAX)" fontColor="{TEXT_CRIMSON}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+            <edit left="600" top="52" width="74" height="40" field="pvAtual" type="number" fontColor="{TEXT_MAIN}" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
+            <label left="674" top="52" width="16" height="40" text="/" fontColor="{TEXT_MUTED}" fontSize="18" horzTextAlign="center" vertTextAlign="center"/>
+            <edit left="690" top="52" width="74" height="40" field="pvMax" type="number" fontColor="{TEXT_CRIMSON}" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
 
-            <rectangle left="774" top="54" width="128" height="40" color="{BG_INPUT}" strokeColor="{BORDER_CRIMSON}" strokeSize="1" xradius="4" yradius="4">
+            <rectangle left="774" top="52" width="128" height="40" color="{BG_INPUT}" strokeColor="{BORDER_CRIMSON}" strokeSize="1" xradius="4" yradius="4">
                 <label align="client" field="limiarDevastador" fontColor="{TEXT_CRIMSON}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
             </rectangle>
 
-            <button left="912" top="54" width="118" height="40" text="Iniciativa" fontSize="14">
-                <event name="onClick"><![CDATA[rolarD20("Iniciativa", getMod("destreza") + math.floor(num(sheet.per_percepcao_grau, 0) / 3) + num(sheet.iniciativaOutros, 0), "");]]></event>
+            <button left="912" top="52" width="118" height="40" text="Iniciativa" fontSize="14">
+                <event name="onClick"><![CDATA[rolarD20("Iniciativa", getMod("destreza") + math.floor(num(sheet.per_percepcao_grau, 0) / 3) + num(sheet.iniciativaOutros, 0), "", 0);]]></event>
+            </button>
+
+            <!-- BARRA RAPIDA DE DIFICULDADE (CD) & DESCANSOS -->
+            <label left="12" top="104" width="96" height="32" text="CD do Teste:" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold" vertTextAlign="center"/>
+            <edit left="110" top="104" width="52" height="32" field="cdTeste" type="number" textPrompt="0" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center"/>
+            <checkBox left="168" top="104" width="164" height="32" field="perguntarCD" text="Perguntar CD ao rolar" fontColor="{TEXT_MAIN}" fontSize="12"/>
+
+            <button left="338" top="106" width="56" height="28" text="Livre" fontSize="11">
+                <event name="onClick"><![CDATA[sheet.cdTeste = "0";]]></event>
+            </button>
+            <button left="398" top="106" width="52" height="28" text="CD 10" fontSize="11">
+                <event name="onClick"><![CDATA[sheet.cdTeste = "10";]]></event>
+            </button>
+            <button left="454" top="106" width="52" height="28" text="CD 15" fontSize="11">
+                <event name="onClick"><![CDATA[sheet.cdTeste = "15";]]></event>
+            </button>
+            <button left="510" top="106" width="52" height="28" text="CD 20" fontSize="11">
+                <event name="onClick"><![CDATA[sheet.cdTeste = "20";]]></event>
+            </button>
+            <button left="566" top="106" width="52" height="28" text="CD 25" fontSize="11">
+                <event name="onClick"><![CDATA[sheet.cdTeste = "25";]]></event>
+            </button>
+
+            <button left="644" top="105" width="194" height="30" text="Descanso Curto (1dX+CON)" fontSize="12">
+                <event name="onClick"><![CDATA[descansoCurto();]]></event>
+            </button>
+            <button left="844" top="105" width="186" height="30" text="Descanso Longo (+50% PV)" fontSize="12">
+                <event name="onClick"><![CDATA[descansoLongo();]]></event>
             </button>
         </rectangle>
 
@@ -1384,15 +1524,17 @@ def build_lfm() -> str:
                             <button left="536" top="148" width="318" height="42" text="CON vs Golpe Devastador (&gt;2/3 PV)" fontSize="14">
                                 <event name="onClick"><![CDATA[rolarD20("CON contra Golpe Devastador (Morte Instantanea)", getMod("constituicao"), "Limiar de Golpe Devastador deste personagem: " .. (sheet.limiarDevastador or ""));]]></event>
                             </button>
-                            <button left="862" top="148" width="160" height="42" text="Moribundo (CON)" fontSize="14">
-                                <event name="onClick"><![CDATA[rolarD20("Teste de Moribundo (CD 12 — 3 sucessos estabiliza)", getMod("constituicao"), "");]]></event>
+                            <button left="862" top="148" width="160" height="42" text="Moribundo (CD 12)" fontSize="14">
+                                <event name="onClick"><![CDATA[rolarD20("Teste de Moribundo (3 sucessos estabiliza)", getMod("constituicao"), "", 12);]]></event>
                             </button>
                         </rectangle>
 
                         <rectangle left="6" top="218" width="1036" height="320" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="12" width="490" height="26" text="ARSENAL &amp; MULTIPLAS ACOES (Trava: Destr 1 | Tr 2 | Esp 3 | Mst 4)" fontColor="{TEXT_GOLD}" fontSize="14" fontStyle="bold"/>
-                            <label left="516" top="12" width="180" height="26" text="Acoes no Turno (N):" fontColor="{TEXT_MAIN}" fontSize="14" horzTextAlign="trailing" vertTextAlign="center"/>
-                            <comboBox left="704" top="8" width="318" height="34" field="multiAcoes" items="{{'1 Acao (Bonus Integral)', '2 Acoes (floor(Bonus/2) - 2)', '3 Acoes (floor(Bonus/3) - 3)', '4 Acoes (floor(Bonus/4) - 4)'}}" values="{{'1', '2', '3', '4'}}" fontSize="14"/>
+                            <label left="12" top="12" width="446" height="26" text="ARSENAL (Corpo a Corpo soma FOR no dano | Trava: 1/2/3/4)" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
+                            <label left="464" top="12" width="74" height="26" text="Def. Alvo:" fontColor="{TEXT_CRIMSON}" fontSize="13" fontStyle="bold" horzTextAlign="trailing" vertTextAlign="center"/>
+                            <edit left="542" top="8" width="52" height="34" field="defesaAlvo" type="number" textPrompt="0" fontColor="{TEXT_CRIMSON}" fontSize="15" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="602" top="12" width="120" height="26" text="Acoes (N):" fontColor="{TEXT_MAIN}" fontSize="13" horzTextAlign="trailing" vertTextAlign="center"/>
+                            <comboBox left="726" top="8" width="296" height="34" field="multiAcoes" items="{{'1 Acao (Bonus Integral)', '2 Acoes (floor(Bonus/2) - 2)', '3 Acoes (floor(Bonus/3) - 3)', '4 Acoes (floor(Bonus/4) - 4)'}}" values="{{'1', '2', '3', '4'}}" fontSize="13"/>
 
                             <label left="16" top="52" width="210" height="20" text="ARMA" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
                             <label left="232" top="52" width="70" height="20" text="ATTR" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
@@ -1581,8 +1723,8 @@ def build_lfm() -> str:
 
                         <!-- CARD DE ATUALIZACAO AUTOMATICA -->
                         <rectangle left="6" top="194" width="1036" height="244" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="20" top="14" width="996" height="28" text="ATUALIZACAO AUTOMATICA INTEGRADA (VIA GITHUB)" fontColor="{TEXT_GOLD}" fontSize="16" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="20" top="44" width="996" height="24" text="O verificador consulta o pacote oficial no GitHub e instala a nova versao diretamente dentro do seu Firecast." fontColor="{TEXT_MUTED}" fontSize="14" horzTextAlign="center"/>
+                            <label left="20" top="14" width="996" height="28" text="ATUALIZACAO AUTOMATICA INTEGRADA" fontColor="{TEXT_GOLD}" fontSize="16" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="20" top="44" width="996" height="24" text="O verificador consulta a versao oficial mais recente e instala a atualizacao diretamente dentro do seu Firecast." fontColor="{TEXT_MUTED}" fontSize="14" horzTextAlign="center"/>
 
                             <button left="248" top="80" width="540" height="50" text="Clique aqui para verificar se ha atualizacoes" fontSize="16">
                                 <event name="onClick"><![CDATA[verificarEAtualizarPlugin(false);]]></event>
@@ -1592,25 +1734,22 @@ def build_lfm() -> str:
                                 <label align="client" field="statusAtualizacao" fontColor="{TEXT_GOLD}" fontSize="14" horzTextAlign="center" vertTextAlign="center"/>
                             </rectangle>
 
-                            <button left="48" top="194" width="300" height="36" text="Forcar Reinstalacao Direta" fontSize="13">
+                            <button left="168" top="194" width="330" height="36" text="Forcar Reinstalacao Direta" fontSize="14">
                                 <event name="onClick"><![CDATA[verificarEAtualizarPlugin(true);]]></event>
                             </button>
-                            <button left="368" top="194" width="300" height="36" text="Abrir Biblioteca Online de Alenia" fontSize="13">
+                            <button left="538" top="194" width="330" height="36" text="Abrir Biblioteca Online de Alenia" fontSize="14">
                                 <event name="onClick"><![CDATA[abrirLinkExterno(BIBLIOTECA_URL);]]></event>
-                            </button>
-                            <button left="688" top="194" width="300" height="36" text="Abrir Repositorio no GitHub" fontSize="13">
-                                <event name="onClick"><![CDATA[abrirLinkExterno(REPO_URL);]]></event>
                             </button>
                         </rectangle>
 
                         <!-- CARD DE NOVIDADES -->
-                        <rectangle left="6" top="450" width="1036" height="214" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="450" width="1036" height="224" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v1.4 — Aba Autoria &amp; Atualizacao com verificacao e instalacao automatica direta do plugin via GitHub (por Mestre Carlos)." fontColor="{TEXT_MAIN}" fontSize="14"/>
-                            <label left="20" top="74" width="996" height="24" text="• v1.3 — Graduacao numerica livre em todas as 34 pericias e pericias livres (+0, +1, +2...) com calculo automatico de grau." fontColor="{TEXT_MAIN}" fontSize="14"/>
-                            <label left="20" top="102" width="996" height="24" text="• v1.2 — Dado de Vida (1d6 a 1d12) por Kit, botao Subir Nivel (1dX+CON) e trava anti-abuso nas Multiplas Acoes Storyteller." fontColor="{TEXT_MUTED}" fontSize="14"/>
-                            <label left="20" top="130" width="996" height="24" text="• v1.1 — Fontes ampliadas, 36 Kits Universais (+ Sem Kit), rolagem inicial 4d6 bloqueavel e 5 Atributos Especiais por Feitos." fontColor="{TEXT_MUTED}" fontSize="14"/>
-                            <label left="20" top="164" width="996" height="34" text="Nota: Apos uma atualizacao automatica bem-sucedida, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
+                            <label left="20" top="46" width="996" height="24" text="• v1.5 — Definicao de CD nos testes (campo rapido ou pergunta ao rolar), Defesa do Alvo em ataques, dano corpo a corpo com +FOR e Descansos." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="74" width="996" height="24" text="• v1.4 — Aba Autoria &amp; Atualizacao (por Mestre Carlos) com verificacao e instalacao automatica direta do plugin." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="102" width="996" height="24" text="• v1.3 — Graduacao numerica livre em todas as 34 pericias e pericias livres (+0, +1, +2...) com calculo automatico de grau." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="130" width="996" height="24" text="• v1.2 — Dado de Vida (1d6 a 1d12) por Kit, botao Subir Nivel (1dX+CON) e trava anti-abuso nas Multiplas Acoes Storyteller." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao automatica bem-sucedida, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
                 </scrollBox>

@@ -344,6 +344,8 @@ A cada **nível par** (`2, 4, 6, 8, 10...`), o explorador escolhe **1 Talento** 
 | **Arco Curto / Longo** | `20 / 45 PP` | `1d6 / 1d8` | `20 / ×3` | 2 mãos, Alcance 24m / 45m |
 | **Besta Leve / Pesada** | `35 / 75 PP` | `1d8 / 1d10` | `19–20 / ×2` | Recarga (Mov. / Ação Principal) |
 
+*(Regra de Dano: **armas corpo a corpo** — inclusive armas ágeis que atacam com `DES` — e armas de arremesso **sempre somam `Mod(FOR)` ao dano**; arcos e bestas usam o dano base da arma + eventuais bônus fixos de adamante ou talento.)*
+
 ### Armaduras e Escudos *(Bônus de Defesa — Zero RD)*
 | Proteção | Preço | Bônus Defesa | Penalidade Furt./Acrob. | Observação |
 | :--- | :---: | :---: | :---: | :--- |
