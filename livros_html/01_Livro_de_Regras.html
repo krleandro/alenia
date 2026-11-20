@@ -207,12 +207,18 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 
 .leaf-body {
     flex: 1 1 auto;
+    min-height: 0;
     padding: 8px 30px 10px;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: rgba(154, 123, 59, 0.4) transparent;
 }
+.leaf-body table { font-size: 13px; line-height: 1.35; }
+.leaf-body thead th { padding: 5px 6px; font-size: 9.5px; }
+.leaf-body tbody td { padding: 5px 6px; }
+.leaf-body tbody td code,
+.leaf-body .nowrap-cell { white-space: nowrap; }
 
 .leaf-footer {
     height: 30px;
@@ -805,7 +811,7 @@ tr { break-inside: avoid; }
 </ul>
 
     <div class="gm-vault" data-locked="true">
-        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"Ow+CUGe4Qy1okzd4I5hURA==","i":"VJmO+08arlMlFG/p","c":"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"}</script>
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"Q+giIvwPY7f3kphLDWjW7Q==","i":"vctEayILZwN2RmAd","c":"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"}</script>
         <div class="gm-gate-box">
             <div class="gm-seal-icon">🔒</div>
             <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
@@ -850,14 +856,15 @@ tr { break-inside: avoid; }
         return JSON.parse(new TextDecoder().decode(plainBuf));
     }
 
-    function wireLightbox(root) {
-        const lb = document.getElementById('atlas-lightbox');
-        const lbImg = document.getElementById('atlas-lightbox-img');
-        if (!lb || !lbImg) return;
-        (root || document).querySelectorAll('.atlas-plate img').forEach(img => {
-            if (img.dataset.lbBound) return;
-            img.dataset.lbBound = '1';
-            img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+    function tagNowrapCells(root) {
+        const reShortNum = /^\s*(?:[+-]?\d+(?:\s*[–\-—]\s*\d+)?|[+-]?\d*d\d+(?:\s*[+-]\s*\d+)?|\d+(?:,\d+)?[×x%]?)\s*$/i;
+        (root || document).querySelectorAll('tbody td').forEach(td => {
+            if (td.children.length === 0 || (td.children.length === 1 && td.firstElementChild.tagName === 'STRONG')) {
+                const txt = (td.textContent || '').trim();
+                if (txt.length > 0 && txt.length <= 12 && reShortNum.test(txt)) {
+                    td.classList.add('nowrap-cell');
+                }
+            }
         });
     }
 
@@ -872,7 +879,7 @@ tr { break-inside: avoid; }
         currentIdx: 0,  // index of left (or single) page shown
         bookTitle: '',
 
-        init() {
+        async init() {
             const stage = document.getElementById('reader-stage');
             if (!stage) return; // index.html portal does not paginate
             this.enabled = true;
@@ -885,8 +892,36 @@ tr { break-inside: avoid; }
                 this.mode = window.innerWidth >= 1120 ? 'spread' : 'single';
             }
 
+            // Wait briefly for web fonts so initial page count is accurate on first paint
+            if (document.fonts && document.fonts.ready) {
+                await Promise.race([
+                    document.fonts.ready,
+                    new Promise(res => setTimeout(res, 1200))
+                ]);
+            }
+
             this.bindControls();
             this.applyMode(this.mode, false);
+
+            // Re-paginate cleanly if any map image finishes loading after initial paint
+            const source = document.querySelector('.book-page');
+            if (source) {
+                let imgTimer = null;
+                source.querySelectorAll('img').forEach(img => {
+                    if (!img.complete) {
+                        img.addEventListener('load', () => {
+                            clearTimeout(imgTimer);
+                            imgTimer = setTimeout(() => {
+                                if (this.mode !== 'scroll') {
+                                    const prev = this.currentIdx;
+                                    this.paginate();
+                                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                }
+                            }, 120);
+                        }, { once: true });
+                    }
+                });
+            }
 
             let resizeTimer = null;
             window.addEventListener('resize', () => {
@@ -922,7 +957,8 @@ tr { break-inside: avoid; }
             }
             document.documentElement.style.setProperty('--leaf-w', leafW + 'px');
             document.documentElement.style.setProperty('--leaf-h', leafH + 'px');
-            return { leafW, leafH, bodyH: leafH - 66 };
+            // 2px border + 30px header + 30px footer + 10px safety breathing room
+            return { leafW, leafH, bodyH: leafH - 72 };
         },
 
         collectBlocks(container) {
@@ -978,7 +1014,182 @@ tr { break-inside: avoid; }
                 mBody.innerHTML = '';
             };
 
-            const isHeading = (el) => /^H[1-4]$/.test(el.tagName);
+            const isHeading = (el) => el && /^H[1-4]$/.test(el.tagName);
+
+            const popOrphanHeadings = (allowShortIntro) => {
+                const carried = [];
+                // Optionally pull a single short intro <p> sitting right under a heading if there's earlier content on the page
+                if (
+                    allowShortIntro &&
+                    curNodes.length >= 3 &&
+                    curNodes[curNodes.length - 1].tagName === 'P' &&
+                    (curNodes[curNodes.length - 1].textContent || '').trim().length <= 180 &&
+                    isHeading(curNodes[curNodes.length - 2])
+                ) {
+                    carried.unshift(curNodes.pop());
+                    if (mBody.lastChild) mBody.removeChild(mBody.lastChild);
+                }
+                while (curNodes.length > 0 && isHeading(curNodes[curNodes.length - 1])) {
+                    carried.unshift(curNodes.pop());
+                    if (mBody.lastChild) mBody.removeChild(mBody.lastChild);
+                }
+                // Never empty the entire page when carrying headings (prevents infinite loops)
+                if (curNodes.length === 0 && carried.length > 0) {
+                    carried.forEach(node => {
+                        curNodes.push(node);
+                        mBody.appendChild(node);
+                    });
+                    return [];
+                }
+                return carried;
+            };
+
+            const restoreCarried = (carried) => {
+                carried.forEach(node => {
+                    curNodes.push(node);
+                    mBody.appendChild(node);
+                });
+            };
+
+            const placeTableWrap = (tableWrap) => {
+                tagNowrapCells(tableWrap);
+                const table = tableWrap.querySelector('table');
+                const tbody = table ? table.querySelector('tbody') : null;
+                const rows = tbody ? Array.from(tbody.querySelectorAll(':scope > tr')) : [];
+                if (!table || !tbody || rows.length <= 1) {
+                    // Fallback to atomic placement for trivial 0-1 row tables
+                    placeAtomic(tableWrap);
+                    return;
+                }
+
+                // Fast path: whole table fits right now!
+                mBody.appendChild(tableWrap);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(tableWrap);
+                    return;
+                }
+                mBody.removeChild(tableWrap);
+
+                const theadOrig = table.querySelector('thead');
+                const buildChunk = () => {
+                    const w = document.createElement('div');
+                    w.className = tableWrap.className;
+                    const t = document.createElement('table');
+                    if (theadOrig) t.appendChild(theadOrig.cloneNode(true));
+                    const tb = document.createElement('tbody');
+                    t.appendChild(tb);
+                    w.appendChild(t);
+                    return { w, tb };
+                };
+
+                let rowIdx = 0;
+                while (rowIdx < rows.length) {
+                    const chunk = buildChunk();
+                    mBody.appendChild(chunk.w);
+                    let addedHere = 0;
+
+                    while (rowIdx < rows.length) {
+                        const rowClone = rows[rowIdx].cloneNode(true);
+                        chunk.tb.appendChild(rowClone);
+                        if (mBody.scrollHeight > bodyH) {
+                            if (addedHere === 0 && curNodes.length === 0) {
+                                // Single super-tall row alone on fresh page: keep it so we make forward progress
+                                addedHere++;
+                                rowIdx++;
+                                break;
+                            }
+                            chunk.tb.removeChild(rowClone);
+                            break;
+                        }
+                        addedHere++;
+                        rowIdx++;
+                    }
+
+                    // Avoid leaving just 1 lonely row at bottom of a non-empty page if more rows remain
+                    if (addedHere === 0 || (addedHere === 1 && rowIdx < rows.length && curNodes.length > 0)) {
+                        mBody.removeChild(chunk.w);
+                        rowIdx -= addedHere;
+                        const carried = popOrphanHeadings(true);
+                        flushPage();
+                        restoreCarried(carried);
+                        continue;
+                    }
+
+                    curNodes.push(chunk.w);
+                    if (rowIdx < rows.length) {
+                        flushPage();
+                    }
+                }
+            };
+
+            const placeList = (listEl) => {
+                const items = Array.from(listEl.children).filter(el => el.tagName === 'LI');
+                if (items.length <= 1) {
+                    placeAtomic(listEl);
+                    return;
+                }
+                mBody.appendChild(listEl);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(listEl);
+                    return;
+                }
+                mBody.removeChild(listEl);
+
+                let idx = 0;
+                const baseStart = parseInt(listEl.getAttribute('start') || '1', 10) || 1;
+                while (idx < items.length) {
+                    const chunk = document.createElement(listEl.tagName);
+                    if (listEl.className) chunk.className = listEl.className;
+                    if (listEl.tagName === 'OL' && idx > 0) {
+                        chunk.setAttribute('start', String(baseStart + idx));
+                    }
+                    mBody.appendChild(chunk);
+                    let addedHere = 0;
+
+                    while (idx < items.length) {
+                        const liClone = items[idx].cloneNode(true);
+                        chunk.appendChild(liClone);
+                        if (mBody.scrollHeight > bodyH) {
+                            if (addedHere === 0 && curNodes.length === 0) {
+                                addedHere++;
+                                idx++;
+                                break;
+                            }
+                            chunk.removeChild(liClone);
+                            break;
+                        }
+                        addedHere++;
+                        idx++;
+                    }
+
+                    if (addedHere === 0) {
+                        mBody.removeChild(chunk);
+                        const carried = popOrphanHeadings(true);
+                        flushPage();
+                        restoreCarried(carried);
+                        continue;
+                    }
+
+                    curNodes.push(chunk);
+                    if (idx < items.length) {
+                        flushPage();
+                    }
+                }
+            };
+
+            const placeAtomic = (clone) => {
+                mBody.appendChild(clone);
+                if (mBody.scrollHeight > bodyH && curNodes.length > 0) {
+                    mBody.removeChild(clone);
+                    const carried = popOrphanHeadings(true);
+                    flushPage();
+                    restoreCarried(carried);
+                    curNodes.push(clone);
+                    mBody.appendChild(clone);
+                } else {
+                    curNodes.push(clone);
+                }
+            };
 
             for (let idx = 0; idx < rawBlocks.length; idx++) {
                 const orig = rawBlocks[idx];
@@ -1001,26 +1212,12 @@ tr { break-inside: avoid; }
                     flushPage();
                 }
 
-                mBody.appendChild(clone);
-                const hNow = mBody.scrollHeight;
-
-                if (hNow > bodyH && curNodes.length > 0) {
-                    // Check orphan heading at bottom of page: if previous node was a heading, carry it over too!
-                    mBody.removeChild(clone);
-                    let carried = null;
-                    if (curNodes.length > 0 && isHeading(curNodes[curNodes.length - 1])) {
-                        carried = curNodes.pop();
-                        if (mBody.lastChild) mBody.removeChild(mBody.lastChild);
-                    }
-                    flushPage();
-                    if (carried) {
-                        curNodes.push(carried);
-                        mBody.appendChild(carried);
-                    }
-                    curNodes.push(clone);
-                    mBody.appendChild(clone);
+                if (clone.classList.contains('table-wrap')) {
+                    placeTableWrap(clone);
+                } else if (clone.tagName === 'UL' || clone.tagName === 'OL') {
+                    placeList(clone);
                 } else {
-                    curNodes.push(clone);
+                    placeAtomic(clone);
                 }
             }
             flushPage();
@@ -1088,9 +1285,6 @@ tr { break-inside: avoid; }
             document.querySelectorAll('.btn-prev-page').forEach(b => b.disabled = atStart);
             document.querySelectorAll('.btn-next-page').forEach(b => b.disabled = atEnd);
 
-            // Re-bind lightbox & GM unlock forms inside freshly rendered leaf DOM!
-            wireLightbox(spreadEl);
-            bindUnlockForms(spreadEl);
             this.highlightActiveToc(idx, eff === 'spread' ? idx + 1 : idx);
         },
 
@@ -1216,7 +1410,6 @@ tr { break-inside: avoid; }
                 const data = await decryptBlock(cipherObj, password);
                 outEl.innerHTML = data.html || '';
                 v.setAttribute('data-locked', 'false');
-                wireLightbox(outEl);
                 if (data.toc) {
                     const tocList = document.querySelector('.toc-list');
                     if (tocList) {
@@ -1251,24 +1444,32 @@ tr { break-inside: avoid; }
         }
     }
 
-    function bindUnlockForms(root) {
-        (root || document).querySelectorAll('.gm-unlock-form').forEach(form => {
-            if (form.dataset.bound) return;
-            form.dataset.bound = '1';
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const input = form.querySelector('.gm-pwd-input');
-                const pwd = input ? input.value : '';
-                if (!pwd) return;
-                if (!window.crypto || !window.crypto.subtle) {
-                    const errEl = form.parentElement.querySelector('.gm-gate-error');
-                    if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
-                    return;
-                }
-                await unlockAllVaults(pwd, false);
-            });
-        });
-    }
+    // Document-level event delegation (works cleanly across cloned book pages & scroll mode)
+    document.addEventListener('submit', async (e) => {
+        const form = e.target.closest('.gm-unlock-form');
+        if (!form) return;
+        e.preventDefault();
+        const input = form.querySelector('.gm-pwd-input');
+        const pwd = input ? input.value : '';
+        if (!pwd) return;
+        if (!window.crypto || !window.crypto.subtle) {
+            const errEl = form.parentElement.querySelector('.gm-gate-error');
+            if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
+            return;
+        }
+        await unlockAllVaults(pwd, false);
+    });
+
+    document.addEventListener('click', (e) => {
+        const img = e.target.closest('.atlas-plate img');
+        if (!img) return;
+        const lb = document.getElementById('atlas-lightbox');
+        const lbImg = document.getElementById('atlas-lightbox-img');
+        if (lb && lbImg) {
+            lbImg.src = img.src;
+            lb.classList.add('open');
+        }
+    });
 
     document.addEventListener('DOMContentLoaded', async () => {
         const lb = document.getElementById('atlas-lightbox');
@@ -1276,8 +1477,6 @@ tr { break-inside: avoid; }
             lb.addEventListener('click', () => lb.classList.remove('open'));
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
         }
-        wireLightbox(document);
-        bindUnlockForms(document);
 
         const lockBtn = document.getElementById('btn-lock-gm');
         if (lockBtn) {
@@ -1294,7 +1493,7 @@ tr { break-inside: avoid; }
             await unlockAllVaults(saved, true);
         }
 
-        BookReader.init();
+        await BookReader.init();
     });
 })();
 </script>

@@ -386,12 +386,18 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 
 .leaf-body {
     flex: 1 1 auto;
+    min-height: 0;
     padding: 8px 30px 10px;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: rgba(154, 123, 59, 0.4) transparent;
 }
+.leaf-body table { font-size: 13px; line-height: 1.35; }
+.leaf-body thead th { padding: 5px 6px; font-size: 9.5px; }
+.leaf-body tbody td { padding: 5px 6px; }
+.leaf-body tbody td code,
+.leaf-body .nowrap-cell { white-space: nowrap; }
 
 .leaf-footer {
     height: 30px;
@@ -771,14 +777,15 @@ SHARED_JS = r"""
         return JSON.parse(new TextDecoder().decode(plainBuf));
     }
 
-    function wireLightbox(root) {
-        const lb = document.getElementById('atlas-lightbox');
-        const lbImg = document.getElementById('atlas-lightbox-img');
-        if (!lb || !lbImg) return;
-        (root || document).querySelectorAll('.atlas-plate img').forEach(img => {
-            if (img.dataset.lbBound) return;
-            img.dataset.lbBound = '1';
-            img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+    function tagNowrapCells(root) {
+        const reShortNum = /^\s*(?:[+-]?\d+(?:\s*[–\-—]\s*\d+)?|[+-]?\d*d\d+(?:\s*[+-]\s*\d+)?|\d+(?:,\d+)?[×x%]?)\s*$/i;
+        (root || document).querySelectorAll('tbody td').forEach(td => {
+            if (td.children.length === 0 || (td.children.length === 1 && td.firstElementChild.tagName === 'STRONG')) {
+                const txt = (td.textContent || '').trim();
+                if (txt.length > 0 && txt.length <= 12 && reShortNum.test(txt)) {
+                    td.classList.add('nowrap-cell');
+                }
+            }
         });
     }
 
@@ -793,7 +800,7 @@ SHARED_JS = r"""
         currentIdx: 0,  // index of left (or single) page shown
         bookTitle: '',
 
-        init() {
+        async init() {
             const stage = document.getElementById('reader-stage');
             if (!stage) return; // index.html portal does not paginate
             this.enabled = true;
@@ -806,8 +813,36 @@ SHARED_JS = r"""
                 this.mode = window.innerWidth >= 1120 ? 'spread' : 'single';
             }
 
+            // Wait briefly for web fonts so initial page count is accurate on first paint
+            if (document.fonts && document.fonts.ready) {
+                await Promise.race([
+                    document.fonts.ready,
+                    new Promise(res => setTimeout(res, 1200))
+                ]);
+            }
+
             this.bindControls();
             this.applyMode(this.mode, false);
+
+            // Re-paginate cleanly if any map image finishes loading after initial paint
+            const source = document.querySelector('.book-page');
+            if (source) {
+                let imgTimer = null;
+                source.querySelectorAll('img').forEach(img => {
+                    if (!img.complete) {
+                        img.addEventListener('load', () => {
+                            clearTimeout(imgTimer);
+                            imgTimer = setTimeout(() => {
+                                if (this.mode !== 'scroll') {
+                                    const prev = this.currentIdx;
+                                    this.paginate();
+                                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                }
+                            }, 120);
+                        }, { once: true });
+                    }
+                });
+            }
 
             let resizeTimer = null;
             window.addEventListener('resize', () => {
@@ -843,7 +878,8 @@ SHARED_JS = r"""
             }
             document.documentElement.style.setProperty('--leaf-w', leafW + 'px');
             document.documentElement.style.setProperty('--leaf-h', leafH + 'px');
-            return { leafW, leafH, bodyH: leafH - 66 };
+            // 2px border + 30px header + 30px footer + 10px safety breathing room
+            return { leafW, leafH, bodyH: leafH - 72 };
         },
 
         collectBlocks(container) {
@@ -899,7 +935,182 @@ SHARED_JS = r"""
                 mBody.innerHTML = '';
             };
 
-            const isHeading = (el) => /^H[1-4]$/.test(el.tagName);
+            const isHeading = (el) => el && /^H[1-4]$/.test(el.tagName);
+
+            const popOrphanHeadings = (allowShortIntro) => {
+                const carried = [];
+                // Optionally pull a single short intro <p> sitting right under a heading if there's earlier content on the page
+                if (
+                    allowShortIntro &&
+                    curNodes.length >= 3 &&
+                    curNodes[curNodes.length - 1].tagName === 'P' &&
+                    (curNodes[curNodes.length - 1].textContent || '').trim().length <= 180 &&
+                    isHeading(curNodes[curNodes.length - 2])
+                ) {
+                    carried.unshift(curNodes.pop());
+                    if (mBody.lastChild) mBody.removeChild(mBody.lastChild);
+                }
+                while (curNodes.length > 0 && isHeading(curNodes[curNodes.length - 1])) {
+                    carried.unshift(curNodes.pop());
+                    if (mBody.lastChild) mBody.removeChild(mBody.lastChild);
+                }
+                // Never empty the entire page when carrying headings (prevents infinite loops)
+                if (curNodes.length === 0 && carried.length > 0) {
+                    carried.forEach(node => {
+                        curNodes.push(node);
+                        mBody.appendChild(node);
+                    });
+                    return [];
+                }
+                return carried;
+            };
+
+            const restoreCarried = (carried) => {
+                carried.forEach(node => {
+                    curNodes.push(node);
+                    mBody.appendChild(node);
+                });
+            };
+
+            const placeTableWrap = (tableWrap) => {
+                tagNowrapCells(tableWrap);
+                const table = tableWrap.querySelector('table');
+                const tbody = table ? table.querySelector('tbody') : null;
+                const rows = tbody ? Array.from(tbody.querySelectorAll(':scope > tr')) : [];
+                if (!table || !tbody || rows.length <= 1) {
+                    // Fallback to atomic placement for trivial 0-1 row tables
+                    placeAtomic(tableWrap);
+                    return;
+                }
+
+                // Fast path: whole table fits right now!
+                mBody.appendChild(tableWrap);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(tableWrap);
+                    return;
+                }
+                mBody.removeChild(tableWrap);
+
+                const theadOrig = table.querySelector('thead');
+                const buildChunk = () => {
+                    const w = document.createElement('div');
+                    w.className = tableWrap.className;
+                    const t = document.createElement('table');
+                    if (theadOrig) t.appendChild(theadOrig.cloneNode(true));
+                    const tb = document.createElement('tbody');
+                    t.appendChild(tb);
+                    w.appendChild(t);
+                    return { w, tb };
+                };
+
+                let rowIdx = 0;
+                while (rowIdx < rows.length) {
+                    const chunk = buildChunk();
+                    mBody.appendChild(chunk.w);
+                    let addedHere = 0;
+
+                    while (rowIdx < rows.length) {
+                        const rowClone = rows[rowIdx].cloneNode(true);
+                        chunk.tb.appendChild(rowClone);
+                        if (mBody.scrollHeight > bodyH) {
+                            if (addedHere === 0 && curNodes.length === 0) {
+                                // Single super-tall row alone on fresh page: keep it so we make forward progress
+                                addedHere++;
+                                rowIdx++;
+                                break;
+                            }
+                            chunk.tb.removeChild(rowClone);
+                            break;
+                        }
+                        addedHere++;
+                        rowIdx++;
+                    }
+
+                    // Avoid leaving just 1 lonely row at bottom of a non-empty page if more rows remain
+                    if (addedHere === 0 || (addedHere === 1 && rowIdx < rows.length && curNodes.length > 0)) {
+                        mBody.removeChild(chunk.w);
+                        rowIdx -= addedHere;
+                        const carried = popOrphanHeadings(true);
+                        flushPage();
+                        restoreCarried(carried);
+                        continue;
+                    }
+
+                    curNodes.push(chunk.w);
+                    if (rowIdx < rows.length) {
+                        flushPage();
+                    }
+                }
+            };
+
+            const placeList = (listEl) => {
+                const items = Array.from(listEl.children).filter(el => el.tagName === 'LI');
+                if (items.length <= 1) {
+                    placeAtomic(listEl);
+                    return;
+                }
+                mBody.appendChild(listEl);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(listEl);
+                    return;
+                }
+                mBody.removeChild(listEl);
+
+                let idx = 0;
+                const baseStart = parseInt(listEl.getAttribute('start') || '1', 10) || 1;
+                while (idx < items.length) {
+                    const chunk = document.createElement(listEl.tagName);
+                    if (listEl.className) chunk.className = listEl.className;
+                    if (listEl.tagName === 'OL' && idx > 0) {
+                        chunk.setAttribute('start', String(baseStart + idx));
+                    }
+                    mBody.appendChild(chunk);
+                    let addedHere = 0;
+
+                    while (idx < items.length) {
+                        const liClone = items[idx].cloneNode(true);
+                        chunk.appendChild(liClone);
+                        if (mBody.scrollHeight > bodyH) {
+                            if (addedHere === 0 && curNodes.length === 0) {
+                                addedHere++;
+                                idx++;
+                                break;
+                            }
+                            chunk.removeChild(liClone);
+                            break;
+                        }
+                        addedHere++;
+                        idx++;
+                    }
+
+                    if (addedHere === 0) {
+                        mBody.removeChild(chunk);
+                        const carried = popOrphanHeadings(true);
+                        flushPage();
+                        restoreCarried(carried);
+                        continue;
+                    }
+
+                    curNodes.push(chunk);
+                    if (idx < items.length) {
+                        flushPage();
+                    }
+                }
+            };
+
+            const placeAtomic = (clone) => {
+                mBody.appendChild(clone);
+                if (mBody.scrollHeight > bodyH && curNodes.length > 0) {
+                    mBody.removeChild(clone);
+                    const carried = popOrphanHeadings(true);
+                    flushPage();
+                    restoreCarried(carried);
+                    curNodes.push(clone);
+                    mBody.appendChild(clone);
+                } else {
+                    curNodes.push(clone);
+                }
+            };
 
             for (let idx = 0; idx < rawBlocks.length; idx++) {
                 const orig = rawBlocks[idx];
@@ -922,26 +1133,12 @@ SHARED_JS = r"""
                     flushPage();
                 }
 
-                mBody.appendChild(clone);
-                const hNow = mBody.scrollHeight;
-
-                if (hNow > bodyH && curNodes.length > 0) {
-                    // Check orphan heading at bottom of page: if previous node was a heading, carry it over too!
-                    mBody.removeChild(clone);
-                    let carried = null;
-                    if (curNodes.length > 0 && isHeading(curNodes[curNodes.length - 1])) {
-                        carried = curNodes.pop();
-                        if (mBody.lastChild) mBody.removeChild(mBody.lastChild);
-                    }
-                    flushPage();
-                    if (carried) {
-                        curNodes.push(carried);
-                        mBody.appendChild(carried);
-                    }
-                    curNodes.push(clone);
-                    mBody.appendChild(clone);
+                if (clone.classList.contains('table-wrap')) {
+                    placeTableWrap(clone);
+                } else if (clone.tagName === 'UL' || clone.tagName === 'OL') {
+                    placeList(clone);
                 } else {
-                    curNodes.push(clone);
+                    placeAtomic(clone);
                 }
             }
             flushPage();
@@ -1009,9 +1206,6 @@ SHARED_JS = r"""
             document.querySelectorAll('.btn-prev-page').forEach(b => b.disabled = atStart);
             document.querySelectorAll('.btn-next-page').forEach(b => b.disabled = atEnd);
 
-            // Re-bind lightbox & GM unlock forms inside freshly rendered leaf DOM!
-            wireLightbox(spreadEl);
-            bindUnlockForms(spreadEl);
             this.highlightActiveToc(idx, eff === 'spread' ? idx + 1 : idx);
         },
 
@@ -1137,7 +1331,6 @@ SHARED_JS = r"""
                 const data = await decryptBlock(cipherObj, password);
                 outEl.innerHTML = data.html || '';
                 v.setAttribute('data-locked', 'false');
-                wireLightbox(outEl);
                 if (data.toc) {
                     const tocList = document.querySelector('.toc-list');
                     if (tocList) {
@@ -1172,24 +1365,32 @@ SHARED_JS = r"""
         }
     }
 
-    function bindUnlockForms(root) {
-        (root || document).querySelectorAll('.gm-unlock-form').forEach(form => {
-            if (form.dataset.bound) return;
-            form.dataset.bound = '1';
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const input = form.querySelector('.gm-pwd-input');
-                const pwd = input ? input.value : '';
-                if (!pwd) return;
-                if (!window.crypto || !window.crypto.subtle) {
-                    const errEl = form.parentElement.querySelector('.gm-gate-error');
-                    if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
-                    return;
-                }
-                await unlockAllVaults(pwd, false);
-            });
-        });
-    }
+    // Document-level event delegation (works cleanly across cloned book pages & scroll mode)
+    document.addEventListener('submit', async (e) => {
+        const form = e.target.closest('.gm-unlock-form');
+        if (!form) return;
+        e.preventDefault();
+        const input = form.querySelector('.gm-pwd-input');
+        const pwd = input ? input.value : '';
+        if (!pwd) return;
+        if (!window.crypto || !window.crypto.subtle) {
+            const errEl = form.parentElement.querySelector('.gm-gate-error');
+            if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
+            return;
+        }
+        await unlockAllVaults(pwd, false);
+    });
+
+    document.addEventListener('click', (e) => {
+        const img = e.target.closest('.atlas-plate img');
+        if (!img) return;
+        const lb = document.getElementById('atlas-lightbox');
+        const lbImg = document.getElementById('atlas-lightbox-img');
+        if (lb && lbImg) {
+            lbImg.src = img.src;
+            lb.classList.add('open');
+        }
+    });
 
     document.addEventListener('DOMContentLoaded', async () => {
         const lb = document.getElementById('atlas-lightbox');
@@ -1197,8 +1398,6 @@ SHARED_JS = r"""
             lb.addEventListener('click', () => lb.classList.remove('open'));
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
         }
-        wireLightbox(document);
-        bindUnlockForms(document);
 
         const lockBtn = document.getElementById('btn-lock-gm');
         if (lockBtn) {
@@ -1215,7 +1414,7 @@ SHARED_JS = r"""
             await unlockAllVaults(saved, true);
         }
 
-        BookReader.init();
+        await BookReader.init();
     });
 })();
 """
