@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 """
-Gerador Editorial HTML Autocontido com Criptografia AES-256-GCM para Área do Mestre — Alenia RPG (v2.0)
-- Copia os 6 mapas para livros_html/assets/
-- Criptografa com PBKDF2-HMAC-SHA256 + AES-256-GCM (Web Crypto API) todo conteúdo restrito ao Mestre:
-  * Tomo IV (Bestiário completo + sumário)
-  * Tomo VII (Aventura Inicial completa + sumário)
-  * Seção 7 do Livro do Cenário (Segredos do Regente das Cinzas & Simbionte da Comunhão)
-  * Os mesmos blocos dentro do Compêndio Completo
-- A senha é lida via variável de ambiente ALENIA_GM_PASSWORD e NUNCA é gravada nos arquivos gerados.
+Gerador Editorial HTML em Formato de Livro Real (Páginas Duplas + Criptografia AES-256-GCM) — Alenia RPG (v2.0)
+- Modo Livro (2 páginas com lombada central em desktop, 1 página em telas menores, alternável para 1 Página ou Contínuo)
+- Paginação inteligente sem títulos órfãos, navegação por teclado (<- / ->), saltos pelo sumário lateral
+- Área do Mestre criptografada em AES-256-GCM (PBKDF2 120k) com re-paginação automática ao destrancar
+- Pasta livros_html/ 100% autocontida com mapas em assets/ e CSS @media print A4
 """
 import base64
 import html
@@ -27,7 +24,6 @@ os.makedirs(ASSETS_DIR, exist_ok=True)
 
 EDITION_LABEL = "Edição Revisada v2.0 • RRPG Firecast"
 PBKDF2_ITERS = 120000
-
 GM_PASSWORD = os.environ.get("ALENIA_GM_PASSWORD", "")
 
 BOOKS = [
@@ -144,34 +140,22 @@ CHAPTER_MAPS = {
     ),
 }
 
-# Seções específicas (por prefixo de H2 ou H3) que são seladas para o Mestre mesmo dentro de tomos públicos
-GM_SECTION_H2_PREFIXES = (
-    "7. A Grande Ameaça:",
-)
-GM_SECTION_H3_PREFIXES = (
-    "O Simbionte da Comunhão",
-)
+GM_SECTION_H2_PREFIXES = ("7. A Grande Ameaça:",)
+GM_SECTION_H3_PREFIXES = ("O Simbionte da Comunhão",)
 
 
 def encrypt_payload(plaintext: str, password: str) -> str:
     salt = os.urandom(16)
     iv = os.urandom(12)
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32,
-        salt=salt,
-        iterations=PBKDF2_ITERS,
-    )
+    kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=PBKDF2_ITERS)
     key = kdf.derive(password.encode("utf-8"))
     ct = AESGCM(key).encrypt(iv, plaintext.encode("utf-8"), None)
-    obj = {
-        "v": 1,
-        "it": PBKDF2_ITERS,
+    return json.dumps({
+        "v": 1, "it": PBKDF2_ITERS,
         "s": base64.b64encode(salt).decode("ascii"),
         "i": base64.b64encode(iv).decode("ascii"),
         "c": base64.b64encode(ct).decode("ascii"),
-    }
-    return json.dumps(obj, separators=(",", ":"))
+    }, separators=(",", ":"))
 
 
 def make_gm_gate_block(label: str, subtitle: str, encrypted_body_html: str, encrypted_toc_html: str = "") -> str:
@@ -203,7 +187,7 @@ SHARED_CSS = r"""
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
 
 :root {
-    --desk: #171512;
+    --desk: #171411;
     --vellum: #f7f1e3;
     --vellum-alt: #efe6d2;
     --vellum-card: #f2ead8;
@@ -214,7 +198,9 @@ SHARED_CSS = r"""
     --gold: #9a7b3b;
     --gold-light: #cdb06e;
     --border: #cfc2a5;
-    --sidebar-w: 280px;
+    --sidebar-w: 256px;
+    --topbar-h: 52px;
+    --footbar-h: 56px;
 }
 
 * { box-sizing: border-box; }
@@ -222,15 +208,16 @@ html { scroll-behavior: smooth; background: var(--desk); color: var(--ink); }
 body {
     margin: 0;
     font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
-    font-size: 18px;
-    line-height: 1.66;
-    background: radial-gradient(circle at top, #27221c 0%, #171512 58%, #100e0c 100%);
+    font-size: 16.5px;
+    line-height: 1.56;
+    background: radial-gradient(circle at top, #2a241d 0%, #171411 60%, #0e0c0a 100%);
     min-height: 100vh;
 }
 
+/* TOP BAR */
 .topbar {
-    position: fixed; top: 0; left: 0; right: 0; height: 54px;
-    background: rgba(18, 16, 13, 0.96);
+    position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h);
+    background: rgba(18, 15, 12, 0.97);
     border-bottom: 1px solid rgba(154, 123, 59, 0.45);
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
@@ -240,7 +227,7 @@ body {
     letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
 }
 .topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.topbar-nav a, .btn-print, .btn-lock {
+.topbar-nav a, .btn-print, .btn-lock, .btn-toc-toggle {
     font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
     text-transform: uppercase; color: #ded5c3; text-decoration: none;
     padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
@@ -254,28 +241,296 @@ body {
 .btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
 .btn-lock.visible { display: inline-block; }
 .btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
+.btn-toc-toggle { border-color: rgba(154, 123, 59, 0.35); color: #d4cab6; }
+.btn-toc-toggle:hover { color: var(--gold-light); border-color: var(--gold); }
 
+/* SIDEBAR TOC */
 .sidebar {
-    position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
+    position: fixed; top: var(--topbar-h); left: 0; bottom: var(--footbar-h); width: var(--sidebar-w);
     background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
-    padding: 18px 14px 32px; overflow-y: auto; z-index: 900;
+    padding: 16px 12px 24px; overflow-y: auto; z-index: 900;
+    transition: transform 0.22s ease;
 }
+body.sidebar-hidden .sidebar { transform: translateX(-100%); }
+body.sidebar-hidden .book-shell,
+body.sidebar-hidden .reader-stage { margin-left: 0; }
 .sidebar-title {
-    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.14em;
+    font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--gold-light);
-    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 12px 0;
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 10px 0;
 }
 .toc-list { list-style: none; padding: 0; margin: 0; }
 .toc-list li { margin: 2px 0; }
 .toc-list a {
-    display: block; text-decoration: none; color: #cfc6b4; font-size: 14.5px;
-    line-height: 1.35; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
+    display: block; text-decoration: none; color: #cfc6b4; font-size: 14px;
+    line-height: 1.32; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
 }
-.toc-list a:hover { color: var(--gold-light); background: rgba(154, 123, 59, 0.1); border-left-color: var(--gold); }
-.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 6px; }
-.toc-h3 a { padding-left: 16px; font-size: 13.5px; color: #b5ab98; }
+.toc-list a:hover, .toc-list a.toc-active {
+    color: var(--gold-light); background: rgba(154, 123, 59, 0.14); border-left-color: var(--gold);
+}
+.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 5px; }
+.toc-h3 a { padding-left: 16px; font-size: 13px; color: #b5ab98; }
 
-.book-shell { margin-left: var(--sidebar-w); padding: 80px 26px 64px; display: flex; justify-content: center; }
+/* =====================================================
+   HARDCOVER BOOK READER MODE (DEFAULT ON ALL TOMES)
+   ===================================================== */
+body.book-mode {
+    overflow: hidden;
+}
+
+.reader-stage {
+    margin-left: var(--sidebar-w);
+    margin-top: var(--topbar-h);
+    height: calc(100vh - var(--topbar-h) - var(--footbar-h));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 22px;
+    position: relative;
+    transition: margin-left 0.22s ease;
+}
+
+/* Source container hidden when in paginated book-mode, visible in scroll-mode or print */
+body.book-mode .book-shell { display: none; }
+body.scroll-mode .reader-stage,
+body.scroll-mode .reader-footer-bar .pager-controls { display: none; }
+body.scroll-mode { overflow: auto; }
+body.scroll-mode .book-shell { padding-bottom: 84px; }
+
+/* Book Hardcover Leather Binding + Double Page Spread */
+.hardcover-wrap {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    background: linear-gradient(135deg, #3c2218 0%, #26140e 50%, #3a2016 100%);
+    padding: 10px 12px;
+    border-radius: 7px;
+    border: 1px solid rgba(154, 123, 59, 0.55);
+    box-shadow:
+        0 26px 70px rgba(0, 0, 0, 0.78),
+        0 6px 18px rgba(0, 0, 0, 0.55),
+        inset 0 0 0 1px rgba(205, 176, 110, 0.22);
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+}
+
+.book-spread {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    position: relative;
+    animation: pageFadeIn 0.22s ease;
+}
+
+@keyframes pageFadeIn {
+    from { opacity: 0.45; transform: translateY(2px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.leaf {
+    width: var(--leaf-w, 520px);
+    height: var(--leaf-h, 710px);
+    background: var(--vellum);
+    color: var(--ink);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #c9ba9a;
+}
+
+.leaf.leaf-left {
+    border-radius: 3px 0 0 3px;
+    border-right: none;
+    background: linear-gradient(90deg, #f3ecdc 0%, #f8f2e4 8%, #f8f2e4 90%, #e7dcc4 98%, #d7c7a7 100%);
+    box-shadow: inset -14px 0 22px -12px rgba(45, 30, 15, 0.34);
+}
+
+.leaf.leaf-right {
+    border-radius: 0 3px 3px 0;
+    border-left: 1px solid rgba(72, 52, 32, 0.22);
+    background: linear-gradient(90deg, #d8c8a9 0%, #e9dec7 3%, #f8f2e4 11%, #f8f2e4 92%, #f1e8d6 100%);
+    box-shadow: inset 14px 0 22px -12px rgba(45, 30, 15, 0.34);
+}
+
+.leaf.leaf-single {
+    border-radius: 3px;
+    background: linear-gradient(90deg, #efe6d4 0%, #f8f2e4 5%, #f8f2e4 95%, #efe6d4 100%);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.leaf::after {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border: 1px solid rgba(154, 123, 59, 0.26);
+    pointer-events: none;
+}
+
+.leaf-header {
+    height: 30px;
+    padding: 8px 28px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0.78;
+    flex-shrink: 0;
+}
+
+.leaf-body {
+    flex: 1 1 auto;
+    padding: 8px 30px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(154, 123, 59, 0.4) transparent;
+}
+
+.leaf-footer {
+    height: 30px;
+    padding: 0 28px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    flex-shrink: 0;
+}
+
+.leaf.leaf-blank {
+    background: linear-gradient(90deg, #e5dac3 0%, #f2ead8 14%, #f4ede0 100%);
+}
+.leaf-blank-ornament {
+    margin: auto;
+    font-family: 'Cinzel', Georgia, serif;
+    color: rgba(154, 123, 59, 0.38);
+    font-size: 26px;
+    letter-spacing: 0.2em;
+}
+
+/* Side floating turn arrows */
+.side-turn-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 64px;
+    background: rgba(20, 17, 14, 0.82);
+    color: var(--gold-light);
+    border: 1px solid rgba(154, 123, 59, 0.5);
+    border-radius: 4px;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.16s ease;
+}
+.side-turn-btn:hover:not(:disabled) {
+    background: var(--crimson);
+    color: #fff;
+    border-color: var(--gold-light);
+}
+.side-turn-btn:disabled { opacity: 0.22; cursor: default; }
+.side-turn-prev { left: 10px; }
+.side-turn-next { right: 10px; }
+
+/* BOTTOM READER BAR */
+.reader-footer-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: var(--footbar-h);
+    background: rgba(18, 15, 12, 0.97);
+    border-top: 1px solid rgba(154, 123, 59, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    z-index: 1000;
+    gap: 12px;
+}
+
+.pager-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 auto;
+}
+
+.pager-btn {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    background: #231e19;
+    color: #ede4d1;
+    border: 1px solid rgba(154, 123, 59, 0.5);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.pager-btn:hover:not(:disabled) { background: var(--crimson); color: #fff; border-color: var(--gold-light); }
+.pager-btn:disabled { opacity: 0.35; cursor: default; }
+
+.pager-status {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+    min-width: 150px;
+    text-align: center;
+}
+
+.pager-jump {
+    width: 58px;
+    padding: 5px 6px;
+    text-align: center;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 12px;
+    background: #12100d;
+    color: #f7f1e3;
+    border: 1px solid rgba(154, 123, 59, 0.5);
+    border-radius: 3px;
+}
+
+.view-mode-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mode-btn {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 9px;
+    background: transparent;
+    color: #bfb5a2;
+    border: 1px solid rgba(154, 123, 59, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+}
+.mode-btn.active, .mode-btn:hover {
+    background: rgba(154, 123, 59, 0.2);
+    color: var(--gold-light);
+    border-color: var(--gold);
+}
+
+/* SCROLL / PORTAL LAYOUT */
+.book-shell { margin-left: var(--sidebar-w); padding: 78px 26px 64px; display: flex; justify-content: center; }
 .book-shell.no-sidebar { margin-left: 0; }
 .book-page {
     width: 100%; max-width: 920px; background: var(--vellum); color: var(--ink);
@@ -288,151 +543,156 @@ body {
     border: 1px solid rgba(154, 123, 59, 0.32); pointer-events: none;
 }
 
+/* COVER PAGE */
 .cover-page {
-    min-height: 760px; display: flex; flex-direction: column; justify-content: center; align-items: center;
-    text-align: center; padding: 54px 44px; margin-bottom: 52px;
-    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -8px;
+    min-height: 580px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 34px 28px; margin-bottom: 42px;
+    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -7px;
     background: radial-gradient(circle at center, #fbf7ee 0%, #f3ead6 100%);
     page-break-after: always; break-after: page;
 }
+.leaf-body .cover-page {
+    min-height: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 24px 20px;
+}
 .cover-kicker {
-    font-family: 'Cinzel', Georgia, serif; font-size: 13px; letter-spacing: 0.26em;
-    text-transform: uppercase; color: var(--crimson); margin-bottom: 14px;
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--crimson); margin-bottom: 10px;
 }
 .cover-rule {
-    width: 180px; height: 2px;
+    width: 150px; height: 2px;
     background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
-    margin: 18px auto;
+    margin: 14px auto;
 }
 .cover-title {
-    font-family: 'Cinzel', Georgia, serif; font-size: 40px; font-weight: 800; line-height: 1.15;
+    font-family: 'Cinzel', Georgia, serif; font-size: 32px; font-weight: 800; line-height: 1.14;
     letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
 }
 .cover-subtitle {
-    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 21px;
-    color: var(--ink-soft); margin: 14px 0 8px; max-width: 640px;
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 18px;
+    color: var(--ink-soft); margin: 10px 0 6px; max-width: 520px;
 }
-.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 560px; margin: 24px auto 14px; }
+.cover-epigraph { font-style: italic; font-size: 16px; color: var(--crimson-dark); max-width: 460px; margin: 16px auto 10px; }
 .cover-thumb {
-    max-width: 100%; max-height: 310px; border: 2px solid var(--gold);
-    box-shadow: 0 10px 26px rgba(0,0,0,0.22); margin: 16px auto; border-radius: 2px;
+    max-width: 100%; max-height: 220px; border: 2px solid var(--gold);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin: 12px auto; border-radius: 2px;
 }
 .cover-edition {
-    margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
-    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+    margin-top: auto; padding-top: 18px; font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft);
 }
 
 /* GM ENCRYPTED VAULT GATE */
 .gm-gate-box {
-    margin: 28px 0;
-    padding: 36px 28px;
+    margin: 16px 0;
+    padding: 28px 22px;
     text-align: center;
     background: linear-gradient(180deg, #1d1916 0%, #151210 100%);
     color: #efe6d2;
     border: 2px solid var(--gold);
     outline: 1px solid var(--crimson);
-    outline-offset: -7px;
+    outline-offset: -6px;
     border-radius: 4px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.32);
 }
 .gm-vault[data-locked="false"] .gm-gate-box { display: none; }
-.gm-seal-icon { font-size: 36px; margin-bottom: 8px; }
+.gm-seal-icon { font-size: 30px; margin-bottom: 6px; }
 .gm-gate-kicker {
-    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.22em;
-    color: var(--gold-light); text-transform: uppercase; margin-bottom: 6px;
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.2em;
+    color: var(--gold-light); text-transform: uppercase; margin-bottom: 4px;
 }
 .gm-gate-title {
-    font-family: 'Cinzel', Georgia, serif; font-size: 24px; color: #f7f1e3;
-    border: none; margin: 6px 0 10px; padding: 0;
+    font-family: 'Cinzel', Georgia, serif; font-size: 20px; color: #f7f1e3;
+    border: none; margin: 4px 0 8px; padding: 0;
 }
 .gm-gate-desc {
-    text-align: center; color: #cfc6b4; font-style: italic; max-width: 540px; margin: 0 auto 20px; font-size: 17px;
+    text-align: center; color: #cfc6b4; font-style: italic; max-width: 440px; margin: 0 auto 16px; font-size: 15.5px;
 }
-.gm-unlock-form {
-    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 440px; margin: 0 auto;
-}
+.gm-unlock-form { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 390px; margin: 0 auto; }
 .gm-pwd-input {
-    flex: 1 1 220px; padding: 10px 14px; font-family: 'EB Garamond', Georgia, serif; font-size: 17px;
+    flex: 1 1 180px; padding: 8px 12px; font-family: 'EB Garamond', Georgia, serif; font-size: 16px;
     background: #100e0c; color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
 }
 .gm-pwd-input:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 0 2px rgba(205,176,110,0.28); }
 .gm-unlock-btn {
-    padding: 10px 20px; font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    padding: 8px 16px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; font-weight: 700;
     letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
     background: var(--crimson); color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
 }
 .gm-unlock-btn:hover { background: #962724; }
-.gm-gate-error {
-    margin-top: 12px; min-height: 22px; font-size: 15px; color: #f08a84; font-weight: 600;
-}
+.gm-gate-error { margin-top: 10px; min-height: 20px; font-size: 14px; color: #f08a84; font-weight: 600; }
 
+/* CONTENT TYPOGRAPHY */
 h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
 h1.book-h1 {
-    font-size: 28px; letter-spacing: 0.05em; text-transform: uppercase;
-    border-bottom: 2px solid var(--crimson); padding-bottom: 10px; margin: 0 0 22px 0;
+    font-size: 23px; letter-spacing: 0.05em; text-transform: uppercase;
+    border-bottom: 2px solid var(--crimson); padding-bottom: 8px; margin: 0 0 16px 0;
 }
-h2 { font-size: 21px; letter-spacing: 0.04em; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--gold); }
-h3 { font-size: 16.5px; letter-spacing: 0.03em; margin: 22px 0 8px; color: #3d2415; }
-p { margin: 0 0 13px; text-align: justify; hyphens: auto; }
-ul, ol { margin: 6px 0 16px; padding-left: 24px; }
-li { margin-bottom: 6px; }
+h2 { font-size: 18px; letter-spacing: 0.04em; margin: 18px 0 10px; padding-bottom: 5px; border-bottom: 1px solid var(--gold); }
+h3 { font-size: 15px; letter-spacing: 0.03em; margin: 14px 0 6px; color: #3d2415; }
+p { margin: 0 0 10px; text-align: justify; hyphens: auto; }
+ul, ol { margin: 4px 0 12px; padding-left: 20px; }
+li { margin-bottom: 4px; }
 strong { color: #17120d; }
 code {
-    font-family: Consolas, 'Courier New', monospace; font-size: 0.86em;
+    font-family: Consolas, 'Courier New', monospace; font-size: 0.84em;
     background: rgba(154, 123, 59, 0.14); border: 1px solid rgba(154, 123, 59, 0.28);
-    padding: 1px 5px; border-radius: 3px; color: #5b1d18;
+    padding: 1px 4px; border-radius: 3px; color: #5b1d18;
 }
-hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 28px 0; }
-a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 3px; }
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 16px 0; }
+a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 2px; }
 
 blockquote {
-    margin: 18px 0 22px; padding: 14px 20px; background: var(--vellum-card);
-    border-left: 4px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
+    margin: 12px 0 14px; padding: 10px 15px; background: var(--vellum-card);
+    border-left: 3px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
 }
 .callout {
-    margin: 20px 0; padding: 14px 18px; border-radius: 2px; border: 1px solid var(--border);
-    border-left: 5px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid;
+    margin: 12px 0; padding: 11px 14px; border-radius: 2px; border: 1px solid var(--border);
+    border-left: 4px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid; font-size: 15.5px;
 }
 .callout-title {
-    font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
-    letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); margin-bottom: 6px;
+    font-family: 'Cinzel', Georgia, serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--crimson); margin-bottom: 4px;
 }
 .callout.warning { border-left-color: #b4691e; background: #f6ecd7; }
 .callout.warning .callout-title { color: #8c4d10; }
 
 .formula-box {
-    margin: 16px 0 20px; padding: 12px 18px; background: #efe5cf;
+    margin: 10px 0 14px; padding: 9px 12px; background: #efe5cf;
     border: 1px solid var(--gold); border-radius: 3px; text-align: center;
-    font-size: 18.5px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
+    font-size: 16px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
 }
 
-.table-wrap { width: 100%; overflow-x: auto; margin: 16px 0 24px; }
-table { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.44; border: 1px solid var(--gold); }
+.table-wrap { width: 100%; overflow-x: auto; margin: 10px 0 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 13.8px; line-height: 1.38; border: 1px solid var(--gold); }
 thead th {
-    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.05em;
+    font-family: 'Cinzel', Georgia, serif; font-size: 10px; letter-spacing: 0.04em;
     text-transform: uppercase; background: var(--crimson); color: #f7f1e3;
-    padding: 9px 9px; border: 1px solid #5f1816; text-align: left;
+    padding: 7px 7px; border: 1px solid #5f1816; text-align: left;
 }
-tbody td { padding: 8px 9px; border: 1px solid var(--border); vertical-align: top; }
+tbody td { padding: 6px 7px; border: 1px solid var(--border); vertical-align: top; }
 tbody tr:nth-child(even) { background: var(--vellum-alt); }
 tr { break-inside: avoid; }
 
 .atlas-plate {
-    margin: 22px 0 28px; padding: 10px; background: #ebe1ca;
-    border: 1px solid var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+    margin: 10px 0 14px; padding: 8px; background: #ebe1ca;
+    border: 1px solid var(--gold); box-shadow: 0 5px 14px rgba(0,0,0,0.14);
     text-align: center; break-inside: avoid;
 }
-.atlas-plate img { width: 100%; height: auto; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.atlas-plate img { width: 100%; height: auto; max-height: 460px; object-fit: contain; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
 .atlas-caption {
-    font-family: 'Cinzel', Georgia, serif; font-size: 12px; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--ink-soft); margin-top: 8px;
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 6px;
 }
 
 .entry-card {
-    margin: 16px 0 20px; padding: 14px 18px 12px; background: var(--vellum-card);
+    margin: 10px 0 12px; padding: 11px 14px 9px; background: var(--vellum-card);
     border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
+    font-size: 15.2px;
 }
-.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 5px; }
+.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 4px; }
 
 .lightbox {
     display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
@@ -441,6 +701,7 @@ tr { break-inside: avoid; }
 .lightbox.open { display: flex; }
 .lightbox img { max-width: 96vw; max-height: 92vh; border: 2px solid var(--gold); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
 
+/* PORTAL GRID (INDEX.HTML) */
 .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 22px 0 32px; }
 .portal-card {
     display: flex; flex-direction: column; background: var(--vellum-card);
@@ -460,16 +721,22 @@ tr { break-inside: avoid; }
 .tome-divider { page-break-before: always; break-before: page; }
 
 @media (max-width: 1020px) {
-    .sidebar { display: none; }
-    .book-shell { margin-left: 0; padding: 72px 14px 40px; }
-    .book-page { padding: 30px 24px 42px; }
+    .sidebar { transform: translateX(-100%); }
+    body.sidebar-open-mobile .sidebar { transform: translateX(0); box-shadow: 6px 0 30px rgba(0,0,0,0.7); }
+    .book-shell, .reader-stage { margin-left: 0; }
+    .book-page { padding: 28px 22px 42px; }
+    .side-turn-btn { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .book-spread { animation: none; }
 }
 
 @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
 @media print {
-    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
-    .topbar, .sidebar, .lightbox, .gm-gate-box { display: none !important; }
-    .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
+    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; overflow: visible !important; }
+    .topbar, .sidebar, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar { display: none !important; }
+    body.book-mode .book-shell, .book-shell { display: block !important; margin: 0 !important; padding: 0 !important; }
     .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
     .book-page::before { display: none !important; }
     .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -482,6 +749,7 @@ tr { break-inside: avoid; }
 SHARED_JS = r"""
 (function() {
     const SESSION_KEY = 'alenia_gm_unlock_key';
+    const MODE_KEY = 'alenia_reader_mode';
 
     function b64ToBytes(b64) {
         const bin = atob(b64);
@@ -492,20 +760,13 @@ SHARED_JS = r"""
 
     async function decryptBlock(cipherObj, password) {
         const enc = new TextEncoder();
-        const keyMat = await crypto.subtle.importKey(
-            'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
-        );
+        const keyMat = await crypto.subtle.importKey('raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']);
         const aesKey = await crypto.subtle.deriveKey(
             { name: 'PBKDF2', salt: b64ToBytes(cipherObj.s), iterations: cipherObj.it, hash: 'SHA-256' },
-            keyMat,
-            { name: 'AES-GCM', length: 256 },
-            false,
-            ['decrypt']
+            keyMat, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
         );
         const plainBuf = await crypto.subtle.decrypt(
-            { name: 'AES-GCM', iv: b64ToBytes(cipherObj.i) },
-            aesKey,
-            b64ToBytes(cipherObj.c)
+            { name: 'AES-GCM', iv: b64ToBytes(cipherObj.i) }, aesKey, b64ToBytes(cipherObj.c)
         );
         return JSON.parse(new TextDecoder().decode(plainBuf));
     }
@@ -521,14 +782,354 @@ SHARED_JS = r"""
         });
     }
 
+    /* =====================================================
+       HARDCOVER BOOK PAGINATOR ENGINE
+       ===================================================== */
+    const BookReader = {
+        enabled: false,
+        mode: 'spread', // 'spread' (2 pages), 'single' (1 page), 'scroll'
+        pages: [],      // array of HTML strings (one per book page)
+        anchorMap: {},  // element id -> page index (0-based)
+        currentIdx: 0,  // index of left (or single) page shown
+        bookTitle: '',
+
+        init() {
+            const stage = document.getElementById('reader-stage');
+            if (!stage) return; // index.html portal does not paginate
+            this.enabled = true;
+            this.bookTitle = document.body.dataset.bookTitle || 'Alenia RPG';
+
+            const savedMode = localStorage.getItem(MODE_KEY);
+            if (savedMode === 'spread' || savedMode === 'single' || savedMode === 'scroll') {
+                this.mode = savedMode;
+            } else {
+                this.mode = window.innerWidth >= 1120 ? 'spread' : 'single';
+            }
+
+            this.bindControls();
+            this.applyMode(this.mode, false);
+
+            let resizeTimer = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (this.mode !== 'scroll') {
+                        const prev = this.currentIdx;
+                        this.paginate();
+                        this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                    }
+                }, 220);
+            });
+        },
+
+        effectiveMode() {
+            if (this.mode === 'scroll') return 'scroll';
+            if (this.mode === 'spread' && window.innerWidth < 1040) return 'single';
+            return this.mode;
+        },
+
+        computeLeafDimensions() {
+            const eff = this.effectiveMode();
+            const sidebarVisible = window.innerWidth > 1020 && !document.body.classList.contains('sidebar-hidden');
+            const availW = window.innerWidth - (sidebarVisible ? 256 : 0) - 120;
+            const availH = window.innerHeight - 52 - 56 - 48;
+            let leafH = Math.max(460, Math.min(790, availH));
+            let leafW;
+            if (eff === 'spread') {
+                leafW = Math.min(540, Math.floor(availW / 2) - 8);
+                leafW = Math.max(360, leafW);
+            } else {
+                leafW = Math.min(680, Math.max(320, availW));
+            }
+            document.documentElement.style.setProperty('--leaf-w', leafW + 'px');
+            document.documentElement.style.setProperty('--leaf-h', leafH + 'px');
+            return { leafW, leafH, bodyH: leafH - 66 };
+        },
+
+        collectBlocks(container) {
+            const blocks = [];
+            function walk(parent) {
+                for (const child of Array.from(parent.children)) {
+                    if (child.tagName === 'SECTION' && child.classList.contains('tome-divider')) {
+                        walk(child);
+                    } else if (child.classList.contains('gm-vault') && child.getAttribute('data-locked') === 'false') {
+                        const unlocked = child.querySelector('.gm-unlocked-content');
+                        if (unlocked) walk(unlocked);
+                    } else {
+                        blocks.push(child);
+                    }
+                }
+            }
+            walk(container);
+            return blocks;
+        },
+
+        paginate() {
+            const source = document.querySelector('.book-page');
+            if (!source) return;
+            const { leafW, bodyH } = this.computeLeafDimensions();
+
+            // Offscreen measurement leaf matching exact styles & width
+            const measurer = document.createElement('div');
+            measurer.className = 'leaf leaf-single';
+            measurer.style.cssText = `position:fixed; left:-99999px; top:0; width:${leafW}px; height:auto; visibility:hidden; pointer-events:none;`;
+            const mBody = document.createElement('div');
+            mBody.className = 'leaf-body';
+            mBody.style.overflow = 'visible';
+            measurer.appendChild(mBody);
+            document.body.appendChild(measurer);
+
+            const rawBlocks = this.collectBlocks(source);
+            const pages = [];
+            const anchorMap = {};
+
+            let curNodes = [];
+
+            const flushPage = () => {
+                if (curNodes.length === 0) return;
+                const pageIdx = pages.length;
+                const wrap = document.createElement('div');
+                curNodes.forEach(n => {
+                    if (n.id) anchorMap[n.id] = pageIdx;
+                    n.querySelectorAll('[id]').forEach(el => { anchorMap[el.id] = pageIdx; });
+                    wrap.appendChild(n);
+                });
+                pages.push(wrap.innerHTML);
+                curNodes = [];
+                mBody.innerHTML = '';
+            };
+
+            const isHeading = (el) => /^H[1-4]$/.test(el.tagName);
+
+            for (let idx = 0; idx < rawBlocks.length; idx++) {
+                const orig = rawBlocks[idx];
+                const clone = orig.cloneNode(true);
+
+                // Cover pages always occupy their own dedicated full page
+                if (clone.classList.contains('cover-page')) {
+                    flushPage();
+                    const pageIdx = pages.length;
+                    if (clone.id) anchorMap[clone.id] = pageIdx;
+                    pages.push(clone.outerHTML);
+                    continue;
+                }
+
+                // Skip standalone <hr> at top of a fresh page
+                if (clone.tagName === 'HR' && curNodes.length === 0) continue;
+
+                // Start major H1 on a fresh page if current page already has content
+                if (clone.tagName === 'H1' && curNodes.length > 0) {
+                    flushPage();
+                }
+
+                mBody.appendChild(clone);
+                const hNow = mBody.scrollHeight;
+
+                if (hNow > bodyH && curNodes.length > 0) {
+                    // Check orphan heading at bottom of page: if previous node was a heading, carry it over too!
+                    mBody.removeChild(clone);
+                    let carried = null;
+                    if (curNodes.length > 0 && isHeading(curNodes[curNodes.length - 1])) {
+                        carried = curNodes.pop();
+                        if (mBody.lastChild) mBody.removeChild(mBody.lastChild);
+                    }
+                    flushPage();
+                    if (carried) {
+                        curNodes.push(carried);
+                        mBody.appendChild(carried);
+                    }
+                    curNodes.push(clone);
+                    mBody.appendChild(clone);
+                } else {
+                    curNodes.push(clone);
+                }
+            }
+            flushPage();
+            document.body.removeChild(measurer);
+
+            this.pages = pages.length > 0 ? pages : ['<p>Volume vazio.</p>'];
+            this.anchorMap = anchorMap;
+        },
+
+        renderCurrentSpread() {
+            const spreadEl = document.getElementById('book-spread');
+            if (!spreadEl) return;
+            const eff = this.effectiveMode();
+            const total = this.pages.length;
+
+            // Clamp index
+            let idx = Math.max(0, Math.min(this.currentIdx, total - 1));
+            const isCoverPage = (i) => this.pages[i] && this.pages[i].includes('class="cover-page"');
+
+            const makeLeaf = (pageIdx, sideCls) => {
+                if (pageIdx < 0 || pageIdx >= total) {
+                    return `<div class="leaf ${sideCls} leaf-blank"><div class="leaf-blank-ornament">✦</div></div>`;
+                }
+                const cover = isCoverPage(pageIdx);
+                const hdr = cover ? '' : `<div class="leaf-header"><span>ALENIA RPG</span><span>${this.bookTitle}</span></div>`;
+                const ftr = cover ? '' : `<div class="leaf-footer">— ${pageIdx + 1} —</div>`;
+                return `<div class="leaf ${sideCls}">${hdr}<div class="leaf-body">${this.pages[pageIdx]}</div>${ftr}</div>`;
+            };
+
+            let statusText = '';
+            if (eff === 'spread') {
+                // Page 0 (Cover) renders cleanly centered as a closed front cover!
+                if (idx === 0 && isCoverPage(0)) {
+                    spreadEl.innerHTML = makeLeaf(0, 'leaf-single');
+                    statusText = `Capa • 1 / ${total}`;
+                } else {
+                    // Align open spreads to (1,2), (3,4), (5,6)... so cover is page 1 and inside spreads pair naturally
+                    if (idx % 2 === 0) idx = Math.max(1, idx - 1);
+                    this.currentIdx = idx;
+                    const leftHtml = makeLeaf(idx, 'leaf-left');
+                    const rightHtml = makeLeaf(idx + 1, 'leaf-right');
+                    spreadEl.innerHTML = leftHtml + rightHtml;
+                    const rNum = Math.min(total, idx + 2);
+                    statusText = (idx + 1 < total) ? `Págs. ${idx + 1}–${rNum} de ${total}` : `Pág. ${idx + 1} de ${total}`;
+                }
+            } else {
+                this.currentIdx = idx;
+                spreadEl.innerHTML = makeLeaf(idx, 'leaf-single');
+                statusText = (idx === 0 && isCoverPage(0)) ? `Capa • 1 / ${total}` : `Pág. ${idx + 1} de ${total}`;
+            }
+
+            // Re-trigger gentle page fade animation
+            spreadEl.style.animation = 'none';
+            void spreadEl.offsetWidth;
+            spreadEl.style.animation = '';
+
+            // Update controls
+            const statusEl = document.getElementById('pager-status');
+            if (statusEl) statusEl.textContent = statusText;
+            const jumpEl = document.getElementById('pager-jump');
+            if (jumpEl) { jumpEl.value = String(idx + 1); jumpEl.max = String(total); }
+
+            const atStart = idx === 0;
+            const atEnd = eff === 'spread' ? (idx === 0 ? total <= 1 : idx + 2 >= total) : (idx + 1 >= total);
+            document.querySelectorAll('.btn-prev-page').forEach(b => b.disabled = atStart);
+            document.querySelectorAll('.btn-next-page').forEach(b => b.disabled = atEnd);
+
+            // Re-bind lightbox & GM unlock forms inside freshly rendered leaf DOM!
+            wireLightbox(spreadEl);
+            bindUnlockForms(spreadEl);
+            this.highlightActiveToc(idx, eff === 'spread' ? idx + 1 : idx);
+        },
+
+        highlightActiveToc(pStart, pEnd) {
+            document.querySelectorAll('.toc-list a').forEach(a => {
+                const href = a.getAttribute('href') || '';
+                if (!href.startsWith('#')) return;
+                const targetPage = this.anchorMap[href.slice(1)];
+                const active = targetPage !== undefined && targetPage >= pStart && targetPage <= pEnd;
+                a.classList.toggle('toc-active', active);
+            });
+        },
+
+        step(dir) {
+            if (this.effectiveMode() === 'scroll') return;
+            const eff = this.effectiveMode();
+            if (eff === 'spread') {
+                if (dir > 0) {
+                    if (this.currentIdx === 0) this.currentIdx = 1;
+                    else this.currentIdx = Math.min(this.pages.length - 1, this.currentIdx + 2);
+                } else {
+                    if (this.currentIdx <= 1) this.currentIdx = 0;
+                    else this.currentIdx = Math.max(1, this.currentIdx - 2);
+                }
+            } else {
+                this.currentIdx = Math.max(0, Math.min(this.pages.length - 1, this.currentIdx + dir));
+            }
+            this.renderCurrentSpread();
+        },
+
+        goToPage(pageIdx) {
+            this.currentIdx = Math.max(0, Math.min(this.pages.length - 1, pageIdx));
+            this.renderCurrentSpread();
+        },
+
+        applyMode(newMode, persist = true) {
+            this.mode = newMode;
+            if (persist) localStorage.setItem(MODE_KEY, newMode);
+            document.body.classList.toggle('book-mode', newMode !== 'scroll');
+            document.body.classList.toggle('scroll-mode', newMode === 'scroll');
+            document.querySelectorAll('.mode-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.mode === newMode);
+            });
+            if (newMode !== 'scroll') {
+                this.paginate();
+                this.renderCurrentSpread();
+            }
+        },
+
+        bindControls() {
+            document.querySelectorAll('.btn-prev-page').forEach(b => b.addEventListener('click', () => this.step(-1)));
+            document.querySelectorAll('.btn-next-page').forEach(b => b.addEventListener('click', () => this.step(1)));
+
+            const jumpEl = document.getElementById('pager-jump');
+            if (jumpEl) {
+                jumpEl.addEventListener('change', () => {
+                    const n = parseInt(jumpEl.value, 10);
+                    if (!isNaN(n)) this.goToPage(n - 1);
+                });
+            }
+
+            document.querySelectorAll('.mode-btn').forEach(b => {
+                b.addEventListener('click', () => this.applyMode(b.dataset.mode, true));
+            });
+
+            const tocBtn = document.getElementById('btn-toc-toggle');
+            if (tocBtn) {
+                tocBtn.addEventListener('click', () => {
+                    if (window.innerWidth <= 1020) {
+                        document.body.classList.toggle('sidebar-open-mobile');
+                    } else {
+                        document.body.classList.toggle('sidebar-hidden');
+                        if (this.mode !== 'scroll') {
+                            const prev = this.currentIdx;
+                            this.paginate();
+                            this.goToPage(prev);
+                        }
+                    }
+                });
+            }
+
+            // Keyboard arrow / PageUp / PageDown turning
+            document.addEventListener('keydown', (e) => {
+                if (this.mode === 'scroll') return;
+                if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+                if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); this.step(1); }
+                else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.step(-1); }
+            });
+
+            // Intercept TOC anchor clicks to jump directly to the exact book page!
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                sidebar.addEventListener('click', (e) => {
+                    const a = e.target.closest('a[href^="#"]');
+                    if (!a || this.mode === 'scroll') return;
+                    const id = a.getAttribute('href').slice(1);
+                    if (this.anchorMap[id] !== undefined) {
+                        e.preventDefault();
+                        this.goToPage(this.anchorMap[id]);
+                        document.body.classList.remove('sidebar-open-mobile');
+                    }
+                });
+            }
+        }
+    };
+
+    /* =====================================================
+       GM AES-256-GCM VAULT UNLOCKER (SYNCS WITH BOOK MODE)
+       ===================================================== */
     async function unlockAllVaults(password, silent) {
-        const vaults = document.querySelectorAll('.gm-vault[data-locked="true"]');
+        // Always decrypt the authoritative vaults inside .book-page first!
+        const sourceRoot = document.querySelector('.book-page') || document;
+        const vaults = sourceRoot.querySelectorAll('.gm-vault[data-locked="true"]');
         let anyUnlocked = false;
         let failed = false;
 
         for (const v of vaults) {
             const scriptEl = v.querySelector('script.gm-cipher');
-            const errEl = v.querySelector('.gm-gate-error');
             const outEl = v.querySelector('.gm-unlocked-content');
             if (!scriptEl || !outEl) continue;
             try {
@@ -536,7 +1137,6 @@ SHARED_JS = r"""
                 const data = await decryptBlock(cipherObj, password);
                 outEl.innerHTML = data.html || '';
                 v.setAttribute('data-locked', 'false');
-                if (errEl) errEl.textContent = '';
                 wireLightbox(outEl);
                 if (data.toc) {
                     const tocList = document.querySelector('.toc-list');
@@ -549,7 +1149,6 @@ SHARED_JS = r"""
                 anyUnlocked = true;
             } catch (e) {
                 failed = true;
-                if (!silent && errEl) errEl.textContent = 'Senha incorreta — o selo do Mestre permanece fechado.';
             }
         }
 
@@ -557,29 +1156,26 @@ SHARED_JS = r"""
             sessionStorage.setItem(SESSION_KEY, password);
             const lockBtn = document.getElementById('btn-lock-gm');
             if (lockBtn) lockBtn.classList.add('visible');
-        } else if (failed && silent) {
-            sessionStorage.removeItem(SESSION_KEY);
+            if (BookReader.enabled && BookReader.mode !== 'scroll') {
+                const cur = BookReader.currentIdx;
+                BookReader.paginate();
+                BookReader.goToPage(cur);
+            }
+        } else if (failed) {
+            if (silent) {
+                sessionStorage.removeItem(SESSION_KEY);
+            } else {
+                document.querySelectorAll('.gm-gate-error').forEach(el => {
+                    el.textContent = 'Senha incorreta — o selo do Mestre permanece fechado.';
+                });
+            }
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const lb = document.getElementById('atlas-lightbox');
-        if (lb) {
-            lb.addEventListener('click', () => lb.classList.remove('open'));
-            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
-        }
-        wireLightbox(document);
-
-        const lockBtn = document.getElementById('btn-lock-gm');
-        if (lockBtn) {
-            if (sessionStorage.getItem(SESSION_KEY)) lockBtn.classList.add('visible');
-            lockBtn.addEventListener('click', () => {
-                sessionStorage.removeItem(SESSION_KEY);
-                location.reload();
-            });
-        }
-
-        document.querySelectorAll('.gm-unlock-form').forEach(form => {
+    function bindUnlockForms(root) {
+        (root || document).querySelectorAll('.gm-unlock-form').forEach(form => {
+            if (form.dataset.bound) return;
+            form.dataset.bound = '1';
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const input = form.querySelector('.gm-pwd-input');
@@ -593,11 +1189,33 @@ SHARED_JS = r"""
                 await unlockAllVaults(pwd, false);
             });
         });
+    }
 
+    document.addEventListener('DOMContentLoaded', async () => {
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) {
+            lb.addEventListener('click', () => lb.classList.remove('open'));
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+        }
+        wireLightbox(document);
+        bindUnlockForms(document);
+
+        const lockBtn = document.getElementById('btn-lock-gm');
+        if (lockBtn) {
+            if (sessionStorage.getItem(SESSION_KEY)) lockBtn.classList.add('visible');
+            lockBtn.addEventListener('click', () => {
+                sessionStorage.removeItem(SESSION_KEY);
+                location.reload();
+            });
+        }
+
+        // If already unlocked in this session, decrypt BEFORE initial pagination!
         const saved = sessionStorage.getItem(SESSION_KEY);
         if (saved && window.crypto && window.crypto.subtle) {
-            unlockAllVaults(saved, true);
+            await unlockAllVaults(saved, true);
         }
+
+        BookReader.init();
     });
 })();
 """
@@ -695,7 +1313,6 @@ def render_toc_items(toc_items) -> str:
 
 
 def split_md_with_gm_sections(md_text: str):
-    """Splits a public Markdown doc into chunks: (is_gm_secret, label, text)."""
     lines = md_text.splitlines()
     chunks = []
     cur_lines = []
@@ -946,9 +1563,11 @@ def render_public_doc_with_sealed_sections(md_content: str, id_prefix: str, card
     return "\n".join(html_parts), public_toc
 
 
-def build_topbar(active_file: str) -> str:
+def build_topbar(active_file: str, has_toc: bool) -> str:
     links = [("index.html", "Biblioteca")] + [(b["out"], b["short"]) for b in BOOKS] + [("Alenia_Compendio_Completo.html", "Compêndio")]
     nav_html = []
+    if has_toc:
+        nav_html.append('<button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Mostrar/Ocultar Sumário">☰ Sumário</button>')
     for href, lbl in links:
         cls = ' class="active"' if href == active_file else ""
         nav_html.append(f'<a href="{href}"{cls}>{lbl}</a>')
@@ -978,7 +1597,7 @@ def build_cover(num: str, title: str, subtitle: str, epigraph: str, cover_map: s
     """
 
 
-def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=None, force_sidebar: bool = False) -> str:
+def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=None, force_sidebar: bool = False, enable_book_reader: bool = True) -> str:
     has_toc = force_sidebar or (toc_items is not None and len(toc_items) > 0)
     sidebar_html = ""
     shell_cls = "book-shell" if has_toc else "book-shell no-sidebar"
@@ -991,6 +1610,34 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
             '</aside>'
         )
 
+    reader_ui = ""
+    body_cls = ""
+    if enable_book_reader:
+        body_cls = ' class="book-mode"'
+        reader_ui = """
+    <section id="reader-stage" class="reader-stage" aria-label="Leitor em Formato de Livro">
+        <button class="side-turn-btn side-turn-prev btn-prev-page" type="button" title="Página Anterior (←)">‹</button>
+        <div class="hardcover-wrap">
+            <div id="book-spread" class="book-spread"></div>
+        </div>
+        <button class="side-turn-btn side-turn-next btn-next-page" type="button" title="Próxima Página (→)">›</button>
+    </section>
+    <footer class="reader-footer-bar">
+        <div class="view-mode-group" title="Modo de visualização">
+            <button class="mode-btn active" data-mode="spread" type="button">📖 2 Páginas</button>
+            <button class="mode-btn" data-mode="single" type="button">📄 1 Página</button>
+            <button class="mode-btn" data-mode="scroll" type="button">📜 Contínuo</button>
+        </div>
+        <div class="pager-controls">
+            <button class="pager-btn btn-prev-page" type="button">‹ Anterior</button>
+            <span id="pager-status" class="pager-status">Carregando...</span>
+            <input id="pager-jump" class="pager-jump" type="number" min="1" value="1" title="Ir para página" aria-label="Número da página"/>
+            <button class="pager-btn btn-next-page" type="button">Próxima ›</button>
+        </div>
+        <div style="font-family:'Cinzel',Georgia,serif; font-size:10px; letter-spacing:0.1em; color:#8f8574; white-space:nowrap;">SETAS ← / →</div>
+    </footer>
+        """
+
     return f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -999,9 +1646,10 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
     <title>{html.escape(page_title)} — Alenia RPG</title>
     <style>{SHARED_CSS}</style>
 </head>
-<body>
-    {build_topbar(active_file)}
+<body{body_cls} data-book-title="{html.escape(page_title)}">
+    {build_topbar(active_file, has_toc)}
     {sidebar_html}
+    {reader_ui}
     <main class="{shell_cls}">
         <article class="book-page">
             {body_html}
@@ -1021,7 +1669,7 @@ def main():
     if not GM_PASSWORD:
         print("[WARN] ALENIA_GM_PASSWORD nao definida — gerando sem criptografia!")
     else:
-        print("[OK] Criptografia AES-256-GCM (PBKDF2 120k) ativa para toda a Area do Mestre.")
+        print("[OK] Criptografia AES-256-GCM (PBKDF2 120k) + Modo Livro Real ativos.")
 
     compendium_parts = [
         build_cover(
@@ -1045,7 +1693,6 @@ def main():
 
         if bk["gm_only"] and GM_PASSWORD:
             secret_html, secret_toc = md_to_html(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps)
-            # For Adventure, also include Aurora map inside the encrypted payload so cover stays spoiler-free!
             if bk["out"] == "07_Aventura_Inicial.html":
                 secret_html = (
                     '<figure class="atlas-plate"><img src="assets/mapa_regional_aurora.jpg" alt="Mapa Regional de Aurora"/>'
@@ -1058,13 +1705,11 @@ def main():
                 secret_html,
                 render_toc_items(secret_toc),
             )
-            full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + gated, toc_items=[], force_sidebar=True)
-            out_path = os.path.join(OUT_DIR, bk["out"])
-            with open(out_path, "w", encoding="utf-8") as f:
+            full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + gated, toc_items=[], force_sidebar=True, enable_book_reader=True)
+            with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
                 f.write(full_doc)
-            print(f"[OK] {bk['out']:34s} (CRIPTOGRAFADO AES-256-GCM)")
+            print(f"[OK] {bk['out']:34s} (LIVRO + AES-256-GCM)")
 
-            # Compendium version (also encrypted!)
             c_secret_html, c_secret_toc = md_to_html(md_content, id_prefix=f"t{idx+1}-", card_h3=card_h3, inject_maps=inject_maps)
             tome_anchor = f"tomo-{idx+1}"
             compendium_toc.append((2, f"🔒 {bk['num']} — {bk['title']}", tome_anchor))
@@ -1083,11 +1728,10 @@ def main():
             )
         else:
             body_inner, pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps)
-            full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + body_inner, pub_toc)
-            out_path = os.path.join(OUT_DIR, bk["out"])
-            with open(out_path, "w", encoding="utf-8") as f:
+            full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + body_inner, pub_toc, enable_book_reader=True)
+            with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
                 f.write(full_doc)
-            print(f"[OK] {bk['out']:34s} ({len(pub_toc)} secoes publicas)")
+            print(f"[OK] {bk['out']:34s} (LIVRO • {len(pub_toc)} secoes publicas)")
 
             c_inner, c_pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix=f"t{idx+1}-", card_h3=card_h3, inject_maps=inject_maps)
             tome_anchor = f"tomo-{idx+1}"
@@ -1102,15 +1746,15 @@ def main():
                 f'</section>'
             )
 
-    comp_html = wrap_html_doc("Compêndio Completo", "Alenia_Compendio_Completo.html", "\n".join(compendium_parts), compendium_toc)
+    comp_html = wrap_html_doc("Compêndio Completo", "Alenia_Compendio_Completo.html", "\n".join(compendium_parts), compendium_toc, enable_book_reader=True)
     with open(os.path.join(OUT_DIR, "Alenia_Compendio_Completo.html"), "w", encoding="utf-8") as f:
         f.write(comp_html)
-    print(f"[OK] Alenia_Compendio_Completo.html    ({len(compendium_toc)} entradas publicas no sumario)")
+    print(f"[OK] Alenia_Compendio_Completo.html    (LIVRO • {len(compendium_toc)} entradas publicas)")
 
     cards = []
     for bk in BOOKS:
         cls = "portal-card gm-card" if bk["gm_only"] else "portal-card"
-        cta = "🔒 Destrancar (Mestre) →" if bk["gm_only"] else "Abrir Tomo →"
+        cta = "🔒 Destrancar Livro (Mestre) →" if bk["gm_only"] else "Abrir Livro →"
         cards.append(f"""
         <a class="{cls}" href="{bk['out']}">
             <div class="portal-kicker">{html.escape(bk['num'])}</div>
@@ -1123,7 +1767,7 @@ def main():
         <a class="portal-card" href="Alenia_Compendio_Completo.html" style="border-top-color:#9a7b3b; background:#efe5cf;">
             <div class="portal-kicker">EDIÇÃO INTEGRAL (PDF MESTRE)</div>
             <div class="portal-title">Compêndio Completo</div>
-            <p class="portal-desc">Todos os tomos reunidos em um único volume contínuo com os mapas embutidos — com as áreas do Mestre seladas por senha.</p>
+            <p class="portal-desc">Todos os tomos reunidos em formato de livro folheável com os mapas embutidos — com as áreas do Mestre seladas por senha.</p>
             <div class="portal-cta">Abrir Volume Único →</div>
         </a>
     """)
@@ -1133,7 +1777,7 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">7 Tomos • Atlas Ilustrado • 36 Kits • Ficha Firecast v1.2 • Área Selada do Mestre</div>
+        <div class="cover-subtitle">7 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • Ficha Firecast v1.2</div>
         <div class="cover-rule"></div>
         <figure class="atlas-plate" style="margin:14px 0 0; width:100%;">
             <img src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Mapa-Múndi de Alenia"/>
@@ -1141,7 +1785,7 @@ def main():
         </figure>
     </section>
 
-    <h2>Coleção Oficial (Jogadores &amp; 🔒 Área do Mestre)</h2>
+    <h2>Estante Oficial (Jogadores &amp; 🔒 Área do Mestre)</h2>
     <div class="portal-grid">{"".join(cards)}</div>
 
     <h2>Galeria de Mapas Regionais</h2>
@@ -1154,10 +1798,10 @@ def main():
     </div>
     """
 
-    idx_html = wrap_html_doc("Biblioteca Oficial", "index.html", index_body, toc_items=None)
+    idx_html = wrap_html_doc("Biblioteca Oficial", "index.html", index_body, toc_items=None, enable_book_reader=False)
     with open(os.path.join(OUT_DIR, "index.html"), "w", encoding="utf-8") as f:
         f.write(idx_html)
-    print("[OK] index.html atualizado com Selo do Mestre.")
+    print("[OK] index.html atualizado.")
 
 
 if __name__ == "__main__":
