@@ -69,9 +69,9 @@ BOOKS = [
         "num": "TOMO IV • MESTRE",
         "short": "🔒 Bestiário",
         "title": "Bestiário & Ameaças",
-        "subtitle": "Acesso Restrito ao Mestre • Fichas, Táticas & Segredos",
+        "subtitle": "Acesso Restrito ao Mestre • 31 Ameaças Auditadas, Ilustrações & Segredos",
         "epigraph": "“A maioria das feras que matam viajantes usa botas de couro e fala sua própria língua.”",
-        "desc": "🔒 Área Restrita ao Mestre: fichas completas de inimigos, feras e ameaças ocultas de Alenia protegidas por criptografia AES-256.",
+        "desc": "🔒 Área Restrita ao Mestre: 31 fichas completas (humanos, megafauna, terrores marítimos, folclore sombrio, alquimia e agentes ocultos) com 16 ilustrações exclusivas, protegidas por criptografia AES-256.",
         "cover_map": "assets/capa_04_bestiario.jpg",
         "gm_only": True,
     },
@@ -138,6 +138,25 @@ CHAPTER_MAPS = {
         "assets/mapa_regional_incognito.jpg",
         "Prancha VI — Mapa Regional de Incognito, Ilha de Thanatos & Mar das Cinzas"
     ),
+}
+
+BESTIARY_PLATES = {
+    "7. Inquisidor da Chama Branca": "assets/b_plate_01.jpg",
+    "11. Urso-de-Rubecina": "assets/b_plate_02.jpg",
+    "12. Cervo-de-Galhada-Férrea": "assets/b_plate_03.jpg",
+    "13. Abutre-Osso": "assets/b_plate_04.jpg",
+    "14. Hiena-de-Sal": "assets/b_plate_05.jpg",
+    "15. Cantora-de-Recife": "assets/b_plate_06.jpg",
+    "16. Polvo-de-Quilha": "assets/b_plate_07.jpg",
+    "17. Verme-de-Maré": "assets/b_plate_08.jpg",
+    "19. O Repetidor": "assets/b_plate_09.jpg",
+    "20. Lanterna-de-Turfa": "assets/b_plate_10.jpg",
+    "21. Tece-Arame": "assets/b_plate_11.jpg",
+    "22. Tronco-de-Sangue": "assets/b_plate_12.jpg",
+    "23. Mastim-de-Vitro": "assets/b_plate_13.jpg",
+    "24. Ressonante-de-Mina": "assets/b_plate_14.jpg",
+    "25. Bando de Corvos-de-Cinzas": "assets/b_plate_15.jpg",
+    "27. Sentinela-de-Laca": "assets/b_plate_16.jpg",
 }
 
 GM_SECTION_H2_PREFIXES = ("7. A Grande Ameaça:",)
@@ -580,9 +599,14 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 .leaf-body tbody td { padding: 6px 8px; }
 .leaf-body tbody td code,
 .leaf-body .nowrap-cell { white-space: nowrap; }
-.leaf-body .callout,
-.leaf-body .entry-card { font-size: calc(16.5px * var(--font-scale, 1)); }
+.leaf-body .callout { font-size: calc(16.5px * var(--font-scale, 1)); }
+.leaf-body .entry-card { font-size: calc(15.2px * var(--font-scale, 1)); line-height: 1.44; padding: 10px 13px 8px; }
+.leaf-body .entry-card p { margin-bottom: 6px; }
+.leaf-body .entry-card ul { margin: 4px 0 6px; padding-left: 18px; }
+.leaf-body .entry-card li { margin-bottom: 3px; }
 .leaf-body .atlas-plate img { max-height: calc(var(--leaf-h, 760px) * 0.64); }
+.creature-plate { margin: 7px 0 9px; padding: 5px; background: #e8dec7; border: 1px solid var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
+.creature-plate img { width: 100%; aspect-ratio: 16 / 9; max-height: 215px; object-fit: cover; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
 
 .leaf-footer {
     height: 30px;
@@ -1946,7 +1970,7 @@ def split_md_with_gm_sections(md_text: str):
     return chunks
 
 
-def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_maps: bool = False, toc_start_idx: int = 0):
+def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_maps: bool = False, inject_bestiary_plates: bool = False, toc_start_idx: int = 0):
     lines = md_text.splitlines()
     out = []
     toc = []
@@ -2020,6 +2044,16 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
                             f'<figure class="atlas-plate">'
                             f'<img src="{img_rel}" alt="{html.escape(cap)}" loading="lazy"/>'
                             f'<figcaption class="atlas-caption">{html.escape(cap)}</figcaption>'
+                            f'</figure>'
+                        )
+                        break
+
+            if inject_bestiary_plates and level == 3:
+                for key, img_rel in BESTIARY_PLATES.items():
+                    if plain_title.startswith(key):
+                        out.append(
+                            f'<figure class="atlas-plate creature-plate">'
+                            f'<img src="{img_rel}" alt="{html.escape(plain_title)}" loading="lazy"/>'
                             f'</figure>'
                         )
                         break
@@ -2286,10 +2320,11 @@ def main():
 
         card_h3 = bk["out"] in ("03_Catalogo_de_Kits.html", "04_Bestiario_de_Alenia.html")
         inject_maps = bk["out"] == "02_Livro_do_Cenario.html"
+        inject_bestiary = bk["out"] == "04_Bestiario_de_Alenia.html"
         cover_html = build_cover(bk["num"], bk["title"], bk["subtitle"], bk["epigraph"], bk["cover_map"])
 
         if bk["gm_only"] and GM_PASSWORD:
-            secret_html, secret_toc = md_to_html(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps)
+            secret_html, secret_toc = md_to_html(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps, inject_bestiary_plates=inject_bestiary)
             if bk["out"] == "07_Aventura_Inicial.html":
                 secret_html = (
                     '<figure class="atlas-plate"><img src="assets/mapa_regional_aurora.jpg" alt="Mapa Regional de Aurora"/>'
@@ -2307,7 +2342,7 @@ def main():
                 f.write(full_doc)
             print(f"[OK] {bk['out']:34s} (LIVRO + AES-256-GCM)")
 
-            c_secret_html, c_secret_toc = md_to_html(md_content, id_prefix=f"t{idx+1}-", card_h3=card_h3, inject_maps=inject_maps)
+            c_secret_html, c_secret_toc = md_to_html(md_content, id_prefix=f"t{idx+1}-", card_h3=card_h3, inject_maps=inject_maps, inject_bestiary_plates=inject_bestiary)
             tome_anchor = f"tomo-{idx+1}"
             compendium_toc.append((2, f"🔒 {bk['num']} — {bk['title']}", tome_anchor))
             c_toc_only_h2 = [(3, lbl, hid) for lvl, lbl, hid in c_secret_toc if lvl == 2]
