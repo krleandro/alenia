@@ -142,12 +142,189 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     justify-content: center;
     gap: 0;
     position: relative;
-    animation: pageFadeIn 0.22s ease;
+    perspective: 2600px;
+    transform-style: preserve-3d;
 }
 
-@keyframes pageFadeIn {
-    from { opacity: 0.45; transform: translateY(2px); }
-    to { opacity: 1; transform: translateY(0); }
+/* =====================================================
+   3D PHYSICAL PAGE-TURN ANIMATION
+   ===================================================== */
+.flip-sheet {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: 30;
+    transform-style: preserve-3d;
+    pointer-events: none;
+    will-change: transform;
+}
+.flip-sheet.flip-next {
+    left: 50%;
+    width: 50%;
+    transform-origin: left center;
+    animation: turnPageNext 560ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+.flip-sheet.flip-prev {
+    left: 0;
+    width: 50%;
+    transform-origin: right center;
+    animation: turnPagePrev 560ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+.flip-sheet.flip-single-next {
+    left: 0;
+    width: 100%;
+    transform-origin: left center;
+    animation: turnSingleNext 480ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+.flip-sheet.flip-single-prev {
+    left: 0;
+    width: 100%;
+    transform-origin: left center;
+    animation: turnSinglePrev 480ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+
+.flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+}
+.flip-face > .leaf {
+    width: 100% !important;
+    height: 100% !important;
+}
+.flip-face::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0;
+}
+.flip-sheet.flip-next .flip-front::before {
+    background: linear-gradient(90deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeFrontHalf 560ms ease-in-out forwards;
+}
+.flip-sheet.flip-next .flip-back::before {
+    background: linear-gradient(270deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeBackHalf 560ms ease-in-out forwards;
+}
+.flip-sheet.flip-prev .flip-front::before {
+    background: linear-gradient(270deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeFrontHalf 560ms ease-in-out forwards;
+}
+.flip-sheet.flip-prev .flip-back::before {
+    background: linear-gradient(90deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeBackHalf 560ms ease-in-out forwards;
+}
+.flip-back.flip-back-next { transform: rotateY(180deg); }
+.flip-back.flip-back-prev { transform: rotateY(-180deg); }
+
+.flip-cast-shadow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 20;
+    pointer-events: none;
+}
+.flip-cast-shadow.shadow-next {
+    right: 0;
+    background: linear-gradient(90deg, rgba(22, 14, 7, 0.36) 0%, rgba(22, 14, 7, 0.12) 45%, transparent 100%);
+    animation: castShadowSweep 560ms ease-in-out forwards;
+}
+.flip-cast-shadow.shadow-prev {
+    left: 0;
+    background: linear-gradient(270deg, rgba(22, 14, 7, 0.36) 0%, rgba(22, 14, 7, 0.12) 45%, transparent 100%);
+    animation: castShadowSweep 560ms ease-in-out forwards;
+}
+
+@keyframes turnPageNext {
+    0%   { transform: rotateY(0deg); box-shadow: -2px 0 8px rgba(0,0,0,0.08); }
+    45%  { box-shadow: -22px 10px 36px rgba(15, 9, 4, 0.42); }
+    55%  { box-shadow: 22px 10px 36px rgba(15, 9, 4, 0.42); }
+    100% { transform: rotateY(-180deg); box-shadow: 2px 0 8px rgba(0,0,0,0.06); }
+}
+@keyframes turnPagePrev {
+    0%   { transform: rotateY(0deg); box-shadow: 2px 0 8px rgba(0,0,0,0.08); }
+    45%  { box-shadow: 22px 10px 36px rgba(15, 9, 4, 0.42); }
+    55%  { box-shadow: -22px 10px 36px rgba(15, 9, 4, 0.42); }
+    100% { transform: rotateY(180deg); box-shadow: -2px 0 8px rgba(0,0,0,0.06); }
+}
+@keyframes turnSingleNext {
+    0%   { transform: rotateY(0deg); opacity: 1; box-shadow: 0 8px 24px rgba(0,0,0,0.22); }
+    72%  { opacity: 0.94; box-shadow: -20px 10px 34px rgba(0,0,0,0.42); }
+    100% { transform: rotateY(-108deg); opacity: 0; }
+}
+@keyframes turnSinglePrev {
+    0%   { transform: rotateY(-102deg); opacity: 0.12; box-shadow: -20px 10px 34px rgba(0,0,0,0.42); }
+    35%  { opacity: 0.96; }
+    100% { transform: rotateY(0deg); opacity: 1; box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+}
+@keyframes shadeFrontHalf {
+    0%   { opacity: 0; }
+    48%  { opacity: 1; }
+    52%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+@keyframes shadeBackHalf {
+    0%   { opacity: 0; }
+    48%  { opacity: 0; }
+    52%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+@keyframes castShadowSweep {
+    0%   { opacity: 0.78; }
+    50%  { opacity: 0.35; }
+    100% { opacity: 0; }
+}
+
+.book-spread.anim-cover-open {
+    animation: coverOpenSwing 500ms cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
+}
+.book-spread.anim-cover-close {
+    animation: coverCloseSwing 440ms cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
+}
+@keyframes coverOpenSwing {
+    0%   { opacity: 0.35; transform: scale(0.95) rotateY(-12deg); }
+    100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+}
+@keyframes coverCloseSwing {
+    0%   { opacity: 0.4; transform: scale(1.03) rotateY(14deg); }
+    100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+}
+
+/* Interactive tactile page corners */
+.leaf-corner-btn {
+    position: absolute;
+    bottom: 0;
+    width: 44px;
+    height: 44px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 12;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+.leaf-corner-next {
+    right: 0;
+    background: linear-gradient(315deg, rgba(154,123,59,0.22) 0%, rgba(154,123,59,0.12) 28%, transparent 50%);
+}
+.leaf-corner-next:hover {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(315deg, #d7c7a7 0%, #efe6d3 36%, rgba(90,62,32,0.24) 48%, transparent 52%);
+}
+.leaf-corner-prev {
+    left: 0;
+    background: linear-gradient(45deg, rgba(154,123,59,0.22) 0%, rgba(154,123,59,0.12) 28%, transparent 50%);
+}
+.leaf-corner-prev:hover {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(45deg, #d7c7a7 0%, #efe6d3 36%, rgba(90,62,32,0.24) 48%, transparent 52%);
 }
 
 .leaf {
@@ -577,7 +754,7 @@ tr { break-inside: avoid; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .book-spread { animation: none; }
+    .book-spread, .flip-sheet, .flip-cast-shadow, .flip-face::before { animation: none !important; }
 }
 
 @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
@@ -836,7 +1013,7 @@ tr { break-inside: avoid; }
 </ul>
 
     <div class="gm-vault" data-locked="true">
-        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"z4atiBuhCZpJNvLNC9vBbQ==","i":"USvcqXCEubvaVijB","c":"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"}</script>
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"29DoGOTKOAug38W1+uUsOg==","i":"H0jQwPqcEh/uryPR","c":"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"}</script>
         <div class="gm-gate-box">
             <div class="gm-seal-icon">🔒</div>
             <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
@@ -1279,54 +1456,71 @@ tr { break-inside: avoid; }
             this.anchorMap = anchorMap;
         },
 
-        renderCurrentSpread() {
-            const spreadEl = document.getElementById('book-spread');
-            if (!spreadEl) return;
+        flipTimer: null,
+        pendingCommit: null,
+
+        finishPendingFlip() {
+            if (this.flipTimer) {
+                clearTimeout(this.flipTimer);
+                this.flipTimer = null;
+            }
+            if (this.pendingCommit) {
+                const fn = this.pendingCommit;
+                this.pendingCommit = null;
+                fn();
+            }
+        },
+
+        isCoverPage(i) {
+            return Boolean(this.pages[i] && this.pages[i].includes('class="cover-page"'));
+        },
+
+        normalizeIdx(rawIdx) {
+            const total = this.pages.length;
+            let idx = Math.max(0, Math.min(rawIdx, total - 1));
+            if (this.effectiveMode() === 'spread') {
+                if (!(idx === 0 && this.isCoverPage(0))) {
+                    if (idx % 2 === 0) idx = Math.max(1, idx - 1);
+                }
+            }
+            return idx;
+        },
+
+        makeLeafHtml(pageIdx, sideCls, interactive = true) {
+            const total = this.pages.length;
+            if (pageIdx < 0 || pageIdx >= total) {
+                return `<div class="leaf ${sideCls} leaf-blank"><div class="leaf-blank-ornament">✦</div></div>`;
+            }
+            const cover = this.isCoverPage(pageIdx);
+            const hdr = cover ? '' : `<div class="leaf-header"><span>ALENIA RPG</span><span>${this.bookTitle}</span></div>`;
+            const ftr = cover ? '' : `<div class="leaf-footer">— ${pageIdx + 1} —</div>`;
+            let corner = '';
+            if (interactive) {
+                if ((sideCls === 'leaf-right' || sideCls === 'leaf-single') && pageIdx + 1 < total) {
+                    corner += '<button class="leaf-corner-btn leaf-corner-next" type="button" title="Virar página (→)" aria-label="Próxima página"></button>';
+                }
+                if (sideCls === 'leaf-left' || (sideCls === 'leaf-single' && pageIdx > 0)) {
+                    corner += '<button class="leaf-corner-btn leaf-corner-prev" type="button" title="Página anterior (←)" aria-label="Página anterior"></button>';
+                }
+            }
+            return `<div class="leaf ${sideCls}">${hdr}<div class="leaf-body">${this.pages[pageIdx]}</div>${ftr}${corner}</div>`;
+        },
+
+        updateHud(idx) {
             const eff = this.effectiveMode();
             const total = this.pages.length;
-
-            // Clamp index
-            let idx = Math.max(0, Math.min(this.currentIdx, total - 1));
-            const isCoverPage = (i) => this.pages[i] && this.pages[i].includes('class="cover-page"');
-
-            const makeLeaf = (pageIdx, sideCls) => {
-                if (pageIdx < 0 || pageIdx >= total) {
-                    return `<div class="leaf ${sideCls} leaf-blank"><div class="leaf-blank-ornament">✦</div></div>`;
-                }
-                const cover = isCoverPage(pageIdx);
-                const hdr = cover ? '' : `<div class="leaf-header"><span>ALENIA RPG</span><span>${this.bookTitle}</span></div>`;
-                const ftr = cover ? '' : `<div class="leaf-footer">— ${pageIdx + 1} —</div>`;
-                return `<div class="leaf ${sideCls}">${hdr}<div class="leaf-body">${this.pages[pageIdx]}</div>${ftr}</div>`;
-            };
-
             let statusText = '';
             if (eff === 'spread') {
-                // Page 0 (Cover) renders cleanly centered as a closed front cover!
-                if (idx === 0 && isCoverPage(0)) {
-                    spreadEl.innerHTML = makeLeaf(0, 'leaf-single');
+                if (idx === 0 && this.isCoverPage(0)) {
                     statusText = `Capa • 1 / ${total}`;
                 } else {
-                    // Align open spreads to (1,2), (3,4), (5,6)... so cover is page 1 and inside spreads pair naturally
-                    if (idx % 2 === 0) idx = Math.max(1, idx - 1);
-                    this.currentIdx = idx;
-                    const leftHtml = makeLeaf(idx, 'leaf-left');
-                    const rightHtml = makeLeaf(idx + 1, 'leaf-right');
-                    spreadEl.innerHTML = leftHtml + rightHtml;
                     const rNum = Math.min(total, idx + 2);
                     statusText = (idx + 1 < total) ? `Págs. ${idx + 1}–${rNum} de ${total}` : `Pág. ${idx + 1} de ${total}`;
                 }
             } else {
-                this.currentIdx = idx;
-                spreadEl.innerHTML = makeLeaf(idx, 'leaf-single');
-                statusText = (idx === 0 && isCoverPage(0)) ? `Capa • 1 / ${total}` : `Pág. ${idx + 1} de ${total}`;
+                statusText = (idx === 0 && this.isCoverPage(0)) ? `Capa • 1 / ${total}` : `Pág. ${idx + 1} de ${total}`;
             }
 
-            // Re-trigger gentle page fade animation
-            spreadEl.style.animation = 'none';
-            void spreadEl.offsetWidth;
-            spreadEl.style.animation = '';
-
-            // Update controls
             const statusEl = document.getElementById('pager-status');
             if (statusEl) statusEl.textContent = statusText;
             const jumpEl = document.getElementById('pager-jump');
@@ -1338,6 +1532,114 @@ tr { break-inside: avoid; }
             document.querySelectorAll('.btn-next-page').forEach(b => b.disabled = atEnd);
 
             this.highlightActiveToc(idx, eff === 'spread' ? idx + 1 : idx);
+        },
+
+        renderCurrentSpread() {
+            this.finishPendingFlip();
+            const spreadEl = document.getElementById('book-spread');
+            if (!spreadEl) return;
+            const eff = this.effectiveMode();
+            const idx = this.normalizeIdx(this.currentIdx);
+            this.currentIdx = idx;
+
+            spreadEl.classList.remove('anim-cover-open', 'anim-cover-close');
+            if (eff === 'spread' && !(idx === 0 && this.isCoverPage(0))) {
+                spreadEl.innerHTML = this.makeLeafHtml(idx, 'leaf-left', true) + this.makeLeafHtml(idx + 1, 'leaf-right', true);
+            } else {
+                spreadEl.innerHTML = this.makeLeafHtml(idx, 'leaf-single', true);
+            }
+            this.updateHud(idx);
+        },
+
+        turnTo(rawTargetIdx, dir) {
+            this.finishPendingFlip();
+            const spreadEl = document.getElementById('book-spread');
+            if (!spreadEl) return;
+
+            const eff = this.effectiveMode();
+            const prevIdx = this.normalizeIdx(this.currentIdx);
+            const nextIdx = this.normalizeIdx(rawTargetIdx);
+            if (nextIdx === prevIdx) return;
+
+            const direction = dir || (nextIdx > prevIdx ? 1 : -1);
+            const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduced) {
+                this.currentIdx = nextIdx;
+                this.renderCurrentSpread();
+                return;
+            }
+
+            this.currentIdx = nextIdx;
+            this.updateHud(nextIdx);
+
+            const prevWasCover = eff === 'spread' && prevIdx === 0 && this.isCoverPage(0);
+            const nextIsCover = eff === 'spread' && nextIdx === 0 && this.isCoverPage(0);
+
+            // Case 1: Opening or closing the hardcover cover
+            if (prevWasCover || nextIsCover) {
+                spreadEl.classList.remove('anim-cover-open', 'anim-cover-close');
+                if (nextIsCover) {
+                    spreadEl.innerHTML = this.makeLeafHtml(0, 'leaf-single', true);
+                } else {
+                    spreadEl.innerHTML = this.makeLeafHtml(nextIdx, 'leaf-left', true) + this.makeLeafHtml(nextIdx + 1, 'leaf-right', true);
+                }
+                void spreadEl.offsetWidth;
+                const cls = prevWasCover ? 'anim-cover-open' : 'anim-cover-close';
+                spreadEl.classList.add(cls);
+                const commit = () => spreadEl.classList.remove(cls);
+                this.pendingCommit = commit;
+                this.flipTimer = setTimeout(() => { this.flipTimer = null; this.pendingCommit = null; commit(); }, 500);
+                return;
+            }
+
+            // Case 2: 2-Page Open Spread Physical Double-Sided 3D Flip
+            if (eff === 'spread') {
+                const isNext = direction > 0;
+                const baseLeft = isNext ? prevIdx : nextIdx;
+                const baseRight = isNext ? nextIdx + 1 : prevIdx + 1;
+                const frontPage = isNext ? prevIdx + 1 : prevIdx;
+                const backPage = isNext ? nextIdx : nextIdx + 1;
+
+                const flipCls = isNext ? 'flip-next' : 'flip-prev';
+                const frontSide = isNext ? 'leaf-right' : 'leaf-left';
+                const backSide = isNext ? 'leaf-left' : 'leaf-right';
+                const backFlipCls = isNext ? 'flip-back-next' : 'flip-back-prev';
+                const shadowCls = isNext ? 'shadow-next' : 'shadow-prev';
+
+                spreadEl.innerHTML =
+                    this.makeLeafHtml(baseLeft, 'leaf-left', false) +
+                    this.makeLeafHtml(baseRight, 'leaf-right', false) +
+                    `<div class="flip-cast-shadow ${shadowCls}"></div>` +
+                    `<div class="flip-sheet ${flipCls}">` +
+                        `<div class="flip-face flip-front">${this.makeLeafHtml(frontPage, frontSide, false)}</div>` +
+                        `<div class="flip-face flip-back ${backFlipCls}">${this.makeLeafHtml(backPage, backSide, false)}</div>` +
+                    `</div>`;
+
+                const commit = () => {
+                    spreadEl.innerHTML = this.makeLeafHtml(nextIdx, 'leaf-left', true) + this.makeLeafHtml(nextIdx + 1, 'leaf-right', true);
+                };
+                this.pendingCommit = commit;
+                this.flipTimer = setTimeout(() => { this.flipTimer = null; this.pendingCommit = null; commit(); }, 570);
+                return;
+            }
+
+            // Case 3: Single-Page 3D Peel / Swing-In
+            const isNext = direction > 0;
+            const underIdx = isNext ? nextIdx : prevIdx;
+            const sheetIdx = isNext ? prevIdx : nextIdx;
+            const flipCls = isNext ? 'flip-single-next' : 'flip-single-prev';
+
+            spreadEl.innerHTML =
+                this.makeLeafHtml(underIdx, 'leaf-single', false) +
+                `<div class="flip-sheet ${flipCls}">` +
+                    `<div class="flip-face flip-front">${this.makeLeafHtml(sheetIdx, 'leaf-single', false)}</div>` +
+                `</div>`;
+
+            const commit = () => {
+                spreadEl.innerHTML = this.makeLeafHtml(nextIdx, 'leaf-single', true);
+            };
+            this.pendingCommit = commit;
+            this.flipTimer = setTimeout(() => { this.flipTimer = null; this.pendingCommit = null; commit(); }, 490);
         },
 
         highlightActiveToc(pStart, pEnd) {
@@ -1353,27 +1655,34 @@ tr { break-inside: avoid; }
         step(dir) {
             if (this.effectiveMode() === 'scroll') return;
             const eff = this.effectiveMode();
+            let target = this.currentIdx;
             if (eff === 'spread') {
                 if (dir > 0) {
-                    if (this.currentIdx === 0) this.currentIdx = 1;
-                    else this.currentIdx = Math.min(this.pages.length - 1, this.currentIdx + 2);
+                    if (this.currentIdx === 0) target = 1;
+                    else target = Math.min(this.pages.length - 1, this.currentIdx + 2);
                 } else {
-                    if (this.currentIdx <= 1) this.currentIdx = 0;
-                    else this.currentIdx = Math.max(1, this.currentIdx - 2);
+                    if (this.currentIdx <= 1) target = 0;
+                    else target = Math.max(1, this.currentIdx - 2);
                 }
             } else {
-                this.currentIdx = Math.max(0, Math.min(this.pages.length - 1, this.currentIdx + dir));
+                target = Math.max(0, Math.min(this.pages.length - 1, this.currentIdx + dir));
             }
-            this.renderCurrentSpread();
+            this.turnTo(target, dir);
         },
 
-        goToPage(pageIdx) {
-            this.currentIdx = Math.max(0, Math.min(this.pages.length - 1, pageIdx));
-            this.renderCurrentSpread();
+        goToPage(pageIdx, animate = false) {
+            const clamped = Math.max(0, Math.min(this.pages.length - 1, pageIdx));
+            if (animate) {
+                this.turnTo(clamped);
+            } else {
+                this.currentIdx = clamped;
+                this.renderCurrentSpread();
+            }
         },
 
         applyMode(newMode, persist = true) {
             if (!newMode) return;
+            this.finishPendingFlip();
             this.mode = newMode;
             if (persist) localStorage.setItem(MODE_KEY, newMode);
             document.body.classList.toggle('book-mode', newMode !== 'scroll');
@@ -1396,11 +1705,25 @@ tr { break-inside: avoid; }
             document.querySelectorAll('.btn-prev-page').forEach(b => b.addEventListener('click', () => this.step(-1)));
             document.querySelectorAll('.btn-next-page').forEach(b => b.addEventListener('click', () => this.step(1)));
 
+            // Clickable tactile book page corners
+            const spreadEl = document.getElementById('book-spread');
+            if (spreadEl) {
+                spreadEl.addEventListener('click', (e) => {
+                    if (e.target.closest('.leaf-corner-next')) {
+                        e.stopPropagation();
+                        this.step(1);
+                    } else if (e.target.closest('.leaf-corner-prev')) {
+                        e.stopPropagation();
+                        this.step(-1);
+                    }
+                });
+            }
+
             const jumpEl = document.getElementById('pager-jump');
             if (jumpEl) {
                 jumpEl.addEventListener('change', () => {
                     const n = parseInt(jumpEl.value, 10);
-                    if (!isNaN(n)) this.goToPage(n - 1);
+                    if (!isNaN(n)) this.goToPage(n - 1, true);
                 });
             }
 
@@ -1452,7 +1775,7 @@ tr { break-inside: avoid; }
                     const id = a.getAttribute('href').slice(1);
                     if (this.anchorMap[id] !== undefined) {
                         e.preventDefault();
-                        this.goToPage(this.anchorMap[id]);
+                        this.goToPage(this.anchorMap[id], true);
                         document.body.classList.add('sidebar-hidden');
                         document.body.classList.remove('sidebar-open-mobile');
                     }

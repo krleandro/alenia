@@ -321,12 +321,189 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     justify-content: center;
     gap: 0;
     position: relative;
-    animation: pageFadeIn 0.22s ease;
+    perspective: 2600px;
+    transform-style: preserve-3d;
 }
 
-@keyframes pageFadeIn {
-    from { opacity: 0.45; transform: translateY(2px); }
-    to { opacity: 1; transform: translateY(0); }
+/* =====================================================
+   3D PHYSICAL PAGE-TURN ANIMATION
+   ===================================================== */
+.flip-sheet {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: 30;
+    transform-style: preserve-3d;
+    pointer-events: none;
+    will-change: transform;
+}
+.flip-sheet.flip-next {
+    left: 50%;
+    width: 50%;
+    transform-origin: left center;
+    animation: turnPageNext 560ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+.flip-sheet.flip-prev {
+    left: 0;
+    width: 50%;
+    transform-origin: right center;
+    animation: turnPagePrev 560ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+.flip-sheet.flip-single-next {
+    left: 0;
+    width: 100%;
+    transform-origin: left center;
+    animation: turnSingleNext 480ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+.flip-sheet.flip-single-prev {
+    left: 0;
+    width: 100%;
+    transform-origin: left center;
+    animation: turnSinglePrev 480ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+
+.flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+}
+.flip-face > .leaf {
+    width: 100% !important;
+    height: 100% !important;
+}
+.flip-face::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0;
+}
+.flip-sheet.flip-next .flip-front::before {
+    background: linear-gradient(90deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeFrontHalf 560ms ease-in-out forwards;
+}
+.flip-sheet.flip-next .flip-back::before {
+    background: linear-gradient(270deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeBackHalf 560ms ease-in-out forwards;
+}
+.flip-sheet.flip-prev .flip-front::before {
+    background: linear-gradient(270deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeFrontHalf 560ms ease-in-out forwards;
+}
+.flip-sheet.flip-prev .flip-back::before {
+    background: linear-gradient(90deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeBackHalf 560ms ease-in-out forwards;
+}
+.flip-back.flip-back-next { transform: rotateY(180deg); }
+.flip-back.flip-back-prev { transform: rotateY(-180deg); }
+
+.flip-cast-shadow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 20;
+    pointer-events: none;
+}
+.flip-cast-shadow.shadow-next {
+    right: 0;
+    background: linear-gradient(90deg, rgba(22, 14, 7, 0.36) 0%, rgba(22, 14, 7, 0.12) 45%, transparent 100%);
+    animation: castShadowSweep 560ms ease-in-out forwards;
+}
+.flip-cast-shadow.shadow-prev {
+    left: 0;
+    background: linear-gradient(270deg, rgba(22, 14, 7, 0.36) 0%, rgba(22, 14, 7, 0.12) 45%, transparent 100%);
+    animation: castShadowSweep 560ms ease-in-out forwards;
+}
+
+@keyframes turnPageNext {
+    0%   { transform: rotateY(0deg); box-shadow: -2px 0 8px rgba(0,0,0,0.08); }
+    45%  { box-shadow: -22px 10px 36px rgba(15, 9, 4, 0.42); }
+    55%  { box-shadow: 22px 10px 36px rgba(15, 9, 4, 0.42); }
+    100% { transform: rotateY(-180deg); box-shadow: 2px 0 8px rgba(0,0,0,0.06); }
+}
+@keyframes turnPagePrev {
+    0%   { transform: rotateY(0deg); box-shadow: 2px 0 8px rgba(0,0,0,0.08); }
+    45%  { box-shadow: 22px 10px 36px rgba(15, 9, 4, 0.42); }
+    55%  { box-shadow: -22px 10px 36px rgba(15, 9, 4, 0.42); }
+    100% { transform: rotateY(180deg); box-shadow: -2px 0 8px rgba(0,0,0,0.06); }
+}
+@keyframes turnSingleNext {
+    0%   { transform: rotateY(0deg); opacity: 1; box-shadow: 0 8px 24px rgba(0,0,0,0.22); }
+    72%  { opacity: 0.94; box-shadow: -20px 10px 34px rgba(0,0,0,0.42); }
+    100% { transform: rotateY(-108deg); opacity: 0; }
+}
+@keyframes turnSinglePrev {
+    0%   { transform: rotateY(-102deg); opacity: 0.12; box-shadow: -20px 10px 34px rgba(0,0,0,0.42); }
+    35%  { opacity: 0.96; }
+    100% { transform: rotateY(0deg); opacity: 1; box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+}
+@keyframes shadeFrontHalf {
+    0%   { opacity: 0; }
+    48%  { opacity: 1; }
+    52%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+@keyframes shadeBackHalf {
+    0%   { opacity: 0; }
+    48%  { opacity: 0; }
+    52%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+@keyframes castShadowSweep {
+    0%   { opacity: 0.78; }
+    50%  { opacity: 0.35; }
+    100% { opacity: 0; }
+}
+
+.book-spread.anim-cover-open {
+    animation: coverOpenSwing 500ms cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
+}
+.book-spread.anim-cover-close {
+    animation: coverCloseSwing 440ms cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
+}
+@keyframes coverOpenSwing {
+    0%   { opacity: 0.35; transform: scale(0.95) rotateY(-12deg); }
+    100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+}
+@keyframes coverCloseSwing {
+    0%   { opacity: 0.4; transform: scale(1.03) rotateY(14deg); }
+    100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+}
+
+/* Interactive tactile page corners */
+.leaf-corner-btn {
+    position: absolute;
+    bottom: 0;
+    width: 44px;
+    height: 44px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 12;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+.leaf-corner-next {
+    right: 0;
+    background: linear-gradient(315deg, rgba(154,123,59,0.22) 0%, rgba(154,123,59,0.12) 28%, transparent 50%);
+}
+.leaf-corner-next:hover {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(315deg, #d7c7a7 0%, #efe6d3 36%, rgba(90,62,32,0.24) 48%, transparent 52%);
+}
+.leaf-corner-prev {
+    left: 0;
+    background: linear-gradient(45deg, rgba(154,123,59,0.22) 0%, rgba(154,123,59,0.12) 28%, transparent 50%);
+}
+.leaf-corner-prev:hover {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(45deg, #d7c7a7 0%, #efe6d3 36%, rgba(90,62,32,0.24) 48%, transparent 52%);
 }
 
 .leaf {
@@ -756,7 +933,7 @@ tr { break-inside: avoid; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .book-spread { animation: none; }
+    .book-spread, .flip-sheet, .flip-cast-shadow, .flip-face::before { animation: none !important; }
 }
 
 @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
@@ -1196,54 +1373,71 @@ SHARED_JS = r"""
             this.anchorMap = anchorMap;
         },
 
-        renderCurrentSpread() {
-            const spreadEl = document.getElementById('book-spread');
-            if (!spreadEl) return;
+        flipTimer: null,
+        pendingCommit: null,
+
+        finishPendingFlip() {
+            if (this.flipTimer) {
+                clearTimeout(this.flipTimer);
+                this.flipTimer = null;
+            }
+            if (this.pendingCommit) {
+                const fn = this.pendingCommit;
+                this.pendingCommit = null;
+                fn();
+            }
+        },
+
+        isCoverPage(i) {
+            return Boolean(this.pages[i] && this.pages[i].includes('class="cover-page"'));
+        },
+
+        normalizeIdx(rawIdx) {
+            const total = this.pages.length;
+            let idx = Math.max(0, Math.min(rawIdx, total - 1));
+            if (this.effectiveMode() === 'spread') {
+                if (!(idx === 0 && this.isCoverPage(0))) {
+                    if (idx % 2 === 0) idx = Math.max(1, idx - 1);
+                }
+            }
+            return idx;
+        },
+
+        makeLeafHtml(pageIdx, sideCls, interactive = true) {
+            const total = this.pages.length;
+            if (pageIdx < 0 || pageIdx >= total) {
+                return `<div class="leaf ${sideCls} leaf-blank"><div class="leaf-blank-ornament">✦</div></div>`;
+            }
+            const cover = this.isCoverPage(pageIdx);
+            const hdr = cover ? '' : `<div class="leaf-header"><span>ALENIA RPG</span><span>${this.bookTitle}</span></div>`;
+            const ftr = cover ? '' : `<div class="leaf-footer">— ${pageIdx + 1} —</div>`;
+            let corner = '';
+            if (interactive) {
+                if ((sideCls === 'leaf-right' || sideCls === 'leaf-single') && pageIdx + 1 < total) {
+                    corner += '<button class="leaf-corner-btn leaf-corner-next" type="button" title="Virar página (→)" aria-label="Próxima página"></button>';
+                }
+                if (sideCls === 'leaf-left' || (sideCls === 'leaf-single' && pageIdx > 0)) {
+                    corner += '<button class="leaf-corner-btn leaf-corner-prev" type="button" title="Página anterior (←)" aria-label="Página anterior"></button>';
+                }
+            }
+            return `<div class="leaf ${sideCls}">${hdr}<div class="leaf-body">${this.pages[pageIdx]}</div>${ftr}${corner}</div>`;
+        },
+
+        updateHud(idx) {
             const eff = this.effectiveMode();
             const total = this.pages.length;
-
-            // Clamp index
-            let idx = Math.max(0, Math.min(this.currentIdx, total - 1));
-            const isCoverPage = (i) => this.pages[i] && this.pages[i].includes('class="cover-page"');
-
-            const makeLeaf = (pageIdx, sideCls) => {
-                if (pageIdx < 0 || pageIdx >= total) {
-                    return `<div class="leaf ${sideCls} leaf-blank"><div class="leaf-blank-ornament">✦</div></div>`;
-                }
-                const cover = isCoverPage(pageIdx);
-                const hdr = cover ? '' : `<div class="leaf-header"><span>ALENIA RPG</span><span>${this.bookTitle}</span></div>`;
-                const ftr = cover ? '' : `<div class="leaf-footer">— ${pageIdx + 1} —</div>`;
-                return `<div class="leaf ${sideCls}">${hdr}<div class="leaf-body">${this.pages[pageIdx]}</div>${ftr}</div>`;
-            };
-
             let statusText = '';
             if (eff === 'spread') {
-                // Page 0 (Cover) renders cleanly centered as a closed front cover!
-                if (idx === 0 && isCoverPage(0)) {
-                    spreadEl.innerHTML = makeLeaf(0, 'leaf-single');
+                if (idx === 0 && this.isCoverPage(0)) {
                     statusText = `Capa • 1 / ${total}`;
                 } else {
-                    // Align open spreads to (1,2), (3,4), (5,6)... so cover is page 1 and inside spreads pair naturally
-                    if (idx % 2 === 0) idx = Math.max(1, idx - 1);
-                    this.currentIdx = idx;
-                    const leftHtml = makeLeaf(idx, 'leaf-left');
-                    const rightHtml = makeLeaf(idx + 1, 'leaf-right');
-                    spreadEl.innerHTML = leftHtml + rightHtml;
                     const rNum = Math.min(total, idx + 2);
                     statusText = (idx + 1 < total) ? `Págs. ${idx + 1}–${rNum} de ${total}` : `Pág. ${idx + 1} de ${total}`;
                 }
             } else {
-                this.currentIdx = idx;
-                spreadEl.innerHTML = makeLeaf(idx, 'leaf-single');
-                statusText = (idx === 0 && isCoverPage(0)) ? `Capa • 1 / ${total}` : `Pág. ${idx + 1} de ${total}`;
+                statusText = (idx === 0 && this.isCoverPage(0)) ? `Capa • 1 / ${total}` : `Pág. ${idx + 1} de ${total}`;
             }
 
-            // Re-trigger gentle page fade animation
-            spreadEl.style.animation = 'none';
-            void spreadEl.offsetWidth;
-            spreadEl.style.animation = '';
-
-            // Update controls
             const statusEl = document.getElementById('pager-status');
             if (statusEl) statusEl.textContent = statusText;
             const jumpEl = document.getElementById('pager-jump');
@@ -1255,6 +1449,114 @@ SHARED_JS = r"""
             document.querySelectorAll('.btn-next-page').forEach(b => b.disabled = atEnd);
 
             this.highlightActiveToc(idx, eff === 'spread' ? idx + 1 : idx);
+        },
+
+        renderCurrentSpread() {
+            this.finishPendingFlip();
+            const spreadEl = document.getElementById('book-spread');
+            if (!spreadEl) return;
+            const eff = this.effectiveMode();
+            const idx = this.normalizeIdx(this.currentIdx);
+            this.currentIdx = idx;
+
+            spreadEl.classList.remove('anim-cover-open', 'anim-cover-close');
+            if (eff === 'spread' && !(idx === 0 && this.isCoverPage(0))) {
+                spreadEl.innerHTML = this.makeLeafHtml(idx, 'leaf-left', true) + this.makeLeafHtml(idx + 1, 'leaf-right', true);
+            } else {
+                spreadEl.innerHTML = this.makeLeafHtml(idx, 'leaf-single', true);
+            }
+            this.updateHud(idx);
+        },
+
+        turnTo(rawTargetIdx, dir) {
+            this.finishPendingFlip();
+            const spreadEl = document.getElementById('book-spread');
+            if (!spreadEl) return;
+
+            const eff = this.effectiveMode();
+            const prevIdx = this.normalizeIdx(this.currentIdx);
+            const nextIdx = this.normalizeIdx(rawTargetIdx);
+            if (nextIdx === prevIdx) return;
+
+            const direction = dir || (nextIdx > prevIdx ? 1 : -1);
+            const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduced) {
+                this.currentIdx = nextIdx;
+                this.renderCurrentSpread();
+                return;
+            }
+
+            this.currentIdx = nextIdx;
+            this.updateHud(nextIdx);
+
+            const prevWasCover = eff === 'spread' && prevIdx === 0 && this.isCoverPage(0);
+            const nextIsCover = eff === 'spread' && nextIdx === 0 && this.isCoverPage(0);
+
+            // Case 1: Opening or closing the hardcover cover
+            if (prevWasCover || nextIsCover) {
+                spreadEl.classList.remove('anim-cover-open', 'anim-cover-close');
+                if (nextIsCover) {
+                    spreadEl.innerHTML = this.makeLeafHtml(0, 'leaf-single', true);
+                } else {
+                    spreadEl.innerHTML = this.makeLeafHtml(nextIdx, 'leaf-left', true) + this.makeLeafHtml(nextIdx + 1, 'leaf-right', true);
+                }
+                void spreadEl.offsetWidth;
+                const cls = prevWasCover ? 'anim-cover-open' : 'anim-cover-close';
+                spreadEl.classList.add(cls);
+                const commit = () => spreadEl.classList.remove(cls);
+                this.pendingCommit = commit;
+                this.flipTimer = setTimeout(() => { this.flipTimer = null; this.pendingCommit = null; commit(); }, 500);
+                return;
+            }
+
+            // Case 2: 2-Page Open Spread Physical Double-Sided 3D Flip
+            if (eff === 'spread') {
+                const isNext = direction > 0;
+                const baseLeft = isNext ? prevIdx : nextIdx;
+                const baseRight = isNext ? nextIdx + 1 : prevIdx + 1;
+                const frontPage = isNext ? prevIdx + 1 : prevIdx;
+                const backPage = isNext ? nextIdx : nextIdx + 1;
+
+                const flipCls = isNext ? 'flip-next' : 'flip-prev';
+                const frontSide = isNext ? 'leaf-right' : 'leaf-left';
+                const backSide = isNext ? 'leaf-left' : 'leaf-right';
+                const backFlipCls = isNext ? 'flip-back-next' : 'flip-back-prev';
+                const shadowCls = isNext ? 'shadow-next' : 'shadow-prev';
+
+                spreadEl.innerHTML =
+                    this.makeLeafHtml(baseLeft, 'leaf-left', false) +
+                    this.makeLeafHtml(baseRight, 'leaf-right', false) +
+                    `<div class="flip-cast-shadow ${shadowCls}"></div>` +
+                    `<div class="flip-sheet ${flipCls}">` +
+                        `<div class="flip-face flip-front">${this.makeLeafHtml(frontPage, frontSide, false)}</div>` +
+                        `<div class="flip-face flip-back ${backFlipCls}">${this.makeLeafHtml(backPage, backSide, false)}</div>` +
+                    `</div>`;
+
+                const commit = () => {
+                    spreadEl.innerHTML = this.makeLeafHtml(nextIdx, 'leaf-left', true) + this.makeLeafHtml(nextIdx + 1, 'leaf-right', true);
+                };
+                this.pendingCommit = commit;
+                this.flipTimer = setTimeout(() => { this.flipTimer = null; this.pendingCommit = null; commit(); }, 570);
+                return;
+            }
+
+            // Case 3: Single-Page 3D Peel / Swing-In
+            const isNext = direction > 0;
+            const underIdx = isNext ? nextIdx : prevIdx;
+            const sheetIdx = isNext ? prevIdx : nextIdx;
+            const flipCls = isNext ? 'flip-single-next' : 'flip-single-prev';
+
+            spreadEl.innerHTML =
+                this.makeLeafHtml(underIdx, 'leaf-single', false) +
+                `<div class="flip-sheet ${flipCls}">` +
+                    `<div class="flip-face flip-front">${this.makeLeafHtml(sheetIdx, 'leaf-single', false)}</div>` +
+                `</div>`;
+
+            const commit = () => {
+                spreadEl.innerHTML = this.makeLeafHtml(nextIdx, 'leaf-single', true);
+            };
+            this.pendingCommit = commit;
+            this.flipTimer = setTimeout(() => { this.flipTimer = null; this.pendingCommit = null; commit(); }, 490);
         },
 
         highlightActiveToc(pStart, pEnd) {
@@ -1270,27 +1572,34 @@ SHARED_JS = r"""
         step(dir) {
             if (this.effectiveMode() === 'scroll') return;
             const eff = this.effectiveMode();
+            let target = this.currentIdx;
             if (eff === 'spread') {
                 if (dir > 0) {
-                    if (this.currentIdx === 0) this.currentIdx = 1;
-                    else this.currentIdx = Math.min(this.pages.length - 1, this.currentIdx + 2);
+                    if (this.currentIdx === 0) target = 1;
+                    else target = Math.min(this.pages.length - 1, this.currentIdx + 2);
                 } else {
-                    if (this.currentIdx <= 1) this.currentIdx = 0;
-                    else this.currentIdx = Math.max(1, this.currentIdx - 2);
+                    if (this.currentIdx <= 1) target = 0;
+                    else target = Math.max(1, this.currentIdx - 2);
                 }
             } else {
-                this.currentIdx = Math.max(0, Math.min(this.pages.length - 1, this.currentIdx + dir));
+                target = Math.max(0, Math.min(this.pages.length - 1, this.currentIdx + dir));
             }
-            this.renderCurrentSpread();
+            this.turnTo(target, dir);
         },
 
-        goToPage(pageIdx) {
-            this.currentIdx = Math.max(0, Math.min(this.pages.length - 1, pageIdx));
-            this.renderCurrentSpread();
+        goToPage(pageIdx, animate = false) {
+            const clamped = Math.max(0, Math.min(this.pages.length - 1, pageIdx));
+            if (animate) {
+                this.turnTo(clamped);
+            } else {
+                this.currentIdx = clamped;
+                this.renderCurrentSpread();
+            }
         },
 
         applyMode(newMode, persist = true) {
             if (!newMode) return;
+            this.finishPendingFlip();
             this.mode = newMode;
             if (persist) localStorage.setItem(MODE_KEY, newMode);
             document.body.classList.toggle('book-mode', newMode !== 'scroll');
@@ -1313,11 +1622,25 @@ SHARED_JS = r"""
             document.querySelectorAll('.btn-prev-page').forEach(b => b.addEventListener('click', () => this.step(-1)));
             document.querySelectorAll('.btn-next-page').forEach(b => b.addEventListener('click', () => this.step(1)));
 
+            // Clickable tactile book page corners
+            const spreadEl = document.getElementById('book-spread');
+            if (spreadEl) {
+                spreadEl.addEventListener('click', (e) => {
+                    if (e.target.closest('.leaf-corner-next')) {
+                        e.stopPropagation();
+                        this.step(1);
+                    } else if (e.target.closest('.leaf-corner-prev')) {
+                        e.stopPropagation();
+                        this.step(-1);
+                    }
+                });
+            }
+
             const jumpEl = document.getElementById('pager-jump');
             if (jumpEl) {
                 jumpEl.addEventListener('change', () => {
                     const n = parseInt(jumpEl.value, 10);
-                    if (!isNaN(n)) this.goToPage(n - 1);
+                    if (!isNaN(n)) this.goToPage(n - 1, true);
                 });
             }
 
@@ -1369,7 +1692,7 @@ SHARED_JS = r"""
                     const id = a.getAttribute('href').slice(1);
                     if (this.anchorMap[id] !== undefined) {
                         e.preventDefault();
-                        this.goToPage(this.anchorMap[id]);
+                        this.goToPage(this.anchorMap[id], true);
                         document.body.classList.add('sidebar-hidden');
                         document.body.classList.remove('sidebar-open-mobile');
                     }
