@@ -36,7 +36,7 @@ BOOKS = [
         "subtitle": "Sistema d20 Sombrio • Dados de Vida, Procedimentos, Preços & Rituais",
         "epigraph": "“O aço quebra, os reis sangram e o mar engole até os mais sábios.”",
         "desc": "Regras revisadas v2.0: 4d6, Atributos Especiais por Feitos, DV por Kit (1d6–1d12), perícias recalibradas (+3/+8/+12 com travas), Defesa situacional, Múltiplas Ações blindadas, procedimentos de mesa, preços e rituais.",
-        "cover_map": None,
+        "cover_map": "assets/capa_01_regras.jpg",
         "gm_only": False,
     },
     {
@@ -60,7 +60,7 @@ BOOKS = [
         "subtitle": "36 Ofícios de Exploradores • Dados de Vida & Habilidades Calibradas",
         "epigraph": "“Em Alenia, nenhum explorador sobrevive apenas pelo sangue — mas pelo ofício que carrega nas mãos.”",
         "desc": "Todos os 36 Kits Universais (+ Sem Kit) com Dado de Vida (1d6 a 1d12), multiplicadores de Inteligência recalibrados, troca de ofício em campanha e habilidades equilibradas para exploração.",
-        "cover_map": None,
+        "cover_map": "assets/capa_03_kits.jpg",
         "gm_only": False,
     },
     {
@@ -72,7 +72,7 @@ BOOKS = [
         "subtitle": "Acesso Restrito ao Mestre • Fichas, Táticas & Segredos",
         "epigraph": "“A maioria das feras que matam viajantes usa botas de couro e fala sua própria língua.”",
         "desc": "🔒 Área Restrita ao Mestre: fichas completas de inimigos, feras e ameaças ocultas de Alenia protegidas por criptografia AES-256.",
-        "cover_map": None,
+        "cover_map": "assets/capa_04_bestiario.jpg",
         "gm_only": True,
     },
     {
@@ -84,7 +84,7 @@ BOOKS = [
         "subtitle": "Tendências Fonéticas, Substratos Históricos, Casas Nobres & Etimologia",
         "epigraph": "“A verossimilhança de um cenário medieval nasce da coesão invisível entre os nomes que habitam esse território.”",
         "desc": "As 5 Fichas Matriz culturais de Alenia, separação entre língua local, tradução vernácula e substrato herdado, sobrenomes de bastardos, casas nobres e etimologia do atlas.",
-        "cover_map": None,
+        "cover_map": "assets/capa_05_onomastica.jpg",
         "gm_only": False,
     },
     {
@@ -96,7 +96,7 @@ BOOKS = [
         "subtitle": "Criação em 6 Passos & Referência Rápida de Mesa",
         "epigraph": "“Cinco minutos de leitura para colocar seu explorador na estrada.”",
         "desc": "Resumo direto do mundo para jogadores novos, criação passo a passo no Firecast e tabela de consulta rápida para combate, moribundo, cura, exaustão e preços.",
-        "cover_map": None,
+        "cover_map": "assets/capa_06_guia_jogador.jpg",
         "gm_only": False,
     },
     {
@@ -108,7 +108,7 @@ BOOKS = [
         "subtitle": "Acesso Restrito ao Mestre • Bastidores, Cenas & Segredos",
         "epigraph": "“Nem tudo o que a bruma devolve deveria ser encontrado.”",
         "desc": "🔒 Área Restrita ao Mestre: aventura introdutória completa, bastidores da trama, encontros e desfechos protegidos por criptografia AES-256.",
-        "cover_map": None,
+        "cover_map": "assets/capa_07_aventura.jpg",
         "gm_only": True,
     },
 ]
@@ -910,8 +910,13 @@ tr { break-inside: avoid; }
 .portal-card {
     display: flex; flex-direction: column; background: var(--vellum-card);
     border: 1px solid var(--border); border-top: 4px solid var(--crimson);
-    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    padding: 16px 16px 15px; text-decoration: none; color: var(--ink);
     transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-cover {
+    width: 100%; height: 148px; object-fit: cover; display: block;
+    border: 1px solid var(--gold); border-radius: 2px; margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
 }
 .portal-card.gm-card { background: #211c18; color: #efe6d2; border-color: var(--gold); border-top-color: var(--gold); }
 .portal-card.gm-card .portal-title { color: #f7f1e3; }
@@ -2170,7 +2175,7 @@ def build_topbar(active_file: str, has_toc: bool) -> str:
 
 
 def build_cover(num: str, title: str, subtitle: str, epigraph: str, cover_map: str = None) -> str:
-    img_html = f'<img class="cover-thumb" src="{cover_map}" alt="Mapa de Alenia"/>' if cover_map else ""
+    img_html = f'<img class="cover-thumb" src="{cover_map}" alt="Ilustração de capa — {html.escape(title)}"/>' if cover_map else ""
     return f"""
     <section class="cover-page">
         <div class="cover-kicker">ALENIA RPG • {html.escape(num)}</div>
@@ -2314,7 +2319,7 @@ def main():
             )
             compendium_parts.append(
                 f'<section id="{tome_anchor}" class="tome-divider">'
-                f'{build_cover(bk["num"], bk["title"], bk["subtitle"], bk["epigraph"], None)}'
+                f'{build_cover(bk["num"], bk["title"], bk["subtitle"], bk["epigraph"], bk["cover_map"])}'
                 f'{c_gated}'
                 f'</section>'
             )
@@ -2333,7 +2338,7 @@ def main():
                     compendium_toc.append((3, lbl, hid))
             compendium_parts.append(
                 f'<section id="{tome_anchor}" class="tome-divider">'
-                f'{build_cover(bk["num"], bk["title"], bk["subtitle"], bk["epigraph"], None)}'
+                f'{build_cover(bk["num"], bk["title"], bk["subtitle"], bk["epigraph"], bk["cover_map"])}'
                 f'{c_inner}'
                 f'</section>'
             )
@@ -2347,8 +2352,10 @@ def main():
     for bk in BOOKS:
         cls = "portal-card gm-card" if bk["gm_only"] else "portal-card"
         cta = "🔒 Destrancar Livro (Mestre) →" if bk["gm_only"] else "Abrir Livro →"
+        thumb = f'<img class="portal-cover" src="{bk["cover_map"]}" alt="Capa — {html.escape(bk["title"])}" loading="lazy"/>' if bk["cover_map"] else ""
         cards.append(f"""
         <a class="{cls}" href="{bk['out']}">
+            {thumb}
             <div class="portal-kicker">{html.escape(bk['num'])}</div>
             <div class="portal-title">{html.escape(bk['title'])}</div>
             <p class="portal-desc">{html.escape(bk['desc'])}</p>
@@ -2357,6 +2364,7 @@ def main():
         """)
     cards.append("""
         <a class="portal-card" href="Alenia_Compendio_Completo.html" style="border-top-color:#9a7b3b; background:#efe5cf;">
+            <img class="portal-cover" src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Capa — Compêndio Completo" loading="lazy"/>
             <div class="portal-kicker">EDIÇÃO INTEGRAL (PDF MESTRE)</div>
             <div class="portal-title">Compêndio Completo</div>
             <p class="portal-desc">Todos os tomos reunidos em formato de livro folheável com os mapas embutidos — com as áreas do Mestre seladas por senha.</p>

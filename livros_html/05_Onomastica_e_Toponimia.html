@@ -731,8 +731,13 @@ tr { break-inside: avoid; }
 .portal-card {
     display: flex; flex-direction: column; background: var(--vellum-card);
     border: 1px solid var(--border); border-top: 4px solid var(--crimson);
-    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    padding: 16px 16px 15px; text-decoration: none; color: var(--ink);
     transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-cover {
+    width: 100%; height: 148px; object-fit: cover; display: block;
+    border: 1px solid var(--gold); border-radius: 2px; margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
 }
 .portal-card.gm-card { background: #211c18; color: #efe6d2; border-color: var(--gold); border-top-color: var(--gold); }
 .portal-card.gm-card .portal-title { color: #f7f1e3; }
@@ -810,7 +815,7 @@ tr { break-inside: avoid; }
         <h1 class="cover-title">Onomástica &amp; Toponímia</h1>
         <div class="cover-subtitle">Tendências Fonéticas, Substratos Históricos, Casas Nobres &amp; Etimologia</div>
         <div class="cover-rule"></div>
-        
+        <img class="cover-thumb" src="assets/capa_05_onomastica.jpg" alt="Ilustração de capa — Onomástica &amp; Toponímia"/>
         <p class="cover-epigraph">“A verossimilhança de um cenário medieval nasce da coesão invisível entre os nomes que habitam esse território.”</p>
         <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
     </section>

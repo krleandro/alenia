@@ -731,8 +731,13 @@ tr { break-inside: avoid; }
 .portal-card {
     display: flex; flex-direction: column; background: var(--vellum-card);
     border: 1px solid var(--border); border-top: 4px solid var(--crimson);
-    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    padding: 16px 16px 15px; text-decoration: none; color: var(--ink);
     transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-cover {
+    width: 100%; height: 148px; object-fit: cover; display: block;
+    border: 1px solid var(--gold); border-radius: 2px; margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
 }
 .portal-card.gm-card { background: #211c18; color: #efe6d2; border-color: var(--gold); border-top-color: var(--gold); }
 .portal-card.gm-card .portal-title { color: #f7f1e3; }
@@ -793,6 +798,7 @@ tr { break-inside: avoid; }
     <h2>Estante Oficial (Jogadores &amp; 🔒 Área do Mestre)</h2>
     <div class="portal-grid">
         <a class="portal-card" href="01_Livro_de_Regras.html">
+            <img class="portal-cover" src="assets/capa_01_regras.jpg" alt="Capa — Livro de Regras" loading="lazy"/>
             <div class="portal-kicker">TOMO I</div>
             <div class="portal-title">Livro de Regras</div>
             <p class="portal-desc">Regras revisadas v2.0: 4d6, Atributos Especiais por Feitos, DV por Kit (1d6–1d12), perícias recalibradas (+3/+8/+12 com travas), Defesa situacional, Múltiplas Ações blindadas, procedimentos de mesa, preços e rituais.</p>
@@ -800,6 +806,7 @@ tr { break-inside: avoid; }
         </a>
         
         <a class="portal-card" href="02_Livro_do_Cenario.html">
+            <img class="portal-cover" src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Capa — Livro do Cenário &amp; Atlas" loading="lazy"/>
             <div class="portal-kicker">TOMO II</div>
             <div class="portal-title">Livro do Cenário &amp; Atlas</div>
             <p class="portal-desc">Presente histórico com 6 crises ativas, 6 facções, economia do adamante, vida civil em Kalis e Gaddra, tabela de viagens, religiões, cronologia, 6 mapas embutidos e seção selada exclusiva do Mestre.</p>
@@ -807,6 +814,7 @@ tr { break-inside: avoid; }
         </a>
         
         <a class="portal-card" href="03_Catalogo_de_Kits.html">
+            <img class="portal-cover" src="assets/capa_03_kits.jpg" alt="Capa — Catálogo de Kits Universais" loading="lazy"/>
             <div class="portal-kicker">TOMO III</div>
             <div class="portal-title">Catálogo de Kits Universais</div>
             <p class="portal-desc">Todos os 36 Kits Universais (+ Sem Kit) com Dado de Vida (1d6 a 1d12), multiplicadores de Inteligência recalibrados, troca de ofício em campanha e habilidades equilibradas para exploração.</p>
@@ -814,6 +822,7 @@ tr { break-inside: avoid; }
         </a>
         
         <a class="portal-card gm-card" href="04_Bestiario_de_Alenia.html">
+            <img class="portal-cover" src="assets/capa_04_bestiario.jpg" alt="Capa — Bestiário &amp; Ameaças" loading="lazy"/>
             <div class="portal-kicker">TOMO IV • MESTRE</div>
             <div class="portal-title">Bestiário &amp; Ameaças</div>
             <p class="portal-desc">🔒 Área Restrita ao Mestre: fichas completas de inimigos, feras e ameaças ocultas de Alenia protegidas por criptografia AES-256.</p>
@@ -821,6 +830,7 @@ tr { break-inside: avoid; }
         </a>
         
         <a class="portal-card" href="05_Onomastica_e_Toponimia.html">
+            <img class="portal-cover" src="assets/capa_05_onomastica.jpg" alt="Capa — Onomástica &amp; Toponímia" loading="lazy"/>
             <div class="portal-kicker">TOMO V</div>
             <div class="portal-title">Onomástica &amp; Toponímia</div>
             <p class="portal-desc">As 5 Fichas Matriz culturais de Alenia, separação entre língua local, tradução vernácula e substrato herdado, sobrenomes de bastardos, casas nobres e etimologia do atlas.</p>
@@ -828,6 +838,7 @@ tr { break-inside: avoid; }
         </a>
         
         <a class="portal-card" href="06_Guia_do_Jogador.html">
+            <img class="portal-cover" src="assets/capa_06_guia_jogador.jpg" alt="Capa — Guia do Jogador &amp; Escudo" loading="lazy"/>
             <div class="portal-kicker">TOMO VI</div>
             <div class="portal-title">Guia do Jogador &amp; Escudo</div>
             <p class="portal-desc">Resumo direto do mundo para jogadores novos, criação passo a passo no Firecast e tabela de consulta rápida para combate, moribundo, cura, exaustão e preços.</p>
@@ -835,6 +846,7 @@ tr { break-inside: avoid; }
         </a>
         
         <a class="portal-card gm-card" href="07_Aventura_Inicial.html">
+            <img class="portal-cover" src="assets/capa_07_aventura.jpg" alt="Capa — Aventura Inicial" loading="lazy"/>
             <div class="portal-kicker">TOMO VII • MESTRE</div>
             <div class="portal-title">Aventura Inicial</div>
             <p class="portal-desc">🔒 Área Restrita ao Mestre: aventura introdutória completa, bastidores da trama, encontros e desfechos protegidos por criptografia AES-256.</p>
@@ -842,6 +854,7 @@ tr { break-inside: avoid; }
         </a>
         
         <a class="portal-card" href="Alenia_Compendio_Completo.html" style="border-top-color:#9a7b3b; background:#efe5cf;">
+            <img class="portal-cover" src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Capa — Compêndio Completo" loading="lazy"/>
             <div class="portal-kicker">EDIÇÃO INTEGRAL (PDF MESTRE)</div>
             <div class="portal-title">Compêndio Completo</div>
             <p class="portal-desc">Todos os tomos reunidos em formato de livro folheável com os mapas embutidos — com as áreas do Mestre seladas por senha.</p>
