@@ -283,9 +283,16 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "1.6";
+local PLUGIN_VERSION = "1.7";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
+
+-- Tabela Oficial de XP Acumulada (Niveis 1 a 30)
+local XP_TABELA = {
+    0, 300, 800, 1500, 2500, 3800, 5500, 7500, 10000, 13000,
+    17000, 21500, 26500, 32000, 38000, 45000, 52500, 61000, 70000, 80000,
+    92000, 105000, 120000, 136000, 154000, 174000, 196000, 220000, 246000, 275000
+};
 
 local recalcularFicha;
 local atualizarPaginaCustomSkills;
@@ -312,11 +319,45 @@ end;
 
 local function getPatamarInfo(nivel)
     if nivel >= 21 then
-        return "Epico (2x Per)", 2.0;
+        return "Epico (2x Per)", 2.0, 22;
     elseif nivel >= 11 then
-        return "Lenda (1.5x Per)", 1.5;
+        return "Lenda (1.5x Per)", 1.5, 20;
     else
-        return "Recruta (1x Per)", 1.0;
+        return "Recruta (1x Per)", 1.0, 18;
+    end;
+end;
+
+local function adicionarXP()
+    if sheet == nil then return; end;
+    local function aplicarXP(valorStr)
+        local ganho = math.floor(num(valorStr, 0));
+        if ganho == 0 then return; end;
+        local xpAntes = math.max(0, math.floor(num(sheet.xpAtual, 0)));
+        local xpNovo = math.max(0, xpAntes + ganho);
+        sheet.xpAtual = tostring(xpNovo);
+        recalcularFicha();
+        local niv = math.max(1, math.min(30, math.floor(num(sheet.nivel, 1))));
+        local nomeChar = sheet.nome or "Explorador";
+        local prox = (niv < 30) and XP_TABELA[niv + 1] or XP_TABELA[30];
+        local alerta = "";
+        if niv < 30 and xpNovo >= prox then
+            alerta = " — PRONTO PARA SUBIR PARA O NIVEL " .. tostring(niv + 1) .. "!";
+        end;
+        local sinal = (ganho >= 0) and "+" or "";
+        enviarChatOuMsg("[" .. nomeChar .. "] XP: " .. sinal .. tostring(ganho) .. " (Total: " .. tostring(xpNovo) .. " / " .. tostring(prox) .. " XP)" .. alerta);
+    end;
+
+    if DialogsMod ~= nil and type(DialogsMod.inputQuery) == "function" then
+        DialogsMod.inputQuery(
+            "Adicionar Experiencia (XP)",
+            "Quanto XP o explorador ganhou? (exploracao, armadilhas, vitorias sociais, contratos ou combates):",
+            "150",
+            function(val) aplicarXP(val); end,
+            function() end,
+            false
+        );
+    else
+        showMessage("Digite o novo total diretamente no campo XP Atual.");
     end;
 end;
 
@@ -594,8 +635,24 @@ recalcularFicha = function()
     sheet.mod_car = fmtMod(mCar);
 
     local nivel = math.max(1, math.min(30, math.floor(num(sheet.nivel, 1))));
-    local patNome, _ = getPatamarInfo(nivel);
+    local patNome, _, tetoAttr = getPatamarInfo(nivel);
     sheet.patamarTexto = patNome;
+    sheet.tetoAtributoTexto = "Teto: " .. tostring(tetoAttr) .. " (" .. fmtMod(math.floor((tetoAttr - 10) / 2)) .. ")";
+
+    local xpAtual = math.max(0, math.floor(num(sheet.xpAtual, 0)));
+    if nivel >= 30 then
+        sheet.xpProxNivel = "MAX (275000)";
+        sheet.xpStatus = "Nivel Maximo Epico alcancado (Niv. 30) | Teto Atributo: 22 (+6)";
+    else
+        local proxXp = XP_TABELA[nivel + 1] or 275000;
+        sheet.xpProxNivel = tostring(proxXp) .. " XP";
+        local falta = proxXp - xpAtual;
+        if falta <= 0 then
+            sheet.xpStatus = "PRONTO PARA SUBIR AO NIVEL " .. tostring(nivel + 1) .. "! Clique em Subir Nivel (1dX+CON).";
+        else
+            sheet.xpStatus = "Faltam " .. tostring(falta) .. " XP para o Nivel " .. tostring(nivel + 1) .. " | Teto Atributo: " .. tostring(tetoAttr);
+        end;
+    end;
 
     local kitId = sheet.kitSelecionado or "sem_kit";
     local kit = KITS[kitId] or KITS["sem_kit"];
@@ -1272,7 +1329,7 @@ def build_lfm() -> str:
 
     recalc_fields = [
         "forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma",
-        "nivel", "pvMax", "kitSelecionado", "kitDvFaces", "kitPerBase", "kitMultInt",
+        "nivel", "xpAtual", "pvMax", "kitSelecionado", "kitDvFaces", "kitPerBase", "kitMultInt",
         "armaduraDef", "escudoDef", "defesaOutros", "iniciativaOutros",
         "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre"
     ]
@@ -1290,7 +1347,7 @@ def build_lfm() -> str:
         "rdEspecial", "defesaOutros", "iniciativaOutros", "multiAcoes",
         "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre",
         "customSkillPage", "moedasOuro", "moedasPrata", "moedasCobre",
-        "cdTeste", "defesaAlvo",
+        "cdTeste", "defesaAlvo", "xpAtual",
         "pluginVersaoAtual", "statusAtualizacao"
     ]
     def_values = [
@@ -1299,8 +1356,8 @@ def build_lfm() -> str:
         "0", "0", "0", "1",
         "0", "0", "0", "0", "0",
         "1", "0", "25", "0",
-        "0", "0",
-        "v1.6", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "0", "0", "0",
+        "v1.7", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -1388,10 +1445,10 @@ def build_lfm() -> str:
             <!-- ABA 1: PRINCIPAL & KIT -->
             <tab title="Principal &amp; Kit">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="860">
+                    <layout left="0" top="0" width="1056" height="920">
                         <!-- ATRIBUTOS BASE -->
                         <rectangle left="6" top="6" width="1036" height="194" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="12" width="540" height="26" text="ATRIBUTOS BASE (3 a 18 | Mod = floor((Valor-10)/2))" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
+                            <label left="12" top="12" width="600" height="26" text="ATRIBUTOS BASE (Teto: 18 Recruta | 20 Lenda | 22 Epico)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <button left="632" top="10" width="390" height="34" text="Rolar Atributos Iniciais (4d6 descarta menor)" fontSize="14">
                                 <event name="onClick"><![CDATA[rolarAtributosIniciais();]]></event>
                             </button>
@@ -1439,39 +1496,55 @@ def build_lfm() -> str:
                             <textEditor left="12" top="184" width="1010" height="100" field="kitHabilidade" fontSize="14"/>
                         </rectangle>
 
-                        <!-- PAINEL AUTOMATICO DE EVOLUCAO -->
-                        <rectangle left="6" top="684" width="1036" height="162" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="1012" height="24" text="EVOLUCAO v2.0 (PV = 1dX+CON/niv | Pericias: Recruta 1x, Lenda 1.5x, Epico 2x | Graduacao: 1-7 [1p], 8-11 [2p, N5+], 12+ [3p, N11+])" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold"/>
+                        <!-- PAINEL AUTOMATICO DE EVOLUCAO & XP -->
+                        <rectangle left="6" top="684" width="1036" height="222" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="8" width="1012" height="24" text="EVOLUCAO &amp; EXPERIENCIA (XP: Exploracao, Armadilhas, Social, Contratos &amp; Combates | Niveis 1-30)" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
 
-                            <rectangle left="12" top="42" width="194" height="106" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
+                            <!-- BARRA DE XP -->
+                            <rectangle left="12" top="36" width="1012" height="50" color="{BG_CARD_ALT}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="5" yradius="5">
+                                <label left="10" top="7" width="84" height="36" text="XP ATUAL:" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold" vertTextAlign="center"/>
+                                <edit left="96" top="7" width="102" height="36" field="xpAtual" type="number" fontColor="{TEXT_MAIN}" fontSize="17" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="200" top="7" width="18" height="36" text="/" fontColor="{TEXT_MUTED}" fontSize="18" horzTextAlign="center" vertTextAlign="center"/>
+                                <rectangle left="220" top="7" width="110" height="36" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                    <label align="client" field="xpProxNivel" fontColor="{TEXT_GOLD}" fontSize="14" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                                </rectangle>
+                                <button left="338" top="7" width="146" height="36" text="+ Adicionar XP" fontSize="14">
+                                    <event name="onClick"><![CDATA[adicionarXP();]]></event>
+                                </button>
+                                <rectangle left="494" top="7" width="508" height="36" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                    <label align="client" field="xpStatus" fontColor="{TEXT_GREEN}" fontSize="13" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                                </rectangle>
+                            </rectangle>
+
+                            <rectangle left="12" top="98" width="194" height="110" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
                                 <label left="4" top="8" width="186" height="20" text="PV MEDIO SUGERIDO" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
                                 <label left="4" top="32" width="186" height="38" field="pvSugerido" fontColor="{TEXT_GREEN}" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
-                                <label left="4" top="76" width="186" height="20" field="proxNivelPv" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="center"/>
+                                <label left="4" top="78" width="186" height="20" field="proxNivelPv" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="center"/>
                             </rectangle>
 
-                            <rectangle left="216" top="42" width="194" height="106" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
+                            <rectangle left="216" top="98" width="194" height="110" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
                                 <label left="4" top="8" width="186" height="20" text="PTS PERICIA TOTAIS" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
                                 <label left="4" top="32" width="186" height="38" field="periciasSugeridas" fontColor="{TEXT_GOLD}" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
-                                <label left="4" top="76" width="186" height="20" field="proxNivelPer" fontColor="{TEXT_MUTED}" fontSize="13" horzTextAlign="center"/>
+                                <label left="4" top="78" width="186" height="20" field="proxNivelPer" fontColor="{TEXT_MUTED}" fontSize="13" horzTextAlign="center"/>
                             </rectangle>
 
-                            <rectangle left="420" top="42" width="194" height="106" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
+                            <rectangle left="420" top="98" width="194" height="110" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
                                 <label left="4" top="8" width="186" height="20" text="PTS PERICIA GASTOS" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
                                 <label left="4" top="32" width="186" height="38" field="periciasGastas" fontColor="{TEXT_MAIN}" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
-                                <label left="4" top="76" width="186" height="20" text="1-7:1p | 8-11:2p | 12+:3p" fontColor="{TEXT_MUTED}" fontSize="11" horzTextAlign="center"/>
+                                <label left="4" top="78" width="186" height="20" text="1-7:1p | 8-11:2p | 12+:3p" fontColor="{TEXT_MUTED}" fontSize="11" horzTextAlign="center"/>
                             </rectangle>
 
-                            <rectangle left="624" top="42" width="194" height="106" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
+                            <rectangle left="624" top="98" width="194" height="110" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
                                 <label left="4" top="8" width="186" height="20" text="AUMENTOS ATTR." fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
                                 <label left="4" top="32" width="186" height="38" field="aumentosAtributo" fontColor="{TEXT_GOLD}" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
-                                <label left="4" top="76" width="186" height="20" text="1 pt a cada 3 niveis" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="center"/>
+                                <label left="4" top="78" width="186" height="20" field="tetoAtributoTexto" fontColor="{TEXT_GOLD}" fontSize="12" horzTextAlign="center"/>
                             </rectangle>
 
-                            <rectangle left="828" top="42" width="196" height="106" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
+                            <rectangle left="828" top="98" width="196" height="110" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
                                 <label left="4" top="8" width="188" height="20" text="PATAMAR ATUAL" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
                                 <label left="4" top="36" width="188" height="34" field="patamarTexto" fontColor="{TEXT_CRIMSON}" fontSize="17" fontStyle="bold" horzTextAlign="center"/>
-                                <label left="12" top="76" width="90" height="20" text="Iniciativa:" fontColor="{TEXT_MUTED}" fontSize="13" horzTextAlign="leading"/>
-                                <label left="96" top="76" width="88" height="20" field="iniciativaTotal" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="trailing"/>
+                                <label left="12" top="78" width="90" height="20" text="Iniciativa:" fontColor="{TEXT_MUTED}" fontSize="13" horzTextAlign="leading"/>
+                                <label left="96" top="78" width="88" height="20" field="iniciativaTotal" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="trailing"/>
                             </rectangle>
                         </rectangle>
                     </layout>
@@ -1745,10 +1818,10 @@ def build_lfm() -> str:
                         <!-- CARD DE NOVIDADES -->
                         <rectangle left="6" top="450" width="1036" height="224" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v1.5 — Definicao de CD nos testes (campo rapido ou pergunta ao rolar), Defesa do Alvo em ataques, dano corpo a corpo com +FOR e Descansos." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="74" width="996" height="24" text="• v1.4 — Aba Autoria &amp; Atualizacao (por Mestre Carlos) com verificacao e instalacao automatica direta do plugin." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="102" width="996" height="24" text="• v1.3 — Graduacao numerica livre em todas as 34 pericias e pericias livres (+0, +1, +2...) com calculo automatico de grau." fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <label left="20" top="130" width="996" height="24" text="• v1.2 — Dado de Vida (1d6 a 1d12) por Kit, botao Subir Nivel (1dX+CON) e trava anti-abuso nas Multiplas Acoes Storyteller." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="46" width="996" height="24" text="• v1.7 — Rastreador oficial de XP (Niveis 1-30), botao + Adicionar XP no chat e teto progressivo de atributos (18 Recruta / 20 Lenda / 22 Epico)." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="74" width="996" height="24" text="• v1.6 — Correcao do atualizador automatico integrado (instalacao direta dentro do Firecast sem erro de cache)." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="102" width="996" height="24" text="• v1.5 — Definicao de CD nos testes (campo rapido ou pergunta ao rolar), Defesa do Alvo em ataques, dano corpo a corpo com +FOR e Descansos." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="130" width="996" height="24" text="• v1.3/1.4 — Graduacao numerica livre em todas as pericias com grau automatico e aba Autoria &amp; Atualizacao (por Mestre Carlos)." fontColor="{TEXT_MUTED}" fontSize="13"/>
                             <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao automatica bem-sucedida, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>

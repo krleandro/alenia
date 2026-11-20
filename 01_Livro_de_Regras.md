@@ -19,7 +19,7 @@
 
 ## 2. Atributos Base e Geração de Personagem
 
-Todo personagem possui **6 Atributos Base** na escala clássica **3 a 18**:
+Todo personagem possui **6 Atributos Base** na escala inicial **3 a 18** *(com teto progressivo por Patamar ao evoluir: **18** em Recruta, **20** em Lenda e **22** em Épico)*:
 
 | Atributo | Sigla | Escopo Principal |
 | :--- | :---: | :--- |
@@ -33,9 +33,9 @@ Todo personagem possui **6 Atributos Base** na escala clássica **3 a 18**:
 ### Cálculo do Modificador
 $$\text{Modificador} = \left\lfloor \frac{\text{Valor do Atributo} - 10}{2} \right\rfloor$$
 
-| Valor | 3 | 4–5 | 6–7 | 8–9 | 10–11 | 12–13 | 14–15 | 16–17 | 18–19 | 20–21 |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Mod.** | `-4` | `-3` | `-2` | `-1` | `0` | `+1` | `+2` | `+3` | `+4` | `+5` |
+| Valor | 3 | 4–5 | 6–7 | 8–9 | 10–11 | 12–13 | 14–15 | 16–17 | 18–19 | 20–21 | 22 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Mod.** | `-4` | `-3` | `-2` | `-1` | `0` | `+1` | `+2` | `+3` | `+4` | `+5` | `+6` |
 
 ### Geração Inicial de Atributos
 - **Regra Oficial (Rolagem)**: role **`4d6` e descarte o menor dado** para cada um dos 6 atributos. Na ficha do **RRPG Firecast**, o botão **"Rolar Atributos Iniciais (4d6)"** só funciona quando todos os 6 campos estiverem vazios, preenche os valores automaticamente e anuncia todos os dados (incluindo o descartado) no chat da mesa.
@@ -107,12 +107,58 @@ Além das **34 perícias oficiais** abaixo, o jogador pode criar **quantas perí
 
 ---
 
-## 5. Níveis, Dados de Vida, Patamares e Troca de Kit (Níveis 1 a 30)
+## 5. Sistema de Evolução, Experiência (XP) e Níveis 1 a 30
 
-### Como e Quando Subir de Nível
-A evolução ocorre por **Marcos de Campanha** definidos pelo Mestre (tipicamente ao concluir um contrato relevante, expedição entre cidades ou arco político — a cada 2 a 4 sessões no patamar Recruta).
+### 5.1 Como Ganhar XP — Os 5 Pilares (Muito Além do Combate)
+Em **Alenia**, a evolução **não** é engessada em matar inimigos. Personagens são exploradores, diplomatas, médicos, navegadores e sobreviventes — portanto, a **Experiência (XP)** é concedida igualmente por **cinco pilares**:
 
-### Pontos de Vida por Dado de Vida (Estilo D&D conforme a Natureza do Kit)
+| Pilar de Experiência | Exemplos Concretos em Mesa | Recruta (`1–10`) | Lenda (`11–20`) | Épico (`21–30`) |
+| :--- | :--- | :---: | :---: | :---: |
+| **1. Exploração & Viagem** | Mapear rota inédita, atravessar tempestade/deserto sem perdas, descobrir ruína, local oculto ou recurso estratégico | `100 – 400 XP` | `400 – 1.200 XP` | `1.200 – 3.500 XP` |
+| **2. Armadilhas, Ofício & Mistérios** | Desarmar armadilha letal, decifrar cifra ou inscrição antiga, solucionar investigação, cirurgia extrema ou salvar vidas | `75 – 350 XP` | `350 – 1.000 XP` | `1.000 – 3.000 XP` |
+| **3. Vitórias Sociais & Intriga** | Firmar tratado, vencer duelo de corte, negociar trégua sem sangue, desmontar conspiração ou recrutar aliado-chave | `100 – 400 XP` | `400 – 1.200 XP` | `1.200 – 3.500 XP` |
+| **4. Combates Superados** | Derrotar, capturar, afugentar ou contornar ameaças *(contornar ou vencer sem matar rende **100% da XP**)* | `50 – 500 XP` | `400 – 1.800 XP` | `1.500 – 5.000 XP` |
+| **5. Contratos, Objetivos & Interpretação** | Concluir missão/arco, avançar o objetivo pessoal do explorador, honrar juramento ou grande dilema moral | `150 – 500 XP` | `600 – 1.800 XP` | `2.000 – 5.500 XP` |
+
+- **Referência Rápida para Ameaças Superadas *(por grupo, dividida ou individual a critério do Mestre)***: Ameaça Comum/Recruta (`75–150 XP`), Elite/Fera Perigosa (`200–450 XP`), Ameaça de Patamar Lenda (`800–1.800 XP`), Ameaça Épica (`3.000–6.000 XP`).
+- **Ritmo Esperado de Campanha**: somando 3 a 4 pilares por sessão, um grupo evolui aproximadamente a cada **1–2 sessões** nos níveis iniciais (`1–4`), **2–3 sessões** no meio de Recruta (`5–10`) e **3–4 sessões** nos patamares Lenda e Épico.
+- **Regra Opcional *(Marcos de Campanha)***: mesas que preferirem dispensar a contagem de XP podem conceder níveis diretamente ao encerrar arcos narrativos relevantes (a cada 2–4 sessões).
+
+### 5.2 Tabela Completa de Evolução (Níveis 1 a 30)
+| Nível | XP Acumulada | XP Próx. Nível | Patamar | Teto Atributo | Ganhos Especiais do Nível *(além de PV + Perícias)* |
+| :---: | :---: | :---: | :---: | :---: | :--- |
+| **1** | `0` | `300` | Recruta | `18 (+4)` | Kit Inicial (`+3` grátis nas perícias do Kit) + Pontos Livres |
+| **2** | `300` | `+500` | Recruta | `18 (+4)` | **+1 Talento** |
+| **3** | `800` | `+700` | Recruta | `18 (+4)` | **`+1` Atributo Base** *(máx. 18)* |
+| **4** | `1.500` | `+1.000` | Recruta | `18 (+4)` | **+1 Talento** |
+| **5** | `2.500` | `+1.300` | Recruta | `18 (+4)` | **Libera Grau Especialista (`+8` a `+11` em perícias)** |
+| **6** | `3.800` | `+1.700` | Recruta | `18 (+4)` | **+1 Talento** + **`+1` Atributo Base** *(máx. 18)* |
+| **7** | `5.500` | `+2.000` | Recruta | `18 (+4)` | Evolução de PV e Perícias |
+| **8** | `7.500` | `+2.500` | Recruta | `18 (+4)` | **+1 Talento** |
+| **9** | `10.000` | `+3.000` | Recruta | `18 (+4)` | **`+1` Atributo Base** *(máx. 18)* |
+| **10** | `13.000` | `+4.000` | Recruta | `18 (+4)` | **+1 Talento** *(Ápice Recruta)* |
+| **11** | `17.000` | `+4.500` | **Lenda** | **`20 (+5)`** | **Perícias `1,5×` • Maestria `+1 dado` • Libera Mestre (`+12+`) & Kits de Lenda** |
+| **12** | `21.500` | `+5.000` | Lenda | `20 (+5)` | **+1 Talento** + **`+1` Atributo Base** *(máx. 20)* |
+| **13** | `26.500` | `+5.500` | Lenda | `20 (+5)` | Evolução de PV e Perícias (`1,5×`) |
+| **14** | `32.000` | `+6.000` | Lenda | `20 (+5)` | **+1 Talento** |
+| **15** | `38.000` | `+7.000` | Lenda | `20 (+5)` | **`+1` Atributo Base** *(máx. 20)* |
+| **16** | `45.000` | `+7.500` | Lenda | `20 (+5)` | **+1 Talento** |
+| **17** | `52.500` | `+8.500` | Lenda | `20 (+5)` | Evolução de PV e Perícias (`1,5×`) |
+| **18** | `61.000` | `+9.000` | Lenda | `20 (+5)` | **+1 Talento** + **`+1` Atributo Base** *(máx. 20)* |
+| **19** | `70.000` | `+10.000` | Lenda | `20 (+5)` | Evolução de PV e Perícias (`1,5×`) |
+| **20** | `80.000` | `+12.000` | Lenda | `20 (+5)` | **+1 Talento** *(Ápice Lenda)* |
+| **21** | `92.000` | `+13.000` | **Épico** | **`22 (+6)`** | **Perícias `2×` • Maestria `+2 dados` • `+1` Atributo Base • Kits Épicos** |
+| **22** | `105.000` | `+15.000` | Épico | `22 (+6)` | **+1 Talento** |
+| **23** | `120.000` | `+16.000` | Épico | `22 (+6)` | Evolução de PV e Perícias (`2×`) |
+| **24** | `136.000` | `+18.000` | Épico | `22 (+6)` | **+1 Talento** + **`+1` Atributo Base** *(máx. 22)* |
+| **25** | `154.000` | `+20.000` | Épico | `22 (+6)` | Evolução de PV e Perícias (`2×`) |
+| **26** | `174.000` | `+22.000` | Épico | `22 (+6)` | **+1 Talento** |
+| **27** | `196.000` | `+24.000` | Épico | `22 (+6)` | **`+1` Atributo Base** *(máx. 22)* |
+| **28** | `220.000` | `+26.000` | Épico | `22 (+6)` | **+1 Talento** |
+| **29** | `246.000` | `+29.000` | Épico | `22 (+6)` | Evolução de PV e Perícias (`2×`) |
+| **30** | `275.000` | `—` | Épico | `22 (+6)` | **+1 Talento** + **`+1` Atributo Base** *(Ápice Épico)* |
+
+### 5.3 Pontos de Vida por Dado de Vida (Estilo D&D conforme a Natureza do Kit)
 - **Dado de Vida (DV) do Kit**:
   - **Combatente Brutal (`1d12`)**: *Bárbaro / Berserker*.
   - **Combatente Pesado (`1d10`)**: *Mercenário, Cavaleiro, Soldado, Guarda-Costas, Lutador*.
@@ -121,19 +167,19 @@ A evolução ocorre por **Marcos de Campanha** definidos pelo Mestre (tipicament
 - **PV no Nível 1**: `Valor Máximo do DV do Kit + Valor Bruto de Constituição` *(ex.: Mercenário `1d10` com CON 14 começa com `24 PV`; Erudito `1d6` com CON 10 começa com `16 PV`)*.
 - **PV ao Subir de Nível**: role **`1dX + Mod. CON`** (mínimo `1 PV` por nível; opção fixa para quem não quiser rolar: metade arredondada para cima do DV + `Mod. CON`, ex.: `1d10` = `6 + Mod. CON`, `1d8` = `5 + Mod. CON`, `1d6` = `4 + Mod. CON`).
 
-### Os 3 Patamares Dinâmicos
-| Patamar | Níveis | Pontos de Perícia | Maestria de Combate *(Dano Base)* | Papel no Mundo |
-| :--- | :---: | :---: | :--- | :--- |
-| **Recruta** | `1 – 10` | `1×` taxa base | Dano normal da arma | Exploradores, soldados e viajantes vulneráveis. Acesso aos **36 Kits Universais**. |
-| **Lenda** | `11 – 20` | `1,5×` (+50%) | **`+1` dado individual** do tipo da arma *(Especialista/Mestre)* | Figuras célebres e temidas; destrava grau **Mestre (`+12`)** e futuros **Kits de Lenda**. |
-| **Épico** | `21 – 30` | `2×` (o dobro) | **`+2` dados individuais** do tipo da arma *(Mestre)* | Nomes imortais capazes de encarar horrores de Incognito; destrava futuros **Kits Épicos**. |
+### 5.4 Os 3 Patamares Dinâmicos, Tetos e Troca de Kit
+| Patamar | Níveis | Teto Atributo | Pontos de Perícia | Maestria de Combate *(Dano Base)* | Papel no Mundo |
+| :--- | :---: | :---: | :---: | :--- | :--- |
+| **Recruta** | `1 – 10` | `18 (+4)` | `1×` taxa base | Dano normal da arma | Exploradores, soldados e viajantes vulneráveis. Acesso aos **36 Kits Universais**. |
+| **Lenda** | `11 – 20` | `20 (+5)` | `1,5×` (+50%) | **`+1` dado individual** do tipo da arma *(Especialista/Mestre)* | Figuras célebres e temidas; destrava grau **Mestre (`+12+`)** e futuros **Kits de Lenda**. |
+| **Épico** | `21 – 30` | `22 (+6)` | `2×` (o dobro) | **`+2` dados individuais** do tipo da arma *(Mestre)* | Nomes imortais capazes de encarar horrores de Incognito; destrava futuros **Kits Épicos**. |
 
 - **Exemplos de Maestria de Combate**: soma-se `+1` dado individual do mesmo tipo da arma (e **não** o conjunto inteiro de dados) em Lenda, e `+2` dados individuais em Épico.
   - *Espada Longa (`1d8`)*: Recruta `1d8` → Lenda **`2d8`** → Épico **`3d8`**.
   - *Montante (`2d6`)*: Recruta `2d6` → Lenda **`3d6`** *(e não `4d6`)* → Épico **`4d6`**.
   - **Interação com Crítico**: os dados de Maestria integram o dano base da arma e **são multiplicados no Acerto Crítico**, preservando a relevância do *Golpe Devastador* nos patamares avançados.
 
-- **Aumento de Atributo Base**: `+1` em um Atributo Base à escolha a cada **3 níveis** (`3, 6, 9, 12, 15, 18, 21, 24, 27, 30`).
+- **Aumento de Atributo Base**: `+1` em um Atributo Base à escolha a cada **3 níveis** (`3, 6, 9, 12, 15, 18, 21, 24, 27, 30`), respeitando o **Teto Progressivo do Patamar** (`18` Recruta, `20` Lenda, `22` Épico).
 - **Talentos / Manobras**: `1` Talento livre a cada **nível par** (`2, 4, 6...`).
 - **Mudança ou Acúmulo de Kit em Campanha**: o Kit inicial define sua formação e equipamento de partida. Se o personagem treinar um novo ofício durante a campanha (com tempo e mentor aprovados pelo Mestre), ele **mantém** todas as perícias e a habilidade já adquiridas e passa a usar o **DV e multiplicadores do novo Kit** nos níveis seguintes (ganhando a habilidade do novo Kit após 2 níveis nele).
 
