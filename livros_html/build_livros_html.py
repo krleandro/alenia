@@ -69,9 +69,9 @@ BOOKS = [
         "num": "TOMO IV • MESTRE",
         "short": "🔒 Bestiário",
         "title": "Bestiário & Ameaças",
-        "subtitle": "Acesso Restrito ao Mestre • 31 Ameaças Auditadas, Ilustrações & Segredos",
+        "subtitle": "Acesso Restrito ao Mestre • 31 Ameaças Auditadas & 31 Pinturas Exclusivas",
         "epigraph": "“A maioria das feras que matam viajantes usa botas de couro e fala sua própria língua.”",
-        "desc": "🔒 Área Restrita ao Mestre: 31 fichas completas (humanos, megafauna, terrores marítimos, folclore sombrio, alquimia e agentes ocultos) com 16 ilustrações exclusivas, protegidas por criptografia AES-256.",
+        "desc": "🔒 Área Restrita ao Mestre: 31 fichas completas (humanos, megafauna, terrores marítimos, folclore sombrio, alquimia e agentes ocultos), todas ilustradas com pintura exclusiva e protegidas por criptografia AES-256.",
         "cover_map": "assets/capa_04_bestiario.jpg",
         "gm_only": True,
     },
@@ -141,7 +141,16 @@ CHAPTER_MAPS = {
 }
 
 BESTIARY_PLATES = {
+    "1. Salteador de Estrada": "assets/b_plate_17.jpg",
+    "2. Guarda de Cidade": "assets/b_plate_18.jpg",
+    "3. Corsário do Mar dos Corais": "assets/b_plate_19.jpg",
+    "4. Guerreiro Tribal de Gaddra": "assets/b_plate_20.jpg",
+    "5. Assassino da Floresta Negra": "assets/b_plate_21.jpg",
+    "6. Mestre Espadachim": "assets/b_plate_22.jpg",
     "7. Inquisidor da Chama Branca": "assets/b_plate_01.jpg",
+    "8. Lobo-das-Brumas": "assets/b_plate_23.jpg",
+    "9. Serpente-do-Pântano": "assets/b_plate_24.jpg",
+    "10. Escorpião-Gigante das Dunas": "assets/b_plate_25.jpg",
     "11. Urso-de-Rubecina": "assets/b_plate_02.jpg",
     "12. Cervo-de-Galhada-Férrea": "assets/b_plate_03.jpg",
     "13. Abutre-Osso": "assets/b_plate_04.jpg",
@@ -149,6 +158,7 @@ BESTIARY_PLATES = {
     "15. Cantora-de-Recife": "assets/b_plate_06.jpg",
     "16. Polvo-de-Quilha": "assets/b_plate_07.jpg",
     "17. Verme-de-Maré": "assets/b_plate_08.jpg",
+    "18. Leviatã-dos-Recifes": "assets/b_plate_26.jpg",
     "19. O Repetidor": "assets/b_plate_09.jpg",
     "20. Lanterna-de-Turfa": "assets/b_plate_10.jpg",
     "21. Tece-Arame": "assets/b_plate_11.jpg",
@@ -156,7 +166,12 @@ BESTIARY_PLATES = {
     "23. Mastim-de-Vitro": "assets/b_plate_13.jpg",
     "24. Ressonante-de-Mina": "assets/b_plate_14.jpg",
     "25. Bando de Corvos-de-Cinzas": "assets/b_plate_15.jpg",
+    "26. Errante do Piche": "assets/b_plate_27.jpg",
     "27. Sentinela-de-Laca": "assets/b_plate_16.jpg",
+    "28. Sombra das Ruínas Perdidas": "assets/b_plate_28.jpg",
+    "29. Hospedeiro em Confluência": "assets/b_plate_29.jpg",
+    "30. A Primeira Devolvida": "assets/b_plate_30.jpg",
+    "31. O Regente das Cinzas": "assets/b_plate_31.jpg",
 }
 
 GM_SECTION_H2_PREFIXES = ("7. A Grande Ameaça:",)
