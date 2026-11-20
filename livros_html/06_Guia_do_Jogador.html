@@ -402,13 +402,17 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 .leaf-body tbody td code,
 .leaf-body .nowrap-cell { white-space: nowrap; }
 .leaf-body .callout { font-size: calc(16.5px * var(--font-scale, 1)); }
-.leaf-body .entry-card { font-size: calc(15.2px * var(--font-scale, 1)); line-height: 1.44; padding: 10px 13px 8px; }
-.leaf-body .entry-card p { margin-bottom: 6px; }
-.leaf-body .entry-card ul { margin: 4px 0 6px; padding-left: 18px; }
-.leaf-body .entry-card li { margin-bottom: 3px; }
+.leaf-body .entry-card { font-size: calc(14.4px * var(--font-scale, 1)); line-height: 1.38; padding: 9px 12px 7px; margin: 6px 0 8px; }
+.leaf-body .entry-card.entry-card-cont { border-top-style: dashed; border-top-width: 2px; }
+.leaf-body .entry-card h3 { font-size: calc(15.5px * var(--font-scale, 1)); margin: 0 0 5px; padding-bottom: 3px; }
+.leaf-body .entry-card p { margin-bottom: 5px; }
+.leaf-body .entry-card ul { margin: 3px 0 4px; padding-left: 17px; }
+.leaf-body .entry-card li { margin-bottom: 2.5px; }
 .leaf-body .atlas-plate img { max-height: calc(var(--leaf-h, 760px) * 0.64); }
+.leaf-body .atlas-plate.creature-plate { margin: 5px 0 7px; padding: 4px; background: #e8dec7; border: 1px solid var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
+.leaf-body .atlas-plate.creature-plate img { width: 100%; aspect-ratio: 16 / 9; max-height: min(260px, calc(var(--leaf-h, 760px) * 0.28)); object-fit: cover; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
 .creature-plate { margin: 7px 0 9px; padding: 5px; background: #e8dec7; border: 1px solid var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
-.creature-plate img { width: 100%; aspect-ratio: 16 / 9; max-height: 215px; object-fit: cover; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.creature-plate img { width: 100%; aspect-ratio: 16 / 9; max-height: 280px; object-fit: cover; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
 
 .leaf-footer {
     height: 30px;
@@ -1249,6 +1253,81 @@ tr { break-inside: avoid; }
                 }
             };
 
+            const placeEntryCard = (cardEl) => {
+                // Fast path 1: whole card fits on current page
+                mBody.appendChild(cardEl);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(cardEl);
+                    return;
+                }
+                mBody.removeChild(cardEl);
+
+                // Fast path 2: flush current non-empty page and try placing whole card on fresh page
+                if (curNodes.length > 0) {
+                    const carried = popOrphanHeadings(true);
+                    flushPage();
+                    restoreCarried(carried);
+                    mBody.appendChild(cardEl);
+                    if (mBody.scrollHeight <= bodyH) {
+                        curNodes.push(cardEl);
+                        return;
+                    }
+                    mBody.removeChild(cardEl);
+                }
+
+                // Fallback: card itself is taller than a full page (e.g., epic boss or high font zoom) — split its children cleanly!
+                const kids = Array.from(cardEl.children);
+                let curCard = document.createElement('div');
+                curCard.className = cardEl.className;
+                mBody.appendChild(curCard);
+
+                const startContinuationCard = () => {
+                    if (curCard.children.length > 0) {
+                        curNodes.push(curCard);
+                        flushPage();
+                    } else if (curCard.parentNode === mBody) {
+                        mBody.removeChild(curCard);
+                    }
+                    curCard = document.createElement('div');
+                    curCard.className = cardEl.className + ' entry-card-cont';
+                    mBody.appendChild(curCard);
+                };
+
+                for (const child of kids) {
+                    if (child.tagName === 'UL' || child.tagName === 'OL') {
+                        const lis = Array.from(child.children).filter(el => el.tagName === 'LI');
+                        let subList = document.createElement(child.tagName);
+                        curCard.appendChild(subList);
+                        for (const li of lis) {
+                            const liClone = li.cloneNode(true);
+                            subList.appendChild(liClone);
+                            if (mBody.scrollHeight > bodyH && (subList.children.length > 1 || curCard.children.length > 1)) {
+                                subList.removeChild(liClone);
+                                if (subList.children.length === 0) curCard.removeChild(subList);
+                                startContinuationCard();
+                                subList = document.createElement(child.tagName);
+                                curCard.appendChild(subList);
+                                subList.appendChild(liClone);
+                            }
+                        }
+                        if (subList.children.length === 0 && subList.parentNode === curCard) curCard.removeChild(subList);
+                    } else {
+                        const cClone = child.cloneNode(true);
+                        curCard.appendChild(cClone);
+                        if (mBody.scrollHeight > bodyH && curCard.children.length > 1) {
+                            curCard.removeChild(cClone);
+                            startContinuationCard();
+                            curCard.appendChild(cClone);
+                        }
+                    }
+                }
+                if (curCard.children.length > 0) {
+                    curNodes.push(curCard);
+                } else if (curCard.parentNode === mBody) {
+                    mBody.removeChild(curCard);
+                }
+            };
+
             const placeAtomic = (clone) => {
                 mBody.appendChild(clone);
                 if (mBody.scrollHeight > bodyH && curNodes.length > 0) {
@@ -1286,6 +1365,8 @@ tr { break-inside: avoid; }
 
                 if (clone.classList.contains('table-wrap')) {
                     placeTableWrap(clone);
+                } else if (clone.classList.contains('entry-card')) {
+                    placeEntryCard(clone);
                 } else if (clone.tagName === 'UL' || clone.tagName === 'OL') {
                     placeList(clone);
                 } else {
