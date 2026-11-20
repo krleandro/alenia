@@ -45,7 +45,7 @@ body {
     letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
 }
 .topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.topbar-nav a, .btn-print {
+.topbar-nav a, .btn-print, .btn-lock {
     font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
     text-transform: uppercase; color: #ded5c3; text-decoration: none;
     padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
@@ -56,6 +56,9 @@ body {
 }
 .btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
 .btn-print:hover { background: #922624; color: #fff; }
+.btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
+.btn-lock.visible { display: inline-block; }
+.btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
 
 .sidebar {
     position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
@@ -122,6 +125,50 @@ body {
 .cover-edition {
     margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
     font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+/* GM ENCRYPTED VAULT GATE */
+.gm-gate-box {
+    margin: 28px 0;
+    padding: 36px 28px;
+    text-align: center;
+    background: linear-gradient(180deg, #1d1916 0%, #151210 100%);
+    color: #efe6d2;
+    border: 2px solid var(--gold);
+    outline: 1px solid var(--crimson);
+    outline-offset: -7px;
+    border-radius: 4px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+}
+.gm-vault[data-locked="false"] .gm-gate-box { display: none; }
+.gm-seal-icon { font-size: 36px; margin-bottom: 8px; }
+.gm-gate-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.22em;
+    color: var(--gold-light); text-transform: uppercase; margin-bottom: 6px;
+}
+.gm-gate-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 24px; color: #f7f1e3;
+    border: none; margin: 6px 0 10px; padding: 0;
+}
+.gm-gate-desc {
+    text-align: center; color: #cfc6b4; font-style: italic; max-width: 540px; margin: 0 auto 20px; font-size: 17px;
+}
+.gm-unlock-form {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 440px; margin: 0 auto;
+}
+.gm-pwd-input {
+    flex: 1 1 220px; padding: 10px 14px; font-family: 'EB Garamond', Georgia, serif; font-size: 17px;
+    background: #100e0c; color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-pwd-input:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 0 2px rgba(205,176,110,0.28); }
+.gm-unlock-btn {
+    padding: 10px 20px; font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    background: var(--crimson); color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-unlock-btn:hover { background: #962724; }
+.gm-gate-error {
+    margin-top: 12px; min-height: 22px; font-size: 15px; color: #f08a84; font-weight: 600;
 }
 
 h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
@@ -206,6 +253,10 @@ tr { break-inside: avoid; }
     padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
     transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
+.portal-card.gm-card { background: #211c18; color: #efe6d2; border-color: var(--gold); border-top-color: var(--gold); }
+.portal-card.gm-card .portal-title { color: #f7f1e3; }
+.portal-card.gm-card .portal-desc { color: #c7beac; }
+.portal-card.gm-card .portal-kicker, .portal-card.gm-card .portal-cta { color: var(--gold-light); }
 .portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
 .portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
 .portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
@@ -222,7 +273,7 @@ tr { break-inside: avoid; }
 @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
 @media print {
     html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
-    .topbar, .sidebar, .lightbox { display: none !important; }
+    .topbar, .sidebar, .lightbox, .gm-gate-box { display: none !important; }
     .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
     .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
     .book-page::before { display: none !important; }
@@ -234,7 +285,7 @@ tr { break-inside: avoid; }
 </style>
 </head>
 <body>
-    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html" class="active">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">🔒 Bestiário</a><a href="05_Onomastica_e_Toponimia.html" class="active">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">🔒 Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
     <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#princípio-de-flexibilidade-linguística-0">Princípio de Flexibilidade Linguística</a></li><li class="toc-h2"><a href="#parte-i-fichas-matriz-de-registro-cultural-1">Parte I — Fichas Matriz de Registro Cultural</a></li><li class="toc-h3"><a href="#1-reino-capital-de-aurora-2">1. Reino Capital de Aurora</a></li><li class="toc-h3"><a href="#2-povo-das-florestas-cidade-suspensa-subcultura-de-aurora-3">2. Povo das Florestas (Cidade Suspensa — Subcultura de Aurora)</a></li><li class="toc-h3"><a href="#3-liga-talassocrática-de-corallis-e-o-mar-dos-corais-4">3. Liga Talassocrática de Corallis (e o Mar dos Corais)</a></li><li class="toc-h3"><a href="#4-confederação-tribal-de-gaddra-5">4. Confederação Tribal de Gaddra</a></li><li class="toc-h3"><a href="#5-despotado-velado-de-kalis-e-o-mar-intransponível-6">5. Despotado Velado de Kalis (e o Mar Intransponível)</a></li><li class="toc-h2"><a href="#parte-ii-notas-de-substrato-enclaves-e-terras-limítrofes-7">Parte II — Notas de Substrato, Enclaves e Terras Limítrofes</a></li><li class="toc-h2"><a href="#parte-iii-etimologia-oficial-dos-topônimos-do-atlas-8">Parte III — Etimologia Oficial dos Topônimos do Atlas</a></li></ul></aside>
     <main class="book-shell">
         <article class="book-page">
@@ -293,17 +344,126 @@ tr { break-inside: avoid; }
         <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
     </div>
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const lb = document.getElementById('atlas-lightbox');
-    const lbImg = document.getElementById('atlas-lightbox-img');
-    if (lb && lbImg) {
-        document.querySelectorAll('.atlas-plate img').forEach(img => {
+(function() {
+    const SESSION_KEY = 'alenia_gm_unlock_key';
+
+    function b64ToBytes(b64) {
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return bytes;
+    }
+
+    async function decryptBlock(cipherObj, password) {
+        const enc = new TextEncoder();
+        const keyMat = await crypto.subtle.importKey(
+            'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
+        );
+        const aesKey = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: b64ToBytes(cipherObj.s), iterations: cipherObj.it, hash: 'SHA-256' },
+            keyMat,
+            { name: 'AES-GCM', length: 256 },
+            false,
+            ['decrypt']
+        );
+        const plainBuf = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: b64ToBytes(cipherObj.i) },
+            aesKey,
+            b64ToBytes(cipherObj.c)
+        );
+        return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+
+    function wireLightbox(root) {
+        const lb = document.getElementById('atlas-lightbox');
+        const lbImg = document.getElementById('atlas-lightbox-img');
+        if (!lb || !lbImg) return;
+        (root || document).querySelectorAll('.atlas-plate img').forEach(img => {
+            if (img.dataset.lbBound) return;
+            img.dataset.lbBound = '1';
             img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
         });
-        lb.addEventListener('click', () => lb.classList.remove('open'));
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
     }
-});
+
+    async function unlockAllVaults(password, silent) {
+        const vaults = document.querySelectorAll('.gm-vault[data-locked="true"]');
+        let anyUnlocked = false;
+        let failed = false;
+
+        for (const v of vaults) {
+            const scriptEl = v.querySelector('script.gm-cipher');
+            const errEl = v.querySelector('.gm-gate-error');
+            const outEl = v.querySelector('.gm-unlocked-content');
+            if (!scriptEl || !outEl) continue;
+            try {
+                const cipherObj = JSON.parse(scriptEl.textContent);
+                const data = await decryptBlock(cipherObj, password);
+                outEl.innerHTML = data.html || '';
+                v.setAttribute('data-locked', 'false');
+                if (errEl) errEl.textContent = '';
+                wireLightbox(outEl);
+                if (data.toc) {
+                    const tocList = document.querySelector('.toc-list');
+                    if (tocList) {
+                        const tmp = document.createElement('div');
+                        tmp.innerHTML = data.toc;
+                        while (tmp.firstChild) tocList.appendChild(tmp.firstChild);
+                    }
+                }
+                anyUnlocked = true;
+            } catch (e) {
+                failed = true;
+                if (!silent && errEl) errEl.textContent = 'Senha incorreta — o selo do Mestre permanece fechado.';
+            }
+        }
+
+        if (anyUnlocked) {
+            sessionStorage.setItem(SESSION_KEY, password);
+            const lockBtn = document.getElementById('btn-lock-gm');
+            if (lockBtn) lockBtn.classList.add('visible');
+        } else if (failed && silent) {
+            sessionStorage.removeItem(SESSION_KEY);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) {
+            lb.addEventListener('click', () => lb.classList.remove('open'));
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+        }
+        wireLightbox(document);
+
+        const lockBtn = document.getElementById('btn-lock-gm');
+        if (lockBtn) {
+            if (sessionStorage.getItem(SESSION_KEY)) lockBtn.classList.add('visible');
+            lockBtn.addEventListener('click', () => {
+                sessionStorage.removeItem(SESSION_KEY);
+                location.reload();
+            });
+        }
+
+        document.querySelectorAll('.gm-unlock-form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const input = form.querySelector('.gm-pwd-input');
+                const pwd = input ? input.value : '';
+                if (!pwd) return;
+                if (!window.crypto || !window.crypto.subtle) {
+                    const errEl = form.parentElement.querySelector('.gm-gate-error');
+                    if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
+                    return;
+                }
+                await unlockAllVaults(pwd, false);
+            });
+        });
+
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved && window.crypto && window.crypto.subtle) {
+            unlockAllVaults(saved, true);
+        }
+    });
+})();
 </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Cinzas no Estuário — Alenia RPG</title>
+    <title>Aventura Inicial — Alenia RPG</title>
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
 
@@ -45,7 +45,7 @@ body {
     letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
 }
 .topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.topbar-nav a, .btn-print {
+.topbar-nav a, .btn-print, .btn-lock {
     font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
     text-transform: uppercase; color: #ded5c3; text-decoration: none;
     padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
@@ -56,6 +56,9 @@ body {
 }
 .btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
 .btn-print:hover { background: #922624; color: #fff; }
+.btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
+.btn-lock.visible { display: inline-block; }
+.btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
 
 .sidebar {
     position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
@@ -122,6 +125,50 @@ body {
 .cover-edition {
     margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
     font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+/* GM ENCRYPTED VAULT GATE */
+.gm-gate-box {
+    margin: 28px 0;
+    padding: 36px 28px;
+    text-align: center;
+    background: linear-gradient(180deg, #1d1916 0%, #151210 100%);
+    color: #efe6d2;
+    border: 2px solid var(--gold);
+    outline: 1px solid var(--crimson);
+    outline-offset: -7px;
+    border-radius: 4px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+}
+.gm-vault[data-locked="false"] .gm-gate-box { display: none; }
+.gm-seal-icon { font-size: 36px; margin-bottom: 8px; }
+.gm-gate-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.22em;
+    color: var(--gold-light); text-transform: uppercase; margin-bottom: 6px;
+}
+.gm-gate-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 24px; color: #f7f1e3;
+    border: none; margin: 6px 0 10px; padding: 0;
+}
+.gm-gate-desc {
+    text-align: center; color: #cfc6b4; font-style: italic; max-width: 540px; margin: 0 auto 20px; font-size: 17px;
+}
+.gm-unlock-form {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 440px; margin: 0 auto;
+}
+.gm-pwd-input {
+    flex: 1 1 220px; padding: 10px 14px; font-family: 'EB Garamond', Georgia, serif; font-size: 17px;
+    background: #100e0c; color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-pwd-input:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 0 2px rgba(205,176,110,0.28); }
+.gm-unlock-btn {
+    padding: 10px 20px; font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    background: var(--crimson); color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-unlock-btn:hover { background: #962724; }
+.gm-gate-error {
+    margin-top: 12px; min-height: 22px; font-size: 15px; color: #f08a84; font-weight: 600;
 }
 
 h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
@@ -206,6 +253,10 @@ tr { break-inside: avoid; }
     padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
     transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
+.portal-card.gm-card { background: #211c18; color: #efe6d2; border-color: var(--gold); border-top-color: var(--gold); }
+.portal-card.gm-card .portal-title { color: #f7f1e3; }
+.portal-card.gm-card .portal-desc { color: #c7beac; }
+.portal-card.gm-card .portal-kicker, .portal-card.gm-card .portal-cta { color: var(--gold-light); }
 .portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
 .portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
 .portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
@@ -222,7 +273,7 @@ tr { break-inside: avoid; }
 @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
 @media print {
     html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
-    .topbar, .sidebar, .lightbox { display: none !important; }
+    .topbar, .sidebar, .lightbox, .gm-gate-box { display: none !important; }
     .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
     .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
     .book-page::before { display: none !important; }
@@ -234,96 +285,165 @@ tr { break-inside: avoid; }
 </style>
 </head>
 <body>
-    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html" class="active">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
-    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-premissa-e-bastidores-para-o-mestre-0">1. Premissa e Bastidores para o Mestre</a></li><li class="toc-h2"><a href="#2-ato-i-o-contrato-no-cais-de-merlinport-1">2. Ato I — O Contrato no Cais de Merlinport</a></li><li class="toc-h3"><a href="#pistas-investigáveis-em-merlinport-teste-cd-1315-2">Pistas Investigáveis em Merlinport (Teste CD 13–15)</a></li><li class="toc-h2"><a href="#3-ato-ii-a-marcha-pela-estrada-da-bruma-e-os-pântanos-nebulosos-3">3. Ato II — A Marcha pela Estrada da Bruma e os Pântanos Nebulosos</a></li><li class="toc-h3"><a href="#cena-2a-os-destroços-no-juncais-dia-1-4">Cena 2A — Os Destroços no Juncais (Dia 1)</a></li><li class="toc-h3"><a href="#cena-2b-emboscada-ou-barganha-na-estrada-dia-2-5">Cena 2B — Emboscada ou Barganha na Estrada (Dia 2)</a></li><li class="toc-h2"><a href="#4-ato-iii-a-torre-de-specula-clímax-6">4. Ato III — A Torre de Specula (Clímax)</a></li><li class="toc-h3"><a href="#resoluções-possíveis-escolhas-morais-cinzentas-7">Resoluções Possíveis (Escolhas Morais Cinzentas)</a></li><li class="toc-h2"><a href="#5-desfecho-recompensas-e-próximos-caminhos-8">5. Desfecho, Recompensas e Próximos Caminhos</a></li></ul></aside>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">🔒 Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html" class="active">🔒 Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"></ul></aside>
     <main class="book-shell">
         <article class="book-page">
             
     <section class="cover-page">
-        <div class="cover-kicker">ALENIA RPG • TOMO VII</div>
+        <div class="cover-kicker">ALENIA RPG • TOMO VII • MESTRE</div>
         <div class="cover-rule"></div>
-        <h1 class="cover-title">Cinzas no Estuário</h1>
-        <div class="cover-subtitle">Aventura Inicial no Eixo Merlinport – Dahrma – Altrax (Nível 1–2)</div>
+        <h1 class="cover-title">Aventura Inicial</h1>
+        <div class="cover-subtitle">Acesso Restrito ao Mestre • Bastidores, Cenas &amp; Segredos</div>
         <div class="cover-rule"></div>
-        <img class="cover-thumb" src="assets/mapa_regional_aurora.jpg" alt="Mapa de Alenia"/>
-        <p class="cover-epigraph">“Uma barca perdida na bruma, três caixas de adamante e um morto que voltou a caminhar.”</p>
+        
+        <p class="cover-epigraph">“Nem tudo o que a bruma devolve deveria ser encontrado.”</p>
         <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
     </section>
     
-<h1 id="alenia-rpg-aventura-inicial-cinzas-no-estuário-edição-revisada-v20-0" class="book-h1">ALENIA RPG — Aventura Inicial: Cinzas no Estuário (Edição Revisada v2.0)</h1>
-<blockquote><strong>Para 3 a 5 Exploradores (Nível 1–2) • Duração estimada: 2 a 3 sessões</strong><br/><strong>Região</strong>: Eixo <strong>Merlinport – Dahrma – Torre de Specula – Altrax</strong> <em>(Oeste de Aurora)</em><br/><strong>Temas</strong>: Contrabando de adamante, intriga entre Casas, sobrevivência nos Pântanos Nebulosos e o primeiro eco sinistro do mistério de Thanatos.</blockquote>
-<hr/>
-<h2 id="1-premissa-e-bastidores-para-o-mestre-0">1. Premissa e Bastidores para o Mestre</h2>
-<p>Há cinco dias, a barca fluvial <strong>Estrela de Aurélio</strong> partiu de <strong>Merlinport</strong> levando três caixas lacradas de <strong>ligas de adamante refinado</strong> e um tubo de correspondência selado da <strong>Casa Valerion</strong> rumo ao interior. Oficialmente, o barco desapareceu na bruma espessa do rio antes de chegar a <strong>Dahrma</strong>.</p>
-<p>Na verdade, a carga foi desviada por um pacto sujo:</p>
-<ul>
-<li>Um nobre ambicioso ligado à ala de <em>Lucian Leonastis</em> (em Altavanne) financiou em segredo <strong>prospecção ilegal de adamante</strong> nos contrafortes próximos a <strong>Altrax</strong>, violando os limites florestais do Tratado de Vergod.</li>
-<li>O emissário da <em>Cidade Suspensa</em>, <strong>Cadwyn ap Merion</strong>, descobriu os registros dessa prospecção ilegal e fugiu rumo a <strong>Merlinport</strong> com o dossiê — mas acabou capturado por mercenários perto dos <strong>Pântanos Nebulosos</strong> e mantido preso na arruinada <strong>Torre de Specula</strong>.</li>
-<li><strong>O Fator Inesperado <em>(Primeiro Eco do Simbionte e de Thanatos)</strong></em>: entre os tripulantes mortos do ataque à barca, o piloto <strong>Beren do Cais</strong> — cujo corpo foi visto boiando por pescadores — <strong>reapareceu vivo ontem à noite num beco de Merlinport</strong>, lúcido e aterrorizado, encharcado de água gelada, com uma <strong>pequena cicatriz pálida atrás da nuca</strong> (marca da larva simbionte da Comunhão). Ele reconhece sua família, mas soluçava sobre <em>&quot;um farol apagado, areia preta e lembrar de se afogar num galeão que afundou duzentos anos atrás&quot;</em>, antes de ser levado à força por dois agentes de sotaque setentrional de <strong>Kalis</strong>!</li>
-</ul>
-<hr/>
-<h2 id="2-ato-i-o-contrato-no-cais-de-merlinport-1">2. Ato I — O Contrato no Cais de Merlinport</h2>
-<p>Os personagens são reunidos na estalagem <strong>Âncora de Cinza</strong>, no porto de Merlinport, por <strong>Sabina de Pontáuria</strong> <em>(agente discreta da Regente Valora Valerion)</em>:</p>
-<ul>
-<li><strong>Oferta</strong>: <strong><code>60 PP</code> adiantadas</strong> + <strong><code>120 PP</code> na entrega</strong> (além de salvo-conduto real) para localizar os destroços da <em>Estrela de Aurélio</em>, recuperar o <strong>tubo de cartas da Casa Valerion</strong> (prioridade absoluta) e descobrir quem desviou o adamante — sem alertar os guardas leais ao marechal Leonastis.</li>
-</ul>
-<h3 id="pistas-investigáveis-em-merlinport-teste-cd-1315-2">Pistas Investigáveis em Merlinport <em>(Teste CD 13–15)</em></h3>
-<ol>
-<li><strong>No Cais (Investigação / Barganha / Submundo)</strong>: pescadores contam que a barca não foi atacada perto de Dahrma, mas rebocada para o braço norte do rio, na direção dos <strong>Pântanos Nebulosos</strong> e da <strong>Torre de Specula</strong>.</li>
-<li><strong>Na Estalagem (Percepção / Intuição)</strong>: um corallino chamado <strong>Loreo</strong> <em>(ligado a Baldbella)</em> está pagando rodadas para saber se o barco trazia <em>brocas cirúrgicas de adamante</em> — pode virar aliado ou concorrente nervoso.</li>
-<li><strong>O Sussurro do Morto <em>(Intimidação / Persuasão / Medicina)</strong></em>: a estalajadeira mostra uma luva molhada deixada por <strong>Beren do Cais</strong> — coberta de <strong>areia vulcânica negra</strong> estranha a qualquer rio de Aurora <em>(Geografia CD 15 identifica como típica das praias de Thanatos)</em>. Com <em>Persuasão CD 14</em>, ela confessa que Beren chorava dizendo que <em>&quot;não era só dele a voz que o acalmava no escuro&quot;</em>, e que havia uma marca fina e esbranquiçada logo abaixo da linha do cabelo em sua nuca <em>(Medicina CD 16 revela não ser ferida de lâmina, mas uma incisão cicatrizada rápido demais)</em>.</li>
-</ol>
-<hr/>
-<h2 id="3-ato-ii-a-marcha-pela-estrada-da-bruma-e-os-pântanos-nebulosos-3">3. Ato II — A Marcha pela Estrada da Bruma e os Pântanos Nebulosos</h2>
-<p>Saindo de Merlinport rumo ao norte pela <em>Estrada da Bruma</em> (ou de barco a remo pelo braço alagado do rio), o grupo enfrenta <strong>2 dias de viagem tensa</strong> até a <strong>Torre de Specula</strong> <em>(use as regras de Sobrevivência e Exaustão)</em>:</p>
-<h3 id="cena-2a-os-destroços-no-juncais-dia-1-4">Cena 2A — Os Destroços no Juncais <em>(Dia 1)</em></h3>
-<ul>
-<li>A barca <em>Estrela de Aurélio</em> jaz meio afundada entre raízes retorcidas. Duas caixas de adamante estão vazias; a terceira foi escondida num fundo falso pelo capitão moribundo (<strong>Investigação CD 15</strong> encontra <code>4</code> lingotes de liga de adamante, valendo <code>160 PP</code> no mercado negro ou gratidão real — <em>Status</em>!).</li>
-<li><strong>Ameaça Natural</strong>: uma matilha de <strong>3 Lobos-das-Brumas</strong> <em>(Bestiário #7)</em> ronda os corpos na neblina. O grupo pode afugentá-los com fogo/Intimidação CD 14 ou enfrentá-los em terreno lamacento.</li>
-<li><strong>Pista no Convés</strong>: uma flecha de penas verdes <em>(Povo das Florestas)</em> cravada no mastro e rastros de botas pesadas levando para o norte, rumo à <strong>Torre de Specula</strong>.</li>
-</ul>
-<h3 id="cena-2b-emboscada-ou-barganha-na-estrada-dia-2-5">Cena 2B — Emboscada ou Barganha na Estrada <em>(Dia 2)</em></h3>
-<ul>
-<li>Próximo a um cruzamento enevoado, um pequeno bando de <strong>3 Salteadores</strong> <em>(Bestiário #1)</em> liderados por <strong>Tordan Sombra</strong> <em>(um batedor bastardo de Kalis, use ficha de Corsário #3 sem bônus naval)</em> vigia a estrada.</li>
-<li><strong>Interação</strong>: eles não trabalham para Leonastis — são agentes de <strong>Dobalbek (Kalis)</strong> tentando rastrear tanto as cartas de Valerion quanto o destino de <em>Beren do Cais</em>. O grupo pode lutar, contorná-los pelos pântanos (<strong>Furtividade/Sobrevivência CD 15</strong>) ou negociar informações.</li>
-</ul>
-<hr/>
-<h2 id="4-ato-iii-a-torre-de-specula-clímax-6">4. Ato III — A Torre de Specula (Clímax)</h2>
-<p>Erguida sobre um rochedo coberto de musgo a 1 dia ao sul de <strong>Altrax</strong>, a <strong>Torre de Specula</strong> abriga a pequena força que desviou o adamante:</p>
-<ul>
-<li><strong>Guarnição</strong>: <strong>Capitão Cassian de Lavroga</strong> <em>(use ficha de Soldado #2 com <code>28 PV</code> e Espada Longa de aço superior)</em> + <strong>3 Salteadores/Mercenários</strong> <em>(Bestiário #1)</em> + <strong>1 Besta Pesada</strong> montada na janela superior.</li>
-<li><strong>Prisioneiro no Porão</strong>: <strong>Cadwyn ap Merion</strong> <em>(emissário da Cidade Suspensa)</em>, ferido mas vivo, carregando o <strong>tubo selado de Valerion</strong> e o <strong>mapa das minas clandestinas perto de Altrax</strong>!</li>
-</ul>
-<h3 id="resoluções-possíveis-escolhas-morais-cinzentas-7">Resoluções Possíveis <em>(Escolhas Morais Cinzentas)</em></h3>
-<ul>
-<li><strong>Infiltração Noturna</strong>: escalar a lateral quebrada da torre (<strong>Escalada CD 14</strong>), libertar Cadwyn e roubar as cartas sem combate frontal.</li>
-<li><strong>Ataque Direto / Defesa Tática</strong>: enfrentar o Capitão Cassian usando <em>Flanqueio</em>, <em>Proteger Aliado</em> e <em>Múltiplas Ações</em> — lembrando que a besta pesada na janela pode disparar um <strong>Golpe Devastador</strong> contra quem avançar sem cobertura!</li>
-<li><strong>Negociação</strong>: Cassian sabe que foi traído por seus mandantes em Altavanne e pode entregar o prisioneiro em troca de fuga segura para <em>Merlinport</em> e metade da prata.</li>
-</ul>
-<hr/>
-<h2 id="5-desfecho-recompensas-e-próximos-caminhos-8">5. Desfecho, Recompensas e Próximos Caminhos</h2>
-<ul>
-<li><strong>Recompensas</strong>: <code>120 PP</code> de Sabina + subida para o <strong>Nível 2</strong> (rolando <strong><code>1dX + Mod. CON</code></strong> + 1 Talento livre!).</li>
-<li><strong>Feitos (Evolução de Atributos Especiais)</strong>:<ul><li>Devolver o tubo selado e os lingotes à Casa Valerion → <strong><code>+1 Status</code></strong> <em>(ou <code>Status 1</code> para quem tinha <code>0</code>)</em>.</li><li>Libertar Cadwyn ap Merion em segurança → salvo-conduto raro para visitar <strong>Vergod</strong> e a <strong>Cidade Suspensa</strong>.</li><li>Vender os lingotes ou segredos para agentes de Kalis ou do Ferro Velho → <strong><code>+1 Influência no Submundo</code></strong>.</li></ul></li>
-<li><strong>Gancho Direto para a Próxima Sessão</strong>: no bolso do Capitão Cassian há um bilhete lacrado confirmando que o &quot;marinheiro que voltou dos mortos&quot; (<em>Beren do Cais</em>) foi embarcado à força num veleiro rumo a <strong>Altrax / Aeraneas</strong> — abrindo o próximo arco de investigação sobre a <strong>Ilha de Thanatos</strong> ou sobre a greve nas <strong>Minas de Ferraur</strong>!</li>
-</ul>
+
+    <div class="gm-vault" data-locked="true">
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"ykH9nG68cAHAQNnIfXbt4A==","i":"h14+nWSpCEuEO65z","c":"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"}</script>
+        <div class="gm-gate-box">
+            <div class="gm-seal-icon">🔒</div>
+            <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
+            <h2 class="gm-gate-title">Aventura Inicial</h2>
+            <p class="gm-gate-desc">Conteúdo restrito ao Mestre (fichas, segredos e bastidores). Digite a senha para descriptografar.</p>
+            <form class="gm-unlock-form">
+                <input type="password" class="gm-pwd-input" placeholder="Digite a senha do Mestre..." autocomplete="current-password" required />
+                <button type="submit" class="gm-unlock-btn">Destrancar Selo</button>
+            </form>
+            <div class="gm-gate-error" aria-live="polite"></div>
+        </div>
+        <div class="gm-unlocked-content"></div>
+    </div>
+    
         </article>
     </main>
     <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
         <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
     </div>
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const lb = document.getElementById('atlas-lightbox');
-    const lbImg = document.getElementById('atlas-lightbox-img');
-    if (lb && lbImg) {
-        document.querySelectorAll('.atlas-plate img').forEach(img => {
+(function() {
+    const SESSION_KEY = 'alenia_gm_unlock_key';
+
+    function b64ToBytes(b64) {
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return bytes;
+    }
+
+    async function decryptBlock(cipherObj, password) {
+        const enc = new TextEncoder();
+        const keyMat = await crypto.subtle.importKey(
+            'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
+        );
+        const aesKey = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: b64ToBytes(cipherObj.s), iterations: cipherObj.it, hash: 'SHA-256' },
+            keyMat,
+            { name: 'AES-GCM', length: 256 },
+            false,
+            ['decrypt']
+        );
+        const plainBuf = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: b64ToBytes(cipherObj.i) },
+            aesKey,
+            b64ToBytes(cipherObj.c)
+        );
+        return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+
+    function wireLightbox(root) {
+        const lb = document.getElementById('atlas-lightbox');
+        const lbImg = document.getElementById('atlas-lightbox-img');
+        if (!lb || !lbImg) return;
+        (root || document).querySelectorAll('.atlas-plate img').forEach(img => {
+            if (img.dataset.lbBound) return;
+            img.dataset.lbBound = '1';
             img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
         });
-        lb.addEventListener('click', () => lb.classList.remove('open'));
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
     }
-});
+
+    async function unlockAllVaults(password, silent) {
+        const vaults = document.querySelectorAll('.gm-vault[data-locked="true"]');
+        let anyUnlocked = false;
+        let failed = false;
+
+        for (const v of vaults) {
+            const scriptEl = v.querySelector('script.gm-cipher');
+            const errEl = v.querySelector('.gm-gate-error');
+            const outEl = v.querySelector('.gm-unlocked-content');
+            if (!scriptEl || !outEl) continue;
+            try {
+                const cipherObj = JSON.parse(scriptEl.textContent);
+                const data = await decryptBlock(cipherObj, password);
+                outEl.innerHTML = data.html || '';
+                v.setAttribute('data-locked', 'false');
+                if (errEl) errEl.textContent = '';
+                wireLightbox(outEl);
+                if (data.toc) {
+                    const tocList = document.querySelector('.toc-list');
+                    if (tocList) {
+                        const tmp = document.createElement('div');
+                        tmp.innerHTML = data.toc;
+                        while (tmp.firstChild) tocList.appendChild(tmp.firstChild);
+                    }
+                }
+                anyUnlocked = true;
+            } catch (e) {
+                failed = true;
+                if (!silent && errEl) errEl.textContent = 'Senha incorreta — o selo do Mestre permanece fechado.';
+            }
+        }
+
+        if (anyUnlocked) {
+            sessionStorage.setItem(SESSION_KEY, password);
+            const lockBtn = document.getElementById('btn-lock-gm');
+            if (lockBtn) lockBtn.classList.add('visible');
+        } else if (failed && silent) {
+            sessionStorage.removeItem(SESSION_KEY);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) {
+            lb.addEventListener('click', () => lb.classList.remove('open'));
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+        }
+        wireLightbox(document);
+
+        const lockBtn = document.getElementById('btn-lock-gm');
+        if (lockBtn) {
+            if (sessionStorage.getItem(SESSION_KEY)) lockBtn.classList.add('visible');
+            lockBtn.addEventListener('click', () => {
+                sessionStorage.removeItem(SESSION_KEY);
+                location.reload();
+            });
+        }
+
+        document.querySelectorAll('.gm-unlock-form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const input = form.querySelector('.gm-pwd-input');
+                const pwd = input ? input.value : '';
+                if (!pwd) return;
+                if (!window.crypto || !window.crypto.subtle) {
+                    const errEl = form.parentElement.querySelector('.gm-gate-error');
+                    if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
+                    return;
+                }
+                await unlockAllVaults(pwd, false);
+            });
+        });
+
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved && window.crypto && window.crypto.subtle) {
+            unlockAllVaults(saved, true);
+        }
+    });
+})();
 </script>
 </body>
 </html>

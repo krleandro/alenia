@@ -45,7 +45,7 @@ body {
     letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
 }
 .topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.topbar-nav a, .btn-print {
+.topbar-nav a, .btn-print, .btn-lock {
     font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
     text-transform: uppercase; color: #ded5c3; text-decoration: none;
     padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
@@ -56,6 +56,9 @@ body {
 }
 .btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
 .btn-print:hover { background: #922624; color: #fff; }
+.btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
+.btn-lock.visible { display: inline-block; }
+.btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
 
 .sidebar {
     position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
@@ -122,6 +125,50 @@ body {
 .cover-edition {
     margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
     font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+/* GM ENCRYPTED VAULT GATE */
+.gm-gate-box {
+    margin: 28px 0;
+    padding: 36px 28px;
+    text-align: center;
+    background: linear-gradient(180deg, #1d1916 0%, #151210 100%);
+    color: #efe6d2;
+    border: 2px solid var(--gold);
+    outline: 1px solid var(--crimson);
+    outline-offset: -7px;
+    border-radius: 4px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+}
+.gm-vault[data-locked="false"] .gm-gate-box { display: none; }
+.gm-seal-icon { font-size: 36px; margin-bottom: 8px; }
+.gm-gate-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.22em;
+    color: var(--gold-light); text-transform: uppercase; margin-bottom: 6px;
+}
+.gm-gate-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 24px; color: #f7f1e3;
+    border: none; margin: 6px 0 10px; padding: 0;
+}
+.gm-gate-desc {
+    text-align: center; color: #cfc6b4; font-style: italic; max-width: 540px; margin: 0 auto 20px; font-size: 17px;
+}
+.gm-unlock-form {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 440px; margin: 0 auto;
+}
+.gm-pwd-input {
+    flex: 1 1 220px; padding: 10px 14px; font-family: 'EB Garamond', Georgia, serif; font-size: 17px;
+    background: #100e0c; color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-pwd-input:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 0 2px rgba(205,176,110,0.28); }
+.gm-unlock-btn {
+    padding: 10px 20px; font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    background: var(--crimson); color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-unlock-btn:hover { background: #962724; }
+.gm-gate-error {
+    margin-top: 12px; min-height: 22px; font-size: 15px; color: #f08a84; font-weight: 600;
 }
 
 h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
@@ -206,6 +253,10 @@ tr { break-inside: avoid; }
     padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
     transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
+.portal-card.gm-card { background: #211c18; color: #efe6d2; border-color: var(--gold); border-top-color: var(--gold); }
+.portal-card.gm-card .portal-title { color: #f7f1e3; }
+.portal-card.gm-card .portal-desc { color: #c7beac; }
+.portal-card.gm-card .portal-kicker, .portal-card.gm-card .portal-cta { color: var(--gold-light); }
 .portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
 .portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
 .portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
@@ -222,7 +273,7 @@ tr { break-inside: avoid; }
 @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
 @media print {
     html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
-    .topbar, .sidebar, .lightbox { display: none !important; }
+    .topbar, .sidebar, .lightbox, .gm-gate-box { display: none !important; }
     .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
     .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
     .book-page::before { display: none !important; }
@@ -234,228 +285,165 @@ tr { break-inside: avoid; }
 </style>
 </head>
 <body>
-    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html" class="active">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
-    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#como-ler-as-fichas-de-ameaças-100-auditadas-0">Como Ler as Fichas de Ameaças (100% Auditadas)</a></li><li class="toc-h2"><a href="#parte-i-ameaças-humanas-patamar-recruta-lenda-1">Parte I — Ameaças Humanas (Patamar Recruta &amp; Lenda)</a></li><li class="toc-h3"><a href="#1-salteador-de-estrada-contrabandista-comum-2">1. Salteador de Estrada / Contrabandista Comum</a></li><li class="toc-h3"><a href="#2-guarda-de-cidade-soldado-de-aurora-3">2. Guarda de Cidade / Soldado de Aurora</a></li><li class="toc-h3"><a href="#3-corsário-do-mar-dos-corais-arquipélago-ravena-4">3. Corsário do Mar dos Corais / Arquipélago Ravena</a></li><li class="toc-h3"><a href="#4-guerreiro-tribal-de-gaddra-vargheim-ox-5">4. Guerreiro Tribal de Gaddra (Vargheim / OX)</a></li><li class="toc-h3"><a href="#5-assassino-da-floresta-negra-agente-de-kalis-6">5. Assassino da Floresta Negra (Agente de Kalis)</a></li><li class="toc-h3"><a href="#6-mestre-espadachim-yõketsu-veterano-patamar-lenda-7">6. Mestre Espadachim (Yõketsu / Veterano — Patamar Lenda)</a></li><li class="toc-h2"><a href="#parte-ii-feras-naturais-perigos-dos-biomas-8">Parte II — Feras Naturais &amp; Perigos dos Biomas</a></li><li class="toc-h3"><a href="#7-lobo-das-brumas-pântanos-nebulosos-floresta-negra-9">7. Lobo-das-Brumas (Pântanos Nebulosos / Floresta Negra)</a></li><li class="toc-h3"><a href="#8-serpente-do-pântano-pântano-de-voernock-10">8. Serpente-do-Pântano (Pântano de Voernock)</a></li><li class="toc-h3"><a href="#9-escorpião-gigante-das-dunas-estepes-amaldiçoadas-gaddra-11">9. Escorpião-Gigante das Dunas (Estepes Amaldiçoadas / Gaddra)</a></li><li class="toc-h3"><a href="#10-leviatã-dos-recifes-mar-dos-corais-o-ferro-velho-12">10. Leviatã-dos-Recifes (Mar dos Corais / O Ferro Velho)</a></li><li class="toc-h2"><a href="#parte-iii-horrores-raríssimos-lendas-de-incognito-estilo-game-of-thrones-13">Parte III — Horrores Raríssimos &amp; Lendas de Incognito (Estilo Game of Thrones)</a></li><li class="toc-h3"><a href="#11-errante-do-piche-os-poços-de-piche-incognito-14">11. Errante do Piche (Os Poços de Piche / Incognito)</a></li><li class="toc-h3"><a href="#12-sombra-das-ruínas-perdidas-interior-de-incognito-ameaça-de-lendaépica-15">12. Sombra das Ruínas Perdidas (Interior de Incognito — Ameaça de Lenda/Épica)</a></li><li class="toc-h2"><a href="#parte-iv-agentes-do-regente-das-cinzas-a-comunhão-16">Parte IV — Agentes do Regente das Cinzas &amp; A Comunhão</a></li><li class="toc-h3"><a href="#13-hospedeiro-em-confluência-comunidade-submetida-patamar-recruta-17">13. Hospedeiro em Confluência (Comunidade Submetida — Patamar Recruta)</a></li><li class="toc-h3"><a href="#14-a-primeira-devolvida-marella-de-claramar-emissária-patamar-lenda-18">14. A Primeira Devolvida — Marella de Claramar (Emissária — Patamar Lenda)</a></li><li class="toc-h3"><a href="#15-o-regente-das-cinzas-avatar-da-rede-ameaça-épica-19">15. O Regente das Cinzas (Avatar da Rede — Ameaça Épica)</a></li></ul></aside>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html" class="active">🔒 Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">🔒 Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"></ul></aside>
     <main class="book-shell">
         <article class="book-page">
             
     <section class="cover-page">
-        <div class="cover-kicker">ALENIA RPG • TOMO IV</div>
+        <div class="cover-kicker">ALENIA RPG • TOMO IV • MESTRE</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title">Bestiário &amp; Ameaças</h1>
-        <div class="cover-subtitle">Fichas Auditadas, Sinais de Presença, Motivações &amp; Interações</div>
+        <div class="cover-subtitle">Acesso Restrito ao Mestre • Fichas, Táticas &amp; Segredos</div>
         <div class="cover-rule"></div>
         
         <p class="cover-epigraph">“A maioria das feras que matam viajantes usa botas de couro e fala sua própria língua.”</p>
         <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
     </section>
     
-<h1 id="alenia-rpg-bestiário-ameaças-do-mundo-edição-revisada-v20-0" class="book-h1">ALENIA RPG — Bestiário &amp; Ameaças do Mundo (Edição Revisada v2.0)</h1>
-<blockquote><em>&quot;A maioria das feras que matam viajantes usa botas de couro e fala sua própria língua. Mas quando o nevoeiro sobe dos pântanos ou sopra de Incognito, reze para que seu aço baste.&quot;</em></blockquote>
-<hr/>
-<h2 id="como-ler-as-fichas-de-ameaças-100-auditadas-0">Como Ler as Fichas de Ameaças (100% Auditadas)</h2>
-<ul>
-<li><strong>Defesa Exata</strong>: todas as fichas seguem rigorosamente <code>10 + Mod(DES) + Armadura + Escudo + Treino (Aparar ou Esquiva)</code>. Eventuais bônus naturais (como carapaça) estão explicitados.</li>
-<li><strong>RD Especial</strong>: <code>0</code> em todos os humanos com armaduras comuns. Aparece apenas em monstros raríssimos ou horrores de Incognito.</li>
-<li><strong>Constituição Explícita</strong>: toda criatura viva possui <code>CON</code> e modificador listados para testes de <strong>Golpe Devastador (<code>&gt; 2/3 PV</code>)</strong>, venenos e manobras.</li>
-<li><strong>Uso em Cena</strong>: cada entrada inclui <strong>Sinais de Presença</strong>, <strong>Motivação</strong>, <strong>Condição de Fuga</strong> e <strong>Interação Não-Combativa</strong> para evitar combates mecânicos vazios.</li>
-</ul>
-<hr/>
-<h2 id="parte-i-ameaças-humanas-patamar-recruta-lenda-1">Parte I — Ameaças Humanas (Patamar Recruta &amp; Lenda)</h2>
-<div class="entry-card">
-<h3 id="1-salteador-de-estrada-contrabandista-comum-2">1. Salteador de Estrada / Contrabandista Comum</h3>
-<p><em>Estradas entre Merlinport, Dahrma, Lavroga e enseadas do Mar dos Corais.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>15</code> <em>(Golpe Devastador: <code>11+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+1</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 12 (+1)</code>, <code>DES 13 (+1)</code>, <code>CON 12 (+1)</code>, <code>INT 10 (0)</code>, <code>SAB 10 (0)</code>, <code>CAR 9 (-1)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>16</code> / Esquiva <code>16</code> / Desprevenido <code>12</code> <em>(Couro Batido <code>+2</code>, Treinado <code>+3</code> em Aparar e Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataques</strong>:<ul><li><em>Espada Curta</em>: <code>+4</code> (<code>1d6 + 1</code>, <code>19–20 / ×2</code>) — <em>Treinado <code>+3</code> + FOR <code>+1</code></em></li><li><em>Besta Leve</em>: <code>+4</code> (<code>1d8</code>, <code>19–20 / ×2</code>, 24m)</li></ul></li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: galhos estalando, corda esticada baixa na estrada. <em>Motivação</em>: roubar prata e cargas fáceis sem morrer. <em>Fuga</em>: recua assim que 2 aliados caem ou um companheiro sofre Golpe Devastador. <em>Interação</em>: aceita suborno (<code>10–20 PP</code>), troca de informações sobre patrulhas ou rendição negociada.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="2-guarda-de-cidade-soldado-de-aurora-3">2. Guarda de Cidade / Soldado de Aurora</h3>
-<p><em>Patrulhas de Altavanne, Aeraneas, Merlinport e guarnições de Vaarsa e Altrax.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>24</code> <em>(Golpe Devastador: <code>17+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+2</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 14 (+2)</code>, <code>DES 12 (+1)</code>, <code>CON 14 (+2)</code>, <code>INT 10 (0)</code>, <code>SAB 11 (0)</code>, <code>CAR 10 (0)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>19</code> / Esquiva <code>16</code> / Desprevenido <code>15</code> <em>(Cota de Malha <code>+3</code>, Escudo Médio <code>+2</code>, Treinado <code>+3</code> Aparar, Destreinado Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataques</strong>:<ul><li><em>Lança ou Espada Longa</em>: <code>+5</code> (<code>1d8 + 2</code>, <code>20 / ×3</code> lança ou <code>19–20 / ×2</code> espada)</li></ul></li>
-<li><strong>Tática</strong>: usa <em>Proteger Aliado</em> (<code>-4</code> no ataque inimigo contra companheiro adjacente).</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: tinido de malha, lanternas em dupla, apito de metal. <em>Motivação</em>: cumprir turno, receber soldo e evitar problemas com nobres. <em>Fuga</em>: toca o apito por reforços se ficar com menos de <code>8 PV</code>. <em>Interação</em>: respeita <code>Status</code>, salvo-condutos reais ou subornos discretos em portos.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="3-corsário-do-mar-dos-corais-arquipélago-ravena-4">3. Corsário do Mar dos Corais / Arquipélago Ravena</h3>
-<p><em>Saqueadores que dominam os recifes de O Ferro Velho e o Mar Intransponível.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>26</code> <em>(Golpe Devastador: <code>18+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+3</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 13 (+1)</code>, <code>DES 15 (+2)</code>, <code>CON 13 (+1)</code>, <code>INT 11 (0)</code>, <code>SAB 11 (0)</code>, <code>CAR 12 (+1)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>17</code> / Esquiva <code>17</code> / Desprevenido <code>12</code> <em>(Couro Batido <code>+2</code>, Treinado <code>+3</code> Aparar/Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataques</strong>:<ul><li><em>Sabre de Abordagem</em>: <code>+5</code> (<code>1d6 + 2</code>, <code>18–20 / ×2</code>, Ágil DES; <code>+7</code> no 1º turno de abordagem)</li><li><em>Adaga de Arremesso</em>: <code>+5</code> (<code>1d4 + 2</code>, <code>19–20 / ×2</code>, 6m)</li></ul></li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: velas baixas sem bandeira na névoa, sinos abafados. <em>Motivação</em>: pilhagem de adamante, bebidas e mapas seguros. <em>Fuga</em>: pula ao mar ou corta cabos de abordagem se o capitão cair. <em>Interação</em>: pode ser contratado como guia no Mar Intransponível mediante pagamento adiantado ou <code>Submundo</code>.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="4-guerreiro-tribal-de-gaddra-vargheim-ox-5">4. Guerreiro Tribal de Gaddra (Vargheim / OX)</h3>
-<p><em>Combatentes endurecidos pela escassez, leais ao clã e à Lei da Hospitalidade.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>38</code> <em>(Golpe Devastador: <code>26+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+3</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 16 (+3)</code>, <code>DES 14 (+2)</code>, <code>CON 16 (+3)</code>, <code>INT 9 (-1)</code>, <code>SAB 12 (+1)</code>, <code>CAR 11 (0)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>22</code> / Esquiva <code>17</code> / Desprevenido <code>12</code> <em>(Couro Batido <code>+2</code>, Especialista <code>+8</code> Aparar, Treinado <code>+3</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataques</strong>:<ul><li><em>Machado de Batalha (2 mãos)</em>: <code>+11</code> (<code>1d10 + 3</code>, <code>20 / ×3</code>, Especialista <code>+8</code>; pode fazer <strong>2 ações com <code>+3</code> cada</strong>)</li><li><em>Azagaia</em>: <code>+5</code> (<code>1d6 + 3</code>, <code>20 / ×3</code>, 12m)</li></ul></li>
-<li><strong>Habilidade — Sangue do Deserto</strong>: <code>+3</code> em CON contra calor e Golpe Devastador.</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: faixas coloridas de clã no horizonte, cheiro de fumaça de esterco seco. <em>Motivação</em>: honra, proteção de poços e respeito aos pactos. <em>Fuga</em>: raramente foge de duelo justo, mas recua se os anciãos ordenarem. <em>Interação</em>: respeita quem invoca a <em>Lei da Hospitalidade</em>, oferece água ou propõe duelo singular em vez de chacina.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="5-assassino-da-floresta-negra-agente-de-kalis-6">5. Assassino da Floresta Negra (Agente de Kalis)</h3>
-<p><em>Silencioso, paciente e letal — contratado por conselhos velados ou casas rivais.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>30</code> <em>(Golpe Devastador: <code>21+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+5</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 12 (+1)</code>, <code>DES 17 (+3)</code>, <code>CON 12 (+1)</code>, <code>INT 14 (+2)</code>, <code>SAB 13 (+1)</code>, <code>CAR 12 (+1)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>18</code> / Esquiva <code>23</code> / Desprevenido <code>12</code> <em>(Couro Batido <code>+2</code>, Treinado <code>+3</code> Aparar, Especialista <code>+8</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataques</strong>:<ul><li><em>Adaga Envenenada</em>: <code>+11</code> (<code>1d4 + 3</code>, <code>18–20 / ×2</code>, Especialista <code>+8</code>; pode fazer <strong>2 ataques com <code>+3</code> cada</strong>). <strong>Veneno da Floresta Negra</strong>: CON CD 16 ou sofre <code>1d6</code> de dano imediato + <code>-2</code> em testes por <code>3 rodadas</code> (metade do dano e sem penalidade se passar).</li><li><em>Besta Oculta</em>: <code>+11</code> (<code>1d8</code>, <code>19–20 / ×2</code>, mesmo veneno).</li></ul></li>
-<li><strong>Habilidade — Sombra Mortal</strong>: contra alvo surpreso, soma <code>+2d6</code> de dano após a rolagem (não multiplica em crítico).</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: pássaros subitamente calados, aroma leve de erva amarga, janelas destrancadas sem ruído. <em>Motivação</em>: cumprir o contrato e desaparecer sem deixar testemunhas. <em>Fuga</em>: usa bomba de fumaça e foge se o elemento surpresa falhar e ficar em desvantagem numérica. <em>Interação</em>: só negocia se o contratante for traído ou se oferecerem segredo de valor muito superior.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="6-mestre-espadachim-yõketsu-veterano-patamar-lenda-7">6. Mestre Espadachim <em>(Yõketsu / Veterano — Patamar Lenda)</em></h3>
-<p><em>Um duelo contra um verdadeiro Mestre (<code>+12</code>) deve ser temido por qualquer grupo de Recrutas.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>78</code> <em>(Golpe Devastador: <code>53+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+6</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 15 (+2)</code>, <code>DES 18 (+4)</code>, <code>CON 15 (+2)</code>, <code>INT 13 (+1)</code>, <code>SAB 16 (+3)</code>, <code>CAR 14 (+2)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>29</code> / Esquiva <code>25</code> / Desprevenido <code>13</code> <em>(Armadura Leve Reforçada <code>+3</code>, Mestre <code>+12</code> Aparar, Especialista <code>+8</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataques</strong>:<ul><li><em>Lâmina Oriental de Aço Superior</em>: <code>+16</code> (<code>2d8 + 4</code> [Maestria de Lenda], <code>18–20 / ×2</code>; <strong>Múltiplas Ações</strong>: até <strong>2 golpes com <code>+6</code></strong>, <strong>3 golpes com <code>+2</code></strong> ou <strong>4 golpes com <code>+0</code></strong>!)</li></ul></li>
-<li><strong>Habilidade — Corte Silencioso</strong>: em <em>Defesa Total</em>, recebe <code>+8</code> na Defesa (<code>37</code> Aparar) e pode reagir com 1 contra-ataque contra quem errar por 5 ou mais.</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: postura serena, bainha impecável sem ornamentos desnecessários. <em>Motivação</em>: disciplina, juramento a um senhor ou proteção de uma escola. <em>Fuga</em>: recua taticamente apenas se encurralado por bestas/arqueiros sem honra. <em>Interação</em>: aceita duelo formal, pedidos de mediação ou diálogo respeitoso; despreza covardia.</li>
-</ul>
-</div>
-<hr/>
-<h2 id="parte-ii-feras-naturais-perigos-dos-biomas-8">Parte II — Feras Naturais &amp; Perigos dos Biomas</h2>
-<div class="entry-card">
-<h3 id="7-lobo-das-brumas-pântanos-nebulosos-floresta-negra-9">7. Lobo-das-Brumas <em>(Pântanos Nebulosos / Floresta Negra)</em></h3>
-<ul>
-<li><strong>PV</strong>: <code>18</code> <em>(Golpe Devastador: <code>13+</code>)</em> | <strong>Iniciativa</strong>: <code>+2</code> | <strong>Deslocamento</strong>: <code>12m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 14 (+2)</code>, <code>DES 15 (+2)</code>, <code>CON 13 (+1)</code>, <code>INT 3 (-4)</code>, <code>SAB 13 (+1)</code>, <code>CAR 6 (-2)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>12</code> / Esquiva <code>15</code> / Desprevenido <code>10</code> <em>(Treinado <code>+3</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataque</strong>: <em>Mordida</em>: <code>+5</code> (<code>1d6 + 2</code>, <code>20 / ×2</code>; alvo faz Atletismo/FOR CD 13 ou cai derrubado).</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: uivos abafados na névoa, pegadas grandes na lama. <em>Motivação</em>: fome e defesa de território. <em>Fuga</em>: foge diante de fogo intenso ou após perder metade da matilha. <em>Interação</em>: pode ser distraído com carne fresca ou espantado com tochas e Intimidação CD 14.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="8-serpente-do-pântano-pântano-de-voernock-10">8. Serpente-do-Pântano <em>(Pântano de Voernock)</em></h3>
-<ul>
-<li><strong>PV</strong>: <code>28</code> <em>(Golpe Devastador: <code>19+</code>)</em> | <strong>Iniciativa</strong>: <code>+3</code> | <strong>Deslocamento</strong>: <code>9m</code> <em>(Natação <code>12m</code>)</em></li>
-<li><strong>Atributos</strong>: <code>FOR 15 (+2)</code>, <code>DES 16 (+3)</code>, <code>CON 14 (+2)</code>, <code>INT 2 (-4)</code>, <code>SAB 12 (+1)</code>, <code>CAR 4 (-3)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>13</code> / Esquiva <code>18</code> / Desprevenido <code>12</code> <em>(Couro Escamoso <code>+2</code>, Treinado <code>+3</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataque</strong>: <em>Bote Venenoso</em>: <code>+6</code> (<code>1d8 + 3</code>, <code>19–20 / ×2</code>). <strong>Veneno Paralisante</strong>: CON CD 16 ou fica <strong>Paralisado por <code>2 rodadas</code></strong> (novo teste de CON CD 16 ao final de cada turno para encerrar).</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: água parada formando círculos lentos, sapos repentinamente mudos. <em>Motivação</em>: emboscar presas quentes na água rasa. <em>Fuga</em>: mergulha na lama profunda se sofrer mais de <code>12</code> de dano em um turno. <em>Interação</em>: contornável passando por terreno seco com Sobrevivência CD 15.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="9-escorpião-gigante-das-dunas-estepes-amaldiçoadas-gaddra-11">9. Escorpião-Gigante das Dunas <em>(Estepes Amaldiçoadas / Gaddra)</em></h3>
-<ul>
-<li><strong>PV</strong>: <code>38</code> <em>(Golpe Devastador: <code>26+</code>)</em> | <strong>Iniciativa</strong>: <code>+1</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 16 (+3)</code>, <code>DES 12 (+1)</code>, <code>CON 16 (+3)</code>, <code>INT 2 (-4)</code>, <code>SAB 10 (0)</code>, <code>CAR 3 (-4)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>16</code> / Esquiva <code>16</code> / Desprevenido <code>15</code> <em>(Carapaça Natural <code>+5</code>)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataques</strong>: <em>Pinças</em> <code>+6</code> (<code>1d8 + 3</code>, <code>20 / ×2</code>, agarra alvo Atletismo CD 15) | <em>Ferrão</em> <code>+6</code> (<code>1d6 + 3</code>, <code>20 / ×3</code> + <strong>Veneno Necrótico</strong>: CON CD 17 ou sofre <code>2d6</code> de dano imediato e <code>+1</code> nível de Exaustão por 24h; sucesso sofre metade do dano e sem Exaustão).</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: areia vibrando, cascas quitinosas descartadas em fendas de pedra. <em>Motivação</em>: caça noturna atraída por vibrações no solo. <em>Fuga</em>: enterra-se sob areia se exposto a fogo ou perder mais da metade do PV. <em>Interação</em>: guias de Gaddra evitam ninhos viajando sobre rocha firme durante o pico do calor.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="10-leviatã-dos-recifes-mar-dos-corais-o-ferro-velho-12">10. Leviatã-dos-Recifes <em>(Mar dos Corais / O Ferro Velho)</em></h3>
-<p><em>Predador abissal raríssimo responsável por lendas do cemitério de navios.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>82</code> <em>(Golpe Devastador: <code>55+</code>)</em> | <strong>Iniciativa</strong>: <code>+1</code> | <strong>Deslocamento</strong>: <code>15m</code> <em>(Natação)</em></li>
-<li><strong>Atributos</strong>: <code>FOR 20 (+5)</code>, <code>DES 12 (+1)</code>, <code>CON 18 (+4)</code>, <code>INT 3 (-4)</code>, <code>SAB 12 (+1)</code>, <code>CAR 5 (-3)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>16</code> / Esquiva <code>16</code> / Desprevenido <code>15</code> <em>(Carapaça Calcificada <code>+5</code>)</em> | <strong>RD Especial</strong>: <code>2</code> <em>(couro calcificado de coral)</em></li>
-<li><strong>Ataques</strong>: <em>Mandíbula Esmagadora</em> <code>+13</code> (<code>2d10 + 5</code>, <code>20 / ×3</code>, causa dano dobrado em cascos de madeira) | <em>Golpe de Cauda</em> <code>+10</code> (<code>2d6 + 5</code>, derruba tripulantes Acrobacia CD 16).</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: cardumes inteiros saltando fora d&#x27;água, recifes que parecem se mover sob a quilha. <em>Motivação</em>: defender sua fossa de caça e devorar grandes cargas de peixe/carne. <em>Fuga</em>: afunda nas fossas abissais se perder <code>40+</code> PV ou sofrer dano de fogo/óleo em chamas. <em>Interação</em>: marinheiros de Baldbella despejam barris de peixe estragado ao mar para distraí-lo e escapar.</li>
-</ul>
-</div>
-<hr/>
-<h2 id="parte-iii-horrores-raríssimos-lendas-de-incognito-estilo-game-of-thrones-13">Parte III — Horrores Raríssimos &amp; Lendas de Incognito <em>(Estilo Game of Thrones)</em></h2>
-<div class="callout warning"><div class="callout-title">Aviso ao Mestre</div><div>Criaturas desta seção <strong>não são encontros comuns</strong>. Preceda qualquer aparição por silêncio anormal, frio súbito ou vestígios de expedições perdidas.</div></div>
-<div class="entry-card">
-<h3 id="11-errante-do-piche-os-poços-de-piche-incognito-14">11. Errante do Piche <em>(Os Poços de Piche / Incognito)</em></h3>
-<p><em>Vulto humanoide antigo coberto de piche negro e gélido, que não respira nem sangra.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>46</code> <em>(Imune a morte instantânea por Golpe Devastador mundano; vulnerável a fogo — recebe dano dobrado de fogo)</em> | <strong>Iniciativa</strong>: <code>+1</code> | <strong>Deslocamento</strong>: <code>7,5m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 16 (+3)</code>, <code>DES 12 (+1)</code>, <code>CON 16 (+3)</code>, <code>INT 6 (-2)</code>, <code>SAB 10 (0)</code>, <code>CAR 4 (-3)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>18</code> / Esquiva <code>15</code> / Desprevenido <code>14</code> <em>(Pele Petrificada <code>+4</code>, Treinado <code>+3</code> Aparar)</em> | <strong>RD Especial</strong>: <code>3</code> <em>(ignorado por Fogo ou <strong>Armas de Adamante</strong>)</em></li>
-<li><strong>Ataques</strong>: <em>Garras de Piche / Lâmina Antiga</em>: <code>+10</code> (<code>1d8 + 3</code> físico + <code>1d4</code> frio/asfixia, <code>19–20 / ×2</code>).</li>
-<li><strong>Presença Antinatural</strong>: ao avistá-lo pela 1ª vez na cena, personagens fazem SAB CD 16 (somam <code>Fé Verdadeira</code> se possuírem) ou sofrem <code>-2</code> em todos os testes por <code>2 rodadas</code>.</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: cheiro forte de enxofre frio, pegadas negras oleosas que não congelam. <em>Motivação</em>: guardar os limites dos Poços de Piche ou perseguir quem levou relíquias de Incognito. <em>Fuga</em>: nunca foge, mas hesita diante de chamas vivas intensas. <em>Interação</em>: pode ser evitado abandonando relíquias roubadas ou usando barreiras de fogo para escapar.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="12-sombra-das-ruínas-perdidas-interior-de-incognito-ameaça-de-lendaépica-15">12. Sombra das Ruínas Perdidas <em>(Interior de Incognito — Ameaça de Lenda/Épica)</em></h3>
-<p><em>Entidade antiga ligada às civilizações extintas além de Thanatos; apaga tochas e gela o aço.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>96</code> <em>(Imune a venenos e sangramento)</em> | <strong>Iniciativa</strong>: <code>+4</code> | <strong>Deslocamento</strong>: <code>12m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 16 (+3)</code>, <code>DES 18 (+4)</code>, <code>CON 18 (+4)</code>, <code>INT 14 (+2)</code>, <code>SAB 16 (+3)</code>, <code>CAR 14 (+2)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>22</code> / Esquiva <code>22</code> / Desprevenido <code>16</code> <em>(Aura Sombria <code>+6</code>, Destreinado Aparar/Esquiva compensado por DES +4 e deslocamento etéreo <code>+2</code>)</em> | <strong>RD Especial</strong>: <code>5</code> <em>(ignorado apenas por <strong>Adamante Puro</strong>, fogo intenso ou rituais de <strong>Dom Antigo / Fé Verdadeira</strong>)</em></li>
-<li><strong>Ataques</strong>: <em>Toque do Esquecimento</em>: <code>+14</code> (<code>2d8 + 4</code> frio/necrótico, <code>19–20 / ×3</code>; alvo faz CON CD 18 ou sofre <code>+1</code> nível de Exaustão imediato).</li>
-<li><strong>Sussurro das Eras</strong>: como ação livre, apaga chamas comuns num raio de <code>6m</code>; exige SAB CD 19 (soma <code>Fé Verdadeira</code>) para manter a coragem sem recuar.</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: geada repentina formando padrões geométricos, vozes de entes falecidos sussurradas pelo vento. <em>Motivação</em>: enigmática — proteger a <em>Cidadela Sem Nome</em> ou testar intrusos marcados por <em>Thanatos</em>. <em>Fuga</em>: dissolve-se na nevasca ao amanhecer pleno ou diante de ritual bem-sucedido. <em>Interação</em>: em vez de atacar imediatamente, pode oferecer uma visão ou cobrar um sacrifício/memória em troca de passagem.</li>
-</ul>
-</div>
-<hr/>
-<h2 id="parte-iv-agentes-do-regente-das-cinzas-a-comunhão-16">Parte IV — Agentes do Regente das Cinzas &amp; A Comunhão</h2>
-<div class="entry-card">
-<h3 id="13-hospedeiro-em-confluência-comunidade-submetida-patamar-recruta-17">13. Hospedeiro em Confluência <em>(Comunidade Submetida — Patamar Recruta)</em></h3>
-<p><em>Aldeões, marinheiros ou guardas em Estágio III/IV da simbiose — calmos, educados e inquietantemente coordenados.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>22</code> <em>(Golpe Devastador: <code>15+</code>; recebe <code>+3</code> no teste de CON)</em> | <strong>Iniciativa</strong>: <code>+3</code> <em>(+2 da Confluência quando em grupo)</em> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 12 (+1)</code>, <code>DES 12 (+1)</code>, <code>CON 13 (+1)</code>, <code>INT 11 (0)</code>, <code>SAB 10 (0)</code>, <code>CAR 12 (+1)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>15</code> / Esquiva <code>15</code> / Desprevenido <code>11</code> <em>(Gibão Reforçado <code>+1</code>, Treinado <code>+3</code> Aparar/Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
-<li><strong>Ataques</strong>:<ul><li><em>Ferramenta Pesada / Espada Curta</em>: <code>+4</code> (<code>1d6 + 1</code>, <code>19–20 / ×2</code>; recebe <code>+4</code> ao flanquear junto de outro conectado)</li></ul></li>
-<li><strong>Habilidade — Vozes em Uníssono</strong>: quando 2 ou mais conectados lutam juntos, não podem ser flanqueados se ao menos um deles vir o atacante e compartilham instantaneamente o que qualquer um enxerga até <code>30m</code>.</li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: comunidade silenciosamente próspera onde ninguém discute, cicatriz discreta na nuca, moradores evitam deixar o povoado. <em>Motivação</em>: &quot;proteger&quot; os visitantes oferecendo cura e pertencimento. <em>Fuga</em>: recuam em conjunto ordenado se o condutor de adamante local for quebrado. <em>Interação</em>: muitos hospedeiros ainda são pessoas boas — conversar, usar <em>Fé Verdadeira</em> ou despertar memórias pessoais pode gerar hesitação e permitir resgate sem chacina.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="14-a-primeira-devolvida-marella-de-claramar-emissária-patamar-lenda-18">14. A Primeira Devolvida — Marella de Claramar <em>(Emissária — Patamar Lenda)</em></h3>
-<p><em>Antiga navegadora reconstruída em Thanatos com sua tripulação; eloquente, serena e letalmente pragmática.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>84</code> <em>(Golpe Devastador: <code>57+</code>)</em> | <strong>Iniciativa</strong>: <code>+6</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 14 (+2)</code>, <code>DES 17 (+3)</code>, <code>CON 16 (+3)</code>, <code>INT 15 (+2)</code>, <code>SAB 16 (+3)</code>, <code>CAR 18 (+4)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>28</code> / Esquiva <code>24</code> / Desprevenido <code>13</code> <em>(Brigantina Leve/Couro Reforçado <code>+3</code>, Mestre <code>+12</code> Aparar, Especialista <code>+8</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>2</code> <em>(medalhão de adamante antigo amplificador da rede)</em></li>
-<li><strong>Ataques</strong>:<ul><li><em>Sabre de Adamante Antigo</em>: <code>+16</code> (<code>2d6 + 5</code> [Maestria de Lenda + Adamante], <code>18–20 / ×2</code>; <strong>Múltiplas Ações</strong>: até <strong>2 golpes com <code>+6</code></strong> ou <strong>3 golpes com <code>+2</code></strong>)</li></ul></li>
-<li><strong>Habilidades</strong>:<ul><li><em>Voz de Quem Partiu</em>: como Ação Principal, sussurra memórias autênticas de um ente falecido do alvo (SAB CD 17, soma <code>Fé Verdadeira</code>, ou o alvo hesita e sofre <code>-3</code> em ataques contra ela por 1 rodada).</li><li><em>Tripulação em Confluência</em>: enquanto um tripulante seu estiver a até <code>18m</code>, pode usar sua Reação para impor <code>-4</code> a um ataque contra si.</li></ul></li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: veleiro impecável sem bandeira que atravessa nevoeiros sem errar um recife, aroma de água salgada gelada. <em>Motivação</em>: convencer cidades e governantes a aceitar a Comunhão voluntariamente. <em>Fuga</em>: nunca desperdiça sua tripulação em combate sem ganho — negocia trégua ou desaparece na neblina se o duelo virar contra ela. <em>Interação</em>: prefere debate sincero a violência; pode até revelar segredos sobre dissidentes na rede se acreditar que os PJs são capazes de compreender sua causa.</li>
-</ul>
-</div>
-<div class="entry-card">
-<h3 id="15-o-regente-das-cinzas-avatar-da-rede-ameaça-épica-19">15. O Regente das Cinzas <em>(Avatar da Rede — Ameaça Épica)</em></h3>
-<p><em>O último soberano da civilização perdida de Incognito, coroado por um aro de adamante partido; manifestação física sustentada por uma colônia ancestral e pilares de adamante.</em></p>
-<ul>
-<li><strong>PV</strong>: <code>165</code> <em>(Imune a medo, veneno, sangramento e Exaustão; vulnerável quando os pilares de adamante da câmara são rompidos)</em> | <strong>Iniciativa</strong>: <code>+7</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
-<li><strong>Atributos</strong>: <code>FOR 18 (+4)</code>, <code>DES 16 (+3)</code>, <code>CON 20 (+5)</code>, <code>INT 20 (+5)</code>, <code>SAB 18 (+4)</code>, <code>CAR 20 (+5)</code></li>
-<li><strong>Defesa</strong>: Aparar <code>30</code> / Esquiva <code>26</code> / Desprevenido <code>15</code> <em>(Manto e Placa de Adamante Partido <code>+5</code>, Mestre <code>+12</code> Aparar, Especialista <code>+8</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>5</code> <em>(reduzida para <code>2</code> se o amplificador local for destruído; ignorada por armas de Adamante ou rituais de Fé Verdadeira / Dom Antigo)</em></li>
-<li><strong>Ataques</strong>:<ul><li><em>Lâmina da Coroa Partida (Adamante)</em>: <code>+17</code> (<code>3d8 + 6</code> [Maestria Épica + Adamante], <code>18–20 / ×2</code>; ignora até <code>3</code> de RD Especial; <strong>Múltiplas Ações</strong>: até <strong>2 golpes com <code>+6</code></strong> ou <strong>3 golpes com <code>+2</code></strong>)</li><li><em>Chamado da Comunhão (Alcance 18m)</em>: força até 3 alvos a testarem <strong>SAB CD 20</strong> <em>(soma <code>Fé Verdadeira</code>)</em> ou sofrerem <code>3d6</code> de desgaste psíquico e <code>-2</code> em testes por 1 rodada, ouvindo a voz de pessoas amadas pedindo que baixem as armas.</li></ul></li>
-<li><strong>Em Cena</strong>: <em>Sinais</em>: temperatura despenca, ecos de centenas de vozes sussurrando memórias gentis, cinzas subindo lentamente contra a gravidade. <em>Motivação</em>: abolir a morte e a solidão humana sob sua vontade unificada. <em>Fuga</em>: se o avatar for destruído enquanto o núcleo da colônia permanecer intacto, sua consciência recua para a rede. <em>Interação</em>: oferece acordos genuinamente tentadores aos PJs (devolver um aliado morto, curar uma cicatriz permanente ou poupar uma cidade inteira em troca de colaboração) — e dissidentes presos dentro da Comunhão podem ajudar os jogadores a enfraquecê-lo se forem ouvidos.</li>
-</ul>
-</div>
+
+    <div class="gm-vault" data-locked="true">
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"KcjKFAvAcYBV+r6GXbkgUw==","i":"p8JuJ+f0sAxGS7Xd","c":"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"}</script>
+        <div class="gm-gate-box">
+            <div class="gm-seal-icon">🔒</div>
+            <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
+            <h2 class="gm-gate-title">Bestiário &amp; Ameaças</h2>
+            <p class="gm-gate-desc">Conteúdo restrito ao Mestre (fichas, segredos e bastidores). Digite a senha para descriptografar.</p>
+            <form class="gm-unlock-form">
+                <input type="password" class="gm-pwd-input" placeholder="Digite a senha do Mestre..." autocomplete="current-password" required />
+                <button type="submit" class="gm-unlock-btn">Destrancar Selo</button>
+            </form>
+            <div class="gm-gate-error" aria-live="polite"></div>
+        </div>
+        <div class="gm-unlocked-content"></div>
+    </div>
+    
         </article>
     </main>
     <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
         <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
     </div>
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const lb = document.getElementById('atlas-lightbox');
-    const lbImg = document.getElementById('atlas-lightbox-img');
-    if (lb && lbImg) {
-        document.querySelectorAll('.atlas-plate img').forEach(img => {
+(function() {
+    const SESSION_KEY = 'alenia_gm_unlock_key';
+
+    function b64ToBytes(b64) {
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return bytes;
+    }
+
+    async function decryptBlock(cipherObj, password) {
+        const enc = new TextEncoder();
+        const keyMat = await crypto.subtle.importKey(
+            'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
+        );
+        const aesKey = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: b64ToBytes(cipherObj.s), iterations: cipherObj.it, hash: 'SHA-256' },
+            keyMat,
+            { name: 'AES-GCM', length: 256 },
+            false,
+            ['decrypt']
+        );
+        const plainBuf = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: b64ToBytes(cipherObj.i) },
+            aesKey,
+            b64ToBytes(cipherObj.c)
+        );
+        return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+
+    function wireLightbox(root) {
+        const lb = document.getElementById('atlas-lightbox');
+        const lbImg = document.getElementById('atlas-lightbox-img');
+        if (!lb || !lbImg) return;
+        (root || document).querySelectorAll('.atlas-plate img').forEach(img => {
+            if (img.dataset.lbBound) return;
+            img.dataset.lbBound = '1';
             img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
         });
-        lb.addEventListener('click', () => lb.classList.remove('open'));
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
     }
-});
+
+    async function unlockAllVaults(password, silent) {
+        const vaults = document.querySelectorAll('.gm-vault[data-locked="true"]');
+        let anyUnlocked = false;
+        let failed = false;
+
+        for (const v of vaults) {
+            const scriptEl = v.querySelector('script.gm-cipher');
+            const errEl = v.querySelector('.gm-gate-error');
+            const outEl = v.querySelector('.gm-unlocked-content');
+            if (!scriptEl || !outEl) continue;
+            try {
+                const cipherObj = JSON.parse(scriptEl.textContent);
+                const data = await decryptBlock(cipherObj, password);
+                outEl.innerHTML = data.html || '';
+                v.setAttribute('data-locked', 'false');
+                if (errEl) errEl.textContent = '';
+                wireLightbox(outEl);
+                if (data.toc) {
+                    const tocList = document.querySelector('.toc-list');
+                    if (tocList) {
+                        const tmp = document.createElement('div');
+                        tmp.innerHTML = data.toc;
+                        while (tmp.firstChild) tocList.appendChild(tmp.firstChild);
+                    }
+                }
+                anyUnlocked = true;
+            } catch (e) {
+                failed = true;
+                if (!silent && errEl) errEl.textContent = 'Senha incorreta — o selo do Mestre permanece fechado.';
+            }
+        }
+
+        if (anyUnlocked) {
+            sessionStorage.setItem(SESSION_KEY, password);
+            const lockBtn = document.getElementById('btn-lock-gm');
+            if (lockBtn) lockBtn.classList.add('visible');
+        } else if (failed && silent) {
+            sessionStorage.removeItem(SESSION_KEY);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) {
+            lb.addEventListener('click', () => lb.classList.remove('open'));
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+        }
+        wireLightbox(document);
+
+        const lockBtn = document.getElementById('btn-lock-gm');
+        if (lockBtn) {
+            if (sessionStorage.getItem(SESSION_KEY)) lockBtn.classList.add('visible');
+            lockBtn.addEventListener('click', () => {
+                sessionStorage.removeItem(SESSION_KEY);
+                location.reload();
+            });
+        }
+
+        document.querySelectorAll('.gm-unlock-form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const input = form.querySelector('.gm-pwd-input');
+                const pwd = input ? input.value : '';
+                if (!pwd) return;
+                if (!window.crypto || !window.crypto.subtle) {
+                    const errEl = form.parentElement.querySelector('.gm-gate-error');
+                    if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
+                    return;
+                }
+                await unlockAllVaults(pwd, false);
+            });
+        });
+
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved && window.crypto && window.crypto.subtle) {
+            unlockAllVaults(saved, true);
+        }
+    });
+})();
 </script>
 </body>
 </html>

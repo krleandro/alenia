@@ -45,7 +45,7 @@ body {
     letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
 }
 .topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.topbar-nav a, .btn-print {
+.topbar-nav a, .btn-print, .btn-lock {
     font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
     text-transform: uppercase; color: #ded5c3; text-decoration: none;
     padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
@@ -56,6 +56,9 @@ body {
 }
 .btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
 .btn-print:hover { background: #922624; color: #fff; }
+.btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
+.btn-lock.visible { display: inline-block; }
+.btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
 
 .sidebar {
     position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
@@ -122,6 +125,50 @@ body {
 .cover-edition {
     margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
     font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+/* GM ENCRYPTED VAULT GATE */
+.gm-gate-box {
+    margin: 28px 0;
+    padding: 36px 28px;
+    text-align: center;
+    background: linear-gradient(180deg, #1d1916 0%, #151210 100%);
+    color: #efe6d2;
+    border: 2px solid var(--gold);
+    outline: 1px solid var(--crimson);
+    outline-offset: -7px;
+    border-radius: 4px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+}
+.gm-vault[data-locked="false"] .gm-gate-box { display: none; }
+.gm-seal-icon { font-size: 36px; margin-bottom: 8px; }
+.gm-gate-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.22em;
+    color: var(--gold-light); text-transform: uppercase; margin-bottom: 6px;
+}
+.gm-gate-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 24px; color: #f7f1e3;
+    border: none; margin: 6px 0 10px; padding: 0;
+}
+.gm-gate-desc {
+    text-align: center; color: #cfc6b4; font-style: italic; max-width: 540px; margin: 0 auto 20px; font-size: 17px;
+}
+.gm-unlock-form {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 440px; margin: 0 auto;
+}
+.gm-pwd-input {
+    flex: 1 1 220px; padding: 10px 14px; font-family: 'EB Garamond', Georgia, serif; font-size: 17px;
+    background: #100e0c; color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-pwd-input:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 0 2px rgba(205,176,110,0.28); }
+.gm-unlock-btn {
+    padding: 10px 20px; font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    background: var(--crimson); color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-unlock-btn:hover { background: #962724; }
+.gm-gate-error {
+    margin-top: 12px; min-height: 22px; font-size: 15px; color: #f08a84; font-weight: 600;
 }
 
 h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
@@ -206,6 +253,10 @@ tr { break-inside: avoid; }
     padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
     transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
+.portal-card.gm-card { background: #211c18; color: #efe6d2; border-color: var(--gold); border-top-color: var(--gold); }
+.portal-card.gm-card .portal-title { color: #f7f1e3; }
+.portal-card.gm-card .portal-desc { color: #c7beac; }
+.portal-card.gm-card .portal-kicker, .portal-card.gm-card .portal-cta { color: var(--gold-light); }
 .portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
 .portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
 .portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
@@ -222,7 +273,7 @@ tr { break-inside: avoid; }
 @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
 @media print {
     html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
-    .topbar, .sidebar, .lightbox { display: none !important; }
+    .topbar, .sidebar, .lightbox, .gm-gate-box { display: none !important; }
     .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
     .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
     .book-page::before { display: none !important; }
@@ -234,8 +285,8 @@ tr { break-inside: avoid; }
 </style>
 </head>
 <body>
-    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html" class="active">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
-    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-de-alenia-0">1. Visão Geral de Alenia</a></li><li class="toc-h3"><a href="#presente-histórico-as-6-crises-ativas-agora-1">Presente Histórico — As 6 Crises Ativas Agora</a></li><li class="toc-h2"><a href="#2-reino-capital-de-aurora-a-potência-do-adamante-2">2. Reino Capital de Aurora (A Potência do Adamante)</a></li><li class="toc-h2"><a href="#3-liga-talassocrática-de-corallis-o-mar-dos-corais-3">3. Liga Talassocrática de Corallis &amp; O Mar dos Corais</a></li><li class="toc-h2"><a href="#4-confederação-tribal-de-gaddra-4">4. Confederação Tribal de Gaddra</a></li><li class="toc-h2"><a href="#5-despotado-velado-de-kalis-o-mar-intransponível-5">5. Despotado Velado de Kalis &amp; O Mar Intransponível</a></li><li class="toc-h2"><a href="#6-incognito-o-mistério-da-ilha-de-thanatos-6">6. Incognito &amp; O Mistério da Ilha de Thanatos</a></li><li class="toc-h2"><a href="#7-a-grande-ameaça-o-regente-das-cinzas-o-simbionte-da-comunhão-7">7. A Grande Ameaça: O Regente das Cinzas &amp; O Simbionte da Comunhão</a></li><li class="toc-h3"><a href="#a-origem-o-simbionte-e-a-promessa-que-deu-errado-8">A Origem: O Simbionte e a Promessa Que Deu Errado</a></li><li class="toc-h3"><a href="#como-a-ameaça-funciona-na-prática-9">Como a Ameaça Funciona na Prática</a></li><li class="toc-h3"><a href="#o-rosto-da-ameaça-agentes-concretos-10">O Rosto da Ameaça: Agentes Concretos</a></li><li class="toc-h3"><a href="#relógio-de-campanha-as-5-etapas-da-expansão-11">Relógio de Campanha — As 5 Etapas da Expansão</a></li><li class="toc-h3"><a href="#o-dilema-final-e-a-via-de-separação-12">O Dilema Final e a Via de Separação</a></li><li class="toc-h2"><a href="#8-as-6-facções-ativas-do-mundo-13">8. As 6 Facções Ativas do Mundo</a></li><li class="toc-h2"><a href="#9-religiões-ordens-e-cronologia-curta-14">9. Religiões, Ordens e Cronologia Curta</a></li><li class="toc-h3"><a href="#tradições-religiosas-e-fé-verdadeira-convicção-plural-15">Tradições Religiosas e Fé Verdadeira (Convicção Plural)</a></li><li class="toc-h3"><a href="#linha-do-tempo-curta-de-alenia-16">Linha do Tempo Curta de Alenia</a></li><li class="toc-h2"><a href="#10-guia-operacional-de-viagens-distâncias-e-estações-17">10. Guia Operacional de Viagens, Distâncias e Estações</a></li><li class="toc-h3"><a href="#tabela-de-viagens-principais-marcha-normal-30-kmdia-navio-mercante-120-kmdia-18">Tabela de Viagens Principais (Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)</a></li><li class="toc-h2"><a href="#11-atlas-regional-detalhado-5-mapas-aproximados-19">11. Atlas Regional Detalhado (5 Mapas Aproximados)</a></li></ul></aside>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html" class="active">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">🔒 Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">🔒 Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-de-alenia-0">1. Visão Geral de Alenia</a></li><li class="toc-h3"><a href="#presente-histórico-as-6-crises-ativas-agora-1">Presente Histórico — As 6 Crises Ativas Agora</a></li><li class="toc-h2"><a href="#2-reino-capital-de-aurora-a-potência-do-adamante-2">2. Reino Capital de Aurora (A Potência do Adamante)</a></li><li class="toc-h2"><a href="#3-liga-talassocrática-de-corallis-o-mar-dos-corais-3">3. Liga Talassocrática de Corallis &amp; O Mar dos Corais</a></li><li class="toc-h2"><a href="#4-confederação-tribal-de-gaddra-4">4. Confederação Tribal de Gaddra</a></li><li class="toc-h2"><a href="#5-despotado-velado-de-kalis-o-mar-intransponível-5">5. Despotado Velado de Kalis &amp; O Mar Intransponível</a></li><li class="toc-h2"><a href="#6-incognito-o-mistério-da-ilha-de-thanatos-6">6. Incognito &amp; O Mistério da Ilha de Thanatos</a></li><li class="toc-h2"><a href="#8-as-6-facções-ativas-do-mundo-17">8. As 6 Facções Ativas do Mundo</a></li><li class="toc-h2"><a href="#9-religiões-ordens-e-cronologia-curta-18">9. Religiões, Ordens e Cronologia Curta</a></li><li class="toc-h3"><a href="#tradições-religiosas-e-fé-verdadeira-convicção-plural-19">Tradições Religiosas e Fé Verdadeira (Convicção Plural)</a></li><li class="toc-h3"><a href="#linha-do-tempo-curta-de-alenia-20">Linha do Tempo Curta de Alenia</a></li><li class="toc-h2"><a href="#10-guia-operacional-de-viagens-distâncias-e-estações-21">10. Guia Operacional de Viagens, Distâncias e Estações</a></li><li class="toc-h3"><a href="#tabela-de-viagens-principais-marcha-normal-30-kmdia-navio-mercante-120-kmdia-22">Tabela de Viagens Principais (Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)</a></li><li class="toc-h2"><a href="#11-atlas-regional-detalhado-5-mapas-aproximados-23">11. Atlas Regional Detalhado (5 Mapas Aproximados)</a></li></ul></aside>
     <main class="book-shell">
         <article class="book-page">
             
@@ -243,7 +294,7 @@ tr { break-inside: avoid; }
         <div class="cover-kicker">ALENIA RPG • TOMO II</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title">Livro do Cenário &amp; Atlas</h1>
-        <div class="cover-subtitle">6 Crises Ativas, Facções, Religiões, Viagens &amp; 6 Mapas Ilustrados</div>
+        <div class="cover-subtitle">Crises Ativas, Facções, Religiões, Viagens &amp; 6 Mapas Ilustrados</div>
         <div class="cover-rule"></div>
         <img class="cover-thumb" src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Mapa de Alenia"/>
         <p class="cover-epigraph">“Ao norte, além de Thanatos e do Mar das Cinzas, só existe o que os mapas se recusam a nomear.”</p>
@@ -309,37 +360,28 @@ tr { break-inside: avoid; }
 <li><strong>Incognito <em>(Extremo Norte)</strong></em>: continente inabitado além do Mar das Cinzas, marcado por geleiras negras, cinzas vulcânicas, sombras anômalas e <strong>ruínas colossais anteriores à memória humana</strong> (<em>Os Poços de Piche</em>, <em>Ruínas da Coroa Quebrada</em>, <em>Geleira do Silêncio</em>, <em>Cidadela Sem Nome</em>, <em>Cabo dos Náufragos</em> e <em>Fenda Vulcânica</em>).</li>
 </ul>
 <hr/>
-<h2 id="7-a-grande-ameaça-o-regente-das-cinzas-o-simbionte-da-comunhão-7">7. A Grande Ameaça: O Regente das Cinzas &amp; O Simbionte da Comunhão</h2>
-<blockquote><em>&quot;Nenhuma mãe voltará a enterrar um filho. Nenhum de nós será abandonado outra vez.&quot;</em></blockquote>
-<p>Para campanhas longas que cruzem os patamares <strong>Recruta → Lenda → Épico</strong>, Alenia possui uma ameaça mundial concreta nascida dos elementos mais próprios do cenário: o <strong>adamante</strong>, os <strong>despertos de Thanatos</strong> e as <strong>ruínas de Incognito</strong>.</p>
-<h3 id="a-origem-o-simbionte-e-a-promessa-que-deu-errado-8">A Origem: O Simbionte e a Promessa Que Deu Errado</h3>
-<p>Sob o gelo e os poços antigos de <strong>Incognito</strong> vive um organismo ancestral: uma <strong>larva simbionte</strong> que adentra o hospedeiro e desenvolve filamentos delicados pelo corpo, ligando sua mente a uma <strong>consciência coletiva de sentimentos, memórias e emoções</strong> (<em>a Comunhão</em>). Originalmente, o organismo compartilhava apenas instintos simples — até entrar em contato com a civilização perdida do norte.</p>
-<p>Aqueles antigos senhores descobriram que certas formações de <strong>adamante</strong> podiam amplificar e estabilizar a rede do simbionte, preservando impressões da consciência humana após a morte física. Diante de uma catástrofe esquecida, o último soberano ordenou que toda a população fosse ligada à rede para vencer a morte. Os corpos pereceram; as consciências permaneceram presas por séculos, misturando luto, saudade, linguagem e ambição.</p>
-<p>Esse soberano — hoje chamado de <strong>O Regente das Cinzas</strong> — foi o primeiro humano a manter uma vontade própria dominante dentro da Comunhão. Durante séculos, repetiu sua convicção até moldar o emaranhado inteiro: <em>enquanto os homens puderem morrer e sofrer sozinhos, nenhuma ordem será justa</em>. Agora, pretende estender sua &quot;proteção&quot; sobre toda Alenia. Contudo, a rede <strong>não é monolítica</strong>: existem outras vozes e <strong>dissidentes aprisionados</strong> dentro da Comunhão que ainda resistem à vontade do Regente.</p>
-<h3 id="como-a-ameaça-funciona-na-prática-9">Como a Ameaça Funciona na Prática</h3>
-<ul>
-<li><strong>Transmissão Controlada <em>(Sem Paranóia de Contágio Fácil)</strong></em>: o simbionte <strong>não</strong> se espalha por simples toque ou proximidade. A entrada exige uma circunstância específica — contato prolongado com águas de uma colônia ativa, implantação deliberada ou um ritual disfarçado de tratamento médico (<em>um hospício onde ninguém grita de dor; um navio cuja tripulação nunca briga</em>).</li>
-<li><strong>A Sedução do Pertencimento</strong>: o hospedeiro não vira um morto-vivo irracional; ele recebe conforto real — sono sem pesadelos, lembranças de quem ama, conhecimentos úteis de outros conectados. O horror nasce quando a Comunhão passa a enxergar toda separação individual como uma ferida a ser &quot;curada&quot;.</li>
-<li><strong>Thanatos — O Berço dos Despertos</strong>: a larva sozinha apenas guarda a impressão de um hospedeiro; <strong>reconstruir um corpo físico exige a colônia ancestral, as estruturas subterrâneas e o adamante de Thanatos</strong>. Como a reconstrução é imperfeita, lacunas são preenchidas pela memória coletiva: um marinheiro como <em>Beren do Cais</em> reconhece a esposa em Merlinport, mas também se recorda de se afogar num galeão que afundou duzentos anos atrás. <strong>Nem todo Desperto serve ao Regente</strong> — há vítimas lúcidas, retornados seduzidos pelo conforto da rede e emissários conscientes.</li>
-<li><strong>O Papel do Adamante</strong>: espadas comuns de adamante <strong>não</strong> são objetos malignos. Apenas <strong>estruturas antigas, veios soterrados e ligas preparadas de forma específica</strong> amplificam o alcance da rede, ligando colônias distantes. A mineração profunda em <strong>Ferraur</strong> rompeu um isolamento que durou séculos — mas a greve de Aeraneas continua tendo causas humanas legítimas que agentes do Regente apenas exploram.</li>
-</ul>
-<h3 id="o-rosto-da-ameaça-agentes-concretos-10">O Rosto da Ameaça: Agentes Concretos</h3>
-<ul>
-<li><strong>O Regente das Cinzas</strong>: manifesta-se em visões, sonhos compartilhados ou através de um avatar austero coroado por um <strong>aro de adamante partido</strong>. Sua voz ocasionalmente assume o timbre de alguém amado pelo interlocutor; conhece os nomes dos mortos e fatos que nenhum vivo presenciou.</li>
-<li><strong>A Primeira Devolvida <em>(Marella de Claramar)</strong></em>: antiga navegadora reconstruída em Thanatos com toda a sua tripulação. Lúcida, calma e persuasiva, viaja pelos mares oferecendo provas tangíveis de que a morte foi vencida — convencendo governantes e povoados a abrir as portas onde exércitos falhariam.</li>
-<li><strong>Adversários Variados</strong>: colaboradores humanos movidos por luto ou ambição, retornados voluntários, guardiões antigos de Incognito e comunidades inteiras que continuam trabalhando e conversando normalmente, mas perderam a capacidade de partir ou desobedecer.</li>
-</ul>
-<h3 id="relógio-de-campanha-as-5-etapas-da-expansão-11">Relógio de Campanha — As 5 Etapas da Expansão</h3>
-<p>Cada etapa possui necessidades concretas (hospedeiros, colônias, condutores de adamante e agentes vivos) e <strong>pode ser atrasada, alterada ou impedida pelos exploradores</strong>:</p>
-<div class="table-wrap"><table><thead><tr><th style="text-align:left">Etapa</th><th style="text-align:left">Sinais Percebidos pelos Jogadores</th><th style="text-align:left">Como os PJs Podem Intervir</th></tr></thead><tbody><tr><td style="text-align:left"><strong>1. Rumores</strong></td><td style="text-align:left">Despertos reconhecidos em Merlinport/Aeraneas, sonhos compartilhados, relíquias que conservam vozes.</td><td style="text-align:left">Investigar <em>Beren</em>, rastrear as areias negras de Thanatos e proteger testemunhas de inquisidores ou espiões.</td></tr><tr><td style="text-align:left"><strong>2. Incursões</strong></td><td style="text-align:left">Desaparecimento de cargas específicas de adamante, escavações clandestinas em Ferraur/Kelgore, sabotagem de arquivos em Sellene.</td><td style="text-align:left">Interceptar entregas, identificar colaboradores infiltrados e impedir a reabertura de galerias seladas.</td></tr><tr><td style="text-align:left"><strong>3. Primeiro Território Perdido</strong></td><td style="text-align:left">Uma vila isolada <em>(ex.: Vila de Silvaria ou Pelagosa)</em> para de mandar notícias; todos parecem serenos, mas ninguém consegue ir embora.</td><td style="text-align:left">Descobrir a colônia oculta, destruir ou isolar o amplificador de adamante e resgatar hospedeiros nos estágios iniciais.</td></tr><tr><td style="text-align:left"><strong>4. Oferta Pública</strong></td><td style="text-align:left">Um governante enlutado <em>(como um herdeiro de Altavanne ou lorde de Corallis)</em> aceita restaurar alguém amado em troca de acesso a um centro antigo.</td><td style="text-align:left">Expor o preço da perda de autonomia, enfrentar a <em>Primeira Devolvida</em> diplomaticamente ou em combate.</td></tr><tr><td style="text-align:left"><strong>5. Crise Continental</strong></td><td style="text-align:left">Colônias conectadas por adamante passam a operar em escala continental, tornando muralhas e fronteiras irrelevantes.</td><td style="text-align:left">Expedição final além de <em>Thanatos</em> rumo à <em>Cidadela Sem Nome</em> ou aos <em>Poços de Piche</em> em Incognito.</td></tr></tbody></table></div>
-<h3 id="o-dilema-final-e-a-via-de-separação-12">O Dilema Final e a Via de Separação</h3>
-<p>Destruir diretamente o Regente ou a colônia de Thanatos liberta as consciências aprisionadas, mas pode encerrar a vida de <strong>Despertos inocentes</strong> que reconstruíram vínculos e vontade própria. Existe uma <strong>alternativa difícil</strong>: desenvolver um método para <strong>separar os retornados da rede sem matá-los</strong>, exigindo unir saberes de toda Alenia — a <strong>cirurgia de Baldbella</strong>, a <strong>engenharia de Stoneforge</strong>, a <strong>forja de adamante de Aurora</strong>, as <strong>ervas vivas da Ilha das Safiras</strong> e as <strong>tradições de Fé Verdadeira</strong>.</p>
-<hr/>
-<h2 id="8-as-6-facções-ativas-do-mundo-13">8. As 6 Facções Ativas do Mundo</h2>
+
+    <div class="gm-vault" data-locked="true">
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"XYi3V1UliuPWDBBQYmAqdw==","i":"BcMzUG8tRed39TiG","c":"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"}</script>
+        <div class="gm-gate-box">
+            <div class="gm-seal-icon">🔒</div>
+            <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
+            <h2 class="gm-gate-title">Segredos do Mestre — A Grande Ameaça</h2>
+            <p class="gm-gate-desc">Esta seção contém segredos de campanha reservados ao Mestre. Insira a senha para revelar.</p>
+            <form class="gm-unlock-form">
+                <input type="password" class="gm-pwd-input" placeholder="Digite a senha do Mestre..." autocomplete="current-password" required />
+                <button type="submit" class="gm-unlock-btn">Destrancar Selo</button>
+            </form>
+            <div class="gm-gate-error" aria-live="polite"></div>
+        </div>
+        <div class="gm-unlocked-content"></div>
+    </div>
+    
+<h2 id="8-as-6-facções-ativas-do-mundo-17">8. As 6 Facções Ativas do Mundo</h2>
 <div class="table-wrap"><table><thead><tr><th style="text-align:left">Facção</th><th style="text-align:left">Dirigente</th><th style="text-align:left">Objetivo Atual</th><th style="text-align:left">Principal Recurso</th><th style="text-align:left">Dependência</th><th style="text-align:left">Divisão Interna</th><th style="text-align:left">Próxima Ação</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Coroa &amp; Casa Valerion (Aurora)</strong></td><td style="text-align:left">Regente <em>Valora Valerion</em></td><td style="text-align:left">Manter o trono e o monopólio legal do adamante</td><td style="text-align:left">Minas de Ferraur e cofres de Altavanne</td><td style="text-align:left">Paz com Aeraneas e escoamento via Merlinport</td><td style="text-align:left">Ala diplomática vs. ala militar de <em>Lucian Leonastis</em></td><td style="text-align:left">Contratar agentes neutros para investigar o desabamento em Ferraur e o emissário sumido.</td></tr><tr><td style="text-align:left"><strong>Conselho da Liga (Corallis)</strong></td><td style="text-align:left">Arconte <em>Corardo della Rocca</em></td><td style="text-align:left">Unificar tarifas do Mar dos Corais e superar crises portuárias</td><td style="text-align:left">Frotas, engenharia de Stoneforge e ciência de Sellene</td><td style="text-align:left">Importação de adamante bruto/ligas de Aurora</td><td style="text-align:left">Baldbella vs. Alineus; cientistas vs. armadores</td><td style="text-align:left">Financiar expedição discreta a <em>O Ferro Velho</em> e à <em>Ilha de Thanatos</em>.</td></tr><tr><td style="text-align:left"><strong>Conselho dos Clãs (Gaddra)</strong></td><td style="text-align:left">Xeique <em>Qasir Zaharid</em></td><td style="text-align:left">Proteger os poços de Naasar e manter autonomia frente a Aurora</td><td style="text-align:left">Controle do sal de Bayd, cavalaria e Passo de Rubecina</td><td style="text-align:left">Grãos, ferro e paz comercial no sul</td><td style="text-align:left">Clãs mercantis de Naasar vs. guerreiros de Vargheim</td><td style="text-align:left">Exigir indenização ou culpados pelo assassinato do Árbitro do Sangue.</td></tr><tr><td style="text-align:left"><strong>Conselho Velado (Kalis)</strong></td><td style="text-align:left">Déspota <em>Grimrik Ulscold</em></td><td style="text-align:left">Garantir segurança de Kalis e antecipar-se ao segredo de Thanatos</td><td style="text-align:left">Rede de informantes, madeira negra e bancos cifrados</td><td style="text-align:left">Equilíbrio entre as 3 Casas e escoamento via Fugong/Dobalbek</td><td style="text-align:left">Tradicionalistas fechados vs. guildas abertas de Fugong</td><td style="text-align:left">Infiltrar agentes em Merlinport e capturar provas sobre os <em>despertos</em> de Thanatos.</td></tr><tr><td style="text-align:left"><strong>Conselho das Copas</strong></td><td style="text-align:left">Guardiã <em>Aerwen ap Taldor</em></td><td style="text-align:left">Preservar as florestas contra mineração e incêndios</td><td style="text-align:left">Domínio das matas, arqueiros e ervas raras</td><td style="text-align:left">Sal, aço e tecidos vindos por Vergod</td><td style="text-align:left">Anciãos isolacionistas vs. vigias jovens agressivos</td><td style="text-align:left">Resgatar o emissário perdido perto de Altrax ou retaliar caravanas reais.</td></tr><tr><td style="text-align:left"><strong>Irmandade do Ferro Velho</strong></td><td style="text-align:left">Capitã <em>Fioresca Coral</em></td><td style="text-align:left">Manter <em>O Ferro Velho</em> livre de impostos de Corallis e Aurora</td><td style="text-align:left">Práticos que conhecem os recifes e cargas submersas</td><td style="text-align:left">Compradores discretos em Biemont, Merlinport e Fugong</td><td style="text-align:left">Sucateiros honestos vs. corsários ligados a Ravena</td><td style="text-align:left">Disputar um galeão de adamante recém-encalhado nos recifes do sul.</td></tr></tbody></table></div>
 <hr/>
-<h2 id="9-religiões-ordens-e-cronologia-curta-14">9. Religiões, Ordens e Cronologia Curta</h2>
-<h3 id="tradições-religiosas-e-fé-verdadeira-convicção-plural-15">Tradições Religiosas e Fé Verdadeira (Convicção Plural)</h3>
+<h2 id="9-religiões-ordens-e-cronologia-curta-18">9. Religiões, Ordens e Cronologia Curta</h2>
+<h3 id="tradições-religiosas-e-fé-verdadeira-convicção-plural-19">Tradições Religiosas e Fé Verdadeira (Convicção Plural)</h3>
 <p>Em Alenia, <strong>Fé Verdadeira não pertence a uma única igreja</strong>: ela floresce em qualquer devoto de convicção genuína e inabalável, seja qual for sua tradição:</p>
 <ul>
 <li><strong>Igreja da Chama Solar <em>(Aurora)</strong></em>: cultua a Luz e a Ordem que forjaram a civilização; ordena sacerdotes e inquisidores em Altavanne. Considera heresia ritos de sangue e qualquer veneração a Incognito.</li>
@@ -348,7 +390,7 @@ tr { break-inside: avoid; }
 <li><strong>Caminhos do Sol e do Sangue <em>(Gaddra)</strong></em>: juramentos sagrados de água, sol e hospitalidade conduzidos por Anciões das Dunas e Árbitros do Sangue.</li>
 <li><strong>Irmandade do Véu Silencioso <em>(Kalis)</strong></em>: ordem ascética que prega que os deuses se ocultam atrás de um véu — a fé é provada pelo silêncio, disciplina e resistência ao pavor.</li>
 </ul>
-<h3 id="linha-do-tempo-curta-de-alenia-16">Linha do Tempo Curta de Alenia</h3>
+<h3 id="linha-do-tempo-curta-de-alenia-20">Linha do Tempo Curta de Alenia</h3>
 <ul>
 <li><strong>Era Antiga (há mais de 1.200 anos)</strong>: civilizações esquecidas erguem monumentos em Incognito e nas <em>Ruínas de Kelgore</em>; seu colapso deixa apenas cinzas, lendas e o fenômeno de <em>Thanatos</em>.</li>
 <li><strong>Ano 1 da Era da Forja</strong>: descoberta das grandes veias de <strong>adamante</strong> nos Montes Ferraur; fundação de <em>Altavanne</em> e ascensão da <em>Casa Valerion</em>.</li>
@@ -359,14 +401,14 @@ tr { break-inside: avoid; }
 <li><strong>Ano 418 <em>(Presente)</strong></em>: doença do Alto Rei Severor III, greve em Ferraur e o chocante reaparecimento de mortos na <em>Ilha de Thanatos</em>.</li>
 </ul>
 <hr/>
-<h2 id="10-guia-operacional-de-viagens-distâncias-e-estações-17">10. Guia Operacional de Viagens, Distâncias e Estações</h2>
-<h3 id="tabela-de-viagens-principais-marcha-normal-30-kmdia-navio-mercante-120-kmdia-18">Tabela de Viagens Principais <em>(Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)</em></h3>
+<h2 id="10-guia-operacional-de-viagens-distâncias-e-estações-21">10. Guia Operacional de Viagens, Distâncias e Estações</h2>
+<h3 id="tabela-de-viagens-principais-marcha-normal-30-kmdia-navio-mercante-120-kmdia-22">Tabela de Viagens Principais <em>(Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)</em></h3>
 <div class="table-wrap"><table><thead><tr><th style="text-align:left">Trajeto</th><th style="text-align:center">Meio</th><th style="text-align:center">Tempo Médio</th><th style="text-align:left">Abastecimento / Pedágio</th><th style="text-align:left">Risco Principal</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Merlinport ↔ Dahrma</strong></td><td style="text-align:center">Estrada Real</td><td style="text-align:center"><code>3 dias</code></td><td style="text-align:left">Estalagens rurais; pedágio real (<code>2 PP</code>/carroça)</td><td style="text-align:left">Salteadores e brumas vindas do norte</td></tr><tr><td style="text-align:left"><strong>Dahrma ↔ Altavanne</strong></td><td style="text-align:center">Estrada Real (<em>Pontáuria</em>)</td><td style="text-align:center"><code>4 dias</code></td><td style="text-align:left">Pontáuria (<code>1 PP</code>/viajante)</td><td style="text-align:left">Patrulhas rígidas e inspeção de cargas</td></tr><tr><td style="text-align:left"><strong>Altavanne ↔ Aeraneas</strong></td><td style="text-align:center">Estrada do Adamante</td><td style="text-align:center"><code>5 dias</code></td><td style="text-align:left">Postos de guarda e forjas de estrada</td><td style="text-align:left">Frio de altitude e bloqueios por greve</td></tr><tr><td style="text-align:left"><strong>Altavanne ↔ Vaarsa ↔ Naasar</strong></td><td style="text-align:center">Passo de Rubecina</td><td style="text-align:center"><code>8 dias</code></td><td style="text-align:left">Pedágio de fronteira em Vaarsa (<code>5 PP</code>) + salvo-conduto</td><td style="text-align:left">Emboscadas tribais e neve no passo no inverno</td></tr><tr><td style="text-align:left"><strong>Merlinport ↔ Altrax</strong></td><td style="text-align:center">Estrada da Bruma</td><td style="text-align:center"><code>5 dias</code></td><td style="text-align:left">Torre de Specula (água/abrigo básico)</td><td style="text-align:left">Pântanos Nebulosos, lobos-das-brumas e atoleiros</td></tr><tr><td style="text-align:left"><strong>Merlinport ↔ Alineus (Corallis)</strong></td><td style="text-align:center">Navio mercante</td><td style="text-align:center"><code>4 dias</code></td><td style="text-align:left">Passagem <code>15 PP</code></td><td style="text-align:left">Tempestades de outono e corsários</td></tr><tr><td style="text-align:left"><strong>Alineus ↔ Baldbella ↔ Biemont</strong></td><td style="text-align:center">Rota Interna dos Corais</td><td style="text-align:center"><code>4 dias</code></td><td style="text-align:left">Exige prático local (<code>20 PP</code>)</td><td style="text-align:left">Recifes afiados (Navegação CD 20 sem prático)</td></tr><tr><td style="text-align:left"><strong>Yõketsu / Fugong ↔ Kalis</strong> <em>(Mar Intransponível)</em></td><td style="text-align:center">Navio reforçado</td><td style="text-align:center"><code>3–5 dias</code></td><td style="text-align:left">Passagem clandestina <code>80–150 PP</code></td><td style="text-align:left"><strong>Janelas de travessia</strong>: viável apenas nas duas semanas de maré calma a cada troca de estação, ou usando pilotos do Arquipélago Ravena</td></tr><tr><td style="text-align:left"><strong>Aeraneas ↔ Ilha de Thanatos</strong></td><td style="text-align:center">Barco polar</td><td style="text-align:center"><code>3 dias</code></td><td style="text-align:left">Sem porto seguro (levar tudo)</td><td style="text-align:left">Gelo à deriva, nevoeiro fechado e pavor da tripulação</td></tr></tbody></table></div>
 <ul>
 <li><strong>Estações em Alenia</strong>: <strong>Primavera e Verão</strong> abrem os passos montanhosos de Ferraur e Rubecina e favorecem o Mar dos Corais (porém tornam Gaddra escaldante — <code>+2</code> na CD contra sede/exaustão); <strong>Outono</strong> traz nevoeiros densos nos pântanos e tempestades no Mar Intransponível; <strong>Inverno</strong> torna Gaddra excelente para caravanas (<em>Feira de Suq-Ramad</em>), mas fecha o Passo de Rubecina e congela as bordas do Mar das Cinzas.</li>
 </ul>
 <hr/>
-<h2 id="11-atlas-regional-detalhado-5-mapas-aproximados-19">11. Atlas Regional Detalhado (5 Mapas Aproximados)</h2>
+<h2 id="11-atlas-regional-detalhado-5-mapas-aproximados-23">11. Atlas Regional Detalhado (5 Mapas Aproximados)</h2>
 <p>Todos os 5 mapas regionais em alta resolução estão prontos para o <strong>RRPG Firecast</strong> em <code>mapas/regionais/</code>:</p>
 <ol>
 <li><strong><a href="assets/mapa_regional_aurora.jpg">Mapa Regional de Aurora</a></strong> — <em>Estrada do Adamante, Via do Estuário, Estrada da Bruma, Trilha das Copas, Minas de Ferraur, Pontáuria, Vila de Silvaria, Torre de Specula, Ruínas de Vetarx, Santuário de Derwlyn e Passo de Rubecina</em>.</li>
@@ -381,17 +423,126 @@ tr { break-inside: avoid; }
         <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
     </div>
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const lb = document.getElementById('atlas-lightbox');
-    const lbImg = document.getElementById('atlas-lightbox-img');
-    if (lb && lbImg) {
-        document.querySelectorAll('.atlas-plate img').forEach(img => {
+(function() {
+    const SESSION_KEY = 'alenia_gm_unlock_key';
+
+    function b64ToBytes(b64) {
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return bytes;
+    }
+
+    async function decryptBlock(cipherObj, password) {
+        const enc = new TextEncoder();
+        const keyMat = await crypto.subtle.importKey(
+            'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
+        );
+        const aesKey = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: b64ToBytes(cipherObj.s), iterations: cipherObj.it, hash: 'SHA-256' },
+            keyMat,
+            { name: 'AES-GCM', length: 256 },
+            false,
+            ['decrypt']
+        );
+        const plainBuf = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: b64ToBytes(cipherObj.i) },
+            aesKey,
+            b64ToBytes(cipherObj.c)
+        );
+        return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+
+    function wireLightbox(root) {
+        const lb = document.getElementById('atlas-lightbox');
+        const lbImg = document.getElementById('atlas-lightbox-img');
+        if (!lb || !lbImg) return;
+        (root || document).querySelectorAll('.atlas-plate img').forEach(img => {
+            if (img.dataset.lbBound) return;
+            img.dataset.lbBound = '1';
             img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
         });
-        lb.addEventListener('click', () => lb.classList.remove('open'));
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
     }
-});
+
+    async function unlockAllVaults(password, silent) {
+        const vaults = document.querySelectorAll('.gm-vault[data-locked="true"]');
+        let anyUnlocked = false;
+        let failed = false;
+
+        for (const v of vaults) {
+            const scriptEl = v.querySelector('script.gm-cipher');
+            const errEl = v.querySelector('.gm-gate-error');
+            const outEl = v.querySelector('.gm-unlocked-content');
+            if (!scriptEl || !outEl) continue;
+            try {
+                const cipherObj = JSON.parse(scriptEl.textContent);
+                const data = await decryptBlock(cipherObj, password);
+                outEl.innerHTML = data.html || '';
+                v.setAttribute('data-locked', 'false');
+                if (errEl) errEl.textContent = '';
+                wireLightbox(outEl);
+                if (data.toc) {
+                    const tocList = document.querySelector('.toc-list');
+                    if (tocList) {
+                        const tmp = document.createElement('div');
+                        tmp.innerHTML = data.toc;
+                        while (tmp.firstChild) tocList.appendChild(tmp.firstChild);
+                    }
+                }
+                anyUnlocked = true;
+            } catch (e) {
+                failed = true;
+                if (!silent && errEl) errEl.textContent = 'Senha incorreta — o selo do Mestre permanece fechado.';
+            }
+        }
+
+        if (anyUnlocked) {
+            sessionStorage.setItem(SESSION_KEY, password);
+            const lockBtn = document.getElementById('btn-lock-gm');
+            if (lockBtn) lockBtn.classList.add('visible');
+        } else if (failed && silent) {
+            sessionStorage.removeItem(SESSION_KEY);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) {
+            lb.addEventListener('click', () => lb.classList.remove('open'));
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+        }
+        wireLightbox(document);
+
+        const lockBtn = document.getElementById('btn-lock-gm');
+        if (lockBtn) {
+            if (sessionStorage.getItem(SESSION_KEY)) lockBtn.classList.add('visible');
+            lockBtn.addEventListener('click', () => {
+                sessionStorage.removeItem(SESSION_KEY);
+                location.reload();
+            });
+        }
+
+        document.querySelectorAll('.gm-unlock-form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const input = form.querySelector('.gm-pwd-input');
+                const pwd = input ? input.value : '';
+                if (!pwd) return;
+                if (!window.crypto || !window.crypto.subtle) {
+                    const errEl = form.parentElement.querySelector('.gm-gate-error');
+                    if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
+                    return;
+                }
+                await unlockAllVaults(pwd, false);
+            });
+        });
+
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved && window.crypto && window.crypto.subtle) {
+            unlockAllVaults(saved, true);
+        }
+    });
+})();
 </script>
 </body>
 </html>

@@ -45,7 +45,7 @@ body {
     letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
 }
 .topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.topbar-nav a, .btn-print {
+.topbar-nav a, .btn-print, .btn-lock {
     font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
     text-transform: uppercase; color: #ded5c3; text-decoration: none;
     padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
@@ -56,6 +56,9 @@ body {
 }
 .btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
 .btn-print:hover { background: #922624; color: #fff; }
+.btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
+.btn-lock.visible { display: inline-block; }
+.btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
 
 .sidebar {
     position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
@@ -122,6 +125,50 @@ body {
 .cover-edition {
     margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
     font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+/* GM ENCRYPTED VAULT GATE */
+.gm-gate-box {
+    margin: 28px 0;
+    padding: 36px 28px;
+    text-align: center;
+    background: linear-gradient(180deg, #1d1916 0%, #151210 100%);
+    color: #efe6d2;
+    border: 2px solid var(--gold);
+    outline: 1px solid var(--crimson);
+    outline-offset: -7px;
+    border-radius: 4px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+}
+.gm-vault[data-locked="false"] .gm-gate-box { display: none; }
+.gm-seal-icon { font-size: 36px; margin-bottom: 8px; }
+.gm-gate-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.22em;
+    color: var(--gold-light); text-transform: uppercase; margin-bottom: 6px;
+}
+.gm-gate-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 24px; color: #f7f1e3;
+    border: none; margin: 6px 0 10px; padding: 0;
+}
+.gm-gate-desc {
+    text-align: center; color: #cfc6b4; font-style: italic; max-width: 540px; margin: 0 auto 20px; font-size: 17px;
+}
+.gm-unlock-form {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 440px; margin: 0 auto;
+}
+.gm-pwd-input {
+    flex: 1 1 220px; padding: 10px 14px; font-family: 'EB Garamond', Georgia, serif; font-size: 17px;
+    background: #100e0c; color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-pwd-input:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 0 2px rgba(205,176,110,0.28); }
+.gm-unlock-btn {
+    padding: 10px 20px; font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    background: var(--crimson); color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-unlock-btn:hover { background: #962724; }
+.gm-gate-error {
+    margin-top: 12px; min-height: 22px; font-size: 15px; color: #f08a84; font-weight: 600;
 }
 
 h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
@@ -206,6 +253,10 @@ tr { break-inside: avoid; }
     padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
     transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
+.portal-card.gm-card { background: #211c18; color: #efe6d2; border-color: var(--gold); border-top-color: var(--gold); }
+.portal-card.gm-card .portal-title { color: #f7f1e3; }
+.portal-card.gm-card .portal-desc { color: #c7beac; }
+.portal-card.gm-card .portal-kicker, .portal-card.gm-card .portal-cta { color: var(--gold-light); }
 .portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
 .portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
 .portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
@@ -222,7 +273,7 @@ tr { break-inside: avoid; }
 @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
 @media print {
     html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
-    .topbar, .sidebar, .lightbox { display: none !important; }
+    .topbar, .sidebar, .lightbox, .gm-gate-box { display: none !important; }
     .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
     .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
     .book-page::before { display: none !important; }
@@ -234,8 +285,8 @@ tr { break-inside: avoid; }
 </style>
 </head>
 <body>
-    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html" class="active">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
-    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-e-proposta-do-sistema-0">1. Visão Geral e Proposta do Sistema</a></li><li class="toc-h3"><a href="#pilares-fundamentais-1">Pilares Fundamentais</a></li><li class="toc-h2"><a href="#2-atributos-base-e-geração-de-personagem-2">2. Atributos Base e Geração de Personagem</a></li><li class="toc-h3"><a href="#cálculo-do-modificador-3">Cálculo do Modificador</a></li><li class="toc-h3"><a href="#geração-inicial-de-atributos-4">Geração Inicial de Atributos</a></li><li class="toc-h2"><a href="#3-atributos-especiais-opcionais-evolução-exclusiva-por-feitos-5">3. Atributos Especiais (Opcionais — Evolução Exclusiva por Feitos)</a></li><li class="toc-h2"><a href="#4-testes-dificuldades-e-perícias-recalibradas-6">4. Testes, Dificuldades e Perícias (Recalibradas)</a></li><li class="toc-h3"><a href="#teste-básico-7">Teste Básico</a></li><li class="toc-h3"><a href="#graus-de-treino-custos-e-travas-de-patamar-8">Graus de Treino, Custos e Travas de Patamar</a></li><li class="toc-h3"><a href="#pontos-de-perícia-uniforme-e-equilibrado-9">Pontos de Perícia (Uniforme e Equilibrado)</a></li><li class="toc-h3"><a href="#lista-oficial-de-perícias-34-perícias-perícias-livres-ilimitadas-10">Lista Oficial de Perícias (34 Perícias + Perícias Livres Ilimitadas)</a></li><li class="toc-h2"><a href="#5-níveis-dados-de-vida-patamares-e-troca-de-kit-níveis-1-a-30-11">5. Níveis, Dados de Vida, Patamares e Troca de Kit (Níveis 1 a 30)</a></li><li class="toc-h3"><a href="#como-e-quando-subir-de-nível-12">Como e Quando Subir de Nível</a></li><li class="toc-h3"><a href="#pontos-de-vida-por-dado-de-vida-estilo-dd-conforme-a-natureza-do-kit-13">Pontos de Vida por Dado de Vida (Estilo D&amp;D conforme a Natureza do Kit)</a></li><li class="toc-h3"><a href="#os-3-patamares-dinâmicos-14">Os 3 Patamares Dinâmicos</a></li><li class="toc-h2"><a href="#6-combate-ágil-tático-e-mortal-15">6. Combate Ágil, Tático e Mortal</a></li><li class="toc-h3"><a href="#turno-economia-de-ações-e-iniciativa-16">Turno, Economia de Ações e Iniciativa</a></li><li class="toc-h3"><a href="#defesa-situacional-surpresa-e-condições-17">Defesa Situacional, Surpresa e Condições</a></li><li class="toc-h3"><a href="#múltiplas-ações-regra-storyteller-com-trava-de-treino-18">Múltiplas Ações (Regra Storyteller — Com Trava de Treino)</a></li><li class="toc-h3"><a href="#ações-defensivas-sacrificando-o-ataque-19">Ações Defensivas (Sacrificando o Ataque)</a></li><li class="toc-h3"><a href="#críticos-por-arma-e-o-que-multiplica-20">Críticos por Arma e O Que Multiplica</a></li><li class="toc-h3"><a href="#golpe-devastador-23-do-pv-máximo-morte-instantânea-21">Golpe Devastador (&gt; 2/3 do PV Máximo) — Morte Instantânea</a></li><li class="toc-h2"><a href="#7-procedimentos-de-mesa-moribundo-cura-manobras-e-sobrevivência-22">7. Procedimentos de Mesa: Moribundo, Cura, Manobras e Sobrevivência</a></li><li class="toc-h3"><a href="#estado-moribundo-estabilização-23">Estado Moribundo &amp; Estabilização</a></li><li class="toc-h3"><a href="#descanso-recuperação-natural-e-ferimentos-graves-24">Descanso, Recuperação Natural e Ferimentos Graves</a></li><li class="toc-h3"><a href="#manobras-táticas-e-ataque-de-oportunidade-25">Manobras Táticas e Ataque de Oportunidade</a></li><li class="toc-h3"><a href="#fome-sede-friocalor-e-exaustão-níveis-1-a-5-26">Fome, Sede, Frio/Calor e Exaustão (Níveis 1 a 5)</a></li><li class="toc-h3"><a href="#perseguições-e-acidentes-marítimos-27">Perseguições e Acidentes Marítimos</a></li><li class="toc-h2"><a href="#8-talentos-e-manobras-níveis-pares-28">8. Talentos e Manobras (Níveis Pares)</a></li><li class="toc-h2"><a href="#9-equipamentos-economia-e-tabela-de-preços-de-referência-29">9. Equipamentos, Economia e Tabela de Preços de Referência</a></li><li class="toc-h3"><a href="#tabela-de-preços-do-cotidiano-viagem-30">Tabela de Preços do Cotidiano &amp; Viagem</a></li><li class="toc-h3"><a href="#tabela-de-armas-comuns-31">Tabela de Armas Comuns</a></li><li class="toc-h3"><a href="#armaduras-e-escudos-bônus-de-defesa-zero-rd-32">Armaduras e Escudos (Bônus de Defesa — Zero RD)</a></li><li class="toc-h3"><a href="#o-adamante-de-aurora-metal-estratégico-33">O Adamante de Aurora (Metal Estratégico)</a></li><li class="toc-h2"><a href="#10-magia-rituais-e-fé-verdadeira-calibrados-34">10. Magia, Rituais e Fé Verdadeira (Calibrados)</a></li><li class="toc-h3"><a href="#dificuldades-e-preparação-ritualística-35">Dificuldades e Preparação Ritualística</a></li><li class="toc-h3"><a href="#o-simbionte-da-comunhão-regras-dos-4-estágios-remoção-36">O Simbionte da Comunhão (Regras dos 4 Estágios &amp; Remoção)</a></li></ul></aside>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html" class="active">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">🔒 Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">🔒 Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-e-proposta-do-sistema-0">1. Visão Geral e Proposta do Sistema</a></li><li class="toc-h3"><a href="#pilares-fundamentais-1">Pilares Fundamentais</a></li><li class="toc-h2"><a href="#2-atributos-base-e-geração-de-personagem-2">2. Atributos Base e Geração de Personagem</a></li><li class="toc-h3"><a href="#cálculo-do-modificador-3">Cálculo do Modificador</a></li><li class="toc-h3"><a href="#geração-inicial-de-atributos-4">Geração Inicial de Atributos</a></li><li class="toc-h2"><a href="#3-atributos-especiais-opcionais-evolução-exclusiva-por-feitos-5">3. Atributos Especiais (Opcionais — Evolução Exclusiva por Feitos)</a></li><li class="toc-h2"><a href="#4-testes-dificuldades-e-perícias-recalibradas-6">4. Testes, Dificuldades e Perícias (Recalibradas)</a></li><li class="toc-h3"><a href="#teste-básico-7">Teste Básico</a></li><li class="toc-h3"><a href="#graus-de-treino-custos-e-travas-de-patamar-8">Graus de Treino, Custos e Travas de Patamar</a></li><li class="toc-h3"><a href="#pontos-de-perícia-uniforme-e-equilibrado-9">Pontos de Perícia (Uniforme e Equilibrado)</a></li><li class="toc-h3"><a href="#lista-oficial-de-perícias-34-perícias-perícias-livres-ilimitadas-10">Lista Oficial de Perícias (34 Perícias + Perícias Livres Ilimitadas)</a></li><li class="toc-h2"><a href="#5-níveis-dados-de-vida-patamares-e-troca-de-kit-níveis-1-a-30-11">5. Níveis, Dados de Vida, Patamares e Troca de Kit (Níveis 1 a 30)</a></li><li class="toc-h3"><a href="#como-e-quando-subir-de-nível-12">Como e Quando Subir de Nível</a></li><li class="toc-h3"><a href="#pontos-de-vida-por-dado-de-vida-estilo-dd-conforme-a-natureza-do-kit-13">Pontos de Vida por Dado de Vida (Estilo D&amp;D conforme a Natureza do Kit)</a></li><li class="toc-h3"><a href="#os-3-patamares-dinâmicos-14">Os 3 Patamares Dinâmicos</a></li><li class="toc-h2"><a href="#6-combate-ágil-tático-e-mortal-15">6. Combate Ágil, Tático e Mortal</a></li><li class="toc-h3"><a href="#turno-economia-de-ações-e-iniciativa-16">Turno, Economia de Ações e Iniciativa</a></li><li class="toc-h3"><a href="#defesa-situacional-surpresa-e-condições-17">Defesa Situacional, Surpresa e Condições</a></li><li class="toc-h3"><a href="#múltiplas-ações-regra-storyteller-com-trava-de-treino-18">Múltiplas Ações (Regra Storyteller — Com Trava de Treino)</a></li><li class="toc-h3"><a href="#ações-defensivas-sacrificando-o-ataque-19">Ações Defensivas (Sacrificando o Ataque)</a></li><li class="toc-h3"><a href="#críticos-por-arma-e-o-que-multiplica-20">Críticos por Arma e O Que Multiplica</a></li><li class="toc-h3"><a href="#golpe-devastador-23-do-pv-máximo-morte-instantânea-21">Golpe Devastador (&gt; 2/3 do PV Máximo) — Morte Instantânea</a></li><li class="toc-h2"><a href="#7-procedimentos-de-mesa-moribundo-cura-manobras-e-sobrevivência-22">7. Procedimentos de Mesa: Moribundo, Cura, Manobras e Sobrevivência</a></li><li class="toc-h3"><a href="#estado-moribundo-estabilização-23">Estado Moribundo &amp; Estabilização</a></li><li class="toc-h3"><a href="#descanso-recuperação-natural-e-ferimentos-graves-24">Descanso, Recuperação Natural e Ferimentos Graves</a></li><li class="toc-h3"><a href="#manobras-táticas-e-ataque-de-oportunidade-25">Manobras Táticas e Ataque de Oportunidade</a></li><li class="toc-h3"><a href="#fome-sede-friocalor-e-exaustão-níveis-1-a-5-26">Fome, Sede, Frio/Calor e Exaustão (Níveis 1 a 5)</a></li><li class="toc-h3"><a href="#perseguições-e-acidentes-marítimos-27">Perseguições e Acidentes Marítimos</a></li><li class="toc-h2"><a href="#8-talentos-e-manobras-níveis-pares-28">8. Talentos e Manobras (Níveis Pares)</a></li><li class="toc-h2"><a href="#9-equipamentos-economia-e-tabela-de-preços-de-referência-29">9. Equipamentos, Economia e Tabela de Preços de Referência</a></li><li class="toc-h3"><a href="#tabela-de-preços-do-cotidiano-viagem-30">Tabela de Preços do Cotidiano &amp; Viagem</a></li><li class="toc-h3"><a href="#tabela-de-armas-comuns-31">Tabela de Armas Comuns</a></li><li class="toc-h3"><a href="#armaduras-e-escudos-bônus-de-defesa-zero-rd-32">Armaduras e Escudos (Bônus de Defesa — Zero RD)</a></li><li class="toc-h3"><a href="#o-adamante-de-aurora-metal-estratégico-33">O Adamante de Aurora (Metal Estratégico)</a></li><li class="toc-h2"><a href="#10-magia-rituais-e-fé-verdadeira-calibrados-34">10. Magia, Rituais e Fé Verdadeira (Calibrados)</a></li><li class="toc-h3"><a href="#dificuldades-e-preparação-ritualística-35">Dificuldades e Preparação Ritualística</a></li></ul></aside>
     <main class="book-shell">
         <article class="book-page">
             
@@ -446,29 +497,149 @@ tr { break-inside: avoid; }
 <li><strong>Sacrifício de Sangue / Vitalidade</strong> <em>(sofrer <code>1d6</code> a <code>2d6</code> de dano não mitigável ou 1 nível de Exaustão)</em>: <strong><code>+2</code> a <code>+4</code></strong></li>
 <li><strong>Auxílio de Acólitos / Coro de Fiéis</strong>: <strong><code>+1</code> por par de ajudantes</strong> <em>(máx. <code>+2</code>)</em></li>
 </ul>
-<h3 id="o-simbionte-da-comunhão-regras-dos-4-estágios-remoção-36">O Simbionte da Comunhão <em>(Regras dos 4 Estágios &amp; Remoção)</em></h3>
-<p>Quando um personagem entra em contato prolongado com águas de uma colônia ativa, recebe implantação deliberada ou passa por um falso rito de cura ligado ao <strong>Regente das Cinzas</strong>, uma larva simbionte pode se alojar no corpo. A progressão <strong>não tem velocidade fixa</strong> — avança conforme exposição à rede, luto extremo ou escolha voluntária do hospedeiro:</p>
-<div class="table-wrap"><table><thead><tr><th style="text-align:left">Estágio</th><th style="text-align:left">Benefício Mecânico e Narrativo</th><th style="text-align:left">Consequência e Teste</th></tr></thead><tbody><tr><td style="text-align:left"><strong>I. Contato</strong></td><td style="text-align:left">Conforto emocional, sono sem pesadelos e <strong><code>+1</code></strong> em testes contra medo ou desespero.</td><td style="text-align:left">Sonhos compartilhados e sensações ou lembranças sem origem clara.</td></tr><tr><td style="text-align:left"><strong>II. Enlace</strong></td><td style="text-align:left"><strong>1× por cena</strong>, acessa a memória de outro hospedeiro para receber <strong><code>+3</code></strong> em um teste de perícia que não domina <em>(ex.: corrente marítima, idioma ou ofício antigo)</em>.</td><td style="text-align:left">Emoções alheias atravessam decisões e relações; em gatilhos ligados à rede, faz <strong>SAB CD 14</strong> <em>(soma <code>Fé Verdadeira</code>)</em> para não ceder ao impulso.</td></tr><tr><td style="text-align:left"><strong>III. Confluência</strong></td><td style="text-align:left">Coordenação silenciosa com outros conectados (<strong><code>+2</code></strong> em Iniciativa e Flanqueio quando juntos) e <strong><code>+3</code></strong> em testes de CON contra <em>Golpe Devastador</em> e <em>Exaustão</em>.</td><td style="text-align:left">Fronteiras pessoais se dissolvem; agir diretamente contra uma colônia ou emissário exige <strong>SAB CD 17</strong> <em>(soma <code>Fé Verdadeira</code>)</em>.</td></tr><tr><td style="text-align:left"><strong>IV. Entrega</strong></td><td style="text-align:left">Participação plena na memória coletiva; imune a medo comum e recupera <code>+1d6</code> PV extras em descansos perto de uma colônia.</td><td style="text-align:left">O indivíduo já não consegue recusar diretivas centrais do Regente <em>(pode ser aceita voluntariamente por NPCs; <strong>para PJs, jamais ocorre sem aviso claro e acordo prévio com o jogador</strong>)</em>.</td></tr></tbody></table></div>
-<ul>
-<li><strong>Remoção do Simbionte <em>(Custo Físico e Dramático)</strong></em>: nos <strong>Estágios I e II</strong>, a extração é viável por <strong>cirurgia especializada</strong> (<em>Medicina &amp; Cirurgia CD 20</em>, reduzida para <code>17</code> com extratos da <em>Ilha das Safiras</em> ou rito de <em>Fé Verdadeira</em>; causa <code>2d6</code> de dano e exige 1 semana de repouso). No <strong>Estágio III</strong>, exige cirurgia extrema (<code>CD 25</code>) + separação da influência de adamante; no <strong>Estágio IV</strong> ou em <strong>Despertos de Thanatos</strong>, a remoção simples pode ser fatal sem o método multicultural desenvolvido em campanha. Além do risco físico, o hospedeiro perde subitamente o conforto e as vozes de entes queridos que só ouvia pela Comunhão.</li>
-</ul>
+
+    <div class="gm-vault" data-locked="true">
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"vV/0mM0dJ9bUcsEox07Y6g==","i":"oDHoqbcU70J3Zs8O","c":"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"}</script>
+        <div class="gm-gate-box">
+            <div class="gm-seal-icon">🔒</div>
+            <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
+            <h2 class="gm-gate-title">Segredos do Mestre — Regras Ocultas de Campanha</h2>
+            <p class="gm-gate-desc">Esta seção contém segredos de campanha reservados ao Mestre. Insira a senha para revelar.</p>
+            <form class="gm-unlock-form">
+                <input type="password" class="gm-pwd-input" placeholder="Digite a senha do Mestre..." autocomplete="current-password" required />
+                <button type="submit" class="gm-unlock-btn">Destrancar Selo</button>
+            </form>
+            <div class="gm-gate-error" aria-live="polite"></div>
+        </div>
+        <div class="gm-unlocked-content"></div>
+    </div>
+    
         </article>
     </main>
     <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
         <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
     </div>
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const lb = document.getElementById('atlas-lightbox');
-    const lbImg = document.getElementById('atlas-lightbox-img');
-    if (lb && lbImg) {
-        document.querySelectorAll('.atlas-plate img').forEach(img => {
+(function() {
+    const SESSION_KEY = 'alenia_gm_unlock_key';
+
+    function b64ToBytes(b64) {
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return bytes;
+    }
+
+    async function decryptBlock(cipherObj, password) {
+        const enc = new TextEncoder();
+        const keyMat = await crypto.subtle.importKey(
+            'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
+        );
+        const aesKey = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: b64ToBytes(cipherObj.s), iterations: cipherObj.it, hash: 'SHA-256' },
+            keyMat,
+            { name: 'AES-GCM', length: 256 },
+            false,
+            ['decrypt']
+        );
+        const plainBuf = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: b64ToBytes(cipherObj.i) },
+            aesKey,
+            b64ToBytes(cipherObj.c)
+        );
+        return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+
+    function wireLightbox(root) {
+        const lb = document.getElementById('atlas-lightbox');
+        const lbImg = document.getElementById('atlas-lightbox-img');
+        if (!lb || !lbImg) return;
+        (root || document).querySelectorAll('.atlas-plate img').forEach(img => {
+            if (img.dataset.lbBound) return;
+            img.dataset.lbBound = '1';
             img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
         });
-        lb.addEventListener('click', () => lb.classList.remove('open'));
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
     }
-});
+
+    async function unlockAllVaults(password, silent) {
+        const vaults = document.querySelectorAll('.gm-vault[data-locked="true"]');
+        let anyUnlocked = false;
+        let failed = false;
+
+        for (const v of vaults) {
+            const scriptEl = v.querySelector('script.gm-cipher');
+            const errEl = v.querySelector('.gm-gate-error');
+            const outEl = v.querySelector('.gm-unlocked-content');
+            if (!scriptEl || !outEl) continue;
+            try {
+                const cipherObj = JSON.parse(scriptEl.textContent);
+                const data = await decryptBlock(cipherObj, password);
+                outEl.innerHTML = data.html || '';
+                v.setAttribute('data-locked', 'false');
+                if (errEl) errEl.textContent = '';
+                wireLightbox(outEl);
+                if (data.toc) {
+                    const tocList = document.querySelector('.toc-list');
+                    if (tocList) {
+                        const tmp = document.createElement('div');
+                        tmp.innerHTML = data.toc;
+                        while (tmp.firstChild) tocList.appendChild(tmp.firstChild);
+                    }
+                }
+                anyUnlocked = true;
+            } catch (e) {
+                failed = true;
+                if (!silent && errEl) errEl.textContent = 'Senha incorreta — o selo do Mestre permanece fechado.';
+            }
+        }
+
+        if (anyUnlocked) {
+            sessionStorage.setItem(SESSION_KEY, password);
+            const lockBtn = document.getElementById('btn-lock-gm');
+            if (lockBtn) lockBtn.classList.add('visible');
+        } else if (failed && silent) {
+            sessionStorage.removeItem(SESSION_KEY);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) {
+            lb.addEventListener('click', () => lb.classList.remove('open'));
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+        }
+        wireLightbox(document);
+
+        const lockBtn = document.getElementById('btn-lock-gm');
+        if (lockBtn) {
+            if (sessionStorage.getItem(SESSION_KEY)) lockBtn.classList.add('visible');
+            lockBtn.addEventListener('click', () => {
+                sessionStorage.removeItem(SESSION_KEY);
+                location.reload();
+            });
+        }
+
+        document.querySelectorAll('.gm-unlock-form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const input = form.querySelector('.gm-pwd-input');
+                const pwd = input ? input.value : '';
+                if (!pwd) return;
+                if (!window.crypto || !window.crypto.subtle) {
+                    const errEl = form.parentElement.querySelector('.gm-gate-error');
+                    if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
+                    return;
+                }
+                await unlockAllVaults(pwd, false);
+            });
+        });
+
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved && window.crypto && window.crypto.subtle) {
+            unlockAllVaults(saved, true);
+        }
+    });
+})();
 </script>
 </body>
 </html>
