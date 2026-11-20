@@ -1290,6 +1290,7 @@ SHARED_JS = r"""
         },
 
         applyMode(newMode, persist = true) {
+            if (!newMode) return;
             this.mode = newMode;
             if (persist) localStorage.setItem(MODE_KEY, newMode);
             document.body.classList.toggle('book-mode', newMode !== 'scroll');
@@ -1299,7 +1300,7 @@ SHARED_JS = r"""
             } else if (newMode !== 'scroll') {
                 document.body.classList.add('sidebar-hidden');
             }
-            document.querySelectorAll('.mode-btn').forEach(b => {
+            document.querySelectorAll('.mode-btn[data-mode]').forEach(b => {
                 b.classList.toggle('active', b.dataset.mode === newMode);
             });
             if (newMode !== 'scroll') {
@@ -1320,7 +1321,7 @@ SHARED_JS = r"""
                 });
             }
 
-            document.querySelectorAll('.mode-btn').forEach(b => {
+            document.querySelectorAll('.mode-btn[data-mode]').forEach(b => {
                 b.addEventListener('click', () => this.applyMode(b.dataset.mode, true));
             });
 
