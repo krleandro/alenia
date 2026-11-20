@@ -7,6 +7,8 @@ Thumbs.db
 # Manuais/arquivos pesados fora da publicação web (mantenha livros_html/ leve)
 *.rpk
 *.rdk
+!plugins/Alenia_RPG_Ficha.rpk
+!plugins/Alenia_RPG_Ficha.rdk
 *.pdf
 mapas/*.png
 mapas/regionais/*.png

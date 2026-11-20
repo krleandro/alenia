@@ -275,6 +275,19 @@ def build_lua_script() -> str:
 
     lua = "\n".join(kits_lua) + "\n\n" + "\n".join(skills_lua) + r"""
 
+local okInt, InternetMod = pcall(require, "internet.lua");
+if not okInt or InternetMod == nil then InternetMod = Internet or internet; end;
+local okPlg, PluginsMod = pcall(require, "plugins.lua");
+if not okPlg or PluginsMod == nil then PluginsMod = (Firecast and Firecast.Plugins) or (rrpg and rrpg.Plugins); end;
+local okDlg, DialogsMod = pcall(require, "dialogs.lua");
+if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
+
+local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
+local PLUGIN_VERSION = "1.4";
+local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
+local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
+local REPO_URL = "https://github.com/krleandro/alenia";
+
 local recalcularFicha;
 local atualizarPaginaCustomSkills;
 
@@ -583,6 +596,11 @@ recalcularFicha = function()
         local atkTot = getMod(aAttr) + num(sheet[aPer .. "_grau"], 0) + num(sheet[aPer .. "_outros"], 0) + aExtra;
         sheet["arma" .. idx .. "_atk"] = fmtMod(atkTot);
     end;
+
+    sheet.pluginVersaoAtual = "v" .. PLUGIN_VERSION;
+    if sheet.statusAtualizacao == nil or tostring(sheet.statusAtualizacao) == "" then
+        sheet.statusAtualizacao = "Clique no botao acima para checar e instalar atualizacoes automaticamente.";
+    end;
 end;
 
 local function aplicarKitSelecionado()
@@ -830,6 +848,165 @@ local function rolarCustomSkill(slotIdx)
     local rk = nomeGrau(grau, sheet.nivel);
     rolarD20("Pericia Livre: " .. nome .. " (+" .. tostring(grau) .. " — " .. rk .. ")", getMod(attr) + grau + outros, "");
 end;
+
+local function compararVersoes(vA, vB)
+    local function splitNums(s)
+        local t = {};
+        for n in tostring(s or "0"):gmatch("%d+") do
+            table.insert(t, tonumber(n) or 0);
+        end;
+        return t;
+    end;
+    local a = splitNums(vA);
+    local b = splitNums(vB);
+    local maxLen = math.max(#a, #b);
+    for i = 1, maxLen do
+        local na = a[i] or 0;
+        local nb = b[i] or 0;
+        if na > nb then return 1; end;
+        if na < nb then return -1; end;
+    end;
+    return 0;
+end;
+
+local function getVersaoInstalada()
+    local ver = PLUGIN_VERSION;
+    if PluginsMod ~= nil and type(PluginsMod.getInstalledPlugins) == "function" then
+        local ok, lista = pcall(PluginsMod.getInstalledPlugins);
+        if ok and type(lista) == "table" then
+            for i = 1, #lista do
+                local item = lista[i];
+                if item ~= nil and item.moduleId == PLUGIN_MODULE_ID and item.version ~= nil and tostring(item.version) ~= "" then
+                    ver = tostring(item.version);
+                    break;
+                end;
+            end;
+        end;
+    end;
+    return ver;
+end;
+
+local function abrirLinkExterno(url)
+    if GUI ~= nil and type(GUI.openInBrowser) == "function" then
+        GUI.openInBrowser(url);
+    else
+        showMessage("Acesse no navegador:\n" .. tostring(url));
+    end;
+end;
+
+local function verificarEAtualizarPlugin(forcarReinstalacao)
+    if sheet == nil then return; end;
+    local verLocal = getVersaoInstalada();
+    sheet.pluginVersaoAtual = "v" .. verLocal;
+
+    if InternetMod == nil or type(InternetMod.download) ~= "function" then
+        sheet.statusAtualizacao = "Modulo de internet indisponivel neste ambiente.";
+        showMessage("Nao foi possivel acessar a internet pelo Firecast.\nBaixe manualmente em:\n" .. PLUGIN_RPK_URL);
+        return;
+    end;
+
+    sheet.statusAtualizacao = "Verificando atualizacoes no GitHub oficial...";
+    local urlCheck = PLUGIN_RPK_URL .. "?t=" .. tostring(os.time());
+
+    InternetMod.download(
+        urlCheck,
+        function(stream, contentType)
+            if stream == nil then
+                sheet.statusAtualizacao = "Falha: resposta vazia do GitHub.";
+                showMessage("Nao foi possivel ler o pacote de atualizacao do GitHub.");
+                return;
+            end;
+
+            local details = nil;
+            if PluginsMod ~= nil and type(PluginsMod.getRPKDetails) == "function" then
+                local okDet, det = pcall(PluginsMod.getRPKDetails, stream);
+                if okDet then details = det; end;
+            end;
+
+            if details == nil or details.version == nil then
+                sheet.statusAtualizacao = "Pacote remoto invalido ou ainda nao publicado no GitHub.";
+                if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+                    DialogsMod.confirmYesNo(
+                        "Nao foi possivel inspecionar o arquivo .rpk no GitHub.\nDeseja abrir o repositorio no navegador para verificar manualmente?",
+                        function(sim)
+                            if sim then abrirLinkExterno(REPO_URL); end;
+                        end
+                    );
+                else
+                    showMessage("Nao foi possivel inspecionar o .rpk remoto. Verifique em:\n" .. REPO_URL);
+                end;
+                return;
+            end;
+
+            local verRemota = tostring(details.version);
+            local cmp = compararVersoes(verRemota, verLocal);
+
+            local function instalarAgora()
+                if PluginsMod == nil or type(PluginsMod.installPlugin) ~= "function" then
+                    sheet.statusAtualizacao = "Instalacao automatica indisponivel; abrindo download no navegador...";
+                    abrirLinkExterno(PLUGIN_RPK_URL);
+                    return;
+                end;
+                local okCall, okInst, errMsg = pcall(PluginsMod.installPlugin, stream, not forcarReinstalacao);
+                if okCall and okInst then
+                    sheet.pluginVersaoAtual = "v" .. verRemota .. " (reabra)";
+                    sheet.statusAtualizacao = "Atualizado com sucesso para v" .. verRemota .. "! Feche e reabra a ficha para aplicar.";
+                    showMessage("Ficha Alenia RPG atualizada automaticamente para a versao v" .. verRemota .. "!\n\nFeche e reabra a janela da ficha para carregar todas as novidades.");
+                else
+                    local detalhe = tostring(errMsg or okInst or "erro desconhecido");
+                    sheet.statusAtualizacao = "Falha ao instalar automaticamente (" .. detalhe .. ").";
+                    if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+                        DialogsMod.confirmYesNo(
+                            "Nao foi possivel instalar automaticamente (" .. detalhe .. ").\nDeseja baixar o arquivo .rpk diretamente no navegador?",
+                            function(sim)
+                                if sim then abrirLinkExterno(PLUGIN_RPK_URL); end;
+                            end
+                        );
+                    else
+                        showMessage("Falha ao instalar (" .. detalhe .. "). Baixe em:\n" .. PLUGIN_RPK_URL);
+                    end;
+                end;
+            end;
+
+            if cmp > 0 then
+                sheet.statusAtualizacao = "Nova versao encontrada: v" .. verRemota .. " (atual: v" .. verLocal .. ").";
+                if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+                    DialogsMod.confirmYesNo(
+                        "Nova versao da ficha Alenia RPG disponivel!\n\nVersao instalada: v" .. verLocal .. "\nNova versao no GitHub: v" .. verRemota .. "\n\nDeseja baixar e atualizar a ficha automaticamente agora mesmo?",
+                        function(sim)
+                            if sim then
+                                instalarAgora();
+                            else
+                                sheet.statusAtualizacao = "Atualizacao v" .. verRemota .. " disponivel (cancelada pelo usuario).";
+                            end;
+                        end
+                    );
+                else
+                    instalarAgora();
+                end;
+            elseif forcarReinstalacao then
+                sheet.statusAtualizacao = "Reinstalando v" .. verRemota .. "...";
+                instalarAgora();
+            else
+                sheet.statusAtualizacao = "Sua ficha ja esta atualizada na versao mais recente (v" .. verLocal .. ").";
+                showMessage("Tudo certo! Sua ficha Alenia RPG ja esta na versao mais recente (v" .. verLocal .. ").");
+            end;
+        end,
+        function(errorMsg)
+            sheet.statusAtualizacao = "Erro de conexao ao verificar atualizacoes: " .. tostring(errorMsg);
+            showMessage("Nao foi possivel conectar ao GitHub para verificar atualizacoes.\nDetalhe: " .. tostring(errorMsg));
+        end,
+        function(downloadedBytes, totalBytes)
+            if totalBytes ~= nil and totalBytes > 0 then
+                local pct = math.min(100, math.floor((downloadedBytes / totalBytes) * 100));
+                sheet.statusAtualizacao = "Baixando pacote de atualizacao do GitHub... (" .. tostring(pct) .. "%)";
+            else
+                sheet.statusAtualizacao = "Baixando pacote de atualizacao do GitHub...";
+            end;
+        end,
+        "ignoreCache"
+    );
+end;
 """
     return lua
 
@@ -1002,14 +1179,16 @@ def build_lfm() -> str:
         "kitPerBase", "kitMultInt", "pvAtual", "pvMax", "armaduraDef", "escudoDef",
         "rdEspecial", "defesaOutros", "iniciativaOutros", "multiAcoes",
         "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre",
-        "customSkillPage", "moedasOuro", "moedasPrata", "moedasCobre"
+        "customSkillPage", "moedasOuro", "moedasPrata", "moedasCobre",
+        "pluginVersaoAtual", "statusAtualizacao"
     ]
     def_values = [
         "1", "sem_kit", "00 - Sem Kit (Livre / Media Padrao)", "8",
         "1", "0.75", "18", "18", "0", "0",
         "0", "0", "0", "1",
         "0", "0", "0", "0", "0",
-        "1", "0", "25", "0"
+        "1", "0", "25", "0",
+        "v1.4", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -1371,6 +1550,67 @@ def build_lfm() -> str:
                         <rectangle left="528" top="450" width="514" height="316" color="{BG_CARD}" strokeColor="{BORDER_CRIMSON}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="490" height="24" text="MISTERIOS ANTIGOS, PRESSAGIOS &amp; SEGREDOS" fontColor="{TEXT_CRIMSON}" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="490" height="264" field="misteriosSegredos" fontSize="14"/>
+                        </rectangle>
+                    </layout>
+                </scrollBox>
+            </tab>
+
+            <!-- ABA 6: AUTORIA & ATUALIZACAO -->
+            <tab title="Autoria &amp; Atualizacao">
+                <scrollBox align="client">
+                    <layout left="0" top="0" width="1056" height="680">
+                        <!-- CARD DE AUTORIA -->
+                        <rectangle left="6" top="6" width="1036" height="176" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="2" xradius="6" yradius="6">
+                            <label left="20" top="18" width="996" height="30" text="ALENIA RPG — FICHA OFICIAL PARA RRPG FIRECAST" fontColor="{TEXT_GOLD}" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="20" top="56" width="996" height="34" text="Plugin desenvolvido por Mestre Carlos" fontColor="{TEXT_MAIN}" fontSize="22" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="20" top="98" width="996" height="24" text="Sistema d20 Sombrio • 36 Kits Universais • 44 Talentos • Graduacao Livre de Pericias • Atlas &amp; Bestiario" fontColor="{TEXT_MUTED}" fontSize="14" horzTextAlign="center"/>
+
+                            <rectangle left="168" top="130" width="220" height="34" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label left="8" top="0" width="110" height="34" text="Versao Atual:" fontColor="{TEXT_MUTED}" fontSize="13" vertTextAlign="center"/>
+                                <label left="118" top="0" width="94" height="34" field="pluginVersaoAtual" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+
+                            <rectangle left="404" top="130" width="260" height="34" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" text="ID: br.com.alenia.rpg_oficial" fontColor="{TEXT_MUTED}" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+
+                            <rectangle left="680" top="130" width="190" height="34" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" text="Firecast SDK 3.7b" fontColor="{TEXT_GREEN}" fontSize="13" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+                        </rectangle>
+
+                        <!-- CARD DE ATUALIZACAO AUTOMATICA -->
+                        <rectangle left="6" top="194" width="1036" height="244" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="20" top="14" width="996" height="28" text="ATUALIZACAO AUTOMATICA INTEGRADA (VIA GITHUB)" fontColor="{TEXT_GOLD}" fontSize="16" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="20" top="44" width="996" height="24" text="O verificador consulta o pacote oficial no GitHub e instala a nova versao diretamente dentro do seu Firecast." fontColor="{TEXT_MUTED}" fontSize="14" horzTextAlign="center"/>
+
+                            <button left="248" top="80" width="540" height="50" text="Clique aqui para verificar se ha atualizacoes" fontSize="16">
+                                <event name="onClick"><![CDATA[verificarEAtualizarPlugin(false);]]></event>
+                            </button>
+
+                            <rectangle left="48" top="142" width="940" height="40" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" field="statusAtualizacao" fontColor="{TEXT_GOLD}" fontSize="14" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+
+                            <button left="48" top="194" width="300" height="36" text="Forcar Reinstalacao Direta" fontSize="13">
+                                <event name="onClick"><![CDATA[verificarEAtualizarPlugin(true);]]></event>
+                            </button>
+                            <button left="368" top="194" width="300" height="36" text="Abrir Biblioteca Online de Alenia" fontSize="13">
+                                <event name="onClick"><![CDATA[abrirLinkExterno(BIBLIOTECA_URL);]]></event>
+                            </button>
+                            <button left="688" top="194" width="300" height="36" text="Abrir Repositorio no GitHub" fontSize="13">
+                                <event name="onClick"><![CDATA[abrirLinkExterno(REPO_URL);]]></event>
+                            </button>
+                        </rectangle>
+
+                        <!-- CARD DE NOVIDADES -->
+                        <rectangle left="6" top="450" width="1036" height="214" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
+                            <label left="20" top="46" width="996" height="24" text="• v1.4 — Aba Autoria &amp; Atualizacao com verificacao e instalacao automatica direta do plugin via GitHub (por Mestre Carlos)." fontColor="{TEXT_MAIN}" fontSize="14"/>
+                            <label left="20" top="74" width="996" height="24" text="• v1.3 — Graduacao numerica livre em todas as 34 pericias e pericias livres (+0, +1, +2...) com calculo automatico de grau." fontColor="{TEXT_MAIN}" fontSize="14"/>
+                            <label left="20" top="102" width="996" height="24" text="• v1.2 — Dado de Vida (1d6 a 1d12) por Kit, botao Subir Nivel (1dX+CON) e trava anti-abuso nas Multiplas Acoes Storyteller." fontColor="{TEXT_MUTED}" fontSize="14"/>
+                            <label left="20" top="130" width="996" height="24" text="• v1.1 — Fontes ampliadas, 36 Kits Universais (+ Sem Kit), rolagem inicial 4d6 bloqueavel e 5 Atributos Especiais por Feitos." fontColor="{TEXT_MUTED}" fontSize="14"/>
+                            <label left="20" top="164" width="996" height="34" text="Nota: Apos uma atualizacao automatica bem-sucedida, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
                 </scrollBox>
