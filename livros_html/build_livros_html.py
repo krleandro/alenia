@@ -2508,10 +2508,10 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">7 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Ficha Firecast v1.7</div>
+        <div class="cover-subtitle">7 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Ficha Firecast v1.8</div>
         <div class="cover-rule"></div>
         <div style="margin: 8px 0 4px;">
-            <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 18px; border-radius:3px; font-weight:700;">⬇ Baixar Plugin da Ficha Firecast (v1.7 • Auto-Atualizável)</a>
+            <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 18px; border-radius:3px; font-weight:700;">⬇ Baixar Plugin da Ficha Firecast (v1.8)</a>
         </div>
         <figure class="atlas-plate" style="margin:14px 0 0; width:100%;">
             <img src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Mapa-Múndi de Alenia"/>

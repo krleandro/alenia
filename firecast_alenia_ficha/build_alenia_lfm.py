@@ -283,7 +283,7 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "1.7";
+local PLUGIN_VERSION = "1.8";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
 
@@ -292,6 +292,16 @@ local XP_TABELA = {
     0, 300, 800, 1500, 2500, 3800, 5500, 7500, 10000, 13000,
     17000, 21500, 26500, 32000, 38000, 45000, 52500, 61000, 70000, 80000,
     92000, 105000, 120000, 136000, 154000, 174000, 196000, 220000, 246000, 275000
+};
+
+-- Padrao de Vida Mensal (em PP — Padrao Prata: 1 PO = 10 PP = 100 PC)
+local PADROES_VIDA = {
+    miseravel     = { nome="Miseravel",     custo=0,   info="0 PP/mes | Risco de doenca/roubo; -2 Etiqueta/Persuasao" },
+    pobre         = { nome="Pobre",         custo=6,   info="6 PP/mes (2 PC/dia) | Albergue coletivo, sobrevivencia basica" },
+    modesto       = { nome="Modesto",       custo=15,  info="15 PP/mes (5 PC/dia) | Estalagem simples (Status 0-1)" },
+    confortavel   = { nome="Confortavel",   custo=45,  info="45 PP/mes (1,5 PP/dia) | Sustenta Status 2; +1 com mercadores" },
+    abastado      = { nome="Abastado",      custo=150, info="150 PP/mes (15 PO) | Sustenta Status 3; abre portas de guildas" },
+    aristocratico = { nome="Aristocratico", custo=450, info="450 PP/mes (45 PO) | Sustenta Status 4-5; +2 Etiqueta na corte" }
 };
 
 local recalcularFicha;
@@ -695,6 +705,20 @@ recalcularFicha = function()
     local forRaw = num(sheet.forca, 10);
     sheet.cargaMax = tostring(forRaw * 5) .. " kg";
 
+    -- Sistema Monetario (Padrao Prata: 1 PO = 10 PP = 100 PC; 100 moedas fisicas = 1 kg)
+    local po = math.max(0, math.floor(num(sheet.moedasOuro, 0)));
+    local pp = math.max(0, math.floor(num(sheet.moedasPrata, 0)));
+    local pc = math.max(0, math.floor(num(sheet.moedasCobre, 0)));
+    local cc = math.max(0, num(sheet.cartasCredito, 0));
+    local totalMoedasFisicas = po + pp + pc;
+    local pesoMoedasKg = totalMoedasFisicas / 100.0;
+    local totalPc = (po * 100) + (pp * 10) + pc + math.floor(cc * 10 + 0.5);
+    sheet.patrimonioTotal = string.format("%.1f PP (%.2f PO)", totalPc / 10.0, totalPc / 100.0);
+    sheet.pesoMoedas = string.format("%.2f kg (%d m.)", pesoMoedasKg, totalMoedasFisicas);
+    local pvKey = sheet.padraoVida or "modesto";
+    local pvObj = PADROES_VIDA[pvKey] or PADROES_VIDA["modesto"];
+    sheet.padraoVidaInfo = "Sustento: " .. pvObj.info .. " | Peso: 100 moedas = 1 kg (Cartas de Credito = 0 kg).";
+
     -- Desconta 3 pts gratuitos das pericias iniciais (+3) do Kit atual
     local kitGratis = {};
     for i = 1, #kit.pericias do kitGratis[kit.pericias[i]] = true; end;
@@ -1016,6 +1040,134 @@ local function rolarCustomSkill(slotIdx)
     rolarD20("Pericia Livre: " .. nome .. " (+" .. tostring(grau) .. " — " .. rk .. ")", getMod(attr) + grau + outros, "");
 end;
 
+local function aplicarDeltaCobres(deltaPc, motivo)
+    if sheet == nil then return false; end;
+    local po = math.max(0, math.floor(num(sheet.moedasOuro, 0)));
+    local pp = math.max(0, math.floor(num(sheet.moedasPrata, 0)));
+    local pc = math.max(0, math.floor(num(sheet.moedasCobre, 0)));
+    local bolsaPc = (po * 100) + (pp * 10) + pc;
+    local novoPc = bolsaPc + deltaPc;
+    if novoPc < 0 then
+        showMessage("Moedas fisicas insuficientes! Voce tem " .. string.format("%.1f PP", bolsaPc / 10.0) .. " na bolsa e precisa de " .. string.format("%.1f PP", math.abs(deltaPc) / 10.0) .. ".\n(Se tiver saldo em Cartas de Credito, saque em um banco de Corallis ou Kalis.)");
+        return false;
+    end;
+    if deltaPc >= 0 then
+        -- Ao receber, mantem Ouro existente e adiciona ganho em Pratas e Cobres (Padrao Prata)
+        local addPp = math.floor(deltaPc / 10);
+        local addPc = deltaPc % 10;
+        pp = pp + addPp;
+        pc = pc + addPc;
+        if pc >= 10 then
+            pp = pp + math.floor(pc / 10);
+            pc = pc % 10;
+        end;
+    else
+        -- Ao gastar, consome primeiro Cobres -> Pratas -> quebra Aureos dando troco em Prata
+        local gasto = math.abs(deltaPc);
+        local novoTotal = bolsaPc - gasto;
+        local ouroMantido = math.min(po, math.floor(novoTotal / 100));
+        local resto = novoTotal - (ouroMantido * 100);
+        po = ouroMantido;
+        pp = math.floor(resto / 10);
+        pc = resto % 10;
+    end;
+    sheet.moedasOuro = tostring(po);
+    sheet.moedasPrata = tostring(pp);
+    sheet.moedasCobre = tostring(pc);
+    recalcularFicha();
+    local nomeChar = sheet.nome or "Explorador";
+    local sinal = (deltaPc >= 0) and "+" or "-";
+    enviarChatOuMsg("[" .. nomeChar .. "] " .. motivo .. ": " .. sinal .. string.format("%.1f PP", math.abs(deltaPc) / 10.0) .. " | Bolsa: " .. tostring(po) .. " PO, " .. tostring(pp) .. " PP, " .. tostring(pc) .. " PC.");
+    return true;
+end;
+
+local function registrarTransacao()
+    if sheet == nil then return; end;
+    if DialogsMod == nil or type(DialogsMod.inputQuery) ~= "function" then
+        showMessage("Edite diretamente os campos Aureos (PO), Pratas (PP) e Cobres (PC).");
+        return;
+    end;
+    DialogsMod.inputQuery(
+        "Transacao em Pratas (PP)",
+        "Digite o valor em PP (+ para receber, - para pagar; ex: +60 ou -12.5):",
+        "",
+        function(valorStr)
+            local limpo = tostring(valorStr or ""):gsub(",", "."):gsub("%s+", "");
+            local valPp = tonumber(limpo);
+            if valPp == nil or valPp == 0 then
+                showMessage("Informe um numero valido diferente de zero (ex: +45 ou -5.5).");
+                return;
+            end;
+            local deltaPc = (valPp > 0) and math.floor(valPp * 10 + 0.5) or -math.floor(math.abs(valPp) * 10 + 0.5);
+            local acao = (deltaPc >= 0) and "Recebeu pagamento/espolio" or "Pagou despesa";
+            aplicarDeltaCobres(deltaPc, acao);
+        end,
+        function() end,
+        false
+    );
+end;
+
+local function converterTroco()
+    if sheet == nil then return; end;
+    local po = math.max(0, math.floor(num(sheet.moedasOuro, 0)));
+    local pp = math.max(0, math.floor(num(sheet.moedasPrata, 0)));
+    local pc = math.max(0, math.floor(num(sheet.moedasCobre, 0)));
+    local totalPc = (po * 100) + (pp * 10) + pc;
+    local function aplicar(consolidarOuro)
+        if consolidarOuro then
+            po = math.floor(totalPc / 100);
+            local resto = totalPc % 100;
+            pp = math.floor(resto / 10);
+            pc = resto % 10;
+        else
+            local resto = totalPc - (po * 100);
+            if resto < 0 then
+                po = math.floor(totalPc / 100);
+                resto = totalPc % 100;
+            end;
+            pp = math.floor(resto / 10);
+            pc = resto % 10;
+        end;
+        sheet.moedasOuro = tostring(po);
+        sheet.moedasPrata = tostring(pp);
+        sheet.moedasCobre = tostring(pc);
+        recalcularFicha();
+        showMessage("Troco consolidado!\nBolsa atual: " .. tostring(po) .. " PO (Aureos), " .. tostring(pp) .. " PP (Pratas), " .. tostring(pc) .. " PC (Cobres).\nPeso fisico: " .. tostring(sheet.pesoMoedas));
+    end;
+    if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+        DialogsMod.confirmYesNo(
+            "Deseja tambem converter cada 10 Pratas (PP) em 1 Aureo (PO) para reduzir peso na carga?\n\n[Sim] = Consolida tudo ate Aureos (PO)\n[Nao] = Converte apenas 10 Cobres -> 1 Prata (mantem Padrao Prata)",
+            function(sim) aplicar(sim == true); end
+        );
+    else
+        aplicar(false);
+    end;
+end;
+
+local function pagarPadraoVida()
+    if sheet == nil then return; end;
+    local pvKey = sheet.padraoVida or "modesto";
+    local pvObj = PADROES_VIDA[pvKey] or PADROES_VIDA["modesto"];
+    if pvObj.custo <= 0 then
+        local nomeChar = sheet.nome or "Explorador";
+        enviarChatOuMsg("[" .. nomeChar .. "] Manteve Padrao de Vida Miseravel (0 PP/mes — sujeito a risco de doenca/roubo e -2 social).");
+        return;
+    end;
+    local custoPc = pvObj.custo * 10;
+    if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+        DialogsMod.confirmYesNo(
+            "Descontar " .. tostring(pvObj.custo) .. " PP da sua bolsa pelo mes de Padrao de Vida " .. pvObj.nome .. "?",
+            function(sim)
+                if sim then
+                    aplicarDeltaCobres(-custoPc, "Padrao de Vida Mensal (" .. pvObj.nome .. ")");
+                end;
+            end
+        );
+    else
+        aplicarDeltaCobres(-custoPc, "Padrao de Vida Mensal (" .. pvObj.nome .. ")");
+    end;
+end;
+
 local function compararVersoes(vA, vB)
     local function splitNums(s)
         local t = {};
@@ -1331,7 +1483,8 @@ def build_lfm() -> str:
         "forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma",
         "nivel", "xpAtual", "pvMax", "kitSelecionado", "kitDvFaces", "kitPerBase", "kitMultInt",
         "armaduraDef", "escudoDef", "defesaOutros", "iniciativaOutros",
-        "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre"
+        "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre",
+        "moedasOuro", "moedasPrata", "moedasCobre", "cartasCredito", "padraoVida"
     ]
     for fid, _, _, _ in SKILLS:
         recalc_fields.append(fid + "_grau")
@@ -1347,6 +1500,7 @@ def build_lfm() -> str:
         "rdEspecial", "defesaOutros", "iniciativaOutros", "multiAcoes",
         "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre",
         "customSkillPage", "moedasOuro", "moedasPrata", "moedasCobre",
+        "cartasCredito", "bancoOrigem", "padraoVida",
         "cdTeste", "defesaAlvo", "xpAtual",
         "pluginVersaoAtual", "statusAtualizacao"
     ]
@@ -1356,8 +1510,9 @@ def build_lfm() -> str:
         "0", "0", "0", "1",
         "0", "0", "0", "0", "0",
         "1", "0", "25", "0",
+        "0", "corallis", "modesto",
         "0", "0", "0",
-        "v1.7", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "v1.8", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -1686,40 +1841,80 @@ def build_lfm() -> str:
                 </scrollBox>
             </tab>
 
-            <!-- ABA 4: INVENTARIO -->
-            <tab title="Inventario">
+            <!-- ABA 4: INVENTARIO & SISTEMA MONETARIO -->
+            <tab title="Inventario &amp; Moedas">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="780">
-                        <rectangle left="6" top="6" width="1036" height="86" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="14" top="10" width="146" height="20" text="MOEDAS DE OURO" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold"/>
-                            <edit left="14" top="34" width="136" height="38" field="moedasOuro" type="number" horzTextAlign="center" fontSize="17"/>
+                    <layout left="0" top="0" width="1056" height="890">
+                        <rectangle left="6" top="6" width="1036" height="196" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                            <!-- Linha 1: Moedas (Padrao Prata) + Cartas de Credito -->
+                            <label left="14" top="8" width="160" height="18" text="AUREOS (PO = 10 PP)" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold"/>
+                            <edit left="14" top="28" width="144" height="34" field="moedasOuro" type="number" horzTextAlign="center" fontSize="16"/>
 
-                            <label left="166" top="10" width="146" height="20" text="MOEDAS DE PRATA" fontColor="{TEXT_MAIN}" fontSize="12" fontStyle="bold"/>
-                            <edit left="166" top="34" width="136" height="38" field="moedasPrata" type="number" horzTextAlign="center" fontSize="17"/>
+                            <label left="172" top="8" width="180" height="18" text="PRATAS / ESCUDOS (PP)" fontColor="{TEXT_MAIN}" fontSize="12" fontStyle="bold"/>
+                            <edit left="172" top="28" width="156" height="34" field="moedasPrata" type="number" horzTextAlign="center" fontSize="16"/>
 
-                            <label left="318" top="10" width="146" height="20" text="MOEDAS DE COBRE" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
-                            <edit left="318" top="34" width="136" height="38" field="moedasCobre" type="number" horzTextAlign="center" fontSize="17"/>
+                            <label left="342" top="8" width="180" height="18" text="COBRES / VINTENS (PC)" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
+                            <edit left="342" top="28" width="156" height="34" field="moedasCobre" type="number" horzTextAlign="center" fontSize="16"/>
 
-                            <label left="510" top="10" width="166" height="20" text="CARGA ATUAL (kg)" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
-                            <edit left="510" top="34" width="150" height="38" field="cargaAtual" horzTextAlign="center" fontSize="17"/>
+                            <label left="512" top="8" width="210" height="18" text="CARTAS DE CREDITO (PP | 0 kg)" fontColor="{TEXT_GREEN}" fontSize="12" fontStyle="bold"/>
+                            <edit left="512" top="28" width="186" height="34" field="cartasCredito" type="number" horzTextAlign="center" fontSize="16"/>
 
-                            <label left="686" top="10" width="260" height="20" text="CAPACIDADE MAXIMA (FOR x 5)" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold"/>
-                            <rectangle left="686" top="34" width="180" height="38" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
-                                <label align="client" field="cargaMax" fontColor="{TEXT_GOLD}" fontSize="18" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            <label left="712" top="8" width="310" height="18" text="REDE BANCARIA / CUNHAGEM" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
+                            <comboBox left="712" top="28" width="310" height="34" field="bancoOrigem" fontSize="13"
+                                      items="{{'Corallis — Cera Azul (5% | Legal)', 'Kalis — Talha Cifrada (8% | Sigilo)', 'Misto (Corallis + Kalis)', 'Sem Conta Bancaria'}}"
+                                      values="{{'corallis', 'kalis', 'misto', 'nenhum'}}"/>
+
+                            <!-- Linha 2: Patrimonio, Peso das Moedas e Carga -->
+                            <label left="14" top="70" width="240" height="18" text="PATRIMONIO TOTAL (BOLSA + BANCO)" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold"/>
+                            <rectangle left="14" top="90" width="240" height="32" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" field="patrimonioTotal" fontColor="{TEXT_GOLD}" fontSize="14" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
                             </rectangle>
+
+                            <label left="268" top="70" width="210" height="18" text="PESO DAS MOEDAS (100 = 1 kg)" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold"/>
+                            <rectangle left="268" top="90" width="210" height="32" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" field="pesoMoedas" fontColor="{TEXT_MAIN}" fontSize="14" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+
+                            <label left="492" top="70" width="150" height="18" text="CARGA ATUAL (kg)" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold"/>
+                            <edit left="492" top="90" width="144" height="32" field="cargaAtual" horzTextAlign="center" fontSize="15"/>
+
+                            <label left="650" top="70" width="170" height="18" text="CAPACIDADE MAX. (FOR x 5)" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold"/>
+                            <rectangle left="650" top="90" width="156" height="32" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" field="cargaMax" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+
+                            <button left="820" top="88" width="202" height="34" text="+/- Transacao (PP)" fontSize="13">
+                                <event name="onClick"><![CDATA[registrarTransacao();]]></event>
+                            </button>
+
+                            <!-- Linha 3: Padrao de Vida Mensal + Botoes Rapidos -->
+                            <label left="14" top="130" width="160" height="18" text="PADRAO DE VIDA MENSAL" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold"/>
+                            <comboBox left="176" top="128" width="330" height="32" field="padraoVida" fontSize="13"
+                                      items="{{'Miseravel (0 PP/mes)', 'Pobre (6 PP/mes)', 'Modesto / Viajante (15 PP/mes)', 'Confortavel (45 PP/mes | Status 2)', 'Abastado (150 PP/mes | Status 3)', 'Aristocratico / Nobre (450 PP/mes | Status 4-5)'}}"
+                                      values="{{'miseravel', 'pobre', 'modesto', 'confortavel', 'abastado', 'aristocratico'}}"/>
+
+                            <button left="520" top="128" width="220" height="32" text="Pagar Mes (Padrao de Vida)" fontSize="13">
+                                <event name="onClick"><![CDATA[pagarPadraoVida();]]></event>
+                            </button>
+
+                            <button left="754" top="128" width="268" height="32" text="Converter Troco (PC/PP/PO)" fontSize="13">
+                                <event name="onClick"><![CDATA[converterTroco();]]></event>
+                            </button>
+
+                            <label left="14" top="168" width="1008" height="20" field="padraoVidaInfo" fontColor="{TEXT_MUTED}" fontSize="12"/>
                         </rectangle>
 
-                        <rectangle left="6" top="100" width="512" height="666" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="210" width="512" height="666" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="488" height="24" text="MOCHILA, EQUIPAMENTO DE KIT &amp; PROVISOES" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="488" height="614" field="equipamentoMochila" fontSize="14"/>
                         </rectangle>
 
-                        <rectangle left="528" top="100" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="528" top="210" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="490" height="24" text="ARMADURAS, ADAMANTE &amp; RELIQUIAS RARAS (RD)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="490" height="276" field="reliquiasAdamante" fontSize="14"/>
                         </rectangle>
 
-                        <rectangle left="528" top="438" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="528" top="548" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="490" height="24" text="ALQUIMIA, VENENOS, ERVAS &amp; FERRAMENTAS" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="490" height="276" field="alquimiaSuprimentos" fontSize="14"/>
                         </rectangle>

@@ -356,11 +356,66 @@ A cada **nível par** (`2, 4, 6, 8, 10...`), o explorador escolhe **1 Talento** 
 
 ---
 
-## 9. Equipamentos, Economia e Tabela de Preços de Referência
+## 9. Sistema Monetário, Equipamentos e Economia de Alenia
 
-> **Padrão Monetário**: `1 Moeda de Ouro (PO) = 10 Moedas de Prata (PP) = 100 Moedas de Cobre (PC)`. Não existe pólvora em Alenia.
+### 9.1 Padrão Prata, Equivalência e Peso Físico
+A economia de **Alenia** opera sob o **Padrão Prata**: a prata é o metal que move o comércio real, o soldo de mercenários, a compra de armas e as expedições. Moedas de ouro são raras no cotidiano — um trabalhador braçal ganha `3 PC/dia` (`~9 PP/mês`) e pode passar a vida inteira sem segurar um único Áureo.
 
-### Tabela de Preços do Cotidiano & Viagem
+- **Equivalência Universal *(Base Decimal Compatível)***:
+  - **`1 Áureo (PO)`** = **`10 Pratas (PP)`** = **`100 Cobres (PC)`**
+  - **`1 Prata (PP)`** = **`10 Cobres (PC)`**
+  - *(Todas as tabelas de preços e fichas mantêm as siglas universais **`PO`**, **`PP`** e **`PC`**, mudando apenas o nome narrativo conforme o cunho da região.)*
+- **Regra Social do Ouro**: tentar pagar uma caneca (`2 PC`) ou hospedagem comum (`3 PC`) com uma moeda de ouro quase sempre resulta em **recusa por falta de troco**, suspeita imediata da guarda ou atenção indesejada de ladrões, informantes e coletores de impostos.
+- **Peso Físico das Moedas (`100 moedas = 1 kg`)**:
+  - Cada moeda padrão pesa aproximadamente `10 g` — portanto, **`100 moedas de qualquer metal pesam 1 kg`** (`50 moedas = 0,5 kg`; `500 moedas = 5 kg`).
+  - Carregar `450 PP` para comprar uma *Armadura de Placas* exige carregar **`4,5 kg` de metal barulhento**; carregar o mesmo valor em `45 PO` pesa apenas **`0,45 kg`**, mas atrai olhares perigosos. Para grandes somas, viajantes experientes recorrem às **Cartas de Crédito** (seção 9.4).
+
+### 9.2 Cunhagens Regionais dos Domínios *(Aceitas por Peso)*
+Como na Idade Média real, mercadores experientes aceitam moedas estrangeiras **pelo peso e pureza do metal**, desde que não estejam raspadas ou adulteradas — mas a origem da moeda pode gerar consequências políticas e sociais em cena:
+
+| Domínio / Povo | Ouro (`PO` — `10 PP`) | Prata (`PP` — Base) | Cobre (`PC` — `0,1 PP`) | Cunho & Peculiaridade em Jogo |
+| :--- | :--- | :--- | :--- | :--- |
+| **Reino Capital de Aurora** *(Referência)* | **Áureo** *(Coroa de Aurora)* | **Escudo** *(Prata Real)* | **Vintém** *(Grão de Cobre)* | Cunhado em Altavanne com o perfil do Alto Rei e a bigorna de Ferraur. Referência de peso em todo o continente. |
+| **Liga de Corallis** *(Moeda Mercantil)* | **Florim de Coral** | **Ducado** *(Vela de Prata)* | **Cente** *(Concha)* | Cunhagem mais pura e uniforme dos mares (farol e galé); aceita sem desconto nem desconfiança em qualquer porto. |
+| **Confederação de Gaddra** *(Rotas do Sal)* | **Dinar Solar** *(Zahar)* | **Dirame** *(Lua Seca)* | **Fals** *(Grão de Sal)* | Perfuradas ao centro para serem enfiadas em cordões sob a túnica. Em oásis remotos, **blocos de sal de Bayd (`1 kg = 1 PP`)** e **fichas de água de Naasar** circulam como moeda. |
+| **Despotado Velado de Kalis** *(Cofres de Ferro)* | **Marco Negro** *(liga escurecida)* | **Marco de Prata** *(Corvo)* | **Pfenig** *(Preguinho)* | Bordas serrilhadas de precisão contra raspagem. Pagar com *Marcos Negros* diante de guardas ou nobres de Aurora desperta suspeita imediata de espionagem ou suborno. |
+| **Cidade Suspensa** *(Povo das Florestas)* | *(Não cunha)* | **Prata Cortada** *(por peso)* | **Escambo** *(sal, ferro, lã)* | Recusam rostos de reis. Em **Vergod**, negociam por escambo ou prata pesada em balança (frequentemente cortada em metades e quartos). |
+
+### 9.3 Moedas Raspadas, Falsificação, Barganha e Mercado Negro
+- **Raspagem de Borda (*"Toque Leve"*)**: ladrões e cambistas desonestos raspam limalha das bordas de moedas de ouro e prata. Um saco de moedas raspadas perde **`10%` a `20%`** do valor ao ser pesado numa balança mercantil.
+- **Detectar Fraude / Avaliar Pureza**: teste de **Barganha & Comércio** ou **Percepção** (`CD 14` para raspagem visível; `CD 18` para liga falsificada de chumbo/estanho banhada a prata). O Kit *Mercador* aplica seu `+4` de *Olhar de Ouro*.
+- **Câmbio & Troca de Metal**: converter pilhas de cobre/prata em ouro (ou trocar moedas de má fama como *Marcos Negros* por *Áureos*) com um cambista cobra comissão de **`5%`** *(reduzida para `2%` com Barganha CD 16 ou Talento `Crédito de Porto`)*.
+- **Barganha em Mesa**: antes de fechar uma compra ou venda relevante, o comprador pode fazer um teste oposto de **Barganha & Comércio** contra o mercador:
+  - Vitória por `1–4`: ajusta o preço em **`10%`** a seu favor.
+  - Vitória por `5+`: ajusta o preço em **`20%`** *(acumula com `Crédito de Porto` até o teto prático de `30%`, jamais abaixo do custo de reposição do mercador)*.
+  - Falha por `5+`: ofende o mercador (recusa desconto ou eleva o preço em `+10%`).
+- **Venda de Espólio & Mercado Negro**: equipamentos usados em bom estado vendem normalmente por **`50%`** do preço de tabela (obras-primas, joias e adamante mantêm `70%–90%` com comprador certo). Itens proibidos, venenos raros, documentos forjados ou adamante sem selo real exigem acesso via **`Submundo`** e custam **`1,5×` a `3×`** o valor nominal.
+
+### 9.4 Casas Bancárias e Cartas de Crédito (Corallis e Kalis)
+Para evitar transportar quilos de metal por estradas de salteadores ou mares de corsários, mercadores, nobres e exploradores utilizam **Cartas de Crédito (peso `0 kg`)** mantidas por duas redes financeiras rivais:
+
+| Rede Bancária | Documento & Sedes | Taxa de Emissão / Saque | Valor Mínimo | Diferencial em Jogo |
+| :--- | :--- | :---: | :---: | :--- |
+| **Bancos da Liga de Corallis** *(Casa Falcenzo & Banco dos Recifes)* | **Letra Selada em Cera Azul** *(Baldbella, Alineus, Merlinport, Altavanne)* | **`5%`** | `100 PP` (`10 PO`) | Nominal, auditável e aceita como prova legal de solvência em estaleiros, leilões e cortes. Se roubada, exige verificação de selo/assinatura (`Enganação` ou `Ladinagem CD 22` para fraudar). |
+| **Cofres Cifrados de Kalis** *(Banca Ulscold & Correio de Dobalbek)* | **Talha Cifrada** *(Kalgard, Fugong, Dobalbek e agentes discretos em portos)* | **`8%`** | `200 PP` (`20 PO`) | **Sigilo absoluto** — duas metades de placa de madeira negra ou cédula sem nome real, liberada apenas por frase-chave. Imune a confisco da Coroa de Aurora, mas não oferece recurso legal se a senha vazar. |
+
+- **Empréstimos e Juros**: casas mercantis emprestam a **`10%–15%` ao mês** mediante garantia real (navio, imóvel ou fiador com `Status 2+`). Agiotas do submundo cobram **`25%+` ao mês** — e saldam atrasos com lâminas, confisco ou dívidas de favor.
+
+### 9.5 Padrão de Vida Mensal *(Sustento & Impacto Social)*
+Entre expedições (ou por mês de campanha), cada explorador escolhe um **Padrão de Vida** para cobrir moradia, comida, lavagem e manutenção básica sem precisar anotar cada pão ou vela *(para períodos curtos, divida por `30` ou use o custo diário)*:
+
+| Padrão de Vida | Custo Mensal | Custo Diário | Moradia & Rotina | Efeito Social & Mecânico |
+| :--- | :---: | :---: | :--- | :--- |
+| **Miserável** | `0 PP` | `0 PC` | Becos, palheiros, cais, restos | Risco de doença/roubo; **`-2`** em *Etiqueta/Persuasão* com cidadãos; abrigo inseguro não remove Exaustão facilmente. |
+| **Pobre** | `6 PP` | `2 PC` | Albergue coletivo, sopa rala, pão duro | Sobrevivência básica; guardas e estalajadeiros desconfiam se exibir armas caras ou ouro. |
+| **Modesto / Viajante** | `15 PP` | `5 PC` | Quarto simples em estalagem, refeição quente, reparos | Padrão normal de aventureiros, artesãos e soldados (`Status 0–1`). Sem penalidades. |
+| **Confortável** | `45 PP` | `15 PC` (`1,5 PP`) | Casa alugada ou boa suíte, roupas limpas, cocheira | Sustenta **`Status 2`** com dignidade; **`+1`** em primeiras impressões com mercadores e oficiais. |
+| **Abastado** | `150 PP` (`15 PO`) | `5 PP` | Sobrado mobiliado, `1–2` criados, bons vinhos e lã fina | Sustenta **`Status 3`**; abre portas de guildas, leilões e salões menores sem suborno. |
+| **Aristocrático / Nobre** | `450+ PP` (`45+ PO`) | `15+ PP` | Solar/mansão, escolta, banquetes, vestes com brasão | Exigido para sustentar **`Status 4–5`** em Altavanne ou Baldbella; **`+2`** em *Etiqueta & Corte* com a alta nobreza. |
+
+### 9.6 Tabelas de Preços de Referência
+
+#### Cotidiano, Viagem e Ferramentas
 | Item / Serviço | Preço Médio | Observação |
 | :--- | :---: | :--- |
 | Refeição simples + caneca em estalagem | `2 PC` | `1 PP` para banquete de frutos do mar em Baldbella |
@@ -372,7 +427,27 @@ A cada **nível par** (`2, 4, 6, 8, 10...`), o explorador escolhe **1 Talento** 
 | Cavalo de estrada / Mula de carga | `120 PP` / `45 PP` | Montarias do deserto em OX: `150 PP` |
 | Estojo médico / Gazuas / Bolsa alquímica | `25 PP` / `20 PP` / `40 PP` | Ferramentas profissionais de ofício |
 
-### Tabela de Armas Comuns
+#### Contratações, Serviços e Especialistas
+| Serviço / Especialista | Preço Médio | Observação |
+| :--- | :---: | :--- |
+| Guia local / Batedor de trilha | `3 PP / dia` | `6 PP/dia` em *Pântanos Nebulosos* ou *Passo de Rubecina* |
+| Prático naval *(Mar dos Corais)* | `25 PP / travessia` | Concede **`+4`** em *Navegação & Náutica* contra recifes |
+| Guarda-costas / Escolta armada (comum / veterano) | `2 PP` / `5 PP / dia` | Exige rações + cota de risco em missões letais |
+| Escriba, tradutor ou cartógrafo | `4 PP / página` | Decifração de selo ou mapa antigo: `15–40 PP` |
+| Suborno discreto (guarda de portão / oficial portuário) | `5–15 PP` / `40–100 PP` | Varia conforme gravidade e risco de forca |
+| Acabamento **Obra-Prima** *(arma ou ferramenta)* | `+150 PP` *(sobre base)* | Concede **`+1`** em testes com a ferramenta ou `+1` no acerto *(sem propriedades de adamante)* |
+
+#### Embarcações, Caravanas e Propriedades *(Grandes Compras)*
+| Bem / Propriedade | Preço Médio | Observação |
+| :--- | :---: | :--- |
+| Carroça reforçada + `2` mulas | `130 PP` (`13 PO`) | Transporta até `400 kg` em estradas secas |
+| Barco a remo / Bote costeiro (`4–6` pessoas) | `80 PP` (`8 PO`) | Ideal para rios (*Rio Aurélio*) e estuários |
+| Escuna costeira rápida (`10–15` tripulantes) | `1.500 PP` (`150 PO`) | Manutenção/tripulação: `~120 PP/mês` |
+| Caravela / Galé de Recife *(casco reforçado)* | `4.500 PP` (`450 PO`) | Casco em madeira negra de Kalis dobra o preço (`9.000 PP`) |
+| Pequena oficina, taverna ou armazém portuário | `1.200 – 3.000 PP` | Gera renda líquida de `40–120 PP/mês` se bem gerida |
+| Torre de vigia ou solar rural fortificado | `8.000 – 20.000 PP` | Exige concessão feudal (`Status 3+`) em Aurora ou Corallis |
+
+#### Tabela de Armas Comuns
 | Arma | Preço | Dano | Margem / Mult. | Propriedades |
 | :--- | :---: | :---: | :---: | :--- |
 | **Adaga / Punhal** | `4 PP` | `1d4` | `19–20 / ×2` | Leve, Ágil (`FOR/DES`), Arremesso 6m |
@@ -390,9 +465,9 @@ A cada **nível par** (`2, 4, 6, 8, 10...`), o explorador escolhe **1 Talento** 
 | **Arco Curto / Longo** | `20 / 45 PP` | `1d6 / 1d8` | `20 / ×3` | 2 mãos, Alcance 24m / 45m |
 | **Besta Leve / Pesada** | `35 / 75 PP` | `1d8 / 1d10` | `19–20 / ×2` | Recarga (Mov. / Ação Principal) |
 
-*(Regra de Dano: **armas corpo a corpo** — inclusive armas ágeis que atacam com `DES` — e armas de arremesso **sempre somam `Mod(FOR)` ao dano**; arcos e bestas usam o dano base da arma + eventuais bônus fixos de adamante ou talento.)*
+*(Regra de Dano: **armas corpo a corpo** — inclusive armas ágeis que atacam com `DES` — e armas de arremesso **sempre somam `Mod(FOR)` ao dano**; arcos e bestas usam o dano base da arma + eventuais bônus fixos de adamante ou talento. Não existe pólvora em Alenia.)*
 
-### Armaduras e Escudos *(Bônus de Defesa — Zero RD)*
+#### Armaduras e Escudos *(Bônus de Defesa — Zero RD)*
 | Proteção | Preço | Bônus Defesa | Penalidade Furt./Acrob. | Observação |
 | :--- | :---: | :---: | :---: | :--- |
 | **Gibão Reforçado** | `12 PP` | `+1` | `0` | Discreta para viagem |
@@ -402,7 +477,7 @@ A cada **nível par** (`2, 4, 6, 8, 10...`), o explorador escolhe **1 Talento** 
 | **Placas Completas** | `450 PP` | `+5` | `-5` | Exige `FOR 13+` |
 | **Broquel / Escudo Médio / Torre** | `10 / 20 / 45 PP` | `+1 / +2 / +3` | `0 / -1 / -3` | Torre dá `+2` extra em *Proteger Aliado* |
 
-### O Adamante de Aurora *(Metal Estratégico)*
+#### O Adamante de Aurora *(Metal Estratégico)*
 - **Armas de Adamante** *(raríssimas — a partir de `800–2.000 PP` ou concessão real)*: nunca perdem o fio, concedem **`+1` no acerto e `+2` no dano**, e ignoram até `3` pontos de `RD Especial`.
 - **Peças de Armadura em Adamante Puro / Relíquias Antigas**: única fonte de **`RD Especial`** (`RD 2` a `RD 5`, arbitrado pelo Mestre).
 

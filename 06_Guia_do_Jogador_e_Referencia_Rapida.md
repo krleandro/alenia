@@ -51,8 +51,11 @@ Sua cidade natal define sua cultura, sotaque e sobrenome de bastardo (se aplicá
 | **Acerto Crítico** | Dado natural ≥ Margem da arma (e acerta): multiplica **`(Dados da Arma + Maestria Lenda/Épico + Mod. Atributo + Bônus Fixo) × Mult`**. Dados externos (veneno/Oportunista) somam depois. |
 | **Golpe Devastador (`> 2/3 PV`)** | Dano em 1 golpe > `2/3` do PV Máx. exige **CON CD `15 + ⌊excedente/2⌋`** → falha = **Morte Instantânea**; sucesso = sobrevive com **Ferimento Grave**. |
 
-### Moribundo, Cura, Exaustão e Preços Rápidos
+### Moribundo, Cura, Exaustão e Sistema Monetário
 - **Moribundo (`0 PV`)**: `1d20 + Mod(CON)` CD `12` por turno (`3` sucessos estabiliza; `3` falhas morre; `20` acorda com `1 PV`; `1` = 2 falhas; Medicina CD `15` estabiliza).
 - **Descanso Curto (`1h`)**: recupera `1 DV + Mod(CON)` PV *(máx. 2×/dia)*. **Descanso Longo (`8h`)**: recupera `50%` do PV Máx. e `-1` Exaustão.
 - **Exaustão (`1–5`)**: `1`: `-2` perícias | `2`: ½ deslocamento | `3`: `-3` ataques/Defesa/resistências | `4`: ½ PV Máx. | `5`: morte.
-- **Preços Rápidos**: Refeição `2 PC` | Quarto `1 PP` | Rações (7 dias) `5 PP` | Soldo mercenário `2 PP/dia` | Cirurgia `20 PP` | Navio Merlinport–Alineus `15 PP` | Cavalo `120 PP`.
+- **Moedas *(Padrão Prata — `100 moedas = 1 kg`)***: **`1 Áureo (PO) = 10 Pratas/Escudos (PP) = 100 Cobres/Vinténs (PC)`**. Ouro é raro e chama atenção de ladrões/guardas. Cunhos regionais aceitos por peso: **Aurora** (*Áureo / Escudo / Vintém*), **Corallis** (*Florim / Ducado / Cente*), **Gaddra** (*Dinar / Dirame / Fals* + sal de Bayd), **Kalis** (*Marco Negro / Marco de Prata / Pfenig*), **Cidade Suspensa** (*Prata Cortada & Escambo*).
+- **Cartas de Crédito *(Peso `0 kg`)***: **Corallis** *(Letra em Cera Azul, `5%` taxa, mín. `100 PP`, legal)* | **Kalis** *(Talha Cifrada, `8%` taxa, mín. `200 PP`, sigilo total)*.
+- **Padrão de Vida Mensal**: Miserável `0 PP` (`-2` social) | Pobre `6 PP` | Modesto `15 PP` (`Status 0–1`) | Confortável `45 PP` (`Status 2`) | Abastado `150 PP` (`Status 3`) | Aristocrático `450+ PP` (`Status 4–5`, `+2` Etiqueta).
+- **Preços Rápidos**: Refeição `2 PC` | Quarto `1 PP` | Rações (7 dias) `5 PP` | Soldo mercenário `2 PP/dia` | Cirurgia `20 PP` | Navio Merlinport–Alineus `15 PP` | Cavalo `120 PP` | Escuna `1.500 PP`.

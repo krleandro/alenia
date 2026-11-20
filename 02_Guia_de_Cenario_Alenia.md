@@ -123,7 +123,19 @@ Destruir diretamente o Regente ou a colônia de Thanatos liberta as consciência
 
 ---
 
-## 9. Religiões, Ordens e Cronologia Curta
+## 9. Moedas, Casas Bancárias e Economia dos Domínios
+
+Em **Alenia**, o comércio corre sob o **Padrão Prata** (`1 PO = 10 PP = 100 PC`; `100 moedas = 1 kg`). Na prática, mercadores aceitam cunhos estrangeiros pelo peso do metal na balança — mas **a procedência da moeda revela alianças e perigos**:
+
+- **Aurora *(Áureo / Escudo / Vintém)***: cunhados na Casa da Moeda de *Altavanne* sob o selo da Casa Valerion e da bigorna de Ferraur. O **Escudo de Prata (`PP`)** é a referência comercial de todo o eixo fluvial *Altavanne–Merlinport–Dahrma*; exibir **Áureos (`PO`)** em tavernas comuns atrai instantaneamente ladrões e agentes do fisco.
+- **Corallis *(Florim de Coral / Ducado / Cente)***: as moedas mais puras e padronizadas de Alenia, jamais rebaixadas pela Liga. É em *Baldbella* e *Alineus* que operam a **Casa Falcenzo** e o **Banco dos Recifes**, emissores de **Letras Seladas em Cera Azul** (`5%` de taxa, mín. `100 PP`) — o instrumento legal que permite a armadores e exploradores viajar sem carregar sacos de prata.
+- **Gaddra *(Dinar Solar / Dirame / Fals)***: cunhados com furo central para serem enfiados em cordões sob a túnica durante a travessia das dunas. Nas rotas do interior e na feira de *Suq-Ramad*, **blocos de sal de Bayd (`1 kg = 1 PP`)** e **fichas de água de Naasar** circulam com o mesmo prestígio que a prata cunhada.
+- **Kalis *(Marco Negro / Marco de Prata / Pfenig)***: serrilhados nas bordas para impedir raspagem clandestina. A **Banca Ulscold** e o **Correio de Dobalbek** mantêm a rede de **Talhas Cifradas** (`8%` de taxa, mín. `200 PP`) — placas de madeira negra partidas ao meio e protegidas por frase-chave, sem nome do titular. Em Aurora, pagar uma conta com *Marcos Negros* de Kalis pode render interrogatório imediato por suspeita de espionagem.
+- **Cidade Suspensa *(Prata Cortada & Escambo)***: o Povo das Florestas recusa cunhagens com retratos de reis. Em *Vergod*, negociam trocando ervas, arcos e peles por sal, ferro e lã — ou aceitam **prata cortada** pesada na hora.
+
+---
+
+## 10. Religiões, Ordens e Cronologia Curta
 
 ### Tradições Religiosas e Fé Verdadeira (Convicção Plural)
 Em Alenia, **Fé Verdadeira não pertence a uma única igreja**: ela floresce em qualquer devoto de convicção genuína e inabalável, seja qual for sua tradição:
@@ -144,7 +156,7 @@ Em Alenia, **Fé Verdadeira não pertence a uma única igreja**: ela floresce em
 
 ---
 
-## 10. Guia Operacional de Viagens, Distâncias e Estações
+## 11. Guia Operacional de Viagens, Distâncias e Estações
 
 ### Tabela de Viagens Principais *(Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)*
 | Trajeto | Meio | Tempo Médio | Abastecimento / Pedágio | Risco Principal |
@@ -163,7 +175,7 @@ Em Alenia, **Fé Verdadeira não pertence a uma única igreja**: ela floresce em
 
 ---
 
-## 11. Atlas Regional Detalhado (5 Mapas Aproximados)
+## 12. Atlas Regional Detalhado (5 Mapas Aproximados)
 
 Todos os 5 mapas regionais em alta resolução estão prontos para o **RRPG Firecast** em `mapas/regionais/`:
 1. **[Mapa Regional de Aurora](file:///c:/Users/Cliente/OneDrive/Documentos/alenia/mapas/regionais/mapa_regional_aurora.png)** — *Estrada do Adamante, Via do Estuário, Estrada da Bruma, Trilha das Copas, Minas de Ferraur, Pontáuria, Vila de Silvaria, Torre de Specula, Ruínas de Vetarx, Santuário de Derwlyn e Passo de Rubecina*.
