@@ -231,19 +231,81 @@ Um dia sem água (ou 3 dias sem comida, ou uma noite sem abrigo em frio/calor ex
 
 ---
 
-## 8. Talentos e Manobras (Níveis Pares)
+## 8. Talentos e Manobras (Níveis Pares — 44 Talentos em 4 Categorias)
 
-A cada nível par (`2, 4, 6...`), escolha um Talento/Manobra:
-- **Aparar Relâmpago**: 1×/rodada, usa Reação para somar `+2` à Defesa contra um golpe corpo a corpo.
-- **Muralha de Aço**: ao usar *Proteger Aliado*, cobre até 2 aliados adjacentes e anula flanqueio contra eles.
-- **Golpe Preciso**: reduz a Margem de Crítico de uma arma escolhida em `1` ponto (ex.: `19–20` → `18–20`; não acumula).
-- **Fluxo de Lâminas**: reduz em `1` a penalidade adicional na regra de *Múltiplas Ações* (mínimo `0`).
-- **Tiro Firme**: ignora cobertura parcial e vento moderado com arcos e bestas; recarrega besta leve como ação livre 1×/turno.
-- **Mãos de Cirurgião**: `+3` em Medicina para estabilizar, curar e reduzir risco de sequelas permanentes.
-- **Passo Silencioso**: move-se em velocidade normal usando Furtividade sem penalidade.
-- **Lobo do Mar**: ignora penalidades de convés instável, recifes e embarcações sob tempestade.
-- **Sangue Frio**: `+3` em testes de CON contra *Golpe Devastador* e testes contra medo/horror.
-- **Voz de Comando**: Ação Principal concede `+2` no próximo ataque ou Defesa de aliados que possam ouvi-lo.
+A cada **nível par** (`2, 4, 6, 8, 10...`), o explorador escolhe **1 Talento** dentre as quatro categorias abaixo — **Marciais & Táticos**, **Sobrevivência & Exploração**, **Sociais & Intriga** e **Mentais & Erudição**.
+
+### Regras de Pré-Requisitos e Cadeias
+- **Pré-requisitos obrigatórios**: para escolher um Talento, você deve atender a **todos** os requisitos listados (valor mínimo de Atributo Base, grau de treino em perícia, Patamar/Nível mínimo, Atributo Especial ou **Talento anterior** na árvore).
+- **Especialização em cadeia**: vários Talentos formam progressões em dois degraus *(ex.: `Língua de Prata` → `Teia de Cortes` ou `Mente Analítica` → `Dedução de Campo`)*. Você pode combinar livremente Talentos de categorias diferentes.
+- **Anti-acúmulo**: salvo menção explícita, o mesmo Talento não pode ser adquirido duas vezes, nenhum Talento concede RD passiva a armaduras comuns e nenhum Talento viola os limites de treino de *Múltiplas Ações*.
+
+### 8.1 Talentos Marciais e Táticos (12 Talentos)
+| Talento | Pré-requisitos | Efeito em Jogo |
+| :--- | :--- | :--- |
+| **Aparar Relâmpago** | `DES 12+`, Treinado em *Aparar* | `1×/rodada`, usa sua **Reação** para somar **`+2`** na Defesa contra um ataque corpo a corpo. |
+| **Riposta Mortal** | `DES 14+`, Especialista em *Aparar*, **Aparar Relâmpago** | Quando um ataque corpo a corpo contra você errar após *Aparar Relâmpago* ou *Defesa Total*, você desfere imediatamente **`1` contra-ataque básico** contra o atacante *(parte da mesma Reação)*. |
+| **Muralha de Aço** | `FOR 13+`, Treinado em *Escudos* ou *Aparar* | Ao usar *Proteger Aliado*, cobre até **`2` aliados adjacentes** e anula bônus de *Flanquear* contra eles. |
+| **Bastião Inquebrável** | `FOR 15+`, `CON 14+`, Especialista em *Escudos*, **Muralha de Aço** | Quando absorve golpe pelo aliado em *Proteger Aliado* ou mantém *Defesa Total* com escudo, reduz o dano desse impacto em **`⌊Mod. FOR + Mod. CON⌋`** *(mín. `2`, bloqueio ativo — não é RD passiva)* e ignora *Empurrar* ou *Derrubar*. |
+| **Golpe Preciso** | `FOR 13+` ou `DES 13+`, Treinado em *Armas Brancas* ou *Distância* | Reduz em **`1`** a Margem de Crítico de um tipo de arma escolhido *(ex.: `19–20` → `18–20`; não acumula na mesma arma)*. |
+| **Anatomia Letal** | `INT 12+` ou `SAB 13+`, Nív. `6+`, **Golpe Preciso** | Em Acertos Críticos com a arma escolhida, reduz em **`2`** o limiar do *Golpe Devastador* do alvo **ou** impõe **Sangramento** (`1d4` PV/turno até Medicina CD 15). |
+| **Fluxo de Lâminas** | `DES 14+`, Treinado em *Armas Brancas* ou *Luta Desarmada* | Reduz em **`1`** a penalidade `-N` em *Múltiplas Ações* *(ex.: em 2 ações subtrai `1` em vez de `2`; mantém teto de treino e bônus mínimo `≥ 0`)*. |
+| **Tempestade de Aço** | `DES 16+`, Patamar Lenda (`Nív. 11+`), Especialista em *Armas Brancas*, **Fluxo de Lâminas** | Ao usar *Múltiplas Ações* contra inimigos distintos em alcance, o primeiro ataque em cada alvo diferente recebe **`+2`** no acerto. |
+| **Tiro Firme** | `DES 13+`, Treinado em *Armas à Distância* | Ignora cobertura parcial e vento moderado com arcos/bestas; recarrega besta leve como Ação Livre `1×/turno`. |
+| **Olho de Falcão** | `DES 15+`, `SAB 13+`, Especialista em *Armas à Distância*, **Tiro Firme** | Aumenta em **`+50%`** o alcance efetivo de arcos/bestas; se gastar seu **Movimento** mirando imóvel antes de disparar `1` tiro único, soma **`+3`** no acerto e **`+1d6`** no dano *(não multiplica em crítico)*. |
+| **Quebra-Guarda** | `FOR 14+`, Treinado em *Armas Brancas* ou *Atletismo* | **`+3`** em *Derrubar*, *Empurrar* e *Agarrar*; ao derrubar um oponente com arma pesada ou haste, causa dano igual ao seu `Mod. FOR` *(mín. `1`)*. |
+| **Combate de Cais** | `FOR 12+` ou `DES 12+` | Sem penalidade com armas improvisadas (`1d6`), **`+2`** contra alvos Caídos ou Agarrados e pode usar *Ajudar* em combate como distração suja *(alvo testa DES CD 14 ou sofre `-2` na próxima Defesa)*. |
+
+### 8.2 Talentos de Sobrevivência, Vigor e Exploração (10 Talentos)
+| Talento | Pré-requisitos | Efeito em Jogo |
+| :--- | :--- | :--- |
+| **Sangue Frio** | `CON 12+` ou `SAB 12+` | **`+3`** em testes de CON contra *Golpe Devastador* e em testes de SAB contra medo, pânico e horrores sobrenaturais. |
+| **Vontade de Ferro** | `CON 14+`, `SAB 13+`, Nív. `6+`, **Sangue Frio** | Exige **`4` falhas** *(em vez de `3`)* para morrer no estado *Moribundo*; `1×/Descanso Longo`, ignora os efeitos de `1` nível de *Exaustão* durante uma cena inteira. |
+| **Passo Silencioso** | `DES 13+`, Treinado em *Furtividade* | Move-se em velocidade normal (`9m`) em *Furtividade* sem penalidade e recebe **`+2`** para ocultar rastros. |
+| **Fantasma da Bruma** | `DES 15+`, Especialista em *Furtividade*, **Passo Silencioso** | Em penumbra, neblina ou mata densa, pode tentar esconder-se novamente usando o **Movimento** após agir *(Percepção oposta)*; seu primeiro ataque saindo de ocultação soma **`+1d6`** de dano *(não multiplica em crítico)*. |
+| **Lobo do Mar** | `DES 12+` ou `SAB 12+`, Treinado em *Navegação* ou *Acrobacia* | Ignora penalidades de convés instável, recifes e embarcações sob tempestade; **`+2`** em *Natação* e *Navegação* sob mau tempo. |
+| **Leme de Tempestade** | `SAB 14+`, Especialista em *Navegação & Náutica*, **Lobo do Mar** | Reduz em **`3`** a CD de navegação em recifes/tempestades *(Mar dos Corais / Mar Intransponível)* e reduz à **metade** qualquer avaria no casco sob seu comando. |
+| **Mãos de Cirurgião** | `INT 12+` ou `SAB 12+`, Treinado em *Medicina & Cirurgia* | **`+3`** em *Medicina* para estabilizar, estancar sangramentos e reduzir pela metade o tempo de recuperação de *Ferimentos Graves*. |
+| **Bisturi de Baldbella** | `INT 14+`, `SAB 13+`, Especialista em *Medicina & Cirurgia*, **Mãos de Cirurgião** | Em *Descanso Curto*, um aliado tratado por você recupera **`+1d6` PV extras** e remove `1` veneno leve/sangramento; reduz em **`3`** a CD de cirurgias extremas *(incluindo extração de toxinas ou parasitas)*. |
+| **Passo de Caravana** | `CON 13+`, Treinado em *Sobrevivência* | Suporta o dobro do tempo sem água ou abrigo antes de testar *Exaustão* e recebe **`+2`** em *Sobrevivência* para guiar e abrigar até `6` companheiros. |
+| **Caçador de Fronteira** | `SAB 13+`, Treinado em *Sobrevivência* e *Percepção* | Ao examinar rastros por `5 min`, descobre direção, número aproximado e um hábito/vulnerabilidade da presa *(arbitrado pelo Mestre)*, ganhando **`+2`** na Iniciativa se o confronto ocorrer na cena. |
+
+### 8.3 Talentos Sociais, Intriga e Liderança (11 Talentos)
+| Talento | Pré-requisitos | Efeito em Jogo |
+| :--- | :--- | :--- |
+| **Voz de Comando** | `CAR 12+` | Como **Ação Principal**, concede **`+2`** no próximo ataque ou na Defesa *(até seu próximo turno)* de até `4` aliados que possam ouvi-lo. |
+| **Estandarte Vivo** | `CAR 15+`, Nív. `6+`, **Voz de Comando** | Sua *Voz de Comando* alcança todos os aliados a até `18m`, soma **`+3`** contra medo/horror e, `1×/combate`, permite a `1` aliado realizar um Movimento livre *(sem Ataque de Oportunidade)* ou um novo teste contra medo/paralisia. |
+| **Língua de Prata** | `CAR 13+`, Treinado em *Persuasão* ou *Enganação* | **`+2`** em *Persuasão* e *Enganação* em audiências ou negociações; `1×/sessão`, se falhar em um teste social por `3` ou menos, pode reformular o argumento e rolar novamente *(aceitando o 2º resultado)*. |
+| **Teia de Cortes** | `CAR 15+`, `INT 12+`, Especialista em *Etiqueta* ou *Persuasão*, **Língua de Prata** | Após `1h` em corte, taverna ou salão mercantil, identifica quem detém o poder real na sala e um conflito oculto entre facções locais, ganhando **`+3`** em testes sociais usando essa alavanca na cena. |
+| **Máscara de Mil Rostos** | `CAR 13+`, Treinado em *Disfarce* e *Enganação* | Monta disfarces em metade do tempo, imita sotaques regionais de Alenia sem penalidade e impõe **`-3`** na *Percepção/Intuição* de quem tentar desmascará-lo. |
+| **Sussurro de Kalgard** | `CAR 14+`, `SAB 13+`, Especialista em *Enganação* ou *Intimidação*, **Máscara de Mil Rostos** ou **Língua de Prata** | Após `10 min` de conversa, pode plantar uma suspeita ou boato plausível *(Enganação/Persuasão vs. Intuição do alvo)*; em sucesso, o alvo age com cautela ou desconfiança contra o terceiro citado até obter prova contrária. |
+| **Presença Aterradora** | `CAR 13+` ou `FOR 14+`, Treinado em *Intimidação* | **`+2`** em *Intimidação*; em combate, gasta **Ação Principal** para intimidar `1` inimigo inteligente a até `9m` *(Intimidação vs. SAB do alvo)*: em sucesso, o alvo sofre **`-2`** nos ataques por `2 rodadas` *(1×/alvo/cena)*. |
+| **Olhar do Árbitro** | `SAB 13+`, Treinado em *Intuição* | **`+3`** em *Intuição* para detectar mentiras, coerção, emboscadas disfarçadas ou influência emocional anômala; percebe na hora se alguém age sob chantagem ou medo oculto. |
+| **Crédito de Porto** | `CAR 12+` ou `INT 12+`, Treinado em *Barganha & Comércio* | Consegue **`15%` de desconto** em compras comuns e **`+15%`** na venda de cargas; em qualquer porto ou rota de caravana, obtém abrigo seguro, barco ou crédito modesto *(até `50 PP`)* sem garantia imediata. |
+| **Rede de Informantes** | `CAR 14+` ou `INT 14+`, `Submundo 1+` ou `Status 1+`, **Crédito de Porto** ou **Língua de Prata** | `1×/aventura` *(ou ao chegar a uma grande cidade)*, aciona contatos para obter sem rolagem um mapa de acesso, salvo-conduto discreto, rota de fuga ou dossiê básico sobre um NPC *(o Mestre define o favor futuro)*. |
+| **Coração de Cronista** | `CAR 13+` | Durante *Descanso Curto* ou *Longo*, suas histórias, cantos ou discursos elevam o moral: até `5` aliados recuperam **`+1d4` PV extras** no Descanso Curto ou ganham **`+2`** no primeiro teste contra medo/Exaustão do dia seguinte. |
+
+### 8.4 Talentos Mentais, Erudição e Ofício (11 Talentos)
+| Talento | Pré-requisitos | Efeito em Jogo |
+| :--- | :--- | :--- |
+| **Mente Analítica** | `INT 13+`, Treinado em *Investigação* | **`+3`** em *Investigação* e *História & Lendas* para reconstruir cenas, detectar documentos forjados ou estudar ruínas; encontra pistas secundárias em metade do tempo. |
+| **Dedução de Campo** | `INT 15+`, `SAB 13+`, Especialista em *Investigação*, **Mente Analítica** | Como **Ação Principal** em combate *(ou `1 min` observando antes)*, testa *Investigação/Intuição* CD `15` contra um inimigo visível; em sucesso, descobre sua fraqueza *(menor Defesa, vulnerabilidade ou RD)* e você + `1` aliado ganham **`+2`** no acerto contra ele por `3 rodadas`. |
+| **Estrategista de Batalha** | `INT 14+`, `SAB 12+` | Usa **`Mod. INT`** no lugar de `Mod. DES` na **Iniciativa**; no início do combate, pode trocar sua posição na ordem de Iniciativa com `1` aliado voluntário que possa ouvi-lo. |
+| **Mestre Tático** | `INT 16+`, Nív. `8+`, **Estrategista de Batalha** | Ao usar a ação *Ajudar* em combate, orienta até **`2` aliados a até `9m`** por voz *(sem precisar ficar adjacente a `1,5m`)*, concedendo `+2` a cada um até seu próximo turno. |
+| **Sentidos Aguçados** | `SAB 13+`, Treinado em *Percepção* | **`+3`** em *Percepção* e **`+2`** fixo na Iniciativa; não pode ser surpreendido por emboscadas mundanas enquanto estiver consciente e não incapacitado. |
+| **Memória Enciclopédica** | `INT 13+` | Recorda mapas, brasões, tratados e diálogos com precisão; **`+2`** em *História*, *Geografia*, *Religião* e *Idiomas*, e pode realizar testes de conhecimento mesmo em perícias Destreinadas sem penalidade por falta de biblioteca. |
+| **Poliglota das Cinco Terras** | `INT 13+`, Treinado em *Idiomas & Cifras* | Aprende imediatamente `2` idiomas/dialetos ou cifras de Alenia, recebe **`+3`** para decifrar códigos de Kalis e inscrições de Kelgore/Incognito, e capta o sentido geral de línguas desconhecidas após breve contato. |
+| **Mãos de Alquimista** | `INT 13+`, Treinado em *Alquimia & Venenos* ou *Herbalismo* | Reduz em **`25%`** o custo de reagentes e pela metade o tempo de preparo de venenos, antídotos, óleo incendiário e extratos; aumenta em **`+2`** a CD das misturas que você mesmo preparar. |
+| **Engenho de Armadilhas** | `INT 13+`, Treinado em *Engenharia & Mecânica* | **`+3`** para montar ou desarmar armadilhas, fechaduras complexas e mecanismos antigos; em `10 min` com materiais de campo, monta armadilha improvisada *(alerta, laço que derruba ou estacas de `1d8`, Percepção CD `15 + Mod. INT`)*. |
+| **Mente Blindada** | `SAB 14+` | **`+3`** em testes de SAB contra manipulação, intimidação, ilusões sensoriais, sussurros de *Thanatos/Incognito* e impulsos psíquicos; `1×/sessão`, pode refazer um teste de SAB fracassado contra horror ou coerção. |
+| **Vigia dos Ritos Antigos** | `INT 14+` ou `SAB 14+`, `Fé Verdadeira 1+` ou `Dom Antigo 1+`, Treinado em *Religião & Ocultismo* | Soma **`+2`** adicional na *Preparação Ritualística* *(respeitando o teto de `+8`)*, reduz em `1d6` qualquer dano de sacrifício ritual *(mín. `1`)* e pressente relíquias de Incognito ou condutores ativos de adamante a até `18m`. |
+
+### 8.5 Mapa Rápido das Cadeias de Evolução
+- **Duelista & Escudeiro**: *Aparar Relâmpago* → *Riposta Mortal* | *Muralha de Aço* → *Bastião Inquebrável*
+- **Letalidade & Velocidade**: *Golpe Preciso* → *Anatomia Letal* | *Fluxo de Lâminas* → *Tempestade de Aço* | *Tiro Firme* → *Olho de Falcão*
+- **Sobrevivência & Ofício**: *Sangue Frio* → *Vontade de Ferro* | *Passo Silencioso* → *Fantasma da Bruma* | *Lobo do Mar* → *Leme de Tempestade* | *Mãos de Cirurgião* → *Bisturi de Baldbella*
+- **Liderança & Intriga**: *Voz de Comando* → *Estandarte Vivo* | *Língua de Prata* → *Teia de Cortes* | *Máscara de Mil Rostos* → *Sussurro de Kalgard* | *Crédito de Porto* → *Rede de Informantes*
+- **Estratégia & Intelecto**: *Mente Analítica* → *Dedução de Campo* | *Estrategista de Batalha* → *Mestre Tático*
 
 ---
 
