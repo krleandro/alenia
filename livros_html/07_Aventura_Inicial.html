@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cinzas no Estuário — Alenia RPG</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+    --desk: #171512;
+    --vellum: #f7f1e3;
+    --vellum-alt: #efe6d2;
+    --vellum-card: #f2ead8;
+    --ink: #221c16;
+    --ink-soft: #4e4336;
+    --crimson: #7a1f1d;
+    --crimson-dark: #571412;
+    --gold: #9a7b3b;
+    --gold-light: #cdb06e;
+    --border: #cfc2a5;
+    --sidebar-w: 280px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--desk); color: var(--ink); }
+body {
+    margin: 0;
+    font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.66;
+    background: radial-gradient(circle at top, #27221c 0%, #171512 58%, #100e0c 100%);
+    min-height: 100vh;
+}
+
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 54px;
+    background: rgba(18, 16, 13, 0.96);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.45);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-brand {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+}
+.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-nav a, .btn-print {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none;
+    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    transition: all 0.16s ease; cursor: pointer; background: transparent;
+}
+.topbar-nav a:hover, .topbar-nav a.active {
+    color: var(--gold-light); border-color: rgba(154, 123, 59, 0.55); background: rgba(154, 123, 59, 0.12);
+}
+.btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
+.btn-print:hover { background: #922624; color: #fff; }
+
+.sidebar {
+    position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 18px 14px 32px; overflow-y: auto; z-index: 900;
+}
+.sidebar-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold-light);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 12px 0;
+}
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin: 2px 0; }
+.toc-list a {
+    display: block; text-decoration: none; color: #cfc6b4; font-size: 14.5px;
+    line-height: 1.35; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
+}
+.toc-list a:hover { color: var(--gold-light); background: rgba(154, 123, 59, 0.1); border-left-color: var(--gold); }
+.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 6px; }
+.toc-h3 a { padding-left: 16px; font-size: 13.5px; color: #b5ab98; }
+
+.book-shell { margin-left: var(--sidebar-w); padding: 80px 26px 64px; display: flex; justify-content: center; }
+.book-shell.no-sidebar { margin-left: 0; }
+.book-page {
+    width: 100%; max-width: 920px; background: var(--vellum); color: var(--ink);
+    padding: 52px 60px 70px;
+    box-shadow: 0 24px 65px rgba(0,0,0,0.62), 0 0 0 1px rgba(154, 123, 59, 0.35);
+    border-radius: 3px; position: relative;
+}
+.book-page::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px solid rgba(154, 123, 59, 0.32); pointer-events: none;
+}
+
+.cover-page {
+    min-height: 760px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 54px 44px; margin-bottom: 52px;
+    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -8px;
+    background: radial-gradient(circle at center, #fbf7ee 0%, #f3ead6 100%);
+    page-break-after: always; break-after: page;
+}
+.cover-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 13px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--crimson); margin-bottom: 14px;
+}
+.cover-rule {
+    width: 180px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
+    margin: 18px auto;
+}
+.cover-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 40px; font-weight: 800; line-height: 1.15;
+    letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
+}
+.cover-subtitle {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 21px;
+    color: var(--ink-soft); margin: 14px 0 8px; max-width: 640px;
+}
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 560px; margin: 24px auto 14px; }
+.cover-thumb {
+    max-width: 100%; max-height: 310px; border: 2px solid var(--gold);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.22); margin: 16px auto; border-radius: 2px;
+}
+.cover-edition {
+    margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
+h1.book-h1 {
+    font-size: 28px; letter-spacing: 0.05em; text-transform: uppercase;
+    border-bottom: 2px solid var(--crimson); padding-bottom: 10px; margin: 0 0 22px 0;
+}
+h2 { font-size: 21px; letter-spacing: 0.04em; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--gold); }
+h3 { font-size: 16.5px; letter-spacing: 0.03em; margin: 22px 0 8px; color: #3d2415; }
+p { margin: 0 0 13px; text-align: justify; hyphens: auto; }
+ul, ol { margin: 6px 0 16px; padding-left: 24px; }
+li { margin-bottom: 6px; }
+strong { color: #17120d; }
+code {
+    font-family: Consolas, 'Courier New', monospace; font-size: 0.86em;
+    background: rgba(154, 123, 59, 0.14); border: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 1px 5px; border-radius: 3px; color: #5b1d18;
+}
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 28px 0; }
+a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 3px; }
+
+blockquote {
+    margin: 18px 0 22px; padding: 14px 20px; background: var(--vellum-card);
+    border-left: 4px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
+}
+.callout {
+    margin: 20px 0; padding: 14px 18px; border-radius: 2px; border: 1px solid var(--border);
+    border-left: 5px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid;
+}
+.callout-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); margin-bottom: 6px;
+}
+.callout.warning { border-left-color: #b4691e; background: #f6ecd7; }
+.callout.warning .callout-title { color: #8c4d10; }
+
+.formula-box {
+    margin: 16px 0 20px; padding: 12px 18px; background: #efe5cf;
+    border: 1px solid var(--gold); border-radius: 3px; text-align: center;
+    font-size: 18.5px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
+}
+
+.table-wrap { width: 100%; overflow-x: auto; margin: 16px 0 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.44; border: 1px solid var(--gold); }
+thead th {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.05em;
+    text-transform: uppercase; background: var(--crimson); color: #f7f1e3;
+    padding: 9px 9px; border: 1px solid #5f1816; text-align: left;
+}
+tbody td { padding: 8px 9px; border: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--vellum-alt); }
+tr { break-inside: avoid; }
+
+.atlas-plate {
+    margin: 22px 0 28px; padding: 10px; background: #ebe1ca;
+    border: 1px solid var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+    text-align: center; break-inside: avoid;
+}
+.atlas-plate img { width: 100%; height: auto; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.atlas-caption {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 8px;
+}
+
+.entry-card {
+    margin: 16px 0 20px; padding: 14px 18px 12px; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
+}
+.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 5px; }
+
+.lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
+    z-index: 2000; padding: 24px; align-items: center; justify-content: center; cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 96vw; max-height: 92vh; border: 2px solid var(--gold); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 22px 0 32px; }
+.portal-card {
+    display: flex; flex-direction: column; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 4px solid var(--crimson);
+    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
+.portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
+.portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
+.portal-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.48; margin: 0; text-align: left; }
+.portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+.tome-divider { page-break-before: always; break-before: page; }
+
+@media (max-width: 1020px) {
+    .sidebar { display: none; }
+    .book-shell { margin-left: 0; padding: 72px 14px 40px; }
+    .book-page { padding: 30px 24px 42px; }
+}
+
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@media print {
+    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
+    .topbar, .sidebar, .lightbox { display: none !important; }
+    .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
+    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    .book-page::before { display: none !important; }
+    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: var(--crimson-dark); text-decoration: none; }
+    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+}
+</style>
+</head>
+<body>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html" class="active">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-premissa-e-bastidores-para-o-mestre-0">1. Premissa e Bastidores para o Mestre</a></li><li class="toc-h2"><a href="#2-ato-i-o-contrato-no-cais-de-merlinport-1">2. Ato I — O Contrato no Cais de Merlinport</a></li><li class="toc-h3"><a href="#pistas-investigáveis-em-merlinport-teste-cd-1315-2">Pistas Investigáveis em Merlinport (Teste CD 13–15)</a></li><li class="toc-h2"><a href="#3-ato-ii-a-marcha-pela-estrada-da-bruma-e-os-pântanos-nebulosos-3">3. Ato II — A Marcha pela Estrada da Bruma e os Pântanos Nebulosos</a></li><li class="toc-h3"><a href="#cena-2a-os-destroços-no-juncais-dia-1-4">Cena 2A — Os Destroços no Juncais (Dia 1)</a></li><li class="toc-h3"><a href="#cena-2b-emboscada-ou-barganha-na-estrada-dia-2-5">Cena 2B — Emboscada ou Barganha na Estrada (Dia 2)</a></li><li class="toc-h2"><a href="#4-ato-iii-a-torre-de-specula-clímax-6">4. Ato III — A Torre de Specula (Clímax)</a></li><li class="toc-h3"><a href="#resoluções-possíveis-escolhas-morais-cinzentas-7">Resoluções Possíveis (Escolhas Morais Cinzentas)</a></li><li class="toc-h2"><a href="#5-desfecho-recompensas-e-próximos-caminhos-8">5. Desfecho, Recompensas e Próximos Caminhos</a></li></ul></aside>
+    <main class="book-shell">
+        <article class="book-page">
+            
+    <section class="cover-page">
+        <div class="cover-kicker">ALENIA RPG • TOMO VII</div>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title">Cinzas no Estuário</h1>
+        <div class="cover-subtitle">Aventura Inicial no Eixo Merlinport – Dahrma – Altrax (Nível 1–2)</div>
+        <div class="cover-rule"></div>
+        <img class="cover-thumb" src="assets/mapa_regional_aurora.jpg" alt="Mapa de Alenia"/>
+        <p class="cover-epigraph">“Uma barca perdida na bruma, três caixas de adamante e um morto que voltou a caminhar.”</p>
+        <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
+    </section>
+    
+<h1 id="alenia-rpg-aventura-inicial-cinzas-no-estuário-edição-revisada-v20-0" class="book-h1">ALENIA RPG — Aventura Inicial: Cinzas no Estuário (Edição Revisada v2.0)</h1>
+<blockquote><strong>Para 3 a 5 Exploradores (Nível 1–2) • Duração estimada: 2 a 3 sessões</strong><br/><strong>Região</strong>: Eixo <strong>Merlinport – Dahrma – Torre de Specula – Altrax</strong> <em>(Oeste de Aurora)</em><br/><strong>Temas</strong>: Contrabando de adamante, intriga entre Casas, sobrevivência nos Pântanos Nebulosos e o primeiro eco sinistro do mistério de Thanatos.</blockquote>
+<hr/>
+<h2 id="1-premissa-e-bastidores-para-o-mestre-0">1. Premissa e Bastidores para o Mestre</h2>
+<p>Há cinco dias, a barca fluvial <strong>Estrela de Aurélio</strong> partiu de <strong>Merlinport</strong> levando três caixas lacradas de <strong>ligas de adamante refinado</strong> e um tubo de correspondência selado da <strong>Casa Valerion</strong> rumo ao interior. Oficialmente, o barco desapareceu na bruma espessa do rio antes de chegar a <strong>Dahrma</strong>.</p>
+<p>Na verdade, a carga foi desviada por um pacto sujo:</p>
+<ul>
+<li>Um nobre ambicioso ligado à ala de <em>Lucian Leonastis</em> (em Altavanne) financiou em segredo <strong>prospecção ilegal de adamante</strong> nos contrafortes próximos a <strong>Altrax</strong>, violando os limites florestais do Tratado de Vergod.</li>
+<li>O emissário da <em>Cidade Suspensa</em>, <strong>Cadwyn ap Merion</strong>, descobriu os registros dessa prospecção ilegal e fugiu rumo a <strong>Merlinport</strong> com o dossiê — mas acabou capturado por mercenários perto dos <strong>Pântanos Nebulosos</strong> e mantido preso na arruinada <strong>Torre de Specula</strong>.</li>
+<li><strong>O Fator Inesperado <em>(Primeiro Eco do Simbionte e de Thanatos)</strong></em>: entre os tripulantes mortos do ataque à barca, o piloto <strong>Beren do Cais</strong> — cujo corpo foi visto boiando por pescadores — <strong>reapareceu vivo ontem à noite num beco de Merlinport</strong>, lúcido e aterrorizado, encharcado de água gelada, com uma <strong>pequena cicatriz pálida atrás da nuca</strong> (marca da larva simbionte da Comunhão). Ele reconhece sua família, mas soluçava sobre <em>&quot;um farol apagado, areia preta e lembrar de se afogar num galeão que afundou duzentos anos atrás&quot;</em>, antes de ser levado à força por dois agentes de sotaque setentrional de <strong>Kalis</strong>!</li>
+</ul>
+<hr/>
+<h2 id="2-ato-i-o-contrato-no-cais-de-merlinport-1">2. Ato I — O Contrato no Cais de Merlinport</h2>
+<p>Os personagens são reunidos na estalagem <strong>Âncora de Cinza</strong>, no porto de Merlinport, por <strong>Sabina de Pontáuria</strong> <em>(agente discreta da Regente Valora Valerion)</em>:</p>
+<ul>
+<li><strong>Oferta</strong>: <strong><code>60 PP</code> adiantadas</strong> + <strong><code>120 PP</code> na entrega</strong> (além de salvo-conduto real) para localizar os destroços da <em>Estrela de Aurélio</em>, recuperar o <strong>tubo de cartas da Casa Valerion</strong> (prioridade absoluta) e descobrir quem desviou o adamante — sem alertar os guardas leais ao marechal Leonastis.</li>
+</ul>
+<h3 id="pistas-investigáveis-em-merlinport-teste-cd-1315-2">Pistas Investigáveis em Merlinport <em>(Teste CD 13–15)</em></h3>
+<ol>
+<li><strong>No Cais (Investigação / Barganha / Submundo)</strong>: pescadores contam que a barca não foi atacada perto de Dahrma, mas rebocada para o braço norte do rio, na direção dos <strong>Pântanos Nebulosos</strong> e da <strong>Torre de Specula</strong>.</li>
+<li><strong>Na Estalagem (Percepção / Intuição)</strong>: um corallino chamado <strong>Loreo</strong> <em>(ligado a Baldbella)</em> está pagando rodadas para saber se o barco trazia <em>brocas cirúrgicas de adamante</em> — pode virar aliado ou concorrente nervoso.</li>
+<li><strong>O Sussurro do Morto <em>(Intimidação / Persuasão / Medicina)</strong></em>: a estalajadeira mostra uma luva molhada deixada por <strong>Beren do Cais</strong> — coberta de <strong>areia vulcânica negra</strong> estranha a qualquer rio de Aurora <em>(Geografia CD 15 identifica como típica das praias de Thanatos)</em>. Com <em>Persuasão CD 14</em>, ela confessa que Beren chorava dizendo que <em>&quot;não era só dele a voz que o acalmava no escuro&quot;</em>, e que havia uma marca fina e esbranquiçada logo abaixo da linha do cabelo em sua nuca <em>(Medicina CD 16 revela não ser ferida de lâmina, mas uma incisão cicatrizada rápido demais)</em>.</li>
+</ol>
+<hr/>
+<h2 id="3-ato-ii-a-marcha-pela-estrada-da-bruma-e-os-pântanos-nebulosos-3">3. Ato II — A Marcha pela Estrada da Bruma e os Pântanos Nebulosos</h2>
+<p>Saindo de Merlinport rumo ao norte pela <em>Estrada da Bruma</em> (ou de barco a remo pelo braço alagado do rio), o grupo enfrenta <strong>2 dias de viagem tensa</strong> até a <strong>Torre de Specula</strong> <em>(use as regras de Sobrevivência e Exaustão)</em>:</p>
+<h3 id="cena-2a-os-destroços-no-juncais-dia-1-4">Cena 2A — Os Destroços no Juncais <em>(Dia 1)</em></h3>
+<ul>
+<li>A barca <em>Estrela de Aurélio</em> jaz meio afundada entre raízes retorcidas. Duas caixas de adamante estão vazias; a terceira foi escondida num fundo falso pelo capitão moribundo (<strong>Investigação CD 15</strong> encontra <code>4</code> lingotes de liga de adamante, valendo <code>160 PP</code> no mercado negro ou gratidão real — <em>Status</em>!).</li>
+<li><strong>Ameaça Natural</strong>: uma matilha de <strong>3 Lobos-das-Brumas</strong> <em>(Bestiário #7)</em> ronda os corpos na neblina. O grupo pode afugentá-los com fogo/Intimidação CD 14 ou enfrentá-los em terreno lamacento.</li>
+<li><strong>Pista no Convés</strong>: uma flecha de penas verdes <em>(Povo das Florestas)</em> cravada no mastro e rastros de botas pesadas levando para o norte, rumo à <strong>Torre de Specula</strong>.</li>
+</ul>
+<h3 id="cena-2b-emboscada-ou-barganha-na-estrada-dia-2-5">Cena 2B — Emboscada ou Barganha na Estrada <em>(Dia 2)</em></h3>
+<ul>
+<li>Próximo a um cruzamento enevoado, um pequeno bando de <strong>3 Salteadores</strong> <em>(Bestiário #1)</em> liderados por <strong>Tordan Sombra</strong> <em>(um batedor bastardo de Kalis, use ficha de Corsário #3 sem bônus naval)</em> vigia a estrada.</li>
+<li><strong>Interação</strong>: eles não trabalham para Leonastis — são agentes de <strong>Dobalbek (Kalis)</strong> tentando rastrear tanto as cartas de Valerion quanto o destino de <em>Beren do Cais</em>. O grupo pode lutar, contorná-los pelos pântanos (<strong>Furtividade/Sobrevivência CD 15</strong>) ou negociar informações.</li>
+</ul>
+<hr/>
+<h2 id="4-ato-iii-a-torre-de-specula-clímax-6">4. Ato III — A Torre de Specula (Clímax)</h2>
+<p>Erguida sobre um rochedo coberto de musgo a 1 dia ao sul de <strong>Altrax</strong>, a <strong>Torre de Specula</strong> abriga a pequena força que desviou o adamante:</p>
+<ul>
+<li><strong>Guarnição</strong>: <strong>Capitão Cassian de Lavroga</strong> <em>(use ficha de Soldado #2 com <code>28 PV</code> e Espada Longa de aço superior)</em> + <strong>3 Salteadores/Mercenários</strong> <em>(Bestiário #1)</em> + <strong>1 Besta Pesada</strong> montada na janela superior.</li>
+<li><strong>Prisioneiro no Porão</strong>: <strong>Cadwyn ap Merion</strong> <em>(emissário da Cidade Suspensa)</em>, ferido mas vivo, carregando o <strong>tubo selado de Valerion</strong> e o <strong>mapa das minas clandestinas perto de Altrax</strong>!</li>
+</ul>
+<h3 id="resoluções-possíveis-escolhas-morais-cinzentas-7">Resoluções Possíveis <em>(Escolhas Morais Cinzentas)</em></h3>
+<ul>
+<li><strong>Infiltração Noturna</strong>: escalar a lateral quebrada da torre (<strong>Escalada CD 14</strong>), libertar Cadwyn e roubar as cartas sem combate frontal.</li>
+<li><strong>Ataque Direto / Defesa Tática</strong>: enfrentar o Capitão Cassian usando <em>Flanqueio</em>, <em>Proteger Aliado</em> e <em>Múltiplas Ações</em> — lembrando que a besta pesada na janela pode disparar um <strong>Golpe Devastador</strong> contra quem avançar sem cobertura!</li>
+<li><strong>Negociação</strong>: Cassian sabe que foi traído por seus mandantes em Altavanne e pode entregar o prisioneiro em troca de fuga segura para <em>Merlinport</em> e metade da prata.</li>
+</ul>
+<hr/>
+<h2 id="5-desfecho-recompensas-e-próximos-caminhos-8">5. Desfecho, Recompensas e Próximos Caminhos</h2>
+<ul>
+<li><strong>Recompensas</strong>: <code>120 PP</code> de Sabina + subida para o <strong>Nível 2</strong> (rolando <strong><code>1dX + Mod. CON</code></strong> + 1 Talento livre!).</li>
+<li><strong>Feitos (Evolução de Atributos Especiais)</strong>:<ul><li>Devolver o tubo selado e os lingotes à Casa Valerion → <strong><code>+1 Status</code></strong> <em>(ou <code>Status 1</code> para quem tinha <code>0</code>)</em>.</li><li>Libertar Cadwyn ap Merion em segurança → salvo-conduto raro para visitar <strong>Vergod</strong> e a <strong>Cidade Suspensa</strong>.</li><li>Vender os lingotes ou segredos para agentes de Kalis ou do Ferro Velho → <strong><code>+1 Influência no Submundo</code></strong>.</li></ul></li>
+<li><strong>Gancho Direto para a Próxima Sessão</strong>: no bolso do Capitão Cassian há um bilhete lacrado confirmando que o &quot;marinheiro que voltou dos mortos&quot; (<em>Beren do Cais</em>) foi embarcado à força num veleiro rumo a <strong>Altrax / Aeraneas</strong> — abrindo o próximo arco de investigação sobre a <strong>Ilha de Thanatos</strong> ou sobre a greve nas <strong>Minas de Ferraur</strong>!</li>
+</ul>
+        </article>
+    </main>
+    <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
+        <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const lb = document.getElementById('atlas-lightbox');
+    const lbImg = document.getElementById('atlas-lightbox-img');
+    if (lb && lbImg) {
+        document.querySelectorAll('.atlas-plate img').forEach(img => {
+            img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+        });
+        lb.addEventListener('click', () => lb.classList.remove('open'));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+    }
+});
+</script>
+</body>
+</html>

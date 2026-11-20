@@ -1,0 +1,13 @@
+# Arquivos temporários e caches
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Manuais/arquivos pesados fora da publicação web (mantenha livros_html/ leve)
+*.rpk
+*.rdk
+*.pdf
+mapas/*.png
+mapas/regionais/*.png
+firecast_alenia_ficha/output/

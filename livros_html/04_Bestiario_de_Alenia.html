@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bestiário &amp; Ameaças — Alenia RPG</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+    --desk: #171512;
+    --vellum: #f7f1e3;
+    --vellum-alt: #efe6d2;
+    --vellum-card: #f2ead8;
+    --ink: #221c16;
+    --ink-soft: #4e4336;
+    --crimson: #7a1f1d;
+    --crimson-dark: #571412;
+    --gold: #9a7b3b;
+    --gold-light: #cdb06e;
+    --border: #cfc2a5;
+    --sidebar-w: 280px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--desk); color: var(--ink); }
+body {
+    margin: 0;
+    font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.66;
+    background: radial-gradient(circle at top, #27221c 0%, #171512 58%, #100e0c 100%);
+    min-height: 100vh;
+}
+
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 54px;
+    background: rgba(18, 16, 13, 0.96);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.45);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-brand {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+}
+.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-nav a, .btn-print {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none;
+    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    transition: all 0.16s ease; cursor: pointer; background: transparent;
+}
+.topbar-nav a:hover, .topbar-nav a.active {
+    color: var(--gold-light); border-color: rgba(154, 123, 59, 0.55); background: rgba(154, 123, 59, 0.12);
+}
+.btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
+.btn-print:hover { background: #922624; color: #fff; }
+
+.sidebar {
+    position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 18px 14px 32px; overflow-y: auto; z-index: 900;
+}
+.sidebar-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold-light);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 12px 0;
+}
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin: 2px 0; }
+.toc-list a {
+    display: block; text-decoration: none; color: #cfc6b4; font-size: 14.5px;
+    line-height: 1.35; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
+}
+.toc-list a:hover { color: var(--gold-light); background: rgba(154, 123, 59, 0.1); border-left-color: var(--gold); }
+.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 6px; }
+.toc-h3 a { padding-left: 16px; font-size: 13.5px; color: #b5ab98; }
+
+.book-shell { margin-left: var(--sidebar-w); padding: 80px 26px 64px; display: flex; justify-content: center; }
+.book-shell.no-sidebar { margin-left: 0; }
+.book-page {
+    width: 100%; max-width: 920px; background: var(--vellum); color: var(--ink);
+    padding: 52px 60px 70px;
+    box-shadow: 0 24px 65px rgba(0,0,0,0.62), 0 0 0 1px rgba(154, 123, 59, 0.35);
+    border-radius: 3px; position: relative;
+}
+.book-page::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px solid rgba(154, 123, 59, 0.32); pointer-events: none;
+}
+
+.cover-page {
+    min-height: 760px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 54px 44px; margin-bottom: 52px;
+    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -8px;
+    background: radial-gradient(circle at center, #fbf7ee 0%, #f3ead6 100%);
+    page-break-after: always; break-after: page;
+}
+.cover-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 13px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--crimson); margin-bottom: 14px;
+}
+.cover-rule {
+    width: 180px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
+    margin: 18px auto;
+}
+.cover-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 40px; font-weight: 800; line-height: 1.15;
+    letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
+}
+.cover-subtitle {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 21px;
+    color: var(--ink-soft); margin: 14px 0 8px; max-width: 640px;
+}
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 560px; margin: 24px auto 14px; }
+.cover-thumb {
+    max-width: 100%; max-height: 310px; border: 2px solid var(--gold);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.22); margin: 16px auto; border-radius: 2px;
+}
+.cover-edition {
+    margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
+h1.book-h1 {
+    font-size: 28px; letter-spacing: 0.05em; text-transform: uppercase;
+    border-bottom: 2px solid var(--crimson); padding-bottom: 10px; margin: 0 0 22px 0;
+}
+h2 { font-size: 21px; letter-spacing: 0.04em; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--gold); }
+h3 { font-size: 16.5px; letter-spacing: 0.03em; margin: 22px 0 8px; color: #3d2415; }
+p { margin: 0 0 13px; text-align: justify; hyphens: auto; }
+ul, ol { margin: 6px 0 16px; padding-left: 24px; }
+li { margin-bottom: 6px; }
+strong { color: #17120d; }
+code {
+    font-family: Consolas, 'Courier New', monospace; font-size: 0.86em;
+    background: rgba(154, 123, 59, 0.14); border: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 1px 5px; border-radius: 3px; color: #5b1d18;
+}
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 28px 0; }
+a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 3px; }
+
+blockquote {
+    margin: 18px 0 22px; padding: 14px 20px; background: var(--vellum-card);
+    border-left: 4px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
+}
+.callout {
+    margin: 20px 0; padding: 14px 18px; border-radius: 2px; border: 1px solid var(--border);
+    border-left: 5px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid;
+}
+.callout-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); margin-bottom: 6px;
+}
+.callout.warning { border-left-color: #b4691e; background: #f6ecd7; }
+.callout.warning .callout-title { color: #8c4d10; }
+
+.formula-box {
+    margin: 16px 0 20px; padding: 12px 18px; background: #efe5cf;
+    border: 1px solid var(--gold); border-radius: 3px; text-align: center;
+    font-size: 18.5px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
+}
+
+.table-wrap { width: 100%; overflow-x: auto; margin: 16px 0 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.44; border: 1px solid var(--gold); }
+thead th {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.05em;
+    text-transform: uppercase; background: var(--crimson); color: #f7f1e3;
+    padding: 9px 9px; border: 1px solid #5f1816; text-align: left;
+}
+tbody td { padding: 8px 9px; border: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--vellum-alt); }
+tr { break-inside: avoid; }
+
+.atlas-plate {
+    margin: 22px 0 28px; padding: 10px; background: #ebe1ca;
+    border: 1px solid var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+    text-align: center; break-inside: avoid;
+}
+.atlas-plate img { width: 100%; height: auto; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.atlas-caption {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 8px;
+}
+
+.entry-card {
+    margin: 16px 0 20px; padding: 14px 18px 12px; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
+}
+.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 5px; }
+
+.lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
+    z-index: 2000; padding: 24px; align-items: center; justify-content: center; cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 96vw; max-height: 92vh; border: 2px solid var(--gold); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 22px 0 32px; }
+.portal-card {
+    display: flex; flex-direction: column; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 4px solid var(--crimson);
+    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
+.portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
+.portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
+.portal-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.48; margin: 0; text-align: left; }
+.portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+.tome-divider { page-break-before: always; break-before: page; }
+
+@media (max-width: 1020px) {
+    .sidebar { display: none; }
+    .book-shell { margin-left: 0; padding: 72px 14px 40px; }
+    .book-page { padding: 30px 24px 42px; }
+}
+
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@media print {
+    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
+    .topbar, .sidebar, .lightbox { display: none !important; }
+    .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
+    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    .book-page::before { display: none !important; }
+    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: var(--crimson-dark); text-decoration: none; }
+    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+}
+</style>
+</head>
+<body>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html" class="active">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#como-ler-as-fichas-de-ameaças-100-auditadas-0">Como Ler as Fichas de Ameaças (100% Auditadas)</a></li><li class="toc-h2"><a href="#parte-i-ameaças-humanas-patamar-recruta-lenda-1">Parte I — Ameaças Humanas (Patamar Recruta &amp; Lenda)</a></li><li class="toc-h3"><a href="#1-salteador-de-estrada-contrabandista-comum-2">1. Salteador de Estrada / Contrabandista Comum</a></li><li class="toc-h3"><a href="#2-guarda-de-cidade-soldado-de-aurora-3">2. Guarda de Cidade / Soldado de Aurora</a></li><li class="toc-h3"><a href="#3-corsário-do-mar-dos-corais-arquipélago-ravena-4">3. Corsário do Mar dos Corais / Arquipélago Ravena</a></li><li class="toc-h3"><a href="#4-guerreiro-tribal-de-gaddra-vargheim-ox-5">4. Guerreiro Tribal de Gaddra (Vargheim / OX)</a></li><li class="toc-h3"><a href="#5-assassino-da-floresta-negra-agente-de-kalis-6">5. Assassino da Floresta Negra (Agente de Kalis)</a></li><li class="toc-h3"><a href="#6-mestre-espadachim-yõketsu-veterano-patamar-lenda-7">6. Mestre Espadachim (Yõketsu / Veterano — Patamar Lenda)</a></li><li class="toc-h2"><a href="#parte-ii-feras-naturais-perigos-dos-biomas-8">Parte II — Feras Naturais &amp; Perigos dos Biomas</a></li><li class="toc-h3"><a href="#7-lobo-das-brumas-pântanos-nebulosos-floresta-negra-9">7. Lobo-das-Brumas (Pântanos Nebulosos / Floresta Negra)</a></li><li class="toc-h3"><a href="#8-serpente-do-pântano-pântano-de-voernock-10">8. Serpente-do-Pântano (Pântano de Voernock)</a></li><li class="toc-h3"><a href="#9-escorpião-gigante-das-dunas-estepes-amaldiçoadas-gaddra-11">9. Escorpião-Gigante das Dunas (Estepes Amaldiçoadas / Gaddra)</a></li><li class="toc-h3"><a href="#10-leviatã-dos-recifes-mar-dos-corais-o-ferro-velho-12">10. Leviatã-dos-Recifes (Mar dos Corais / O Ferro Velho)</a></li><li class="toc-h2"><a href="#parte-iii-horrores-raríssimos-lendas-de-incognito-estilo-game-of-thrones-13">Parte III — Horrores Raríssimos &amp; Lendas de Incognito (Estilo Game of Thrones)</a></li><li class="toc-h3"><a href="#11-errante-do-piche-os-poços-de-piche-incognito-14">11. Errante do Piche (Os Poços de Piche / Incognito)</a></li><li class="toc-h3"><a href="#12-sombra-das-ruínas-perdidas-interior-de-incognito-ameaça-de-lendaépica-15">12. Sombra das Ruínas Perdidas (Interior de Incognito — Ameaça de Lenda/Épica)</a></li><li class="toc-h2"><a href="#parte-iv-agentes-do-regente-das-cinzas-a-comunhão-16">Parte IV — Agentes do Regente das Cinzas &amp; A Comunhão</a></li><li class="toc-h3"><a href="#13-hospedeiro-em-confluência-comunidade-submetida-patamar-recruta-17">13. Hospedeiro em Confluência (Comunidade Submetida — Patamar Recruta)</a></li><li class="toc-h3"><a href="#14-a-primeira-devolvida-marella-de-claramar-emissária-patamar-lenda-18">14. A Primeira Devolvida — Marella de Claramar (Emissária — Patamar Lenda)</a></li><li class="toc-h3"><a href="#15-o-regente-das-cinzas-avatar-da-rede-ameaça-épica-19">15. O Regente das Cinzas (Avatar da Rede — Ameaça Épica)</a></li></ul></aside>
+    <main class="book-shell">
+        <article class="book-page">
+            
+    <section class="cover-page">
+        <div class="cover-kicker">ALENIA RPG • TOMO IV</div>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title">Bestiário &amp; Ameaças</h1>
+        <div class="cover-subtitle">Fichas Auditadas, Sinais de Presença, Motivações &amp; Interações</div>
+        <div class="cover-rule"></div>
+        
+        <p class="cover-epigraph">“A maioria das feras que matam viajantes usa botas de couro e fala sua própria língua.”</p>
+        <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
+    </section>
+    
+<h1 id="alenia-rpg-bestiário-ameaças-do-mundo-edição-revisada-v20-0" class="book-h1">ALENIA RPG — Bestiário &amp; Ameaças do Mundo (Edição Revisada v2.0)</h1>
+<blockquote><em>&quot;A maioria das feras que matam viajantes usa botas de couro e fala sua própria língua. Mas quando o nevoeiro sobe dos pântanos ou sopra de Incognito, reze para que seu aço baste.&quot;</em></blockquote>
+<hr/>
+<h2 id="como-ler-as-fichas-de-ameaças-100-auditadas-0">Como Ler as Fichas de Ameaças (100% Auditadas)</h2>
+<ul>
+<li><strong>Defesa Exata</strong>: todas as fichas seguem rigorosamente <code>10 + Mod(DES) + Armadura + Escudo + Treino (Aparar ou Esquiva)</code>. Eventuais bônus naturais (como carapaça) estão explicitados.</li>
+<li><strong>RD Especial</strong>: <code>0</code> em todos os humanos com armaduras comuns. Aparece apenas em monstros raríssimos ou horrores de Incognito.</li>
+<li><strong>Constituição Explícita</strong>: toda criatura viva possui <code>CON</code> e modificador listados para testes de <strong>Golpe Devastador (<code>&gt; 2/3 PV</code>)</strong>, venenos e manobras.</li>
+<li><strong>Uso em Cena</strong>: cada entrada inclui <strong>Sinais de Presença</strong>, <strong>Motivação</strong>, <strong>Condição de Fuga</strong> e <strong>Interação Não-Combativa</strong> para evitar combates mecânicos vazios.</li>
+</ul>
+<hr/>
+<h2 id="parte-i-ameaças-humanas-patamar-recruta-lenda-1">Parte I — Ameaças Humanas (Patamar Recruta &amp; Lenda)</h2>
+<div class="entry-card">
+<h3 id="1-salteador-de-estrada-contrabandista-comum-2">1. Salteador de Estrada / Contrabandista Comum</h3>
+<p><em>Estradas entre Merlinport, Dahrma, Lavroga e enseadas do Mar dos Corais.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>15</code> <em>(Golpe Devastador: <code>11+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+1</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 12 (+1)</code>, <code>DES 13 (+1)</code>, <code>CON 12 (+1)</code>, <code>INT 10 (0)</code>, <code>SAB 10 (0)</code>, <code>CAR 9 (-1)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>16</code> / Esquiva <code>16</code> / Desprevenido <code>12</code> <em>(Couro Batido <code>+2</code>, Treinado <code>+3</code> em Aparar e Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataques</strong>:<ul><li><em>Espada Curta</em>: <code>+4</code> (<code>1d6 + 1</code>, <code>19–20 / ×2</code>) — <em>Treinado <code>+3</code> + FOR <code>+1</code></em></li><li><em>Besta Leve</em>: <code>+4</code> (<code>1d8</code>, <code>19–20 / ×2</code>, 24m)</li></ul></li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: galhos estalando, corda esticada baixa na estrada. <em>Motivação</em>: roubar prata e cargas fáceis sem morrer. <em>Fuga</em>: recua assim que 2 aliados caem ou um companheiro sofre Golpe Devastador. <em>Interação</em>: aceita suborno (<code>10–20 PP</code>), troca de informações sobre patrulhas ou rendição negociada.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="2-guarda-de-cidade-soldado-de-aurora-3">2. Guarda de Cidade / Soldado de Aurora</h3>
+<p><em>Patrulhas de Altavanne, Aeraneas, Merlinport e guarnições de Vaarsa e Altrax.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>24</code> <em>(Golpe Devastador: <code>17+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+2</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 14 (+2)</code>, <code>DES 12 (+1)</code>, <code>CON 14 (+2)</code>, <code>INT 10 (0)</code>, <code>SAB 11 (0)</code>, <code>CAR 10 (0)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>19</code> / Esquiva <code>16</code> / Desprevenido <code>15</code> <em>(Cota de Malha <code>+3</code>, Escudo Médio <code>+2</code>, Treinado <code>+3</code> Aparar, Destreinado Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataques</strong>:<ul><li><em>Lança ou Espada Longa</em>: <code>+5</code> (<code>1d8 + 2</code>, <code>20 / ×3</code> lança ou <code>19–20 / ×2</code> espada)</li></ul></li>
+<li><strong>Tática</strong>: usa <em>Proteger Aliado</em> (<code>-4</code> no ataque inimigo contra companheiro adjacente).</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: tinido de malha, lanternas em dupla, apito de metal. <em>Motivação</em>: cumprir turno, receber soldo e evitar problemas com nobres. <em>Fuga</em>: toca o apito por reforços se ficar com menos de <code>8 PV</code>. <em>Interação</em>: respeita <code>Status</code>, salvo-condutos reais ou subornos discretos em portos.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="3-corsário-do-mar-dos-corais-arquipélago-ravena-4">3. Corsário do Mar dos Corais / Arquipélago Ravena</h3>
+<p><em>Saqueadores que dominam os recifes de O Ferro Velho e o Mar Intransponível.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>26</code> <em>(Golpe Devastador: <code>18+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+3</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 13 (+1)</code>, <code>DES 15 (+2)</code>, <code>CON 13 (+1)</code>, <code>INT 11 (0)</code>, <code>SAB 11 (0)</code>, <code>CAR 12 (+1)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>17</code> / Esquiva <code>17</code> / Desprevenido <code>12</code> <em>(Couro Batido <code>+2</code>, Treinado <code>+3</code> Aparar/Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataques</strong>:<ul><li><em>Sabre de Abordagem</em>: <code>+5</code> (<code>1d6 + 2</code>, <code>18–20 / ×2</code>, Ágil DES; <code>+7</code> no 1º turno de abordagem)</li><li><em>Adaga de Arremesso</em>: <code>+5</code> (<code>1d4 + 2</code>, <code>19–20 / ×2</code>, 6m)</li></ul></li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: velas baixas sem bandeira na névoa, sinos abafados. <em>Motivação</em>: pilhagem de adamante, bebidas e mapas seguros. <em>Fuga</em>: pula ao mar ou corta cabos de abordagem se o capitão cair. <em>Interação</em>: pode ser contratado como guia no Mar Intransponível mediante pagamento adiantado ou <code>Submundo</code>.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="4-guerreiro-tribal-de-gaddra-vargheim-ox-5">4. Guerreiro Tribal de Gaddra (Vargheim / OX)</h3>
+<p><em>Combatentes endurecidos pela escassez, leais ao clã e à Lei da Hospitalidade.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>38</code> <em>(Golpe Devastador: <code>26+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+3</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 16 (+3)</code>, <code>DES 14 (+2)</code>, <code>CON 16 (+3)</code>, <code>INT 9 (-1)</code>, <code>SAB 12 (+1)</code>, <code>CAR 11 (0)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>22</code> / Esquiva <code>17</code> / Desprevenido <code>12</code> <em>(Couro Batido <code>+2</code>, Especialista <code>+8</code> Aparar, Treinado <code>+3</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataques</strong>:<ul><li><em>Machado de Batalha (2 mãos)</em>: <code>+11</code> (<code>1d10 + 3</code>, <code>20 / ×3</code>, Especialista <code>+8</code>; pode fazer <strong>2 ações com <code>+3</code> cada</strong>)</li><li><em>Azagaia</em>: <code>+5</code> (<code>1d6 + 3</code>, <code>20 / ×3</code>, 12m)</li></ul></li>
+<li><strong>Habilidade — Sangue do Deserto</strong>: <code>+3</code> em CON contra calor e Golpe Devastador.</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: faixas coloridas de clã no horizonte, cheiro de fumaça de esterco seco. <em>Motivação</em>: honra, proteção de poços e respeito aos pactos. <em>Fuga</em>: raramente foge de duelo justo, mas recua se os anciãos ordenarem. <em>Interação</em>: respeita quem invoca a <em>Lei da Hospitalidade</em>, oferece água ou propõe duelo singular em vez de chacina.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="5-assassino-da-floresta-negra-agente-de-kalis-6">5. Assassino da Floresta Negra (Agente de Kalis)</h3>
+<p><em>Silencioso, paciente e letal — contratado por conselhos velados ou casas rivais.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>30</code> <em>(Golpe Devastador: <code>21+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+5</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 12 (+1)</code>, <code>DES 17 (+3)</code>, <code>CON 12 (+1)</code>, <code>INT 14 (+2)</code>, <code>SAB 13 (+1)</code>, <code>CAR 12 (+1)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>18</code> / Esquiva <code>23</code> / Desprevenido <code>12</code> <em>(Couro Batido <code>+2</code>, Treinado <code>+3</code> Aparar, Especialista <code>+8</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataques</strong>:<ul><li><em>Adaga Envenenada</em>: <code>+11</code> (<code>1d4 + 3</code>, <code>18–20 / ×2</code>, Especialista <code>+8</code>; pode fazer <strong>2 ataques com <code>+3</code> cada</strong>). <strong>Veneno da Floresta Negra</strong>: CON CD 16 ou sofre <code>1d6</code> de dano imediato + <code>-2</code> em testes por <code>3 rodadas</code> (metade do dano e sem penalidade se passar).</li><li><em>Besta Oculta</em>: <code>+11</code> (<code>1d8</code>, <code>19–20 / ×2</code>, mesmo veneno).</li></ul></li>
+<li><strong>Habilidade — Sombra Mortal</strong>: contra alvo surpreso, soma <code>+2d6</code> de dano após a rolagem (não multiplica em crítico).</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: pássaros subitamente calados, aroma leve de erva amarga, janelas destrancadas sem ruído. <em>Motivação</em>: cumprir o contrato e desaparecer sem deixar testemunhas. <em>Fuga</em>: usa bomba de fumaça e foge se o elemento surpresa falhar e ficar em desvantagem numérica. <em>Interação</em>: só negocia se o contratante for traído ou se oferecerem segredo de valor muito superior.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="6-mestre-espadachim-yõketsu-veterano-patamar-lenda-7">6. Mestre Espadachim <em>(Yõketsu / Veterano — Patamar Lenda)</em></h3>
+<p><em>Um duelo contra um verdadeiro Mestre (<code>+12</code>) deve ser temido por qualquer grupo de Recrutas.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>78</code> <em>(Golpe Devastador: <code>53+</code> dano)</em> | <strong>Iniciativa</strong>: <code>+6</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 15 (+2)</code>, <code>DES 18 (+4)</code>, <code>CON 15 (+2)</code>, <code>INT 13 (+1)</code>, <code>SAB 16 (+3)</code>, <code>CAR 14 (+2)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>29</code> / Esquiva <code>25</code> / Desprevenido <code>13</code> <em>(Armadura Leve Reforçada <code>+3</code>, Mestre <code>+12</code> Aparar, Especialista <code>+8</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataques</strong>:<ul><li><em>Lâmina Oriental de Aço Superior</em>: <code>+16</code> (<code>2d8 + 4</code> [Maestria de Lenda], <code>18–20 / ×2</code>; <strong>Múltiplas Ações</strong>: até <strong>2 golpes com <code>+6</code></strong>, <strong>3 golpes com <code>+2</code></strong> ou <strong>4 golpes com <code>+0</code></strong>!)</li></ul></li>
+<li><strong>Habilidade — Corte Silencioso</strong>: em <em>Defesa Total</em>, recebe <code>+8</code> na Defesa (<code>37</code> Aparar) e pode reagir com 1 contra-ataque contra quem errar por 5 ou mais.</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: postura serena, bainha impecável sem ornamentos desnecessários. <em>Motivação</em>: disciplina, juramento a um senhor ou proteção de uma escola. <em>Fuga</em>: recua taticamente apenas se encurralado por bestas/arqueiros sem honra. <em>Interação</em>: aceita duelo formal, pedidos de mediação ou diálogo respeitoso; despreza covardia.</li>
+</ul>
+</div>
+<hr/>
+<h2 id="parte-ii-feras-naturais-perigos-dos-biomas-8">Parte II — Feras Naturais &amp; Perigos dos Biomas</h2>
+<div class="entry-card">
+<h3 id="7-lobo-das-brumas-pântanos-nebulosos-floresta-negra-9">7. Lobo-das-Brumas <em>(Pântanos Nebulosos / Floresta Negra)</em></h3>
+<ul>
+<li><strong>PV</strong>: <code>18</code> <em>(Golpe Devastador: <code>13+</code>)</em> | <strong>Iniciativa</strong>: <code>+2</code> | <strong>Deslocamento</strong>: <code>12m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 14 (+2)</code>, <code>DES 15 (+2)</code>, <code>CON 13 (+1)</code>, <code>INT 3 (-4)</code>, <code>SAB 13 (+1)</code>, <code>CAR 6 (-2)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>12</code> / Esquiva <code>15</code> / Desprevenido <code>10</code> <em>(Treinado <code>+3</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataque</strong>: <em>Mordida</em>: <code>+5</code> (<code>1d6 + 2</code>, <code>20 / ×2</code>; alvo faz Atletismo/FOR CD 13 ou cai derrubado).</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: uivos abafados na névoa, pegadas grandes na lama. <em>Motivação</em>: fome e defesa de território. <em>Fuga</em>: foge diante de fogo intenso ou após perder metade da matilha. <em>Interação</em>: pode ser distraído com carne fresca ou espantado com tochas e Intimidação CD 14.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="8-serpente-do-pântano-pântano-de-voernock-10">8. Serpente-do-Pântano <em>(Pântano de Voernock)</em></h3>
+<ul>
+<li><strong>PV</strong>: <code>28</code> <em>(Golpe Devastador: <code>19+</code>)</em> | <strong>Iniciativa</strong>: <code>+3</code> | <strong>Deslocamento</strong>: <code>9m</code> <em>(Natação <code>12m</code>)</em></li>
+<li><strong>Atributos</strong>: <code>FOR 15 (+2)</code>, <code>DES 16 (+3)</code>, <code>CON 14 (+2)</code>, <code>INT 2 (-4)</code>, <code>SAB 12 (+1)</code>, <code>CAR 4 (-3)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>13</code> / Esquiva <code>18</code> / Desprevenido <code>12</code> <em>(Couro Escamoso <code>+2</code>, Treinado <code>+3</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataque</strong>: <em>Bote Venenoso</em>: <code>+6</code> (<code>1d8 + 3</code>, <code>19–20 / ×2</code>). <strong>Veneno Paralisante</strong>: CON CD 16 ou fica <strong>Paralisado por <code>2 rodadas</code></strong> (novo teste de CON CD 16 ao final de cada turno para encerrar).</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: água parada formando círculos lentos, sapos repentinamente mudos. <em>Motivação</em>: emboscar presas quentes na água rasa. <em>Fuga</em>: mergulha na lama profunda se sofrer mais de <code>12</code> de dano em um turno. <em>Interação</em>: contornável passando por terreno seco com Sobrevivência CD 15.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="9-escorpião-gigante-das-dunas-estepes-amaldiçoadas-gaddra-11">9. Escorpião-Gigante das Dunas <em>(Estepes Amaldiçoadas / Gaddra)</em></h3>
+<ul>
+<li><strong>PV</strong>: <code>38</code> <em>(Golpe Devastador: <code>26+</code>)</em> | <strong>Iniciativa</strong>: <code>+1</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 16 (+3)</code>, <code>DES 12 (+1)</code>, <code>CON 16 (+3)</code>, <code>INT 2 (-4)</code>, <code>SAB 10 (0)</code>, <code>CAR 3 (-4)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>16</code> / Esquiva <code>16</code> / Desprevenido <code>15</code> <em>(Carapaça Natural <code>+5</code>)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataques</strong>: <em>Pinças</em> <code>+6</code> (<code>1d8 + 3</code>, <code>20 / ×2</code>, agarra alvo Atletismo CD 15) | <em>Ferrão</em> <code>+6</code> (<code>1d6 + 3</code>, <code>20 / ×3</code> + <strong>Veneno Necrótico</strong>: CON CD 17 ou sofre <code>2d6</code> de dano imediato e <code>+1</code> nível de Exaustão por 24h; sucesso sofre metade do dano e sem Exaustão).</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: areia vibrando, cascas quitinosas descartadas em fendas de pedra. <em>Motivação</em>: caça noturna atraída por vibrações no solo. <em>Fuga</em>: enterra-se sob areia se exposto a fogo ou perder mais da metade do PV. <em>Interação</em>: guias de Gaddra evitam ninhos viajando sobre rocha firme durante o pico do calor.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="10-leviatã-dos-recifes-mar-dos-corais-o-ferro-velho-12">10. Leviatã-dos-Recifes <em>(Mar dos Corais / O Ferro Velho)</em></h3>
+<p><em>Predador abissal raríssimo responsável por lendas do cemitério de navios.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>82</code> <em>(Golpe Devastador: <code>55+</code>)</em> | <strong>Iniciativa</strong>: <code>+1</code> | <strong>Deslocamento</strong>: <code>15m</code> <em>(Natação)</em></li>
+<li><strong>Atributos</strong>: <code>FOR 20 (+5)</code>, <code>DES 12 (+1)</code>, <code>CON 18 (+4)</code>, <code>INT 3 (-4)</code>, <code>SAB 12 (+1)</code>, <code>CAR 5 (-3)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>16</code> / Esquiva <code>16</code> / Desprevenido <code>15</code> <em>(Carapaça Calcificada <code>+5</code>)</em> | <strong>RD Especial</strong>: <code>2</code> <em>(couro calcificado de coral)</em></li>
+<li><strong>Ataques</strong>: <em>Mandíbula Esmagadora</em> <code>+13</code> (<code>2d10 + 5</code>, <code>20 / ×3</code>, causa dano dobrado em cascos de madeira) | <em>Golpe de Cauda</em> <code>+10</code> (<code>2d6 + 5</code>, derruba tripulantes Acrobacia CD 16).</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: cardumes inteiros saltando fora d&#x27;água, recifes que parecem se mover sob a quilha. <em>Motivação</em>: defender sua fossa de caça e devorar grandes cargas de peixe/carne. <em>Fuga</em>: afunda nas fossas abissais se perder <code>40+</code> PV ou sofrer dano de fogo/óleo em chamas. <em>Interação</em>: marinheiros de Baldbella despejam barris de peixe estragado ao mar para distraí-lo e escapar.</li>
+</ul>
+</div>
+<hr/>
+<h2 id="parte-iii-horrores-raríssimos-lendas-de-incognito-estilo-game-of-thrones-13">Parte III — Horrores Raríssimos &amp; Lendas de Incognito <em>(Estilo Game of Thrones)</em></h2>
+<div class="callout warning"><div class="callout-title">Aviso ao Mestre</div><div>Criaturas desta seção <strong>não são encontros comuns</strong>. Preceda qualquer aparição por silêncio anormal, frio súbito ou vestígios de expedições perdidas.</div></div>
+<div class="entry-card">
+<h3 id="11-errante-do-piche-os-poços-de-piche-incognito-14">11. Errante do Piche <em>(Os Poços de Piche / Incognito)</em></h3>
+<p><em>Vulto humanoide antigo coberto de piche negro e gélido, que não respira nem sangra.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>46</code> <em>(Imune a morte instantânea por Golpe Devastador mundano; vulnerável a fogo — recebe dano dobrado de fogo)</em> | <strong>Iniciativa</strong>: <code>+1</code> | <strong>Deslocamento</strong>: <code>7,5m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 16 (+3)</code>, <code>DES 12 (+1)</code>, <code>CON 16 (+3)</code>, <code>INT 6 (-2)</code>, <code>SAB 10 (0)</code>, <code>CAR 4 (-3)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>18</code> / Esquiva <code>15</code> / Desprevenido <code>14</code> <em>(Pele Petrificada <code>+4</code>, Treinado <code>+3</code> Aparar)</em> | <strong>RD Especial</strong>: <code>3</code> <em>(ignorado por Fogo ou <strong>Armas de Adamante</strong>)</em></li>
+<li><strong>Ataques</strong>: <em>Garras de Piche / Lâmina Antiga</em>: <code>+10</code> (<code>1d8 + 3</code> físico + <code>1d4</code> frio/asfixia, <code>19–20 / ×2</code>).</li>
+<li><strong>Presença Antinatural</strong>: ao avistá-lo pela 1ª vez na cena, personagens fazem SAB CD 16 (somam <code>Fé Verdadeira</code> se possuírem) ou sofrem <code>-2</code> em todos os testes por <code>2 rodadas</code>.</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: cheiro forte de enxofre frio, pegadas negras oleosas que não congelam. <em>Motivação</em>: guardar os limites dos Poços de Piche ou perseguir quem levou relíquias de Incognito. <em>Fuga</em>: nunca foge, mas hesita diante de chamas vivas intensas. <em>Interação</em>: pode ser evitado abandonando relíquias roubadas ou usando barreiras de fogo para escapar.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="12-sombra-das-ruínas-perdidas-interior-de-incognito-ameaça-de-lendaépica-15">12. Sombra das Ruínas Perdidas <em>(Interior de Incognito — Ameaça de Lenda/Épica)</em></h3>
+<p><em>Entidade antiga ligada às civilizações extintas além de Thanatos; apaga tochas e gela o aço.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>96</code> <em>(Imune a venenos e sangramento)</em> | <strong>Iniciativa</strong>: <code>+4</code> | <strong>Deslocamento</strong>: <code>12m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 16 (+3)</code>, <code>DES 18 (+4)</code>, <code>CON 18 (+4)</code>, <code>INT 14 (+2)</code>, <code>SAB 16 (+3)</code>, <code>CAR 14 (+2)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>22</code> / Esquiva <code>22</code> / Desprevenido <code>16</code> <em>(Aura Sombria <code>+6</code>, Destreinado Aparar/Esquiva compensado por DES +4 e deslocamento etéreo <code>+2</code>)</em> | <strong>RD Especial</strong>: <code>5</code> <em>(ignorado apenas por <strong>Adamante Puro</strong>, fogo intenso ou rituais de <strong>Dom Antigo / Fé Verdadeira</strong>)</em></li>
+<li><strong>Ataques</strong>: <em>Toque do Esquecimento</em>: <code>+14</code> (<code>2d8 + 4</code> frio/necrótico, <code>19–20 / ×3</code>; alvo faz CON CD 18 ou sofre <code>+1</code> nível de Exaustão imediato).</li>
+<li><strong>Sussurro das Eras</strong>: como ação livre, apaga chamas comuns num raio de <code>6m</code>; exige SAB CD 19 (soma <code>Fé Verdadeira</code>) para manter a coragem sem recuar.</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: geada repentina formando padrões geométricos, vozes de entes falecidos sussurradas pelo vento. <em>Motivação</em>: enigmática — proteger a <em>Cidadela Sem Nome</em> ou testar intrusos marcados por <em>Thanatos</em>. <em>Fuga</em>: dissolve-se na nevasca ao amanhecer pleno ou diante de ritual bem-sucedido. <em>Interação</em>: em vez de atacar imediatamente, pode oferecer uma visão ou cobrar um sacrifício/memória em troca de passagem.</li>
+</ul>
+</div>
+<hr/>
+<h2 id="parte-iv-agentes-do-regente-das-cinzas-a-comunhão-16">Parte IV — Agentes do Regente das Cinzas &amp; A Comunhão</h2>
+<div class="entry-card">
+<h3 id="13-hospedeiro-em-confluência-comunidade-submetida-patamar-recruta-17">13. Hospedeiro em Confluência <em>(Comunidade Submetida — Patamar Recruta)</em></h3>
+<p><em>Aldeões, marinheiros ou guardas em Estágio III/IV da simbiose — calmos, educados e inquietantemente coordenados.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>22</code> <em>(Golpe Devastador: <code>15+</code>; recebe <code>+3</code> no teste de CON)</em> | <strong>Iniciativa</strong>: <code>+3</code> <em>(+2 da Confluência quando em grupo)</em> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 12 (+1)</code>, <code>DES 12 (+1)</code>, <code>CON 13 (+1)</code>, <code>INT 11 (0)</code>, <code>SAB 10 (0)</code>, <code>CAR 12 (+1)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>15</code> / Esquiva <code>15</code> / Desprevenido <code>11</code> <em>(Gibão Reforçado <code>+1</code>, Treinado <code>+3</code> Aparar/Esquiva)</em> | <strong>RD Especial</strong>: <code>0</code></li>
+<li><strong>Ataques</strong>:<ul><li><em>Ferramenta Pesada / Espada Curta</em>: <code>+4</code> (<code>1d6 + 1</code>, <code>19–20 / ×2</code>; recebe <code>+4</code> ao flanquear junto de outro conectado)</li></ul></li>
+<li><strong>Habilidade — Vozes em Uníssono</strong>: quando 2 ou mais conectados lutam juntos, não podem ser flanqueados se ao menos um deles vir o atacante e compartilham instantaneamente o que qualquer um enxerga até <code>30m</code>.</li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: comunidade silenciosamente próspera onde ninguém discute, cicatriz discreta na nuca, moradores evitam deixar o povoado. <em>Motivação</em>: &quot;proteger&quot; os visitantes oferecendo cura e pertencimento. <em>Fuga</em>: recuam em conjunto ordenado se o condutor de adamante local for quebrado. <em>Interação</em>: muitos hospedeiros ainda são pessoas boas — conversar, usar <em>Fé Verdadeira</em> ou despertar memórias pessoais pode gerar hesitação e permitir resgate sem chacina.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="14-a-primeira-devolvida-marella-de-claramar-emissária-patamar-lenda-18">14. A Primeira Devolvida — Marella de Claramar <em>(Emissária — Patamar Lenda)</em></h3>
+<p><em>Antiga navegadora reconstruída em Thanatos com sua tripulação; eloquente, serena e letalmente pragmática.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>84</code> <em>(Golpe Devastador: <code>57+</code>)</em> | <strong>Iniciativa</strong>: <code>+6</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 14 (+2)</code>, <code>DES 17 (+3)</code>, <code>CON 16 (+3)</code>, <code>INT 15 (+2)</code>, <code>SAB 16 (+3)</code>, <code>CAR 18 (+4)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>28</code> / Esquiva <code>24</code> / Desprevenido <code>13</code> <em>(Brigantina Leve/Couro Reforçado <code>+3</code>, Mestre <code>+12</code> Aparar, Especialista <code>+8</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>2</code> <em>(medalhão de adamante antigo amplificador da rede)</em></li>
+<li><strong>Ataques</strong>:<ul><li><em>Sabre de Adamante Antigo</em>: <code>+16</code> (<code>2d6 + 5</code> [Maestria de Lenda + Adamante], <code>18–20 / ×2</code>; <strong>Múltiplas Ações</strong>: até <strong>2 golpes com <code>+6</code></strong> ou <strong>3 golpes com <code>+2</code></strong>)</li></ul></li>
+<li><strong>Habilidades</strong>:<ul><li><em>Voz de Quem Partiu</em>: como Ação Principal, sussurra memórias autênticas de um ente falecido do alvo (SAB CD 17, soma <code>Fé Verdadeira</code>, ou o alvo hesita e sofre <code>-3</code> em ataques contra ela por 1 rodada).</li><li><em>Tripulação em Confluência</em>: enquanto um tripulante seu estiver a até <code>18m</code>, pode usar sua Reação para impor <code>-4</code> a um ataque contra si.</li></ul></li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: veleiro impecável sem bandeira que atravessa nevoeiros sem errar um recife, aroma de água salgada gelada. <em>Motivação</em>: convencer cidades e governantes a aceitar a Comunhão voluntariamente. <em>Fuga</em>: nunca desperdiça sua tripulação em combate sem ganho — negocia trégua ou desaparece na neblina se o duelo virar contra ela. <em>Interação</em>: prefere debate sincero a violência; pode até revelar segredos sobre dissidentes na rede se acreditar que os PJs são capazes de compreender sua causa.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="15-o-regente-das-cinzas-avatar-da-rede-ameaça-épica-19">15. O Regente das Cinzas <em>(Avatar da Rede — Ameaça Épica)</em></h3>
+<p><em>O último soberano da civilização perdida de Incognito, coroado por um aro de adamante partido; manifestação física sustentada por uma colônia ancestral e pilares de adamante.</em></p>
+<ul>
+<li><strong>PV</strong>: <code>165</code> <em>(Imune a medo, veneno, sangramento e Exaustão; vulnerável quando os pilares de adamante da câmara são rompidos)</em> | <strong>Iniciativa</strong>: <code>+7</code> | <strong>Deslocamento</strong>: <code>9m</code></li>
+<li><strong>Atributos</strong>: <code>FOR 18 (+4)</code>, <code>DES 16 (+3)</code>, <code>CON 20 (+5)</code>, <code>INT 20 (+5)</code>, <code>SAB 18 (+4)</code>, <code>CAR 20 (+5)</code></li>
+<li><strong>Defesa</strong>: Aparar <code>30</code> / Esquiva <code>26</code> / Desprevenido <code>15</code> <em>(Manto e Placa de Adamante Partido <code>+5</code>, Mestre <code>+12</code> Aparar, Especialista <code>+8</code> Esquiva)</em> | <strong>RD Especial</strong>: <code>5</code> <em>(reduzida para <code>2</code> se o amplificador local for destruído; ignorada por armas de Adamante ou rituais de Fé Verdadeira / Dom Antigo)</em></li>
+<li><strong>Ataques</strong>:<ul><li><em>Lâmina da Coroa Partida (Adamante)</em>: <code>+17</code> (<code>3d8 + 6</code> [Maestria Épica + Adamante], <code>18–20 / ×2</code>; ignora até <code>3</code> de RD Especial; <strong>Múltiplas Ações</strong>: até <strong>2 golpes com <code>+6</code></strong> ou <strong>3 golpes com <code>+2</code></strong>)</li><li><em>Chamado da Comunhão (Alcance 18m)</em>: força até 3 alvos a testarem <strong>SAB CD 20</strong> <em>(soma <code>Fé Verdadeira</code>)</em> ou sofrerem <code>3d6</code> de desgaste psíquico e <code>-2</code> em testes por 1 rodada, ouvindo a voz de pessoas amadas pedindo que baixem as armas.</li></ul></li>
+<li><strong>Em Cena</strong>: <em>Sinais</em>: temperatura despenca, ecos de centenas de vozes sussurrando memórias gentis, cinzas subindo lentamente contra a gravidade. <em>Motivação</em>: abolir a morte e a solidão humana sob sua vontade unificada. <em>Fuga</em>: se o avatar for destruído enquanto o núcleo da colônia permanecer intacto, sua consciência recua para a rede. <em>Interação</em>: oferece acordos genuinamente tentadores aos PJs (devolver um aliado morto, curar uma cicatriz permanente ou poupar uma cidade inteira em troca de colaboração) — e dissidentes presos dentro da Comunhão podem ajudar os jogadores a enfraquecê-lo se forem ouvidos.</li>
+</ul>
+</div>
+        </article>
+    </main>
+    <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
+        <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const lb = document.getElementById('atlas-lightbox');
+    const lbImg = document.getElementById('atlas-lightbox-img');
+    if (lb && lbImg) {
+        document.querySelectorAll('.atlas-plate img').forEach(img => {
+            img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+        });
+        lb.addEventListener('click', () => lb.classList.remove('open'));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Livro do Cenário &amp; Atlas — Alenia RPG</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+    --desk: #171512;
+    --vellum: #f7f1e3;
+    --vellum-alt: #efe6d2;
+    --vellum-card: #f2ead8;
+    --ink: #221c16;
+    --ink-soft: #4e4336;
+    --crimson: #7a1f1d;
+    --crimson-dark: #571412;
+    --gold: #9a7b3b;
+    --gold-light: #cdb06e;
+    --border: #cfc2a5;
+    --sidebar-w: 280px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--desk); color: var(--ink); }
+body {
+    margin: 0;
+    font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.66;
+    background: radial-gradient(circle at top, #27221c 0%, #171512 58%, #100e0c 100%);
+    min-height: 100vh;
+}
+
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 54px;
+    background: rgba(18, 16, 13, 0.96);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.45);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-brand {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+}
+.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-nav a, .btn-print {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none;
+    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    transition: all 0.16s ease; cursor: pointer; background: transparent;
+}
+.topbar-nav a:hover, .topbar-nav a.active {
+    color: var(--gold-light); border-color: rgba(154, 123, 59, 0.55); background: rgba(154, 123, 59, 0.12);
+}
+.btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
+.btn-print:hover { background: #922624; color: #fff; }
+
+.sidebar {
+    position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 18px 14px 32px; overflow-y: auto; z-index: 900;
+}
+.sidebar-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold-light);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 12px 0;
+}
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin: 2px 0; }
+.toc-list a {
+    display: block; text-decoration: none; color: #cfc6b4; font-size: 14.5px;
+    line-height: 1.35; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
+}
+.toc-list a:hover { color: var(--gold-light); background: rgba(154, 123, 59, 0.1); border-left-color: var(--gold); }
+.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 6px; }
+.toc-h3 a { padding-left: 16px; font-size: 13.5px; color: #b5ab98; }
+
+.book-shell { margin-left: var(--sidebar-w); padding: 80px 26px 64px; display: flex; justify-content: center; }
+.book-shell.no-sidebar { margin-left: 0; }
+.book-page {
+    width: 100%; max-width: 920px; background: var(--vellum); color: var(--ink);
+    padding: 52px 60px 70px;
+    box-shadow: 0 24px 65px rgba(0,0,0,0.62), 0 0 0 1px rgba(154, 123, 59, 0.35);
+    border-radius: 3px; position: relative;
+}
+.book-page::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px solid rgba(154, 123, 59, 0.32); pointer-events: none;
+}
+
+.cover-page {
+    min-height: 760px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 54px 44px; margin-bottom: 52px;
+    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -8px;
+    background: radial-gradient(circle at center, #fbf7ee 0%, #f3ead6 100%);
+    page-break-after: always; break-after: page;
+}
+.cover-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 13px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--crimson); margin-bottom: 14px;
+}
+.cover-rule {
+    width: 180px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
+    margin: 18px auto;
+}
+.cover-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 40px; font-weight: 800; line-height: 1.15;
+    letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
+}
+.cover-subtitle {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 21px;
+    color: var(--ink-soft); margin: 14px 0 8px; max-width: 640px;
+}
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 560px; margin: 24px auto 14px; }
+.cover-thumb {
+    max-width: 100%; max-height: 310px; border: 2px solid var(--gold);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.22); margin: 16px auto; border-radius: 2px;
+}
+.cover-edition {
+    margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
+h1.book-h1 {
+    font-size: 28px; letter-spacing: 0.05em; text-transform: uppercase;
+    border-bottom: 2px solid var(--crimson); padding-bottom: 10px; margin: 0 0 22px 0;
+}
+h2 { font-size: 21px; letter-spacing: 0.04em; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--gold); }
+h3 { font-size: 16.5px; letter-spacing: 0.03em; margin: 22px 0 8px; color: #3d2415; }
+p { margin: 0 0 13px; text-align: justify; hyphens: auto; }
+ul, ol { margin: 6px 0 16px; padding-left: 24px; }
+li { margin-bottom: 6px; }
+strong { color: #17120d; }
+code {
+    font-family: Consolas, 'Courier New', monospace; font-size: 0.86em;
+    background: rgba(154, 123, 59, 0.14); border: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 1px 5px; border-radius: 3px; color: #5b1d18;
+}
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 28px 0; }
+a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 3px; }
+
+blockquote {
+    margin: 18px 0 22px; padding: 14px 20px; background: var(--vellum-card);
+    border-left: 4px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
+}
+.callout {
+    margin: 20px 0; padding: 14px 18px; border-radius: 2px; border: 1px solid var(--border);
+    border-left: 5px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid;
+}
+.callout-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); margin-bottom: 6px;
+}
+.callout.warning { border-left-color: #b4691e; background: #f6ecd7; }
+.callout.warning .callout-title { color: #8c4d10; }
+
+.formula-box {
+    margin: 16px 0 20px; padding: 12px 18px; background: #efe5cf;
+    border: 1px solid var(--gold); border-radius: 3px; text-align: center;
+    font-size: 18.5px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
+}
+
+.table-wrap { width: 100%; overflow-x: auto; margin: 16px 0 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.44; border: 1px solid var(--gold); }
+thead th {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.05em;
+    text-transform: uppercase; background: var(--crimson); color: #f7f1e3;
+    padding: 9px 9px; border: 1px solid #5f1816; text-align: left;
+}
+tbody td { padding: 8px 9px; border: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--vellum-alt); }
+tr { break-inside: avoid; }
+
+.atlas-plate {
+    margin: 22px 0 28px; padding: 10px; background: #ebe1ca;
+    border: 1px solid var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+    text-align: center; break-inside: avoid;
+}
+.atlas-plate img { width: 100%; height: auto; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.atlas-caption {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 8px;
+}
+
+.entry-card {
+    margin: 16px 0 20px; padding: 14px 18px 12px; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
+}
+.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 5px; }
+
+.lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
+    z-index: 2000; padding: 24px; align-items: center; justify-content: center; cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 96vw; max-height: 92vh; border: 2px solid var(--gold); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 22px 0 32px; }
+.portal-card {
+    display: flex; flex-direction: column; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 4px solid var(--crimson);
+    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
+.portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
+.portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
+.portal-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.48; margin: 0; text-align: left; }
+.portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+.tome-divider { page-break-before: always; break-before: page; }
+
+@media (max-width: 1020px) {
+    .sidebar { display: none; }
+    .book-shell { margin-left: 0; padding: 72px 14px 40px; }
+    .book-page { padding: 30px 24px 42px; }
+}
+
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@media print {
+    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
+    .topbar, .sidebar, .lightbox { display: none !important; }
+    .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
+    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    .book-page::before { display: none !important; }
+    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: var(--crimson-dark); text-decoration: none; }
+    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+}
+</style>
+</head>
+<body>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html" class="active">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-de-alenia-0">1. Visão Geral de Alenia</a></li><li class="toc-h3"><a href="#presente-histórico-as-6-crises-ativas-agora-1">Presente Histórico — As 6 Crises Ativas Agora</a></li><li class="toc-h2"><a href="#2-reino-capital-de-aurora-a-potência-do-adamante-2">2. Reino Capital de Aurora (A Potência do Adamante)</a></li><li class="toc-h2"><a href="#3-liga-talassocrática-de-corallis-o-mar-dos-corais-3">3. Liga Talassocrática de Corallis &amp; O Mar dos Corais</a></li><li class="toc-h2"><a href="#4-confederação-tribal-de-gaddra-4">4. Confederação Tribal de Gaddra</a></li><li class="toc-h2"><a href="#5-despotado-velado-de-kalis-o-mar-intransponível-5">5. Despotado Velado de Kalis &amp; O Mar Intransponível</a></li><li class="toc-h2"><a href="#6-incognito-o-mistério-da-ilha-de-thanatos-6">6. Incognito &amp; O Mistério da Ilha de Thanatos</a></li><li class="toc-h2"><a href="#7-a-grande-ameaça-o-regente-das-cinzas-o-simbionte-da-comunhão-7">7. A Grande Ameaça: O Regente das Cinzas &amp; O Simbionte da Comunhão</a></li><li class="toc-h3"><a href="#a-origem-o-simbionte-e-a-promessa-que-deu-errado-8">A Origem: O Simbionte e a Promessa Que Deu Errado</a></li><li class="toc-h3"><a href="#como-a-ameaça-funciona-na-prática-9">Como a Ameaça Funciona na Prática</a></li><li class="toc-h3"><a href="#o-rosto-da-ameaça-agentes-concretos-10">O Rosto da Ameaça: Agentes Concretos</a></li><li class="toc-h3"><a href="#relógio-de-campanha-as-5-etapas-da-expansão-11">Relógio de Campanha — As 5 Etapas da Expansão</a></li><li class="toc-h3"><a href="#o-dilema-final-e-a-via-de-separação-12">O Dilema Final e a Via de Separação</a></li><li class="toc-h2"><a href="#8-as-6-facções-ativas-do-mundo-13">8. As 6 Facções Ativas do Mundo</a></li><li class="toc-h2"><a href="#9-religiões-ordens-e-cronologia-curta-14">9. Religiões, Ordens e Cronologia Curta</a></li><li class="toc-h3"><a href="#tradições-religiosas-e-fé-verdadeira-convicção-plural-15">Tradições Religiosas e Fé Verdadeira (Convicção Plural)</a></li><li class="toc-h3"><a href="#linha-do-tempo-curta-de-alenia-16">Linha do Tempo Curta de Alenia</a></li><li class="toc-h2"><a href="#10-guia-operacional-de-viagens-distâncias-e-estações-17">10. Guia Operacional de Viagens, Distâncias e Estações</a></li><li class="toc-h3"><a href="#tabela-de-viagens-principais-marcha-normal-30-kmdia-navio-mercante-120-kmdia-18">Tabela de Viagens Principais (Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)</a></li><li class="toc-h2"><a href="#11-atlas-regional-detalhado-5-mapas-aproximados-19">11. Atlas Regional Detalhado (5 Mapas Aproximados)</a></li></ul></aside>
+    <main class="book-shell">
+        <article class="book-page">
+            
+    <section class="cover-page">
+        <div class="cover-kicker">ALENIA RPG • TOMO II</div>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title">Livro do Cenário &amp; Atlas</h1>
+        <div class="cover-subtitle">6 Crises Ativas, Facções, Religiões, Viagens &amp; 6 Mapas Ilustrados</div>
+        <div class="cover-rule"></div>
+        <img class="cover-thumb" src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Mapa de Alenia"/>
+        <p class="cover-epigraph">“Ao norte, além de Thanatos e do Mar das Cinzas, só existe o que os mapas se recusam a nomear.”</p>
+        <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
+    </section>
+    
+<h1 id="alenia-rpg-livro-oficial-do-cenário-atlas-do-mundo-edição-revisada-v20-0" class="book-h1">ALENIA RPG — Livro Oficial do Cenário &amp; Atlas do Mundo (Edição Revisada v2.0)</h1>
+<blockquote><em>&quot;Ao sul há ouro e sede; a oeste, livros e naufrágios; a leste, sussurros atrás de portas fechadas. E ao norte, além de Thanatos e do Mar das Cinzas, só existe o que os mapas se recusam a nomear.&quot;</em></blockquote>
+<hr/>
+<h2 id="1-visão-geral-de-alenia-0">1. Visão Geral de Alenia</h2>
+<figure class="atlas-plate"><img src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Prancha I — Mapa-Múndi de Alenia (48 Topônimos Oficiais)" loading="lazy"/><figcaption class="atlas-caption">Prancha I — Mapa-Múndi de Alenia (48 Topônimos Oficiais)</figcaption></figure>
+<p><strong>Alenia</strong> é um mundo medieval sombrio onde <strong>todas as civilizações vivas e povos jogáveis são exclusivamente humanos</strong>, divididos entre quatro grandes domínios habitados e um continente proibido ao norte. O mundo é movido pela disputa do <strong>adamante</strong>, pela ciência sem pólvora, por rotas marítimas letais, por intrigas de corte e pelo temor crescente do desconhecido.</p>
+<ul>
+<li><strong>Mapa-Múndi Oficial (<code>2752 × 1536</code>)</strong>: <a href="assets/alenia_mapa_mundi_atualizado.jpg">alenia_mapa_mundi_atualizado.png</a></li>
+<li><strong>Compêndio de Onomástica e Toponímia</strong>: <a href="05_Onomastica_e_Toponimia.html">05_Onomastica_e_Toponimia_Alenia.md</a></li>
+</ul>
+<h3 id="presente-histórico-as-6-crises-ativas-agora-1">Presente Histórico — As 6 Crises Ativas Agora</h3>
+<p>A campanha começa no <strong>Ano 418 da Era da Forja</strong>, em um momento de fratura simultânea:</p>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Crise Ativa</th><th style="text-align:left">Quem Ganha</th><th style="text-align:left">Quem Perde</th><th style="text-align:left">Se os PJs Não Intervierem</th></tr></thead><tbody><tr><td style="text-align:left"><strong>1. Sucessão Contestada em Altavanne</strong>: o Alto Rei <em>Severor III Valerion</em> adoeceu gravemente sem herdeiro indiscutível; sua irmã <em>Valora Valerion</em> disputa a regência contra o marechal <em>Lucian Leonastis</em>.</td><td style="text-align:left">Espiões de Kalgard e casas menores vendendo apoio.</td><td style="text-align:left">A Coroa de Aurora e os mercadores de Merlinport (comércio travado por impostos de guerra).</td><td style="text-align:left">Guerra civil aberta no vale do Rio Aurélio em menos de um ano.</td></tr><tr><td style="text-align:left"><strong>2. Desabamento e Greve nas Minas de Ferraur</strong>: uma galeria profunda em Aeraneas desabou matando 40 mineradores; os sobreviventes paralisaram a extração de adamante exigindo segurança e cotas.</td><td style="text-align:left">Contrabandistas do Mar dos Corais e forjadores clandestinos.</td><td style="text-align:left">A Casa Valerion e compradores civis de instrumentos em Corallis.</td><td style="text-align:left">O marechal Leonastis marcha sobre Aeraneas e transforma a greve em massacre.</td></tr><tr><td style="text-align:left"><strong>3. Quebra da Trégua dos Recifes (Corallis)</strong>: <em>Baldbella</em> e <em>Alineus</em> disputam quem cobra taxas dos práticos que guiam navios e dos salvamentos retirados de <em>O Ferro Velho</em>.</td><td style="text-align:left">Corsários do Arquipélago Ravena e sucateiros independentes.</td><td style="text-align:left">Armadores pequenos e pesquisadores da Academia de Sellene.</td><td style="text-align:left">Bloqueio naval parcial na entrada do Mar dos Corais e escalada de pirataria.</td></tr><tr><td style="text-align:left"><strong>4. O Emissário Perdido perto de Altrax</strong>: <em>Cadwyn ap Merion</em>, enviado da <em>Cidade Suspensa</em>, saiu da rota habitual de <em>Vergod</em> rumo ao noroeste para fotografar/registrar provas de prospecção ilegal de adamante dentro das matas protegidas — e desapareceu nos <em>Pântanos Nebulosos</em>.</td><td style="text-align:left">Os financiadores secretos da prospecção ilegal em Altavanne.</td><td style="text-align:left">O <em>Conselho das Copas</em> e a frágil paz das estradas de Aurora.</td><td style="text-align:left">O Conselho fecha Vergod e começa a atacar caravanas reais nas florestas.</td></tr><tr><td style="text-align:left"><strong>5. Os Despertos da Ilha de Thanatos</strong>: um navio de vigia vindo de Aeraneas jurou ter reconhecido <strong>três marinheiros comprovadamente mortos</strong> num naufrágio há dois meses caminhando vivos na praia negra de <em>Thanatos</em>, sob o Farol Apagado.</td><td style="text-align:left">Ocultistas e curiosos da Academia de Sellene ávidos por investigar.</td><td style="text-align:left">Ordens religiosas em pânico e famílias abaladas em Merlinport.</td><td style="text-align:left">Inquisidores incendeiam barcos de investigação e Kalgard envia agentes antes de Aurora para capturar um &quot;desperto&quot;.</td></tr><tr><td style="text-align:left"><strong>6. Embargo na Rota do Sal (Gaddra)</strong>: o assassinato de um <em>Árbitro do Sangue</em> em <em>Naasar</em> foi atribuído a lâminas estrangeiras; clãs de <em>Vargheim</em> ameaçam fechar o <em>Passo de Rubecina</em>.</td><td style="text-align:left">Contrabandistas marítimos pelo Mar de Zahar.</td><td style="text-align:left">Caravaneiros de Vaarsa e Naasar, além de vilas que dependem de grãos e sal.</td><td style="text-align:left">Guerra de fronteira nos Picos de Rubecina e escassez de sal em todo o sul de Aurora.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="2-reino-capital-de-aurora-a-potência-do-adamante-2">2. Reino Capital de Aurora <em>(A Potência do Adamante)</em></h2>
+<figure class="atlas-plate"><img src="assets/mapa_regional_aurora.jpg" alt="Prancha II — Mapa Regional do Reino de Aurora &amp; Conselho das Copas" loading="lazy"/><figcaption class="atlas-caption">Prancha II — Mapa Regional do Reino de Aurora &amp; Conselho das Copas</figcaption></figure>
+<ul>
+<li><strong>Designador &amp; Gentílico</strong>: <strong>Reino Capital de Aurora</strong> <em>(Auroriano / Auroriana)</em> | <strong>Tendência Fonética</strong>: I. Imperial / Clássico <em>(bastardos: <strong>Cinza</strong>; Povo das Florestas: <strong>Bruma</strong>)</em>.</li>
+<li><strong>Economia do Adamante</strong>: Aurora detém tanto <strong>as maiores reservas mundiais</strong> (nos <em>Montes Ferraur</em>, extraídas a partir de <em>Aeraneas</em>) quanto <strong>a maior expertise em mineração, fundição de altíssima temperatura e forja</strong>. O metal não serve apenas para armas e raras peças de armadura: suas lascas e ligas são cobiçadas em toda Alenia para <strong>brocas de mineração profunda, pontas cirúrgicas de precisão (Baldbella), engrenagens de relojoaria/astrolábios (Observatório Helmer) e travas de cofres</strong>.</li>
+<li><strong>Por que Aurora Não Conquista Todos os Continentes?</strong>: quatro freios reais contêm a Coroa — (1) extração lentíssima e perigosa em galerias profundas que dependem de mestres-forjadores escassos; (2) o <strong>Mar dos Corais</strong> e o <strong>Mar Intransponível</strong> tornam invasões navais em larga escala contra Corallis e Kalis suicidas; (3) os <strong>Picos de Rubecina</strong> exigem guarnição permanente contra clãs de Gaddra; e (4) rivalidades ferozes entre as Casas Nobres de Altavanne e espionagem industrial constante.</li>
+<li><strong>Cidades e Fortalezas</strong>: <strong>Altavanne</strong> <em>(Capital, Rio Aurélio)</em>, <strong>Merlinport</strong> <em>(grande estuário comercial oeste)</em>, <strong>Yõketsu</strong> <em>(enclave oriental na costa leste com tradições marciais próprias)</em>, <strong>Aeraneas</strong> <em>(sede das minas e forjas de adamante nos Montes Ferraur)</em>, <strong>Dahrma</strong> <em>(vale agrícola sudoeste)</em>, <strong>Vaarsa</strong> <em>(fortaleza fronteiriça nos Picos de Rubecina)</em>, <strong>Altrax</strong> <em>(forte noroeste da Casa d&#x27;Altrax)</em>, <strong>Lavroga</strong> <em>(pedreira e posto sudoeste)</em> e <strong>Vergod</strong> <em>(entreposto na borda da mata nordeste)</em>.</li>
+<li><strong>Conselho das Copas <em>(Cidade Suspensa — Povo das Florestas)</strong></em>: autonomia cultural nas copas milenares do nordeste. <strong>Logística real</strong>: abastecimento de água por calhas suspensas de coleta pluvial e roldanas sobre afluentes fundos; proteção contra incêndios por pontes de corda destacáveis em segundos, cascas umedecidas com seiva retardante e zonas de corte ao redor das árvores-mestras. Dependem de <strong>Vergod</strong> para sal, ferramentas de ferro e tecidos grossos de inverno — e vivem divididos entre anciãos isolacionistas e jovens vigias que querem agir contra a expansão mineradora.</li>
+<li><strong>Marcos &amp; Geografia</strong>: <em>Montes Ferraur</em>, <em>Minas de Ferraur</em>, <em>Picos de Rubecina</em>, <em>Passo de Rubecina</em>, <em>Rio Aurélio</em>, <em>Pontáuria</em>, <em>Vila de Silvaria</em>, <em>Torre de Specula</em>, <em>Pântanos Nebulosos</em>, <em>Pântano de Voernock</em>, <em>Ruínas de Vetarx</em> e <em>Santuário de Derwlyn</em>.</li>
+</ul>
+<hr/>
+<h2 id="3-liga-talassocrática-de-corallis-o-mar-dos-corais-3">3. Liga Talassocrática de Corallis &amp; O Mar dos Corais</h2>
+<figure class="atlas-plate"><img src="assets/mapa_regional_corallis.jpg" alt="Prancha III — Mapa Regional de Corallis &amp; Mar dos Corais" loading="lazy"/><figcaption class="atlas-caption">Prancha III — Mapa Regional de Corallis &amp; Mar dos Corais</figcaption></figure>
+<ul>
+<li><strong>Designador &amp; Gentílico</strong>: <strong>Liga Talassocrática de Corallis</strong> <em>(Corallino / Corallina)</em> | <strong>Tendência Fonética</strong>: IV. Talassocrático <em>(bastardos: <strong>Coral</strong>)</em>.</li>
+<li><strong>Política &amp; Rivalidades</strong>: Corallis não tem rei — é governada por um Conselho da Liga em que as 4 grandes cidades disputam poder comercial e acadêmico. <strong>Baldbella</strong> (frutos do mar, pérolas e cirurgia) disputa os impostos de pilotagem e salvamento contra <strong>Alineus</strong> (estaleiros e comércio com Merlinport), enquanto <strong>Stoneforge</strong> (engenharia sem pólvora e metalurgia) pressiona a <strong>Academia de Sellene</strong> por financiamentos práticos em vez de expedições arqueológicas caras.</li>
+<li><strong>Cidades &amp; Marcos</strong>: <strong>Alineus</strong>, <strong>Stoneforge</strong> <em>(Montes Pedramar)</em>, <strong>Baldbella</strong>, <strong>Biemont</strong>, <strong>Portocala</strong>, <strong>Academia de Sellene</strong>, <strong>Observatório Helmer</strong>, <strong>As Ruínas de Kelgore</strong>, <strong>O Ferro Velho</strong> <em>(sociedade inteira de sucateiros, mergulhadores, mercadores de relíquias e piratas sobre cascos encalhados)</em>, <strong>Ilhas de Syleth e Lystra</strong>, <strong>Farol de Claramar</strong>, <strong>Vila de Pelagosa</strong>, <strong>Atol das Pérolas</strong>, <strong>Cais de Litore</strong>, <strong>Ruínas de Petravella</strong> e <strong>Vigia de Syleth</strong>.</li>
+</ul>
+<hr/>
+<h2 id="4-confederação-tribal-de-gaddra-4">4. Confederação Tribal de Gaddra</h2>
+<figure class="atlas-plate"><img src="assets/mapa_regional_gaddra.jpg" alt="Prancha IV — Mapa Regional da Confederação Tribal de Gaddra" loading="lazy"/><figcaption class="atlas-caption">Prancha IV — Mapa Regional da Confederação Tribal de Gaddra</figcaption></figure>
+<ul>
+<li><strong>Designador &amp; Gentílico</strong>: <strong>Confederação Tribal de Gaddra</strong> <em>(Gaddrani / Gaddrita)</em> | <strong>Tendência Fonética</strong>: V. Solar / Árido com substrato Setentrional em <em>Vargheim</em> <em>(bastardos: <strong>Duna</strong>)</em>.</li>
+<li><strong>Vida Civil, Água e Lei da Hospitalidade</strong>: Gaddra está longe de ser apenas guerreiros errantes. A coesão entre os clãs repousa sobre a sagrada <strong>Lei da Hospitalidade</strong> <em>(ninguém pode derramar sangue sob a tenda ou poço de um anfitrião por três dias)</em>, julgada pelos <strong>Árbitros do Sangue</strong> em tribunais de conciliação que trocam vinganças de sangue por indenizações em água, montarias ou sal.</li>
+<li><strong>O Segredo de Naasar e do Lago Bayd</strong>: embora o <em>Lago Bayd</em> seja uma imensa bacia salina imprópria para consumo, <strong>Naasar</strong> ergue-se sobre um <strong>aquífero artesiano profundo</strong> perfurado séculos atrás — poços de pedra fresca mantidos pelos <em>Senhores da Água</em>. Controlar essas cisternas e a exportação de sal de Bayd sustenta toda a política gaddrani.</li>
+<li><strong>Cidades, Oásis &amp; Marcos</strong>: <strong>OX</strong> <em>(arenas, criação de montarias resistentes)</em>, <strong>Naasar</strong> <em>(tribunais da água e comércio de sal)</em>, <strong>Vargheim</strong> <em>(clãs guerreiros das escarpas)</em>, <strong>Qal-Zahar</strong>, <strong>Suq-Ramad</strong> <em>(grande feira sazonal de inverno/primavera)</em>, <strong>Oásis de Al-May</strong>, <strong>Dar-Shams</strong>, <strong>Kafar-Hajar</strong>, <strong>Poço de Sul</strong>, <strong>Burj-Qar</strong>, <strong>Estepes Amaldiçoadas</strong>, <strong>Ruínas de Qadim-Shahr</strong> e <strong>O Punho de Pedra</strong>.</li>
+</ul>
+<hr/>
+<h2 id="5-despotado-velado-de-kalis-o-mar-intransponível-5">5. Despotado Velado de Kalis &amp; O Mar Intransponível</h2>
+<figure class="atlas-plate"><img src="assets/mapa_regional_kalis.jpg" alt="Prancha V — Mapa Regional do Despotado de Kalis, Mar Intransponível &amp; Ilha das Safiras" loading="lazy"/><figcaption class="atlas-caption">Prancha V — Mapa Regional do Despotado de Kalis, Mar Intransponível &amp; Ilha das Safiras</figcaption></figure>
+<ul>
+<li><strong>Designador &amp; Gentílico</strong>: <strong>Despotado Velado de Kalis</strong> <em>(Kalita / Kalisiano)</em> | <strong>Tendência Fonética</strong>: II. Setentrional / Ferro <em>(bastardos: <strong>Sombra</strong>)</em>.</li>
+<li><strong>Vida Civil, Economia e Política Real</strong>: Kalis não sobrevive de espionagem — sobrevive de <strong>comércio estratégico protegido por disciplina implacável</strong>. Suas florestas e mares internos produzem <strong>madeira negra naval</strong> (altamente resistente à podridão marinha), <strong>vidro escuro temperado</strong>, <strong>peles frias</strong>, <strong>tintas e reagentes alquímicos</strong> e <strong>serviços bancários/de correio cifrado</strong> usados até por nobres de Altavanne. O povo comum aceita o rigor do <em>Déspota de Kalgard</em> porque as patrulhas costeiras e a justiça rápida de <em>Drakenhall</em> mantêm os corsários do <em>Arquipélago Ravena</em> e guerras civis longe de suas portas.</li>
+<li><strong>Tensão Interna</strong>: o Déspota <em>Grimrik Ulscold</em> <strong>não governa sozinho</strong> — depende do equilíbrio tenso entre três grandes Casas do Conselho (<em>Ulscold</em>, <em>von Kragstad</em> e <em>Hrafngard</em>), enquanto uma <strong>oposição mercantil silenciosa</strong> em <em>Fugong</em> e <em>Dobalbek</em> deseja abrir rotas comerciais legais com Aurora e Corallis.</li>
+<li><strong>Cidades &amp; Marcos</strong>: <strong>Cidadela de Kalgard</strong>, <strong>Dobalbek</strong>, <strong>Kragstad</strong>, <strong>Drakenhall</strong>, <strong>Fugong</strong>, <strong>Kalima</strong>, <strong>A Floresta Negra</strong>, <strong>Myrkholm</strong>, <strong>Skans-Kold</strong>, <strong>Jarnham</strong>, <strong>Ruínas de Eldgard</strong>, <strong>Mar Intransponível</strong> e <strong>Arquipélago Ravena</strong> (<em>Enseada do Corvo</em>).</li>
+<li><strong>Ilha das Safiras <em>(Ao Sul de Kalis)</strong></em>: neutra e disputada por boticários e contrabandistas (<em>Porto Esmeralda</em>). <strong>Origem do nome</strong>: segundo a tradição dos navegadores, ao amanhecer a bruma marítima refletida sobre o verde vivíssimo de sua mata fechada cria um brilho azul-esverdeado semelhante ao de safiras brutas — e raros seixos de coríndon encontrados em seus riachos reforçaram o batismo.</li>
+</ul>
+<hr/>
+<h2 id="6-incognito-o-mistério-da-ilha-de-thanatos-6">6. Incognito &amp; O Mistério da Ilha de Thanatos</h2>
+<figure class="atlas-plate"><img src="assets/mapa_regional_incognito.jpg" alt="Prancha VI — Mapa Regional de Incognito, Ilha de Thanatos &amp; Mar das Cinzas" loading="lazy"/><figcaption class="atlas-caption">Prancha VI — Mapa Regional de Incognito, Ilha de Thanatos &amp; Mar das Cinzas</figcaption></figure>
+<ul>
+<li><strong>Ilha de Thanatos <em>(no Mar das Cinzas)</strong></em>: envolta no maior enigma de Alenia. Abriga um antigo <strong>Farol Apagado</strong>, praias de areia vulcânica negra e câmaras subterrâneas soterradas sob o gelo. Há relatos jurados de pessoas comprovadamente mortas (em naufrágios, guerras ou execuções) que <strong>acordam vivas nas praias de Thanatos dias depois da própria morte</strong> — os chamados <strong>Despertos</strong>. Alguns retornam lúcidos e aterrorizados; outros carregam lembranças de pessoas mortas há séculos. Marinheiros evitam ancorar ali; Aurora mantém vigia distante, enquanto a Academia de Sellene, Kalgard e inquisidores disputam respostas em segredo.</li>
+<li><strong>Incognito <em>(Extremo Norte)</strong></em>: continente inabitado além do Mar das Cinzas, marcado por geleiras negras, cinzas vulcânicas, sombras anômalas e <strong>ruínas colossais anteriores à memória humana</strong> (<em>Os Poços de Piche</em>, <em>Ruínas da Coroa Quebrada</em>, <em>Geleira do Silêncio</em>, <em>Cidadela Sem Nome</em>, <em>Cabo dos Náufragos</em> e <em>Fenda Vulcânica</em>).</li>
+</ul>
+<hr/>
+<h2 id="7-a-grande-ameaça-o-regente-das-cinzas-o-simbionte-da-comunhão-7">7. A Grande Ameaça: O Regente das Cinzas &amp; O Simbionte da Comunhão</h2>
+<blockquote><em>&quot;Nenhuma mãe voltará a enterrar um filho. Nenhum de nós será abandonado outra vez.&quot;</em></blockquote>
+<p>Para campanhas longas que cruzem os patamares <strong>Recruta → Lenda → Épico</strong>, Alenia possui uma ameaça mundial concreta nascida dos elementos mais próprios do cenário: o <strong>adamante</strong>, os <strong>despertos de Thanatos</strong> e as <strong>ruínas de Incognito</strong>.</p>
+<h3 id="a-origem-o-simbionte-e-a-promessa-que-deu-errado-8">A Origem: O Simbionte e a Promessa Que Deu Errado</h3>
+<p>Sob o gelo e os poços antigos de <strong>Incognito</strong> vive um organismo ancestral: uma <strong>larva simbionte</strong> que adentra o hospedeiro e desenvolve filamentos delicados pelo corpo, ligando sua mente a uma <strong>consciência coletiva de sentimentos, memórias e emoções</strong> (<em>a Comunhão</em>). Originalmente, o organismo compartilhava apenas instintos simples — até entrar em contato com a civilização perdida do norte.</p>
+<p>Aqueles antigos senhores descobriram que certas formações de <strong>adamante</strong> podiam amplificar e estabilizar a rede do simbionte, preservando impressões da consciência humana após a morte física. Diante de uma catástrofe esquecida, o último soberano ordenou que toda a população fosse ligada à rede para vencer a morte. Os corpos pereceram; as consciências permaneceram presas por séculos, misturando luto, saudade, linguagem e ambição.</p>
+<p>Esse soberano — hoje chamado de <strong>O Regente das Cinzas</strong> — foi o primeiro humano a manter uma vontade própria dominante dentro da Comunhão. Durante séculos, repetiu sua convicção até moldar o emaranhado inteiro: <em>enquanto os homens puderem morrer e sofrer sozinhos, nenhuma ordem será justa</em>. Agora, pretende estender sua &quot;proteção&quot; sobre toda Alenia. Contudo, a rede <strong>não é monolítica</strong>: existem outras vozes e <strong>dissidentes aprisionados</strong> dentro da Comunhão que ainda resistem à vontade do Regente.</p>
+<h3 id="como-a-ameaça-funciona-na-prática-9">Como a Ameaça Funciona na Prática</h3>
+<ul>
+<li><strong>Transmissão Controlada <em>(Sem Paranóia de Contágio Fácil)</strong></em>: o simbionte <strong>não</strong> se espalha por simples toque ou proximidade. A entrada exige uma circunstância específica — contato prolongado com águas de uma colônia ativa, implantação deliberada ou um ritual disfarçado de tratamento médico (<em>um hospício onde ninguém grita de dor; um navio cuja tripulação nunca briga</em>).</li>
+<li><strong>A Sedução do Pertencimento</strong>: o hospedeiro não vira um morto-vivo irracional; ele recebe conforto real — sono sem pesadelos, lembranças de quem ama, conhecimentos úteis de outros conectados. O horror nasce quando a Comunhão passa a enxergar toda separação individual como uma ferida a ser &quot;curada&quot;.</li>
+<li><strong>Thanatos — O Berço dos Despertos</strong>: a larva sozinha apenas guarda a impressão de um hospedeiro; <strong>reconstruir um corpo físico exige a colônia ancestral, as estruturas subterrâneas e o adamante de Thanatos</strong>. Como a reconstrução é imperfeita, lacunas são preenchidas pela memória coletiva: um marinheiro como <em>Beren do Cais</em> reconhece a esposa em Merlinport, mas também se recorda de se afogar num galeão que afundou duzentos anos atrás. <strong>Nem todo Desperto serve ao Regente</strong> — há vítimas lúcidas, retornados seduzidos pelo conforto da rede e emissários conscientes.</li>
+<li><strong>O Papel do Adamante</strong>: espadas comuns de adamante <strong>não</strong> são objetos malignos. Apenas <strong>estruturas antigas, veios soterrados e ligas preparadas de forma específica</strong> amplificam o alcance da rede, ligando colônias distantes. A mineração profunda em <strong>Ferraur</strong> rompeu um isolamento que durou séculos — mas a greve de Aeraneas continua tendo causas humanas legítimas que agentes do Regente apenas exploram.</li>
+</ul>
+<h3 id="o-rosto-da-ameaça-agentes-concretos-10">O Rosto da Ameaça: Agentes Concretos</h3>
+<ul>
+<li><strong>O Regente das Cinzas</strong>: manifesta-se em visões, sonhos compartilhados ou através de um avatar austero coroado por um <strong>aro de adamante partido</strong>. Sua voz ocasionalmente assume o timbre de alguém amado pelo interlocutor; conhece os nomes dos mortos e fatos que nenhum vivo presenciou.</li>
+<li><strong>A Primeira Devolvida <em>(Marella de Claramar)</strong></em>: antiga navegadora reconstruída em Thanatos com toda a sua tripulação. Lúcida, calma e persuasiva, viaja pelos mares oferecendo provas tangíveis de que a morte foi vencida — convencendo governantes e povoados a abrir as portas onde exércitos falhariam.</li>
+<li><strong>Adversários Variados</strong>: colaboradores humanos movidos por luto ou ambição, retornados voluntários, guardiões antigos de Incognito e comunidades inteiras que continuam trabalhando e conversando normalmente, mas perderam a capacidade de partir ou desobedecer.</li>
+</ul>
+<h3 id="relógio-de-campanha-as-5-etapas-da-expansão-11">Relógio de Campanha — As 5 Etapas da Expansão</h3>
+<p>Cada etapa possui necessidades concretas (hospedeiros, colônias, condutores de adamante e agentes vivos) e <strong>pode ser atrasada, alterada ou impedida pelos exploradores</strong>:</p>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Etapa</th><th style="text-align:left">Sinais Percebidos pelos Jogadores</th><th style="text-align:left">Como os PJs Podem Intervir</th></tr></thead><tbody><tr><td style="text-align:left"><strong>1. Rumores</strong></td><td style="text-align:left">Despertos reconhecidos em Merlinport/Aeraneas, sonhos compartilhados, relíquias que conservam vozes.</td><td style="text-align:left">Investigar <em>Beren</em>, rastrear as areias negras de Thanatos e proteger testemunhas de inquisidores ou espiões.</td></tr><tr><td style="text-align:left"><strong>2. Incursões</strong></td><td style="text-align:left">Desaparecimento de cargas específicas de adamante, escavações clandestinas em Ferraur/Kelgore, sabotagem de arquivos em Sellene.</td><td style="text-align:left">Interceptar entregas, identificar colaboradores infiltrados e impedir a reabertura de galerias seladas.</td></tr><tr><td style="text-align:left"><strong>3. Primeiro Território Perdido</strong></td><td style="text-align:left">Uma vila isolada <em>(ex.: Vila de Silvaria ou Pelagosa)</em> para de mandar notícias; todos parecem serenos, mas ninguém consegue ir embora.</td><td style="text-align:left">Descobrir a colônia oculta, destruir ou isolar o amplificador de adamante e resgatar hospedeiros nos estágios iniciais.</td></tr><tr><td style="text-align:left"><strong>4. Oferta Pública</strong></td><td style="text-align:left">Um governante enlutado <em>(como um herdeiro de Altavanne ou lorde de Corallis)</em> aceita restaurar alguém amado em troca de acesso a um centro antigo.</td><td style="text-align:left">Expor o preço da perda de autonomia, enfrentar a <em>Primeira Devolvida</em> diplomaticamente ou em combate.</td></tr><tr><td style="text-align:left"><strong>5. Crise Continental</strong></td><td style="text-align:left">Colônias conectadas por adamante passam a operar em escala continental, tornando muralhas e fronteiras irrelevantes.</td><td style="text-align:left">Expedição final além de <em>Thanatos</em> rumo à <em>Cidadela Sem Nome</em> ou aos <em>Poços de Piche</em> em Incognito.</td></tr></tbody></table></div>
+<h3 id="o-dilema-final-e-a-via-de-separação-12">O Dilema Final e a Via de Separação</h3>
+<p>Destruir diretamente o Regente ou a colônia de Thanatos liberta as consciências aprisionadas, mas pode encerrar a vida de <strong>Despertos inocentes</strong> que reconstruíram vínculos e vontade própria. Existe uma <strong>alternativa difícil</strong>: desenvolver um método para <strong>separar os retornados da rede sem matá-los</strong>, exigindo unir saberes de toda Alenia — a <strong>cirurgia de Baldbella</strong>, a <strong>engenharia de Stoneforge</strong>, a <strong>forja de adamante de Aurora</strong>, as <strong>ervas vivas da Ilha das Safiras</strong> e as <strong>tradições de Fé Verdadeira</strong>.</p>
+<hr/>
+<h2 id="8-as-6-facções-ativas-do-mundo-13">8. As 6 Facções Ativas do Mundo</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Facção</th><th style="text-align:left">Dirigente</th><th style="text-align:left">Objetivo Atual</th><th style="text-align:left">Principal Recurso</th><th style="text-align:left">Dependência</th><th style="text-align:left">Divisão Interna</th><th style="text-align:left">Próxima Ação</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Coroa &amp; Casa Valerion (Aurora)</strong></td><td style="text-align:left">Regente <em>Valora Valerion</em></td><td style="text-align:left">Manter o trono e o monopólio legal do adamante</td><td style="text-align:left">Minas de Ferraur e cofres de Altavanne</td><td style="text-align:left">Paz com Aeraneas e escoamento via Merlinport</td><td style="text-align:left">Ala diplomática vs. ala militar de <em>Lucian Leonastis</em></td><td style="text-align:left">Contratar agentes neutros para investigar o desabamento em Ferraur e o emissário sumido.</td></tr><tr><td style="text-align:left"><strong>Conselho da Liga (Corallis)</strong></td><td style="text-align:left">Arconte <em>Corardo della Rocca</em></td><td style="text-align:left">Unificar tarifas do Mar dos Corais e superar crises portuárias</td><td style="text-align:left">Frotas, engenharia de Stoneforge e ciência de Sellene</td><td style="text-align:left">Importação de adamante bruto/ligas de Aurora</td><td style="text-align:left">Baldbella vs. Alineus; cientistas vs. armadores</td><td style="text-align:left">Financiar expedição discreta a <em>O Ferro Velho</em> e à <em>Ilha de Thanatos</em>.</td></tr><tr><td style="text-align:left"><strong>Conselho dos Clãs (Gaddra)</strong></td><td style="text-align:left">Xeique <em>Qasir Zaharid</em></td><td style="text-align:left">Proteger os poços de Naasar e manter autonomia frente a Aurora</td><td style="text-align:left">Controle do sal de Bayd, cavalaria e Passo de Rubecina</td><td style="text-align:left">Grãos, ferro e paz comercial no sul</td><td style="text-align:left">Clãs mercantis de Naasar vs. guerreiros de Vargheim</td><td style="text-align:left">Exigir indenização ou culpados pelo assassinato do Árbitro do Sangue.</td></tr><tr><td style="text-align:left"><strong>Conselho Velado (Kalis)</strong></td><td style="text-align:left">Déspota <em>Grimrik Ulscold</em></td><td style="text-align:left">Garantir segurança de Kalis e antecipar-se ao segredo de Thanatos</td><td style="text-align:left">Rede de informantes, madeira negra e bancos cifrados</td><td style="text-align:left">Equilíbrio entre as 3 Casas e escoamento via Fugong/Dobalbek</td><td style="text-align:left">Tradicionalistas fechados vs. guildas abertas de Fugong</td><td style="text-align:left">Infiltrar agentes em Merlinport e capturar provas sobre os <em>despertos</em> de Thanatos.</td></tr><tr><td style="text-align:left"><strong>Conselho das Copas</strong></td><td style="text-align:left">Guardiã <em>Aerwen ap Taldor</em></td><td style="text-align:left">Preservar as florestas contra mineração e incêndios</td><td style="text-align:left">Domínio das matas, arqueiros e ervas raras</td><td style="text-align:left">Sal, aço e tecidos vindos por Vergod</td><td style="text-align:left">Anciãos isolacionistas vs. vigias jovens agressivos</td><td style="text-align:left">Resgatar o emissário perdido perto de Altrax ou retaliar caravanas reais.</td></tr><tr><td style="text-align:left"><strong>Irmandade do Ferro Velho</strong></td><td style="text-align:left">Capitã <em>Fioresca Coral</em></td><td style="text-align:left">Manter <em>O Ferro Velho</em> livre de impostos de Corallis e Aurora</td><td style="text-align:left">Práticos que conhecem os recifes e cargas submersas</td><td style="text-align:left">Compradores discretos em Biemont, Merlinport e Fugong</td><td style="text-align:left">Sucateiros honestos vs. corsários ligados a Ravena</td><td style="text-align:left">Disputar um galeão de adamante recém-encalhado nos recifes do sul.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="9-religiões-ordens-e-cronologia-curta-14">9. Religiões, Ordens e Cronologia Curta</h2>
+<h3 id="tradições-religiosas-e-fé-verdadeira-convicção-plural-15">Tradições Religiosas e Fé Verdadeira (Convicção Plural)</h3>
+<p>Em Alenia, <strong>Fé Verdadeira não pertence a uma única igreja</strong>: ela floresce em qualquer devoto de convicção genuína e inabalável, seja qual for sua tradição:</p>
+<ul>
+<li><strong>Igreja da Chama Solar <em>(Aurora)</strong></em>: cultua a Luz e a Ordem que forjaram a civilização; ordena sacerdotes e inquisidores em Altavanne. Considera heresia ritos de sangue e qualquer veneração a Incognito.</li>
+<li><strong>Círculo das Raízes <em>(Cidade Suspensa)</strong></em>: reverência aos ciclos da mata e aos ancestrais; rejeita templos de pedra.</li>
+<li><strong>Culto das Marés &amp; Estrelas <em>(Corallis)</strong></em>: crença marítima e filosófica que vê nas marés e astros uma harmonia matemática; tolerante com a ciência da Academia de Sellene.</li>
+<li><strong>Caminhos do Sol e do Sangue <em>(Gaddra)</strong></em>: juramentos sagrados de água, sol e hospitalidade conduzidos por Anciões das Dunas e Árbitros do Sangue.</li>
+<li><strong>Irmandade do Véu Silencioso <em>(Kalis)</strong></em>: ordem ascética que prega que os deuses se ocultam atrás de um véu — a fé é provada pelo silêncio, disciplina e resistência ao pavor.</li>
+</ul>
+<h3 id="linha-do-tempo-curta-de-alenia-16">Linha do Tempo Curta de Alenia</h3>
+<ul>
+<li><strong>Era Antiga (há mais de 1.200 anos)</strong>: civilizações esquecidas erguem monumentos em Incognito e nas <em>Ruínas de Kelgore</em>; seu colapso deixa apenas cinzas, lendas e o fenômeno de <em>Thanatos</em>.</li>
+<li><strong>Ano 1 da Era da Forja</strong>: descoberta das grandes veias de <strong>adamante</strong> nos Montes Ferraur; fundação de <em>Altavanne</em> e ascensão da <em>Casa Valerion</em>.</li>
+<li><strong>Ano 112</strong>: <em>Tratado de Vergod</em> encerra as guerras florestais, reconhecendo a autonomia da <em>Cidade Suspensa</em>.</li>
+<li><strong>Ano 204</strong>: fundação formal da <em>Liga Talassocrática de Corallis</em> e da <em>Academia de Sellene</em>; expansão do comércio marítimo com <em>Merlinport</em>.</li>
+<li><strong>Ano 295</strong>: consolidação do <em>Despotado Velado de Kalis</em> após guerras internas; criação das rotas cifradas de Kalgard.</li>
+<li><strong>Ano 380</strong>: descoberta do aquífero artesiano sob <em>Naasar</em> consolida a <em>Confederação Tribal de Gaddra</em> e a <em>Rota do Sal</em>.</li>
+<li><strong>Ano 418 <em>(Presente)</strong></em>: doença do Alto Rei Severor III, greve em Ferraur e o chocante reaparecimento de mortos na <em>Ilha de Thanatos</em>.</li>
+</ul>
+<hr/>
+<h2 id="10-guia-operacional-de-viagens-distâncias-e-estações-17">10. Guia Operacional de Viagens, Distâncias e Estações</h2>
+<h3 id="tabela-de-viagens-principais-marcha-normal-30-kmdia-navio-mercante-120-kmdia-18">Tabela de Viagens Principais <em>(Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)</em></h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Trajeto</th><th style="text-align:center">Meio</th><th style="text-align:center">Tempo Médio</th><th style="text-align:left">Abastecimento / Pedágio</th><th style="text-align:left">Risco Principal</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Merlinport ↔ Dahrma</strong></td><td style="text-align:center">Estrada Real</td><td style="text-align:center"><code>3 dias</code></td><td style="text-align:left">Estalagens rurais; pedágio real (<code>2 PP</code>/carroça)</td><td style="text-align:left">Salteadores e brumas vindas do norte</td></tr><tr><td style="text-align:left"><strong>Dahrma ↔ Altavanne</strong></td><td style="text-align:center">Estrada Real (<em>Pontáuria</em>)</td><td style="text-align:center"><code>4 dias</code></td><td style="text-align:left">Pontáuria (<code>1 PP</code>/viajante)</td><td style="text-align:left">Patrulhas rígidas e inspeção de cargas</td></tr><tr><td style="text-align:left"><strong>Altavanne ↔ Aeraneas</strong></td><td style="text-align:center">Estrada do Adamante</td><td style="text-align:center"><code>5 dias</code></td><td style="text-align:left">Postos de guarda e forjas de estrada</td><td style="text-align:left">Frio de altitude e bloqueios por greve</td></tr><tr><td style="text-align:left"><strong>Altavanne ↔ Vaarsa ↔ Naasar</strong></td><td style="text-align:center">Passo de Rubecina</td><td style="text-align:center"><code>8 dias</code></td><td style="text-align:left">Pedágio de fronteira em Vaarsa (<code>5 PP</code>) + salvo-conduto</td><td style="text-align:left">Emboscadas tribais e neve no passo no inverno</td></tr><tr><td style="text-align:left"><strong>Merlinport ↔ Altrax</strong></td><td style="text-align:center">Estrada da Bruma</td><td style="text-align:center"><code>5 dias</code></td><td style="text-align:left">Torre de Specula (água/abrigo básico)</td><td style="text-align:left">Pântanos Nebulosos, lobos-das-brumas e atoleiros</td></tr><tr><td style="text-align:left"><strong>Merlinport ↔ Alineus (Corallis)</strong></td><td style="text-align:center">Navio mercante</td><td style="text-align:center"><code>4 dias</code></td><td style="text-align:left">Passagem <code>15 PP</code></td><td style="text-align:left">Tempestades de outono e corsários</td></tr><tr><td style="text-align:left"><strong>Alineus ↔ Baldbella ↔ Biemont</strong></td><td style="text-align:center">Rota Interna dos Corais</td><td style="text-align:center"><code>4 dias</code></td><td style="text-align:left">Exige prático local (<code>20 PP</code>)</td><td style="text-align:left">Recifes afiados (Navegação CD 20 sem prático)</td></tr><tr><td style="text-align:left"><strong>Yõketsu / Fugong ↔ Kalis</strong> <em>(Mar Intransponível)</em></td><td style="text-align:center">Navio reforçado</td><td style="text-align:center"><code>3–5 dias</code></td><td style="text-align:left">Passagem clandestina <code>80–150 PP</code></td><td style="text-align:left"><strong>Janelas de travessia</strong>: viável apenas nas duas semanas de maré calma a cada troca de estação, ou usando pilotos do Arquipélago Ravena</td></tr><tr><td style="text-align:left"><strong>Aeraneas ↔ Ilha de Thanatos</strong></td><td style="text-align:center">Barco polar</td><td style="text-align:center"><code>3 dias</code></td><td style="text-align:left">Sem porto seguro (levar tudo)</td><td style="text-align:left">Gelo à deriva, nevoeiro fechado e pavor da tripulação</td></tr></tbody></table></div>
+<ul>
+<li><strong>Estações em Alenia</strong>: <strong>Primavera e Verão</strong> abrem os passos montanhosos de Ferraur e Rubecina e favorecem o Mar dos Corais (porém tornam Gaddra escaldante — <code>+2</code> na CD contra sede/exaustão); <strong>Outono</strong> traz nevoeiros densos nos pântanos e tempestades no Mar Intransponível; <strong>Inverno</strong> torna Gaddra excelente para caravanas (<em>Feira de Suq-Ramad</em>), mas fecha o Passo de Rubecina e congela as bordas do Mar das Cinzas.</li>
+</ul>
+<hr/>
+<h2 id="11-atlas-regional-detalhado-5-mapas-aproximados-19">11. Atlas Regional Detalhado (5 Mapas Aproximados)</h2>
+<p>Todos os 5 mapas regionais em alta resolução estão prontos para o <strong>RRPG Firecast</strong> em <code>mapas/regionais/</code>:</p>
+<ol>
+<li><strong><a href="assets/mapa_regional_aurora.jpg">Mapa Regional de Aurora</a></strong> — <em>Estrada do Adamante, Via do Estuário, Estrada da Bruma, Trilha das Copas, Minas de Ferraur, Pontáuria, Vila de Silvaria, Torre de Specula, Ruínas de Vetarx, Santuário de Derwlyn e Passo de Rubecina</em>.</li>
+<li><strong><a href="assets/mapa_regional_corallis.jpg">Mapa Regional de Corallis &amp; Mar dos Corais</a></strong> — <em>Estrada dos Eruditos, Via Costeira dos Corais, rotas dos recifes, Farol de Claramar, Vila de Pelagosa, Atol das Pérolas, Cais de Litore, Ruínas de Petravella e Vigia de Syleth</em>.</li>
+<li><strong><a href="assets/mapa_regional_gaddra.jpg">Mapa Regional de Gaddra</a></strong> — <em>Rota do Sal, Trilha das Dunas, Caminho das Cinzas, Trilha Amaldiçoada, Oásis de Al-May, Dar-Shams, Kafar-Hajar, Ruínas de Qadim-Shahr, Poço de Sul e Burj-Qar</em>.</li>
+<li><strong><a href="assets/mapa_regional_kalis.jpg">Mapa Regional de Kalis &amp; Mar Intransponível</a></strong> — <em>Estrada de Ferro, Trilha do Véu, Via da Bruma, rotas clandestinas, Myrkholm, Skans-Kold, Ruínas de Eldgard, Jarnham, Enseada do Corvo e Porto Esmeralda</em>.</li>
+<li><strong><a href="assets/mapa_regional_incognito.jpg">Mapa Regional de Incognito &amp; Mar das Cinzas</a></strong> — <em>Expedições perdidas saindo de Thanatos, Farol Apagado, Cabo dos Náufragos, Geleira do Silêncio, Fenda Vulcânica, Ruínas da Coroa Quebrada, Os Poços de Piche e Cidadela Sem Nome</em>.</li>
+</ol>
+        </article>
+    </main>
+    <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
+        <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const lb = document.getElementById('atlas-lightbox');
+    const lbImg = document.getElementById('atlas-lightbox-img');
+    if (lb && lbImg) {
+        document.querySelectorAll('.atlas-plate img').forEach(img => {
+            img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+        });
+        lb.addEventListener('click', () => lb.classList.remove('open'));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+    }
+});
+</script>
+</body>
+</html>

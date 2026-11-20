@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Guia do Jogador &amp; Escudo — Alenia RPG</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+    --desk: #171512;
+    --vellum: #f7f1e3;
+    --vellum-alt: #efe6d2;
+    --vellum-card: #f2ead8;
+    --ink: #221c16;
+    --ink-soft: #4e4336;
+    --crimson: #7a1f1d;
+    --crimson-dark: #571412;
+    --gold: #9a7b3b;
+    --gold-light: #cdb06e;
+    --border: #cfc2a5;
+    --sidebar-w: 280px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--desk); color: var(--ink); }
+body {
+    margin: 0;
+    font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.66;
+    background: radial-gradient(circle at top, #27221c 0%, #171512 58%, #100e0c 100%);
+    min-height: 100vh;
+}
+
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 54px;
+    background: rgba(18, 16, 13, 0.96);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.45);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-brand {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+}
+.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-nav a, .btn-print {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none;
+    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    transition: all 0.16s ease; cursor: pointer; background: transparent;
+}
+.topbar-nav a:hover, .topbar-nav a.active {
+    color: var(--gold-light); border-color: rgba(154, 123, 59, 0.55); background: rgba(154, 123, 59, 0.12);
+}
+.btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
+.btn-print:hover { background: #922624; color: #fff; }
+
+.sidebar {
+    position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 18px 14px 32px; overflow-y: auto; z-index: 900;
+}
+.sidebar-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold-light);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 12px 0;
+}
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin: 2px 0; }
+.toc-list a {
+    display: block; text-decoration: none; color: #cfc6b4; font-size: 14.5px;
+    line-height: 1.35; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
+}
+.toc-list a:hover { color: var(--gold-light); background: rgba(154, 123, 59, 0.1); border-left-color: var(--gold); }
+.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 6px; }
+.toc-h3 a { padding-left: 16px; font-size: 13.5px; color: #b5ab98; }
+
+.book-shell { margin-left: var(--sidebar-w); padding: 80px 26px 64px; display: flex; justify-content: center; }
+.book-shell.no-sidebar { margin-left: 0; }
+.book-page {
+    width: 100%; max-width: 920px; background: var(--vellum); color: var(--ink);
+    padding: 52px 60px 70px;
+    box-shadow: 0 24px 65px rgba(0,0,0,0.62), 0 0 0 1px rgba(154, 123, 59, 0.35);
+    border-radius: 3px; position: relative;
+}
+.book-page::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px solid rgba(154, 123, 59, 0.32); pointer-events: none;
+}
+
+.cover-page {
+    min-height: 760px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 54px 44px; margin-bottom: 52px;
+    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -8px;
+    background: radial-gradient(circle at center, #fbf7ee 0%, #f3ead6 100%);
+    page-break-after: always; break-after: page;
+}
+.cover-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 13px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--crimson); margin-bottom: 14px;
+}
+.cover-rule {
+    width: 180px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
+    margin: 18px auto;
+}
+.cover-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 40px; font-weight: 800; line-height: 1.15;
+    letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
+}
+.cover-subtitle {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 21px;
+    color: var(--ink-soft); margin: 14px 0 8px; max-width: 640px;
+}
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 560px; margin: 24px auto 14px; }
+.cover-thumb {
+    max-width: 100%; max-height: 310px; border: 2px solid var(--gold);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.22); margin: 16px auto; border-radius: 2px;
+}
+.cover-edition {
+    margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
+h1.book-h1 {
+    font-size: 28px; letter-spacing: 0.05em; text-transform: uppercase;
+    border-bottom: 2px solid var(--crimson); padding-bottom: 10px; margin: 0 0 22px 0;
+}
+h2 { font-size: 21px; letter-spacing: 0.04em; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--gold); }
+h3 { font-size: 16.5px; letter-spacing: 0.03em; margin: 22px 0 8px; color: #3d2415; }
+p { margin: 0 0 13px; text-align: justify; hyphens: auto; }
+ul, ol { margin: 6px 0 16px; padding-left: 24px; }
+li { margin-bottom: 6px; }
+strong { color: #17120d; }
+code {
+    font-family: Consolas, 'Courier New', monospace; font-size: 0.86em;
+    background: rgba(154, 123, 59, 0.14); border: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 1px 5px; border-radius: 3px; color: #5b1d18;
+}
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 28px 0; }
+a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 3px; }
+
+blockquote {
+    margin: 18px 0 22px; padding: 14px 20px; background: var(--vellum-card);
+    border-left: 4px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
+}
+.callout {
+    margin: 20px 0; padding: 14px 18px; border-radius: 2px; border: 1px solid var(--border);
+    border-left: 5px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid;
+}
+.callout-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); margin-bottom: 6px;
+}
+.callout.warning { border-left-color: #b4691e; background: #f6ecd7; }
+.callout.warning .callout-title { color: #8c4d10; }
+
+.formula-box {
+    margin: 16px 0 20px; padding: 12px 18px; background: #efe5cf;
+    border: 1px solid var(--gold); border-radius: 3px; text-align: center;
+    font-size: 18.5px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
+}
+
+.table-wrap { width: 100%; overflow-x: auto; margin: 16px 0 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.44; border: 1px solid var(--gold); }
+thead th {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.05em;
+    text-transform: uppercase; background: var(--crimson); color: #f7f1e3;
+    padding: 9px 9px; border: 1px solid #5f1816; text-align: left;
+}
+tbody td { padding: 8px 9px; border: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--vellum-alt); }
+tr { break-inside: avoid; }
+
+.atlas-plate {
+    margin: 22px 0 28px; padding: 10px; background: #ebe1ca;
+    border: 1px solid var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+    text-align: center; break-inside: avoid;
+}
+.atlas-plate img { width: 100%; height: auto; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.atlas-caption {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 8px;
+}
+
+.entry-card {
+    margin: 16px 0 20px; padding: 14px 18px 12px; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
+}
+.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 5px; }
+
+.lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
+    z-index: 2000; padding: 24px; align-items: center; justify-content: center; cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 96vw; max-height: 92vh; border: 2px solid var(--gold); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 22px 0 32px; }
+.portal-card {
+    display: flex; flex-direction: column; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 4px solid var(--crimson);
+    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
+.portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
+.portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
+.portal-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.48; margin: 0; text-align: left; }
+.portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+.tome-divider { page-break-before: always; break-before: page; }
+
+@media (max-width: 1020px) {
+    .sidebar { display: none; }
+    .book-shell { margin-left: 0; padding: 72px 14px 40px; }
+    .book-page { padding: 30px 24px 42px; }
+}
+
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@media print {
+    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
+    .topbar, .sidebar, .lightbox { display: none !important; }
+    .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
+    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    .book-page::before { display: none !important; }
+    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: var(--crimson-dark); text-decoration: none; }
+    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+}
+</style>
+</head>
+<body>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html" class="active">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#parte-i-guia-rápido-do-jogador-0">Parte I — Guia Rápido do Jogador</a></li><li class="toc-h3"><a href="#1-o-mundo-em-30-segundos-1">1. O Mundo em 30 Segundos</a></li><li class="toc-h3"><a href="#2-escolha-sua-origem-livre-separada-do-kit-2">2. Escolha sua Origem (Livre — Separada do Kit)</a></li><li class="toc-h3"><a href="#3-crie-seu-personagem-em-6-passos-na-ficha-do-firecast-3">3. Crie Seu Personagem em 6 Passos (Na Ficha do Firecast)</a></li><li class="toc-h2"><a href="#parte-ii-referência-rápida-de-mesa-escudo-4">Parte II — Referência Rápida de Mesa (Escudo)</a></li><li class="toc-h3"><a href="#fórmulas-essenciais-5">Fórmulas Essenciais</a></li><li class="toc-h3"><a href="#combate-especial-e-manobras-6">Combate Especial e Manobras</a></li><li class="toc-h3"><a href="#moribundo-cura-exaustão-e-preços-rápidos-7">Moribundo, Cura, Exaustão e Preços Rápidos</a></li></ul></aside>
+    <main class="book-shell">
+        <article class="book-page">
+            
+    <section class="cover-page">
+        <div class="cover-kicker">ALENIA RPG • TOMO VI</div>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title">Guia do Jogador &amp; Escudo</h1>
+        <div class="cover-subtitle">Criação em 6 Passos &amp; Referência Rápida de Mesa</div>
+        <div class="cover-rule"></div>
+        
+        <p class="cover-epigraph">“Cinco minutos de leitura para colocar seu explorador na estrada.”</p>
+        <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
+    </section>
+    
+<h1 id="alenia-rpg-guia-rápido-do-jogador-referência-de-mesa-edição-revisada-v20-0" class="book-h1">ALENIA RPG — Guia Rápido do Jogador &amp; Referência de Mesa (Edição Revisada v2.0)</h1>
+<blockquote><em>Tudo o que um jogador precisa ler em 5 minutos para criar seu explorador e começar a jogar no RRPG Firecast.</em></blockquote>
+<hr/>
+<h2 id="parte-i-guia-rápido-do-jogador-0">Parte I — Guia Rápido do Jogador</h2>
+<h3 id="1-o-mundo-em-30-segundos-1">1. O Mundo em 30 Segundos</h3>
+<p>Você é um <strong>humano explorador</strong> em <strong>Alenia</strong>, um mundo medieval sombrio sem pólvora e com magia raríssima estilo <em>Game of Thrones</em>. O ano é <strong>418 da Era da Forja</strong>: o rei de <strong>Aurora</strong> está doente, uma greve ameaça as minas de <strong>adamante</strong>, cidades de <strong>Corallis</strong> brigam pelos naufrágios do <strong>Mar dos Corais</strong>, clãs de <strong>Gaddra</strong> ameaçam fechar a Rota do Sal, espiões de <strong>Kalis</strong> movimentam-se nas sombras — e marinheiros dados como mortos teriam sido vistos vivos na sombria <strong>Ilha de Thanatos</strong>, às portas do continente inabitado de <strong>Incognito</strong>.</p>
+<h3 id="2-escolha-sua-origem-livre-separada-do-kit-2">2. Escolha sua Origem <em>(Livre — Separada do Kit)</em></h3>
+<p>Sua cidade natal define sua cultura, sotaque e sobrenome de bastardo (se aplicável), mas <strong>nunca limita seu ofício</strong>:</p>
+<ul>
+<li><strong>Aurora</strong> <em>(Altavanne, Merlinport, Dahrma, Aeraneas, Vaarsa, Yõketsu)</em> — nobreza, comércio fluvial, forja de adamante. <em>(Bastardos: <strong>Cinza</strong>)</em></li>
+<li><strong>Cidade Suspensa <em>(Povo das Florestas)</strong></em> — autonomia arbórea, arqueiros, ervas e pactos antigos. <em>(Bastardos: <strong>Bruma</strong>)</em></li>
+<li><strong>Corallis</strong> <em>(Alineus, Baldbella, Biemont, Stoneforge)</em> — ciência sem pólvora, medicina, náutica e recifes do Mar dos Corais. <em>(Bastardos: <strong>Coral</strong>)</em></li>
+<li><strong>Gaddra</strong> <em>(OX, Naasar, Vargheim)</em> — clãs do deserto, Lei da Hospitalidade, oásis e sal. <em>(Bastardos: <strong>Duna</strong>)</em></li>
+<li><strong>Kalis</strong> <em>(Cidadela de Kalgard, Dobalbek, Kragstad, Drakenhall, Fugong, Kalima)</em> — madeira negra, segredos, bancos cifrados e disciplina fria. <em>(Bastardos: <strong>Sombra</strong>)</em></li>
+</ul>
+<h3 id="3-crie-seu-personagem-em-6-passos-na-ficha-do-firecast-3">3. Crie Seu Personagem em 6 Passos (Na Ficha do Firecast)</h3>
+<ol>
+<li><strong>Rolar Atributos</strong>: abra a ficha <strong><code>Alenia RPG</code></strong> no Firecast e clique em <strong>&quot;Rolar Atributos Iniciais (4d6 descarta menor)&quot;</strong> <em>(funciona apenas com os 6 campos vazios e anuncia os dados no chat)</em>. Regra opcional: compra de 27 pts.</li>
+<li><strong>Escolher um Kit Universal</strong>: selecione entre os <strong>36 Ofícios</strong> (ou <em>Sem Kit</em>) e clique em <strong>&quot;Aplicar Kit&quot;</strong>. A ficha preenche automaticamente seu <strong>Dado de Vida (<code>1d6</code> a <code>1d12</code>)</strong>, perícias iniciais (<code>+3</code>), habilidade do ofício, equipamento e eventual Atributo Especial.</li>
+<li><strong>Distribuir Perícias Extras</strong>: gaste seus pontos livres iniciais em qualquer uma das <strong>34 perícias</strong> ou crie <strong>Perícias Livres</strong> na Aba 3 (<code>Treinado +3</code> custa <code>2 pts</code>; <code>Especialista +8</code> exige Nív. 5+; <code>Mestre +12</code> exige Nív. 11+).</li>
+<li><strong>Conferir PV e Defesas</strong>: seu PV inicial é <strong><code>Máximo do DV + CON bruto</code></strong>. Anote sua armadura e escudo na Aba 2 (lembre: armaduras dão <strong>Defesa</strong>, nunca RD).</li>
+<li><strong>Equipar Armas</strong>: cadastre suas armas na Aba 2 com dano, <strong>Margem</strong> e <strong>Multiplicador de Crítico</strong> (<code>19–20/×2</code>, <code>20/×3</code>, etc.).</li>
+<li><strong>Definir Objetivo</strong>: escreva na Aba 5 o que move seu explorador (prata, dívida, pesquisa, honra ou segredo) e um vínculo com outro personagem do grupo.</li>
+</ol>
+<hr/>
+<h2 id="parte-ii-referência-rápida-de-mesa-escudo-4">Parte II — Referência Rápida de Mesa (Escudo)</h2>
+<h3 id="fórmulas-essenciais-5">Fórmulas Essenciais</h3>
+<ul>
+<li><strong>Teste de Perícia</strong>: <code>1d20 + Mod. Atributo + Grau (+0 / +3 / +8 / +12) + Outros</code> <em>(CDs: <code>10</code> Fácil, <code>15</code> Moderada, <code>20</code> Difícil, <code>25</code> Muito Difícil, <code>30</code> Lendária)</em>.</li>
+<li><strong>Iniciativa</strong>: <code>1d20 + Mod(DES) + ⌊Grau em Percepção / 3⌋</code>.</li>
+<li><strong>Defesa Corpo a Corpo (Aparar)</strong>: <code>10 + Mod(DES) + Armadura + Escudo + Aparar</code>.</li>
+<li><strong>Defesa contra Projéteis (Esquiva)</strong>: <code>10 + Mod(DES) + Armadura + Escudo + Esquiva</code>.</li>
+<li><strong>Defesa Desprevenido / Surpreso</strong>: <code>10 + Armadura + Escudo</code> <em>(sem DES nem perícia até o início do seu 1º turno)</em>.</li>
+<li><strong>Condição Caído / Derrubado</strong>: <code>-4</code> na Defesa corpo a corpo e <code>+2</code> contra projéteis à distância até gastar <code>4,5m</code> (metade do Movimento) para levantar.</li>
+<li><strong>Turno</strong>: <code>1 Ação Principal</code> + <code>1 Movimento (9m)</code> + <code>1 Reação/rodada</code> + <code>Ações Livres</code>.</li>
+<li><strong>Subir de Nível</strong>: role <strong><code>1dX + Mod(CON)</code></strong> (mín. <code>1 PV</code>) + ganhe pontos de perícia conforme o Patamar (<strong>Recruta 1–10</strong>: <code>1×</code>, <strong>Lenda 11–20</strong>: <code>1,5×</code> e <code>+1</code> dado individual de dano, <strong>Épico 21–30</strong>: <code>2×</code> e <code>+2</code> dados individuais — ex.: <em>Montante <code>2d6</code> → <code>3d6</code> Lenda → <code>4d6</code> Épico</em>) + <code>+1</code> Atributo a cada <strong>3 níveis</strong> + <code>1</code> Talento nos <strong>níveis pares</strong>.</li>
+</ul>
+<h3 id="combate-especial-e-manobras-6">Combate Especial e Manobras</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Regra</th><th style="text-align:left">Mecânica Exata</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Múltiplas Ações <em>(Storyteller)</strong></em></td><td style="text-align:left">Divida o Bônus Total por <code>N</code> e subtraia <code>N</code>: <code>⌊Bônus / N⌋ - N</code>. <strong>Limites</strong>: Destr. <code>1</code>, Trein. <code>2</code>, Espec. <code>3</code>, Mestre <code>4</code>; só válido se o bônus final for <strong><code>≥ 0</code></strong>.</td></tr><tr><td style="text-align:left"><strong>Defesa Total</strong></td><td style="text-align:left">Sacrifica Ação Principal: <strong><code>+4</code> Defesa</strong> (<code>+6</code> Espec. / <code>+8</code> Mestre) e <code>-2</code> nos ataques corpo a corpo contra você.</td></tr><tr><td style="text-align:left"><strong>Proteger Aliado</strong></td><td style="text-align:left">Sacrifica Ação Principal: atacantes contra aliado adjacente sofrem <strong><code>-4</code></strong> (<code>-6</code> Espec. / <code>-8</code> Mestre) e você pode interceptar o golpe.</td></tr><tr><td style="text-align:left"><strong>Ataque de Oportunidade / Desengajar</strong></td><td style="text-align:left">Sair voluntariamente do alcance corpo a corpo (<code>1,5m</code> / <code>3m</code> pique) ou baixar a guarda adjacente provoca <code>1</code> ataque único de <strong>Reação</strong>. <strong>Desengajar (Ação Principal)</strong> evita isso; empurrões nunca provocam.</td></tr><tr><td style="text-align:left"><strong>Ajudar / Flanquear</strong></td><td style="text-align:left"><strong>Ajudar (Ação Principal, adj. <code>1,5m</code>)</strong>: <code>+2</code> no próximo teste/ataque de um aliado <em>(máx. 1 ajudante em combate; até 2 fora)</em>. <strong>Flanquear</strong>: <code>+2</code> no ataque.</td></tr><tr><td style="text-align:left"><strong>Acerto Crítico</strong></td><td style="text-align:left">Dado natural ≥ Margem da arma (e acerta): multiplica <strong><code>(Dados da Arma + Maestria Lenda/Épico + Mod. Atributo + Bônus Fixo) × Mult</code></strong>. Dados externos (veneno/Oportunista) somam depois.</td></tr><tr><td style="text-align:left"><strong>Golpe Devastador (<code>&gt; 2/3 PV</code>)</strong></td><td style="text-align:left">Dano em 1 golpe &gt; <code>2/3</code> do PV Máx. exige <strong>CON CD <code>15 + ⌊excedente/2⌋</code></strong> → falha = <strong>Morte Instantânea</strong>; sucesso = sobrevive com <strong>Ferimento Grave</strong>.</td></tr></tbody></table></div>
+<h3 id="moribundo-cura-exaustão-e-preços-rápidos-7">Moribundo, Cura, Exaustão e Preços Rápidos</h3>
+<ul>
+<li><strong>Moribundo (<code>0 PV</code>)</strong>: <code>1d20 + Mod(CON)</code> CD <code>12</code> por turno (<code>3</code> sucessos estabiliza; <code>3</code> falhas morre; <code>20</code> acorda com <code>1 PV</code>; <code>1</code> = 2 falhas; Medicina CD <code>15</code> estabiliza).</li>
+<li><strong>Descanso Curto (<code>1h</code>)</strong>: recupera <code>1 DV + Mod(CON)</code> PV <em>(máx. 2×/dia)</em>. <strong>Descanso Longo (<code>8h</code>)</strong>: recupera <code>50%</code> do PV Máx. e <code>-1</code> Exaustão.</li>
+<li><strong>Exaustão (<code>1–5</code>)</strong>: <code>1</code>: <code>-2</code> perícias | <code>2</code>: ½ deslocamento | <code>3</code>: <code>-3</code> ataques/Defesa/resistências | <code>4</code>: ½ PV Máx. | <code>5</code>: morte.</li>
+<li><strong>Preços Rápidos</strong>: Refeição <code>2 PC</code> | Quarto <code>1 PP</code> | Rações (7 dias) <code>5 PP</code> | Soldo mercenário <code>2 PP/dia</code> | Cirurgia <code>20 PP</code> | Navio Merlinport–Alineus <code>15 PP</code> | Cavalo <code>120 PP</code>.</li>
+</ul>
+        </article>
+    </main>
+    <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
+        <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const lb = document.getElementById('atlas-lightbox');
+    const lbImg = document.getElementById('atlas-lightbox-img');
+    if (lb && lbImg) {
+        document.querySelectorAll('.atlas-plate img').forEach(img => {
+            img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+        });
+        lb.addEventListener('click', () => lb.classList.remove('open'));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Livro de Regras — Alenia RPG</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+    --desk: #171512;
+    --vellum: #f7f1e3;
+    --vellum-alt: #efe6d2;
+    --vellum-card: #f2ead8;
+    --ink: #221c16;
+    --ink-soft: #4e4336;
+    --crimson: #7a1f1d;
+    --crimson-dark: #571412;
+    --gold: #9a7b3b;
+    --gold-light: #cdb06e;
+    --border: #cfc2a5;
+    --sidebar-w: 280px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--desk); color: var(--ink); }
+body {
+    margin: 0;
+    font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.66;
+    background: radial-gradient(circle at top, #27221c 0%, #171512 58%, #100e0c 100%);
+    min-height: 100vh;
+}
+
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 54px;
+    background: rgba(18, 16, 13, 0.96);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.45);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-brand {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+}
+.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-nav a, .btn-print {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none;
+    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    transition: all 0.16s ease; cursor: pointer; background: transparent;
+}
+.topbar-nav a:hover, .topbar-nav a.active {
+    color: var(--gold-light); border-color: rgba(154, 123, 59, 0.55); background: rgba(154, 123, 59, 0.12);
+}
+.btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
+.btn-print:hover { background: #922624; color: #fff; }
+
+.sidebar {
+    position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 18px 14px 32px; overflow-y: auto; z-index: 900;
+}
+.sidebar-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold-light);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 12px 0;
+}
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin: 2px 0; }
+.toc-list a {
+    display: block; text-decoration: none; color: #cfc6b4; font-size: 14.5px;
+    line-height: 1.35; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
+}
+.toc-list a:hover { color: var(--gold-light); background: rgba(154, 123, 59, 0.1); border-left-color: var(--gold); }
+.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 6px; }
+.toc-h3 a { padding-left: 16px; font-size: 13.5px; color: #b5ab98; }
+
+.book-shell { margin-left: var(--sidebar-w); padding: 80px 26px 64px; display: flex; justify-content: center; }
+.book-shell.no-sidebar { margin-left: 0; }
+.book-page {
+    width: 100%; max-width: 920px; background: var(--vellum); color: var(--ink);
+    padding: 52px 60px 70px;
+    box-shadow: 0 24px 65px rgba(0,0,0,0.62), 0 0 0 1px rgba(154, 123, 59, 0.35);
+    border-radius: 3px; position: relative;
+}
+.book-page::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px solid rgba(154, 123, 59, 0.32); pointer-events: none;
+}
+
+.cover-page {
+    min-height: 760px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 54px 44px; margin-bottom: 52px;
+    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -8px;
+    background: radial-gradient(circle at center, #fbf7ee 0%, #f3ead6 100%);
+    page-break-after: always; break-after: page;
+}
+.cover-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 13px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--crimson); margin-bottom: 14px;
+}
+.cover-rule {
+    width: 180px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
+    margin: 18px auto;
+}
+.cover-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 40px; font-weight: 800; line-height: 1.15;
+    letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
+}
+.cover-subtitle {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 21px;
+    color: var(--ink-soft); margin: 14px 0 8px; max-width: 640px;
+}
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 560px; margin: 24px auto 14px; }
+.cover-thumb {
+    max-width: 100%; max-height: 310px; border: 2px solid var(--gold);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.22); margin: 16px auto; border-radius: 2px;
+}
+.cover-edition {
+    margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
+h1.book-h1 {
+    font-size: 28px; letter-spacing: 0.05em; text-transform: uppercase;
+    border-bottom: 2px solid var(--crimson); padding-bottom: 10px; margin: 0 0 22px 0;
+}
+h2 { font-size: 21px; letter-spacing: 0.04em; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--gold); }
+h3 { font-size: 16.5px; letter-spacing: 0.03em; margin: 22px 0 8px; color: #3d2415; }
+p { margin: 0 0 13px; text-align: justify; hyphens: auto; }
+ul, ol { margin: 6px 0 16px; padding-left: 24px; }
+li { margin-bottom: 6px; }
+strong { color: #17120d; }
+code {
+    font-family: Consolas, 'Courier New', monospace; font-size: 0.86em;
+    background: rgba(154, 123, 59, 0.14); border: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 1px 5px; border-radius: 3px; color: #5b1d18;
+}
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 28px 0; }
+a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 3px; }
+
+blockquote {
+    margin: 18px 0 22px; padding: 14px 20px; background: var(--vellum-card);
+    border-left: 4px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
+}
+.callout {
+    margin: 20px 0; padding: 14px 18px; border-radius: 2px; border: 1px solid var(--border);
+    border-left: 5px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid;
+}
+.callout-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); margin-bottom: 6px;
+}
+.callout.warning { border-left-color: #b4691e; background: #f6ecd7; }
+.callout.warning .callout-title { color: #8c4d10; }
+
+.formula-box {
+    margin: 16px 0 20px; padding: 12px 18px; background: #efe5cf;
+    border: 1px solid var(--gold); border-radius: 3px; text-align: center;
+    font-size: 18.5px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
+}
+
+.table-wrap { width: 100%; overflow-x: auto; margin: 16px 0 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.44; border: 1px solid var(--gold); }
+thead th {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.05em;
+    text-transform: uppercase; background: var(--crimson); color: #f7f1e3;
+    padding: 9px 9px; border: 1px solid #5f1816; text-align: left;
+}
+tbody td { padding: 8px 9px; border: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--vellum-alt); }
+tr { break-inside: avoid; }
+
+.atlas-plate {
+    margin: 22px 0 28px; padding: 10px; background: #ebe1ca;
+    border: 1px solid var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+    text-align: center; break-inside: avoid;
+}
+.atlas-plate img { width: 100%; height: auto; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.atlas-caption {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 8px;
+}
+
+.entry-card {
+    margin: 16px 0 20px; padding: 14px 18px 12px; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
+}
+.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 5px; }
+
+.lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
+    z-index: 2000; padding: 24px; align-items: center; justify-content: center; cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 96vw; max-height: 92vh; border: 2px solid var(--gold); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 22px 0 32px; }
+.portal-card {
+    display: flex; flex-direction: column; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 4px solid var(--crimson);
+    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
+.portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
+.portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
+.portal-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.48; margin: 0; text-align: left; }
+.portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+.tome-divider { page-break-before: always; break-before: page; }
+
+@media (max-width: 1020px) {
+    .sidebar { display: none; }
+    .book-shell { margin-left: 0; padding: 72px 14px 40px; }
+    .book-page { padding: 30px 24px 42px; }
+}
+
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@media print {
+    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
+    .topbar, .sidebar, .lightbox { display: none !important; }
+    .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
+    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    .book-page::before { display: none !important; }
+    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: var(--crimson-dark); text-decoration: none; }
+    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+}
+</style>
+</head>
+<body>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html" class="active">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-e-proposta-do-sistema-0">1. Visão Geral e Proposta do Sistema</a></li><li class="toc-h3"><a href="#pilares-fundamentais-1">Pilares Fundamentais</a></li><li class="toc-h2"><a href="#2-atributos-base-e-geração-de-personagem-2">2. Atributos Base e Geração de Personagem</a></li><li class="toc-h3"><a href="#cálculo-do-modificador-3">Cálculo do Modificador</a></li><li class="toc-h3"><a href="#geração-inicial-de-atributos-4">Geração Inicial de Atributos</a></li><li class="toc-h2"><a href="#3-atributos-especiais-opcionais-evolução-exclusiva-por-feitos-5">3. Atributos Especiais (Opcionais — Evolução Exclusiva por Feitos)</a></li><li class="toc-h2"><a href="#4-testes-dificuldades-e-perícias-recalibradas-6">4. Testes, Dificuldades e Perícias (Recalibradas)</a></li><li class="toc-h3"><a href="#teste-básico-7">Teste Básico</a></li><li class="toc-h3"><a href="#graus-de-treino-custos-e-travas-de-patamar-8">Graus de Treino, Custos e Travas de Patamar</a></li><li class="toc-h3"><a href="#pontos-de-perícia-uniforme-e-equilibrado-9">Pontos de Perícia (Uniforme e Equilibrado)</a></li><li class="toc-h3"><a href="#lista-oficial-de-perícias-34-perícias-perícias-livres-ilimitadas-10">Lista Oficial de Perícias (34 Perícias + Perícias Livres Ilimitadas)</a></li><li class="toc-h2"><a href="#5-níveis-dados-de-vida-patamares-e-troca-de-kit-níveis-1-a-30-11">5. Níveis, Dados de Vida, Patamares e Troca de Kit (Níveis 1 a 30)</a></li><li class="toc-h3"><a href="#como-e-quando-subir-de-nível-12">Como e Quando Subir de Nível</a></li><li class="toc-h3"><a href="#pontos-de-vida-por-dado-de-vida-estilo-dd-conforme-a-natureza-do-kit-13">Pontos de Vida por Dado de Vida (Estilo D&amp;D conforme a Natureza do Kit)</a></li><li class="toc-h3"><a href="#os-3-patamares-dinâmicos-14">Os 3 Patamares Dinâmicos</a></li><li class="toc-h2"><a href="#6-combate-ágil-tático-e-mortal-15">6. Combate Ágil, Tático e Mortal</a></li><li class="toc-h3"><a href="#turno-economia-de-ações-e-iniciativa-16">Turno, Economia de Ações e Iniciativa</a></li><li class="toc-h3"><a href="#defesa-situacional-surpresa-e-condições-17">Defesa Situacional, Surpresa e Condições</a></li><li class="toc-h3"><a href="#múltiplas-ações-regra-storyteller-com-trava-de-treino-18">Múltiplas Ações (Regra Storyteller — Com Trava de Treino)</a></li><li class="toc-h3"><a href="#ações-defensivas-sacrificando-o-ataque-19">Ações Defensivas (Sacrificando o Ataque)</a></li><li class="toc-h3"><a href="#críticos-por-arma-e-o-que-multiplica-20">Críticos por Arma e O Que Multiplica</a></li><li class="toc-h3"><a href="#golpe-devastador-23-do-pv-máximo-morte-instantânea-21">Golpe Devastador (&gt; 2/3 do PV Máximo) — Morte Instantânea</a></li><li class="toc-h2"><a href="#7-procedimentos-de-mesa-moribundo-cura-manobras-e-sobrevivência-22">7. Procedimentos de Mesa: Moribundo, Cura, Manobras e Sobrevivência</a></li><li class="toc-h3"><a href="#estado-moribundo-estabilização-23">Estado Moribundo &amp; Estabilização</a></li><li class="toc-h3"><a href="#descanso-recuperação-natural-e-ferimentos-graves-24">Descanso, Recuperação Natural e Ferimentos Graves</a></li><li class="toc-h3"><a href="#manobras-táticas-e-ataque-de-oportunidade-25">Manobras Táticas e Ataque de Oportunidade</a></li><li class="toc-h3"><a href="#fome-sede-friocalor-e-exaustão-níveis-1-a-5-26">Fome, Sede, Frio/Calor e Exaustão (Níveis 1 a 5)</a></li><li class="toc-h3"><a href="#perseguições-e-acidentes-marítimos-27">Perseguições e Acidentes Marítimos</a></li><li class="toc-h2"><a href="#8-talentos-e-manobras-níveis-pares-28">8. Talentos e Manobras (Níveis Pares)</a></li><li class="toc-h2"><a href="#9-equipamentos-economia-e-tabela-de-preços-de-referência-29">9. Equipamentos, Economia e Tabela de Preços de Referência</a></li><li class="toc-h3"><a href="#tabela-de-preços-do-cotidiano-viagem-30">Tabela de Preços do Cotidiano &amp; Viagem</a></li><li class="toc-h3"><a href="#tabela-de-armas-comuns-31">Tabela de Armas Comuns</a></li><li class="toc-h3"><a href="#armaduras-e-escudos-bônus-de-defesa-zero-rd-32">Armaduras e Escudos (Bônus de Defesa — Zero RD)</a></li><li class="toc-h3"><a href="#o-adamante-de-aurora-metal-estratégico-33">O Adamante de Aurora (Metal Estratégico)</a></li><li class="toc-h2"><a href="#10-magia-rituais-e-fé-verdadeira-calibrados-34">10. Magia, Rituais e Fé Verdadeira (Calibrados)</a></li><li class="toc-h3"><a href="#dificuldades-e-preparação-ritualística-35">Dificuldades e Preparação Ritualística</a></li><li class="toc-h3"><a href="#o-simbionte-da-comunhão-regras-dos-4-estágios-remoção-36">O Simbionte da Comunhão (Regras dos 4 Estágios &amp; Remoção)</a></li></ul></aside>
+    <main class="book-shell">
+        <article class="book-page">
+            
+    <section class="cover-page">
+        <div class="cover-kicker">ALENIA RPG • TOMO I</div>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title">Livro de Regras</h1>
+        <div class="cover-subtitle">Sistema d20 Sombrio • Dados de Vida, Procedimentos, Preços &amp; Rituais</div>
+        <div class="cover-rule"></div>
+        
+        <p class="cover-epigraph">“O aço quebra, os reis sangram e o mar engole até os mais sábios.”</p>
+        <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
+    </section>
+    
+<h1 id="alenia-rpg-livro-de-regras-oficial-edição-revisada-v20-0" class="book-h1">ALENIA RPG — Livro de Regras Oficial (Edição Revisada v2.0)</h1>
+<blockquote><em>&quot;O aço quebra, os reis sangram e o mar engole até os mais sábios. Só sobrevive em Alenia quem sabe quando atacar, quando aparar e quando calar.&quot;</em></blockquote>
+<hr/>
+<h2 id="1-visão-geral-e-proposta-do-sistema-0">1. Visão Geral e Proposta do Sistema</h2>
+<p><strong>Alenia</strong> é um sistema próprio de RPG medieval sombrio movido por <strong>d20</strong>, desenhado para campanhas de <strong>exploração continental, intriga política, sobrevivência e combates táticos mortais</strong> — integrado ao <strong>RRPG Firecast</strong>.</p>
+<h3 id="pilares-fundamentais-1">Pilares Fundamentais</h3>
+<ol>
+<li><strong>Povos Jogáveis Exclusivamente Humanos</strong>: todas as civilizações vivas e personagens jogáveis são humanos, diferenciados por origem cultural, atributos e ofício. Feras naturais e raros horrores lendários existem apenas como ameaças do mundo.</li>
+<li><strong>Sem Classes Rígidas + 36 Kits Universais</strong>: qualquer explorador pode aprender qualquer perícia ou manobra. Os <strong>Kits</strong> representam ofícios universais que definem o <strong>Dado de Vida (<code>1d6</code> a <code>1d12</code>)</strong>, o <strong>multiplicador de Inteligência para perícias</strong>, a formação inicial e uma habilidade de ofício — e podem ser trocados ou complementados ao longo da campanha.</li>
+<li><strong>Curva Clara de Poder (Recruta → Lenda → Épico)</strong>: personagens iniciantes (Recrutas) são frágeis e sujeitos a morte súbita; veteranos (Lendas, Nív. 11–20) suportam provações maiores e dominam maestrias raras; figuras Épicas (Nív. 21–30) alcançam feitos míticos — mas o <strong>Golpe Devastador (<code>&gt; 2/3</code> do PV)</strong>, venenos, ferimentos graves e inimigos do mesmo patamar mantêm a tensão real.</li>
+<li><strong>Combate Tático e Sem Pólvora</strong>: Defesa situacional (<em>Aparar</em> vs. <em>Esquiva</em>), armaduras comuns <strong>jamais</strong> dão RD (RD é restrita a itens extremamente raros), armas possuem margens e multiplicadores de crítico próprios, <strong>Múltiplas Ações</strong> possuem teto vinculado ao treino e ações defensivas sacrificam o ataque para proteger a si ou aliados.</li>
+<li><strong>Magia Estilo <em>Game of Thrones</strong></em>: raríssima, ancestral, ritualística, cara e envolta em lendas.</li>
+</ol>
+<hr/>
+<h2 id="2-atributos-base-e-geração-de-personagem-2">2. Atributos Base e Geração de Personagem</h2>
+<p>Todo personagem possui <strong>6 Atributos Base</strong> na escala clássica <strong>3 a 18</strong>:</p>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Atributo</th><th style="text-align:center">Sigla</th><th style="text-align:left">Escopo Principal</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Força</strong></td><td style="text-align:center"><code>FOR</code></td><td style="text-align:left">Poder muscular, ataques corpo a corpo pesados, dano, atletismo, capacidade de carga</td></tr><tr><td style="text-align:left"><strong>Destreza</strong></td><td style="text-align:center"><code>DES</code></td><td style="text-align:left">Agilidade, iniciativa, Defesa, ataques à distância e ágeis, furtividade, acrobacia</td></tr><tr><td style="text-align:left"><strong>Constituição</strong></td><td style="text-align:center"><code>CON</code></td><td style="text-align:left">Vigor, Pontos de Vida (PV), testes de Moribundo, venenos, fadiga e <strong>Golpe Devastador</strong></td></tr><tr><td style="text-align:left"><strong>Inteligência</strong></td><td style="text-align:center"><code>INT</code></td><td style="text-align:left">Raciocínio, <strong>Pontos de Perícia</strong>, erudição, engenharia, alquimia, investigação</td></tr><tr><td style="text-align:left"><strong>Sabedoria</strong></td><td style="text-align:center"><code>SAB</code></td><td style="text-align:left">Percepção, intuição, sobrevivência, medicina, navegação, força de vontade</td></tr><tr><td style="text-align:left"><strong>Carisma</strong></td><td style="text-align:center"><code>CAR</code></td><td style="text-align:left">Presença, persuasão, liderança, enganação, intimidação, etiqueta e arte</td></tr></tbody></table></div>
+<h3 id="cálculo-do-modificador-3">Cálculo do Modificador</h3>
+<div class="formula-box">Modificador = ⌊ (Valor do Atributo - 10) / (2) ⌋</div>
+<div class="table-wrap"><table><thead><tr><th style="text-align:center">Valor</th><th style="text-align:center">3</th><th style="text-align:center">4–5</th><th style="text-align:center">6–7</th><th style="text-align:center">8–9</th><th style="text-align:center">10–11</th><th style="text-align:center">12–13</th><th style="text-align:center">14–15</th><th style="text-align:center">16–17</th><th style="text-align:center">18–19</th><th style="text-align:center">20–21</th></tr></thead><tbody><tr><td style="text-align:center"><strong>Mod.</strong></td><td style="text-align:center"><code>-4</code></td><td style="text-align:center"><code>-3</code></td><td style="text-align:center"><code>-2</code></td><td style="text-align:center"><code>-1</code></td><td style="text-align:center"><code>0</code></td><td style="text-align:center"><code>+1</code></td><td style="text-align:center"><code>+2</code></td><td style="text-align:center"><code>+3</code></td><td style="text-align:center"><code>+4</code></td><td style="text-align:center"><code>+5</code></td></tr></tbody></table></div>
+<h3 id="geração-inicial-de-atributos-4">Geração Inicial de Atributos</h3>
+<ul>
+<li><strong>Regra Oficial (Rolagem)</strong>: role <strong><code>4d6</code> e descarte o menor dado</strong> para cada um dos 6 atributos. Na ficha do <strong>RRPG Firecast</strong>, o botão <strong>&quot;Rolar Atributos Iniciais (4d6)&quot;</strong> só funciona quando todos os 6 campos estiverem vazios, preenche os valores automaticamente e anuncia todos os dados (incluindo o descartado) no chat da mesa.</li>
+<li><strong>Regra Opcional (Compra de Pontos)</strong>: comece com todos os 6 atributos em <code>8</code> e distribua <strong>27 pontos</strong> (<code>9–13</code> = 1 pt cada; <code>14–15</code> = 2 pts cada; máximo inicial <code>15</code>).</li>
+</ul>
+<hr/>
+<h2 id="3-atributos-especiais-opcionais-evolução-exclusiva-por-feitos-5">3. Atributos Especiais (Opcionais — Evolução Exclusiva por Feitos)</h2>
+<p>Nem todo personagem possui Atributos Especiais. Eles operam na escala <strong><code>0</code> a <code>5</code></strong> (<code>0</code> = não possui; <code>1–5</code> = nível de poder/peso narrativo e bônus direto somado em testes pertinentes).</p>
+<div class="callout"><div class="callout-title">Regra Fundamental</div><div><strong>Atributos Especiais JAMAIS sobem com pontos de nível.</strong> Eles evoluem (ou diminuem) <strong>exclusivamente por Feitos reais em campanha</strong>, arbitrados pelo Mestre.</div></div>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Atributo Especial</th><th style="text-align:left">O que Representa</th><th style="text-align:left">Exemplos de Feitos para Evoluir</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Status</strong> (<code>0–5</code>)</td><td style="text-align:left">Linhagem nobre, patente militar, prestígio acadêmico, renome tribal ou crédito mercantil.</td><td style="text-align:left">Salvar uma casa nobre em Altavanne, conquistar patente em Corallis, liderar caravanas em Gaddra.</td></tr><tr><td style="text-align:left"><strong>Fé Verdadeira</strong> (<code>0–5</code>)</td><td style="text-align:left">Convicção espiritual autêntica e incorruptível (plural — válida em qualquer tradição sincera de Alenia), capaz de resistir ao horror e produzir bênçãos sutis ou presságios.</td><td style="text-align:left">Sustentar juramentos sob sacrifício real, enfrentar horrores de Incognito sem recuar, realizar atos de devoção genuína.</td></tr><tr><td style="text-align:left"><strong>Influência no Submundo</strong> (<code>0–5</code>)</td><td style="text-align:left">Redes de informantes, respeito entre piratas do Mar dos Corais/Ravena, contrabandistas e guildas ocultas de Kalis.</td><td style="text-align:left">Controlar uma rota clandestina, pagar dívidas de sangue, derrubar um rival no submundo.</td></tr><tr><td style="text-align:left"><strong>Dom Antigo</strong> (<code>0–5</code>)</td><td style="text-align:left"><em>(Raríssimo — exige aval do Mestre)</em> Sangue ancestral, visões proféticas, ecos de Incognito ou afinidade com rituais esquecidos.</td><td style="text-align:left">Sobreviver a um rito ancestral, decifrar ruínas de Kelgore ou Incognito, pagar o preço de uma visão verdadeira.</td></tr><tr><td style="text-align:left"><strong>Especial Livre</strong> (<code>0–5</code>)</td><td style="text-align:left">Espaço aberto na ficha para um atributo exclusivo da campanha criado pelo Mestre (ex.: <em>Honra do Clã</em>, <em>Dívida de Sangue</em>, <em>Segredo de Kalgard</em>).</td><td style="text-align:left">Definido pelo Mestre.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="4-testes-dificuldades-e-perícias-recalibradas-6">4. Testes, Dificuldades e Perícias (Recalibradas)</h2>
+<h3 id="teste-básico-7">Teste Básico</h3>
+<div class="formula-box">Resultado = 1d20 + Modificador do Atributo + Grau de Treino + Modificadores Situacionais</div>
+<div class="table-wrap"><table><thead><tr><th style="text-align:center">Dificuldade (CD)</th><th style="text-align:left">Grau do Desafio</th><th style="text-align:left">Exemplos em Alenia</th></tr></thead><tbody><tr><td style="text-align:center"><strong>10</strong></td><td style="text-align:left">Rotineira / Fácil</td><td style="text-align:left">Negociar suprimentos comuns em Merlinport, escalar muro baixo</td></tr><tr><td style="text-align:center"><strong>15</strong></td><td style="text-align:left">Moderada</td><td style="text-align:left">Navegar recifes calmos, rastrear trilha recente, estancar sangramento</td></tr><tr><td style="text-align:center"><strong>20</strong></td><td style="text-align:left">Difícil</td><td style="text-align:left">Forjar liga superior, infiltrar mansão em Altavanne, tratar fratura grave</td></tr><tr><td style="text-align:center"><strong>25</strong></td><td style="text-align:left">Muito Difícil</td><td style="text-align:left">Cruzar o Mar dos Corais sob tempestade, decifrar inscrição de Kelgore</td></tr><tr><td style="text-align:center"><strong>30</strong></td><td style="text-align:left">Lendária / Extrema</td><td style="text-align:left">Trabalhar adamante puro em campo, sobreviver a tempestade em Incognito</td></tr></tbody></table></div>
+<h3 id="graus-de-treino-custos-e-travas-de-patamar-8">Graus de Treino, Custos e Travas de Patamar</h3>
+<p>Para preservar <strong>Mestre (<code>+12</code>)</strong> como uma autoridade genuinamente rara em toda Alenia (evitando que personagens dominem todas as perícias cedo demais), a evolução exige tanto pontos acumulados quanto maturidade de patamar:</p>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Grau de Treino</th><th style="text-align:center">Bônus</th><th style="text-align:center">Custo para Subir</th><th style="text-align:center">Custo Acumulado</th><th style="text-align:left">Requisito Mínimo</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Destreinado</strong></td><td style="text-align:center"><code>+0</code></td><td style="text-align:center"><code>—</code></td><td style="text-align:center"><code>0 pts</code></td><td style="text-align:left">Nenhum</td></tr><tr><td style="text-align:left"><strong>Treinado</strong></td><td style="text-align:center"><code>+3</code></td><td style="text-align:center"><code>2 pts</code></td><td style="text-align:center"><code>2 pts</code></td><td style="text-align:left">Nível 1+ <em>(ou gratuito pelo Kit inicial)</em></td></tr><tr><td style="text-align:left"><strong>Especialista</strong></td><td style="text-align:center"><code>+8</code></td><td style="text-align:center"><code>+5 pts</code></td><td style="text-align:center"><code>7 pts</code></td><td style="text-align:left"><strong>Nível 5+</strong> <em>(veterano reconhecido)</em></td></tr><tr><td style="text-align:left"><strong>Mestre</strong></td><td style="text-align:center"><code>+12</code></td><td style="text-align:center"><code>+10 pts</code></td><td style="text-align:center"><code>17 pts</code></td><td style="text-align:left"><strong>Nível 11+ (Patamar Lenda)</strong> <em>(ou Feito excepcional aprovado pelo Mestre)</em></td></tr></tbody></table></div>
+<p><em>(Nota: Perícias recebidas como <strong>Treinado (<code>+3</code>)</strong> pelo Kit inicial contam como já tendo os <code>2 pts</code> pagos — elevar uma delas para Especialista no Nív. 5+ custa <code>+5 pts</code>, e depois para Mestre no Nív. 11+ custa <code>+10 pts</code>.)</em></p>
+<h3 id="pontos-de-perícia-uniforme-e-equilibrado-9">Pontos de Perícia (Uniforme e Equilibrado)</h3>
+<p>Em todas as fórmulas de perícia, aplica-se sempre a proteção <strong><code>máx(0, Mod. INT)</code></strong>, garantindo que Inteligência baixa nunca reduza o ganho abaixo da base do Kit:</p>
+<ul>
+<li><strong>No Nível 1</strong>: recebe as perícias treinadas iniciais do Kit (<code>+3</code>) <strong>mais</strong> <code>máx(2, ⌊Base do Kit + máx(0, Mod. INT) × Mult. INT⌋)</code> pontos livres.</li>
+<li><strong>Ao Subir de Nível</strong>: recebe <code>máx(1, ⌊(Base do Kit + máx(0, Mod. INT) × Mult. INT) × Fator de Patamar⌋)</code> pontos de perícia.</li>
+<li><strong>Sem Kit (Média Padrão)</strong>: <code>Base = 1</code>, <code>Mult. INT = 0,75</code>, <code>DV = 1d8</code>.</li>
+</ul>
+<p><em>(Exemplo de calibração: um <strong>Erudito</strong> com <code>INT 18 (+4)</code>, <code>Base 2</code>, <code>Mult. INT 1,25</code> recebe <code>7 pts</code> no Nív. 1 e <code>7 pts/nível</code> em Recruta. No Nív. 10 terá ~70 pts totais — suficientes para ~4 Especialistas e ~12 perícias treinadas, sem nenhum Mestre precoce. No Nív. 20, somando o patamar Lenda <code>1,5×</code>, alcançará <strong>4 a 6 Maestrias (<code>+12</code>)</strong> genuínas, mantendo especialização real mesmo até o Nív. 30!)</em></p>
+<h3 id="lista-oficial-de-perícias-34-perícias-perícias-livres-ilimitadas-10">Lista Oficial de Perícias (34 Perícias + Perícias Livres Ilimitadas)</h3>
+<p>Além das <strong>34 perícias oficiais</strong> abaixo, o jogador pode criar <strong>quantas perícias personalizadas quiser</strong> na ficha do Firecast (ex.: <em>Forja de Adamante</em>, <em>Pilotagem nos Corais</em>, <em>Dialeto de Yõketsu</em>), seguindo os mesmos custos e travas de patamar:</p>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Categoria</th><th style="text-align:left">Perícias (Atributo Base)</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Combate (6)</strong></td><td style="text-align:left"><code>Armas Brancas (FOR/DES)</code>, <code>Armas à Distância (DES)</code>, <code>Luta Desarmada (FOR/DES)</code>, <code>Aparar (FOR/DES)</code>, <code>Esquiva (DES)</code>, <code>Escudos (FOR)</code></td></tr><tr><td style="text-align:left"><strong>Físicas &amp; Exploração (8)</strong></td><td style="text-align:left"><code>Atletismo (FOR)</code>, <code>Acrobacia (DES)</code>, <code>Furtividade (DES)</code>, <code>Escalada (FOR)</code>, <code>Natação (FOR)</code>, <code>Cavalgar (DES)</code>, <code>Sobrevivência (SAB)</code>, <code>Navegação &amp; Náutica (SAB/INT)</code></td></tr><tr><td style="text-align:left"><strong>Percepção &amp; Subterfúgio (5)</strong></td><td style="text-align:left"><code>Percepção (SAB)</code>, <code>Investigação (INT)</code>, <code>Disfarce (CAR)</code>, <code>Ladinagem &amp; Fechaduras (DES)</code>, <code>Prestidigitação (DES)</code></td></tr><tr><td style="text-align:left"><strong>Sociais &amp; Intriga (6)</strong></td><td style="text-align:left"><code>Persuasão (CAR)</code>, <code>Enganação (CAR)</code>, <code>Intimidação (CAR/FOR)</code>, <code>Intuição (SAB)</code>, <code>Etiqueta &amp; Corte (CAR)</code>, <code>Barganha &amp; Comércio (CAR/INT)</code></td></tr><tr><td style="text-align:left"><strong>Saber, Ciência &amp; Ofícios (9)</strong></td><td style="text-align:left"><code>Medicina &amp; Cirurgia (INT/SAB)</code>, <code>Alquimia &amp; Venenos (INT)</code>, <code>Forja &amp; Metalurgia (INT/FOR)</code>, <code>Engenharia &amp; Mecânica (INT)</code>, <code>Herbalismo &amp; Natureza (SAB)</code>, <code>História &amp; Lendas (INT)</code>, <code>Geografia &amp; Cartografia (INT)</code>, <code>Idiomas &amp; Cifras (INT)</code>, <code>Religião &amp; Ocultismo (SAB/INT)</code></td></tr></tbody></table></div>
+<hr/>
+<h2 id="5-níveis-dados-de-vida-patamares-e-troca-de-kit-níveis-1-a-30-11">5. Níveis, Dados de Vida, Patamares e Troca de Kit (Níveis 1 a 30)</h2>
+<h3 id="como-e-quando-subir-de-nível-12">Como e Quando Subir de Nível</h3>
+<p>A evolução ocorre por <strong>Marcos de Campanha</strong> definidos pelo Mestre (tipicamente ao concluir um contrato relevante, expedição entre cidades ou arco político — a cada 2 a 4 sessões no patamar Recruta).</p>
+<h3 id="pontos-de-vida-por-dado-de-vida-estilo-dd-conforme-a-natureza-do-kit-13">Pontos de Vida por Dado de Vida (Estilo D&amp;D conforme a Natureza do Kit)</h3>
+<ul>
+<li><strong>Dado de Vida (DV) do Kit</strong>:<ul><li><strong>Combatente Brutal (<code>1d12</code>)</strong>: <em>Bárbaro / Berserker</em>.</li><li><strong>Combatente Pesado (<code>1d10</code>)</strong>: <em>Mercenário, Cavaleiro, Soldado, Guarda-Costas, Lutador</em>.</li><li><strong>Explorador / Híbrido / Suporte Marcial (<code>1d8</code>)</strong>: <em>Sem Kit, Duelista, Arqueiro, Contrabandista, Caçador de Recompensas, Saqueador, Pirata, Navegador, Explorador, Patrulheiro, Domador, Ferreiro, Carpinteiro, Inquisidor, Ermitão</em>.</li><li><strong>Especialista / Erudito / Intriga / Corte (<code>1d6</code>)</strong>: <em>Ladino, Assassino, Espião, Charlatão, Mercador, Alquimista, Médico, Erudito, Engenheiro, Herbalista, Astrônomo, Nobre, Diplomata, Bardo, Sacerdote, Tocado pelo Dom Antigo</em>.</li></ul></li>
+<li><strong>PV no Nível 1</strong>: <code>Valor Máximo do DV do Kit + Valor Bruto de Constituição</code> <em>(ex.: Mercenário <code>1d10</code> com CON 14 começa com <code>24 PV</code>; Erudito <code>1d6</code> com CON 10 começa com <code>16 PV</code>)</em>.</li>
+<li><strong>PV ao Subir de Nível</strong>: role <strong><code>1dX + Mod. CON</code></strong> (mínimo <code>1 PV</code> por nível; opção fixa para quem não quiser rolar: metade arredondada para cima do DV + <code>Mod. CON</code>, ex.: <code>1d10</code> = <code>6 + Mod. CON</code>, <code>1d8</code> = <code>5 + Mod. CON</code>, <code>1d6</code> = <code>4 + Mod. CON</code>).</li>
+</ul>
+<h3 id="os-3-patamares-dinâmicos-14">Os 3 Patamares Dinâmicos</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Patamar</th><th style="text-align:center">Níveis</th><th style="text-align:center">Pontos de Perícia</th><th style="text-align:left">Maestria de Combate <em>(Dano Base)</em></th><th style="text-align:left">Papel no Mundo</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Recruta</strong></td><td style="text-align:center"><code>1 – 10</code></td><td style="text-align:center"><code>1×</code> taxa base</td><td style="text-align:left">Dano normal da arma</td><td style="text-align:left">Exploradores, soldados e viajantes vulneráveis. Acesso aos <strong>36 Kits Universais</strong>.</td></tr><tr><td style="text-align:left"><strong>Lenda</strong></td><td style="text-align:center"><code>11 – 20</code></td><td style="text-align:center"><code>1,5×</code> (+50%)</td><td style="text-align:left"><strong><code>+1</code> dado individual</strong> do tipo da arma <em>(Especialista/Mestre)</em></td><td style="text-align:left">Figuras célebres e temidas; destrava grau <strong>Mestre (<code>+12</code>)</strong> e futuros <strong>Kits de Lenda</strong>.</td></tr><tr><td style="text-align:left"><strong>Épico</strong></td><td style="text-align:center"><code>21 – 30</code></td><td style="text-align:center"><code>2×</code> (o dobro)</td><td style="text-align:left"><strong><code>+2</code> dados individuais</strong> do tipo da arma <em>(Mestre)</em></td><td style="text-align:left">Nomes imortais capazes de encarar horrores de Incognito; destrava futuros <strong>Kits Épicos</strong>.</td></tr></tbody></table></div>
+<ul>
+<li><strong>Exemplos de Maestria de Combate</strong>: soma-se <code>+1</code> dado individual do mesmo tipo da arma (e <strong>não</strong> o conjunto inteiro de dados) em Lenda, e <code>+2</code> dados individuais em Épico.<ul><li><em>Espada Longa (<code>1d8</code>)</em>: Recruta <code>1d8</code> → Lenda <strong><code>2d8</code></strong> → Épico <strong><code>3d8</code></strong>.</li><li><em>Montante (<code>2d6</code>)</em>: Recruta <code>2d6</code> → Lenda <strong><code>3d6</code></strong> <em>(e não <code>4d6</code>)</em> → Épico <strong><code>4d6</code></strong>.</li><li><strong>Interação com Crítico</strong>: os dados de Maestria integram o dano base da arma e <strong>são multiplicados no Acerto Crítico</strong>, preservando a relevância do <em>Golpe Devastador</em> nos patamares avançados.</li></ul></li>
+</ul>
+<ul>
+<li><strong>Aumento de Atributo Base</strong>: <code>+1</code> em um Atributo Base à escolha a cada <strong>3 níveis</strong> (<code>3, 6, 9, 12, 15, 18, 21, 24, 27, 30</code>).</li>
+<li><strong>Talentos / Manobras</strong>: <code>1</code> Talento livre a cada <strong>nível par</strong> (<code>2, 4, 6...</code>).</li>
+<li><strong>Mudança ou Acúmulo de Kit em Campanha</strong>: o Kit inicial define sua formação e equipamento de partida. Se o personagem treinar um novo ofício durante a campanha (com tempo e mentor aprovados pelo Mestre), ele <strong>mantém</strong> todas as perícias e a habilidade já adquiridas e passa a usar o <strong>DV e multiplicadores do novo Kit</strong> nos níveis seguintes (ganhando a habilidade do novo Kit após 2 níveis nele).</li>
+</ul>
+<hr/>
+<h2 id="6-combate-ágil-tático-e-mortal-15">6. Combate Ágil, Tático e Mortal</h2>
+<h3 id="turno-economia-de-ações-e-iniciativa-16">Turno, Economia de Ações e Iniciativa</h3>
+<ul>
+<li><strong>Iniciativa</strong>: <code>1d20 + Mod(DES) + ⌊Grau em Percepção / 3⌋</code>.</li>
+<li>No seu turno, você dispõe estritamente de:<ul><li><strong>1 Ação Principal</strong>: atacar, usar manobra tática (<em>Agarrar, Derrubar, Empurrar, Desengajar, Ajudar</em>), <em>Defesa Total</em>, <em>Proteger Aliado</em>, estabilizar aliado ou usar item complexo.</li><li><strong>1 Movimento</strong>: deslocar-se até <code>9m</code> (6 quadrados), levantar-se do chão (custa metade do Movimento: <code>4,5m</code>), recarregar besta leve ou executar interações rápidas explicitamente vinculadas ao Movimento.</li><li><strong>1 Reação</strong> <em>(por rodada)</em>: usada fora do seu turno para <em>Ataque de Oportunidade</em>, <em>Aparar Relâmpago</em> ou interceptar golpe com <em>Proteger Aliado</em>.</li><li><strong>Ações Livres</strong>: atos triviais (falar poucas palavras, largar um objeto, ou efeitos explícitos de Kit como a troca de arma do Mercenário).</li></ul></li>
+</ul>
+<h3 id="defesa-situacional-surpresa-e-condições-17">Defesa Situacional, Surpresa e Condições</h3>
+<div class="formula-box">Defesa = 10 + Mod(DES) + Bônus de Armadura + Bônus de Escudo + Perícia Pertinente</div>
+<ul>
+<li><strong>Contra ataques corpo a corpo</strong>: soma o grau de treino em <strong><code>Aparar</code></strong> (ou <strong><code>Esquiva</code></strong> se desarmado).</li>
+<li><strong>Contra projéteis / ataques à distância</strong>: soma o grau de treino em <strong><code>Esquiva</code></strong>.</li>
+<li><strong>Surpreso / Desprevenido</strong>: ocorre em emboscadas (até o início do primeiro turno da vítima), quando cego ou imobilizado. O alvo usa exclusivamente <strong><code>Defesa Desprevenido = 10 + Armadura + Escudo</code></strong> (perde <code>Mod(DES)</code> e a perícia <em>Aparar/Esquiva</em>). Não aplica penalidade extra de <code>-4</code> por estar surpreso.</li>
+<li><strong>Caído / Derrubado</strong>: condição física independente da surpresa. Enquanto estiver no chão, sofre <strong><code>-4</code> na Defesa contra ataques corpo a corpo</strong> (e recebe <strong><code>+2</code> na Defesa contra ataques à distância</strong>, por apresentar perfil reduzido) até gastar metade do seu Movimento (<code>4,5m</code>) para se levantar. <em>(Se estiver Caído e Desprevenido ao mesmo tempo, usa <code>Defesa Desprevenido - 4</code> em corpo a corpo.)</em></li>
+<li><strong>Quebrando Defesas Altas</strong>: <em>Flanquear</em> concede <code>+2</code> no ataque; <em>Ajudar</em> concede <code>+2</code>; derrubar impõe <code>-4</code> na Defesa corpo a corpo.</li>
+</ul>
+<div class="callout warning"><div class="callout-title">Atenção</div><div><strong>Regra de Ouro da Armadura</strong>: armaduras comuns <strong>JAMAIS</strong> concedem Redução de Dano (RD). Elas aumentam apenas a <strong>Defesa</strong>. Redução de Dano (<code>RD Especial</code>) existe <strong>exclusivamente</strong> em itens extremamente raros (como armaduras lendárias de <strong>Adamante Puro</strong> ou relíquias ancestrais).</div></div>
+<h3 id="múltiplas-ações-regra-storyteller-com-trava-de-treino-18">Múltiplas Ações (Regra Storyteller — Com Trava de Treino)</h3>
+<p>Um combatente pode dividir sua Ação Principal em <strong><code>N</code> ataques</strong> (ou ações físicas rápidas equivalentes — nunca multiplicando Movimento nem Reação, e não aplicável a bestas sem recarga rápida):</p>
+<ol>
+<li><strong>Limite Máximo de <code>N</code> pelo Grau de Treino na Perícia Usada</strong>:<ul><li><strong>Destreinado (<code>+0</code>)</strong>: máximo <strong><code>1</code> ação</strong> (não pode dividir).</li><li><strong>Treinado (<code>+3</code>)</strong>: máximo <strong><code>2</code> ações</strong>.</li><li><strong>Especialista (<code>+8</code>)</strong>: máximo <strong><code>3</code> ações</strong>.</li><li><strong>Mestre (<code>+12</code>)</strong>: máximo <strong><code>4</code> ações</strong>.</li></ul></li>
+<li><strong>Fórmula do Bônus por Ação</strong> <em>(para <code>N ≥ 2</code>)</em>:</li>
+</ol>
+<div class="formula-box">Bônus por Ação = ⌊ (Bônus Total de Ataque) / (N) ⌋ - N</div>
+<ol>
+<li><strong>Regra Anti-Abuso (Bônus Mínimo)</strong>: você só pode declarar <code>N</code> ações se o <code>Bônus por Ação</code> resultante for <strong><code>≥ 0</code></strong> (se ficar negativo, reduza <code>N</code>). Isso impede &quot;pesca de 20 natural&quot; com dezenas de ataques sem habilidade real.</li>
+</ol>
+<h3 id="ações-defensivas-sacrificando-o-ataque-19">Ações Defensivas (Sacrificando o Ataque)</h3>
+<p>Sacrificando sua Ação Principal de ataque até o início do próximo turno:</p>
+<ul>
+<li><strong>Defesa Total (Si Mesmo)</strong>: ganha <strong><code>+4</code> na Defesa</strong> (<code>+6</code> se Especialista em Aparar/Esquiva/Escudos; <code>+8</code> se Mestre) e impõe <strong><code>-2</code></strong> nos ataques corpo a corpo direcionados a você.</li>
+<li><strong>Proteger Aliado</strong>: escolha 1 aliado adjacente (<code>1,5m</code>). Atacantes contra ele sofrem <strong><code>-4</code></strong> no ataque (<code>-6</code> se Especialista em Aparar/Escudos; <code>-8</code> se Mestre), e você pode escolher <strong>absorver o golpe no lugar do aliado</strong> caso ainda acerte.</li>
+</ul>
+<h3 id="críticos-por-arma-e-o-que-multiplica-20">Críticos por Arma e O Que Multiplica</h3>
+<ul>
+<li><strong>Acerto Crítico</strong>: ocorre quando o resultado natural do <code>1d20</code> cair dentro da <strong>Margem de Crítico da arma</strong> (ex.: <code>19–20</code>, <code>18–20</code>, <code>20</code>) <strong>e</strong> o ataque superar a Defesa (ou for <code>20</code> natural, que sempre acerta).</li>
+<li><strong>O Que Multiplica</strong>: multiplica-se pelo <strong>Multiplicador da arma (<code>×2</code>, <code>×3</code>, <code>×4</code>)</strong> o pacote completo de dano base: <code>(Dados da arma + Dados de Maestria de Lenda/Épico + Modificador de atributo + Bônus fixo da arma/adamante)</code>. Dados bônus circunstanciais externos (como <em>Golpe Oportunista</em> do Ladino ou dano de veneno) são rolados e somados <strong>após</strong> a multiplicação!</li>
+<li><strong>Falha Crítica (<code>1</code> natural)</strong>: erro automático + abertura tática — o atacante deve gastar seu <strong>Movimento</strong> (ou sua <strong>Reação</strong> da rodada) para recuperar a postura/destravar a arma; se já tiver gasto ambos, um inimigo adjacente recebe <code>+2</code> no próximo ataque contra ele.</li>
+</ul>
+<h3 id="golpe-devastador-23-do-pv-máximo-morte-instantânea-21">Golpe Devastador (<code>&gt; 2/3</code> do PV Máximo) — Morte Instantânea</h3>
+<p>Sempre que um <strong>único ataque</strong> causar dano <strong>estritamente maior que <code>2/3</code> do PV Máximo</strong> do alvo (<code>⌊PV Máx × 2 / 3⌋ + 1</code>):</p>
+<ul>
+<li>O alvo realiza imediatamente um <strong>Teste de Constituição</strong> (<code>CD 15 + ⌊(Dano - Limiar) / 2⌋</code>).</li>
+<li><strong>Falha</strong>: <strong>Morte Instantânea</strong> (golpe fatal em órgão vital).</li>
+<li><strong>Sucesso</strong>: sobrevive reduzindo PV normalmente, mas sofre automaticamente um <strong>Ferimento Grave</strong>.</li>
+</ul>
+<hr/>
+<h2 id="7-procedimentos-de-mesa-moribundo-cura-manobras-e-sobrevivência-22">7. Procedimentos de Mesa: Moribundo, Cura, Manobras e Sobrevivência</h2>
+<h3 id="estado-moribundo-estabilização-23">Estado Moribundo &amp; Estabilização</h3>
+<p>Ao cair a <strong><code>0 PV</code></strong> (sem morrer instantaneamente), o personagem cai inconsciente e <strong>Moribundo</strong>:</p>
+<ul>
+<li><strong>A cada turno seu</strong>: role <strong><code>1d20 + Mod(CON)</code> contra CD 12</strong>.<ul><li><strong>3 Sucessos</strong> (não precisam ser consecutivos): estabiliza em <code>0 PV</code> (inconsciente por <code>1d4</code> horas, desperta com <code>1 PV</code>).</li><li><strong>3 Falhas</strong>: morre.</li><li><strong>20 natural</strong>: acorda imediatamente com <code>1 PV</code>. <strong>1 natural</strong>: conta como 2 falhas.</li><li><strong>Dano sofrido enquanto moribundo</strong>: impõe 1 falha automática (ou 2 se crítico).</li></ul></li>
+<li><strong>Estabilizar Aliado</strong>: Ação Principal + teste de <strong>Medicina CD 15</strong> (ou uso de atadura/cataplasma reduz CD para <code>12</code>) estabiliza imediatamente.</li>
+</ul>
+<h3 id="descanso-recuperação-natural-e-ferimentos-graves-24">Descanso, Recuperação Natural e Ferimentos Graves</h3>
+<ul>
+<li><strong>Descanso Curto (<code>1 hora</code> de repouso e água/curativos)</strong>: recupera <strong><code>1 Dado de Vida do Kit + Mod. CON</code></strong> em PV (máximo 1× entre combates pesados; até 2× por dia).</li>
+<li><strong>Descanso Longo (<code>8 horas</code> em abrigo seguro com alimentação)</strong>: recupera <strong><code>50%</code> do PV Máximo</strong> (arredondado para cima) e reduz <strong>1 nível de Exaustão</strong>.</li>
+<li><strong>Ferimentos Graves &amp; Cicatrizes <em>(Arbitragem Livre do Mestre)</strong></em>: gatilhos incluem cair a <code>0 PV</code>, sobreviver a <em>Golpe Devastador</em> ou sofrer crítico marcante. Exemplos para o Mestre adaptar livremente:<ul><li><em>Sangramento</em>: <code>1d4</code> PV/turno até Medicina CD 15;</li><li><em>Fratura / Membro Avariado</em>: <code>-3</code> em ações usando o membro até <code>1d4</code> semanas (reduzido à metade com Cirurgião);</li><li><em>Concussão</em>: <code>-2</code> em testes mentais e Percepção até Descanso Longo;</li><li><em>Cicatriz / Sequela Permanente</em>: arbitrada pelo Mestre em traumas extremos sem tratamento adequado.</li></ul></li>
+</ul>
+<h3 id="manobras-táticas-e-ataque-de-oportunidade-25">Manobras Táticas e Ataque de Oportunidade</h3>
+<ul>
+<li><strong>Ataque de Oportunidade (Reação)</strong>: provocado sempre que uma criatura <strong>sai voluntariamente do alcance corpo a corpo</strong> (<code>1,5m</code>, ou <code>3m</code> para piques) de um inimigo consciente, armado e que possa vê-la — ou realiza ação que baixa totalmente a guarda adjacente a um inimigo (como disparar arco/besta ou prestar socorro médico em corpo a corpo). Consome a <strong>Reação</strong> do inimigo para <strong>1 único ataque básico</strong> <em>(sem Múltiplas Ações)</em>. Deslocamento forçado (como ser empurrado) <strong>nunca</strong> provoca Ataque de Oportunidade.</li>
+<li><strong>Desengajar (Ação Principal)</strong>: permite percorrer todo o seu Movimento (<code>9m</code>) no turno <strong>sem provocar Ataques de Oportunidade</strong> ao deixar o alcance corpo a corpo de inimigos.</li>
+<li><strong>Ajudar (Ação Principal)</strong>: exige estar adjacente (<code>1,5m</code>) ao aliado ou ao inimigo distraído em combate (ou até <code>9m</code> por voz/sinal fora de combate). Concede <strong><code>+2</code></strong> no próximo ataque ou teste de perícia do aliado antes do início do seu próximo turno. <strong>Limite</strong>: no máximo <strong>1 ajudante em combate</strong> (<code>+2</code> máx.); em tarefas fora de combate, até <strong>2 ajudantes</strong> (<code>+4</code> máx., se o espaço permitir).</li>
+<li><strong>Agarrar (Ação Principal)</strong>: ataque corpo a corpo (<em>Atletismo</em> ou <em>Luta Desarmada</em>) contra Defesa Aparar/Esquiva do alvo. Alvo agarrado tem deslocamento <code>0</code> e <code>-2</code> em ataques; escapar custa Ação Principal (<em>Atletismo/Acrobacia</em> oposto).</li>
+<li><strong>Derrubar / Empurrar <code>3m</code> (Ação Principal)</strong>: teste oposto de <em>Atletismo</em> (ou <em>Armas Brancas</em> com haste) contra <em>Atletismo/Acrobacia</em> do alvo. Alvo derrubado fica <strong>Caído</strong> (<code>-4</code> na Defesa corpo a corpo, <code>+2</code> contra projéteis à distância; gasta <code>4,5m</code> de Movimento para levantar).</li>
+<li><strong>Flanquear</strong>: dois aliados conscientes em lados opostos de um mesmo inimigo em corpo a corpo recebem <strong><code>+2</code> no acerto</strong> contra ele.</li>
+</ul>
+<h3 id="fome-sede-friocalor-e-exaustão-níveis-1-a-5-26">Fome, Sede, Frio/Calor e Exaustão (Níveis 1 a 5)</h3>
+<p>Um dia sem água (ou 3 dias sem comida, ou uma noite sem abrigo em frio/calor extremo sem sucesso em Sobrevivência CD 15) impõe <strong>+1 nível de Exaustão</strong>:</p>
+<ol>
+<li><strong>Nível 1</strong>: <code>-2</code> em todos os testes de perícia.</li>
+<li><strong>Nível 2</strong>: deslocamento reduzido à metade.</li>
+<li><strong>Nível 3</strong>: <code>-3</code> em ataques, Defesa e testes de resistência.</li>
+<li><strong>Nível 4</strong>: PV Máximo reduzido à metade.</li>
+<li><strong>Nível 5</strong>: colapso e morte (se não socorrido imediatamente).</li>
+</ol>
+<h3 id="perseguições-e-acidentes-marítimos-27">Perseguições e Acidentes Marítimos</h3>
+<ul>
+<li><strong>Perseguições</strong>: resolvidas em <strong>3 a 5 rodadas</strong> de testes opostos (Atletismo, Acrobacia, Cavalgar ou Navegação, somando obstáculos narrativos); quem acumular 3 vitórias alcança ou despista o oponente.</li>
+<li><strong>Navegação Perigosa (Mar dos Corais / Mar Intransponível)</strong>: cada dia de travessia em área de recife ou tempestade exige teste de <strong>Navegação &amp; Náutica</strong> do piloto (CD <code>15</code> calmo, <code>20</code> recifes/neblina, <code>25</code> tempestade). Falha reduz velocidade pela metade ou causa impacto no casco (<code>2d6</code> a <code>4d6</code> de avaria; barcos pequenos afundam com <code>30–50</code> de dano sem reparo de Carpinteiro).</li>
+</ul>
+<hr/>
+<h2 id="8-talentos-e-manobras-níveis-pares-28">8. Talentos e Manobras (Níveis Pares)</h2>
+<p>A cada nível par (<code>2, 4, 6...</code>), escolha um Talento/Manobra:</p>
+<ul>
+<li><strong>Aparar Relâmpago</strong>: 1×/rodada, usa Reação para somar <code>+2</code> à Defesa contra um golpe corpo a corpo.</li>
+<li><strong>Muralha de Aço</strong>: ao usar <em>Proteger Aliado</em>, cobre até 2 aliados adjacentes e anula flanqueio contra eles.</li>
+<li><strong>Golpe Preciso</strong>: reduz a Margem de Crítico de uma arma escolhida em <code>1</code> ponto (ex.: <code>19–20</code> → <code>18–20</code>; não acumula).</li>
+<li><strong>Fluxo de Lâminas</strong>: reduz em <code>1</code> a penalidade adicional na regra de <em>Múltiplas Ações</em> (mínimo <code>0</code>).</li>
+<li><strong>Tiro Firme</strong>: ignora cobertura parcial e vento moderado com arcos e bestas; recarrega besta leve como ação livre 1×/turno.</li>
+<li><strong>Mãos de Cirurgião</strong>: <code>+3</code> em Medicina para estabilizar, curar e reduzir risco de sequelas permanentes.</li>
+<li><strong>Passo Silencioso</strong>: move-se em velocidade normal usando Furtividade sem penalidade.</li>
+<li><strong>Lobo do Mar</strong>: ignora penalidades de convés instável, recifes e embarcações sob tempestade.</li>
+<li><strong>Sangue Frio</strong>: <code>+3</code> em testes de CON contra <em>Golpe Devastador</em> e testes contra medo/horror.</li>
+<li><strong>Voz de Comando</strong>: Ação Principal concede <code>+2</code> no próximo ataque ou Defesa de aliados que possam ouvi-lo.</li>
+</ul>
+<hr/>
+<h2 id="9-equipamentos-economia-e-tabela-de-preços-de-referência-29">9. Equipamentos, Economia e Tabela de Preços de Referência</h2>
+<blockquote><strong>Padrão Monetário</strong>: <code>1 Moeda de Ouro (PO) = 10 Moedas de Prata (PP) = 100 Moedas de Cobre (PC)</code>. Não existe pólvora em Alenia.</blockquote>
+<h3 id="tabela-de-preços-do-cotidiano-viagem-30">Tabela de Preços do Cotidiano &amp; Viagem</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item / Serviço</th><th style="text-align:center">Preço Médio</th><th style="text-align:left">Observação</th></tr></thead><tbody><tr><td style="text-align:left">Refeição simples + caneca em estalagem</td><td style="text-align:center"><code>2 PC</code></td><td style="text-align:left"><code>1 PP</code> para banquete de frutos do mar em Baldbella</td></tr><tr><td style="text-align:left">Hospedagem (salão comum / quarto privado)</td><td style="text-align:center"><code>3 PC</code> / <code>1 PP</code></td><td style="text-align:left">Por noite em Merlinport ou Dahrma</td></tr><tr><td style="text-align:left">Rações secas de viagem (1 semana)</td><td style="text-align:center"><code>5 PP</code></td><td style="text-align:left">Indispensável em Gaddra ou pântanos</td></tr><tr><td style="text-align:left">Salário diário (trabalhador / mercenário)</td><td style="text-align:center"><code>3 PC</code> / <code>2 PP</code></td><td style="text-align:left">Mercenários veteranos cobram <code>5 PP/dia</code> + espólio</td></tr><tr><td style="text-align:left">Passagem marítima (Merlinport ↔ Alineus)</td><td style="text-align:center"><code>15 PP</code></td><td style="text-align:left">Travessia clandestina no Mar Intransponível: <code>80–150 PP</code></td></tr><tr><td style="text-align:left">Consulta cirúrgica (tratar Ferimento Grave)</td><td style="text-align:center"><code>20 PP</code></td><td style="text-align:left">Cirurgiões renomados de Baldbella cobram até <code>50 PP</code></td></tr><tr><td style="text-align:left">Cavalo de estrada / Mula de carga</td><td style="text-align:center"><code>120 PP</code> / <code>45 PP</code></td><td style="text-align:left">Montarias do deserto em OX: <code>150 PP</code></td></tr><tr><td style="text-align:left">Estojo médico / Gazuas / Bolsa alquímica</td><td style="text-align:center"><code>25 PP</code> / <code>20 PP</code> / <code>40 PP</code></td><td style="text-align:left">Ferramentas profissionais de ofício</td></tr></tbody></table></div>
+<h3 id="tabela-de-armas-comuns-31">Tabela de Armas Comuns</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Arma</th><th style="text-align:center">Preço</th><th style="text-align:center">Dano</th><th style="text-align:center">Margem / Mult.</th><th style="text-align:left">Propriedades</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Adaga / Punhal</strong></td><td style="text-align:center"><code>4 PP</code></td><td style="text-align:center"><code>1d4</code></td><td style="text-align:center"><code>19–20 / ×2</code></td><td style="text-align:left">Leve, Ágil (<code>FOR/DES</code>), Arremesso 6m</td></tr><tr><td style="text-align:left"><strong>Espada Curta</strong></td><td style="text-align:center"><code>15 PP</code></td><td style="text-align:center"><code>1d6</code></td><td style="text-align:center"><code>19–20 / ×2</code></td><td style="text-align:left">Leve, Ágil (<code>FOR/DES</code>)</td></tr><tr><td style="text-align:left"><strong>Florete / Estoque</strong></td><td style="text-align:center"><code>30 PP</code></td><td style="text-align:center"><code>1d6</code></td><td style="text-align:center"><code>18–20 / ×2</code></td><td style="text-align:left">Ágil (<code>DES</code>), Perfurante</td></tr><tr><td style="text-align:left"><strong>Espada Longa</strong></td><td style="text-align:center"><code>25 PP</code></td><td style="text-align:center"><code>1d8</code></td><td style="text-align:center"><code>19–20 / ×2</code></td><td style="text-align:left">Versátil (<code>1d10</code> em 2 mãos)</td></tr><tr><td style="text-align:left"><strong>Lâmina Oriental (Yõketsu)</strong></td><td style="text-align:center"><code>55 PP</code></td><td style="text-align:center"><code>1d8</code></td><td style="text-align:center"><code>18–20 / ×2</code></td><td style="text-align:left">Ágil em 2 mãos, corte preciso</td></tr><tr><td style="text-align:left"><strong>Cimitarra / Sabre</strong></td><td style="text-align:center"><code>25 PP</code></td><td style="text-align:center"><code>1d6</code></td><td style="text-align:center"><code>18–20 / ×2</code></td><td style="text-align:left">Ágil (<code>DES</code>), ideal em convés/sela</td></tr><tr><td style="text-align:left"><strong>Machado de Batalha</strong></td><td style="text-align:center"><code>20 PP</code></td><td style="text-align:center"><code>1d8</code></td><td style="text-align:center"><code>20 / ×3</code></td><td style="text-align:left">Versátil (<code>1d10</code> em 2 mãos)</td></tr><tr><td style="text-align:left"><strong>Machado Grande</strong></td><td style="text-align:center"><code>35 PP</code></td><td style="text-align:center"><code>1d12</code></td><td style="text-align:center"><code>20 / ×3</code></td><td style="text-align:left">Duas mãos, Pesada</td></tr><tr><td style="text-align:left"><strong>Montante / Espada Grande</strong></td><td style="text-align:center"><code>50 PP</code></td><td style="text-align:center"><code>2d6</code></td><td style="text-align:center"><code>19–20 / ×2</code></td><td style="text-align:left">Duas mãos, Pesada</td></tr><tr><td style="text-align:left"><strong>Lança / Pique</strong></td><td style="text-align:center"><code>10 PP</code></td><td style="text-align:center"><code>1d8</code></td><td style="text-align:center"><code>20 / ×3</code></td><td style="text-align:left">Alcance (<code>3m</code> se pique), Versátil</td></tr><tr><td style="text-align:left"><strong>Martelo de Guerra</strong></td><td style="text-align:center"><code>22 PP</code></td><td style="text-align:center"><code>1d8</code></td><td style="text-align:center"><code>20 / ×3</code></td><td style="text-align:left">Contundente</td></tr><tr><td style="text-align:left"><strong>Picareta de Guerra</strong></td><td style="text-align:center"><code>18 PP</code></td><td style="text-align:center"><code>1d6</code></td><td style="text-align:center"><code>20 / ×4</code></td><td style="text-align:left">Perfurante letal</td></tr><tr><td style="text-align:left"><strong>Arco Curto / Longo</strong></td><td style="text-align:center"><code>20 / 45 PP</code></td><td style="text-align:center"><code>1d6 / 1d8</code></td><td style="text-align:center"><code>20 / ×3</code></td><td style="text-align:left">2 mãos, Alcance 24m / 45m</td></tr><tr><td style="text-align:left"><strong>Besta Leve / Pesada</strong></td><td style="text-align:center"><code>35 / 75 PP</code></td><td style="text-align:center"><code>1d8 / 1d10</code></td><td style="text-align:center"><code>19–20 / ×2</code></td><td style="text-align:left">Recarga (Mov. / Ação Principal)</td></tr></tbody></table></div>
+<h3 id="armaduras-e-escudos-bônus-de-defesa-zero-rd-32">Armaduras e Escudos <em>(Bônus de Defesa — Zero RD)</em></h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Proteção</th><th style="text-align:center">Preço</th><th style="text-align:center">Bônus Defesa</th><th style="text-align:center">Penalidade Furt./Acrob.</th><th style="text-align:left">Observação</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Gibão Reforçado</strong></td><td style="text-align:center"><code>12 PP</code></td><td style="text-align:center"><code>+1</code></td><td style="text-align:center"><code>0</code></td><td style="text-align:left">Discreta para viagem</td></tr><tr><td style="text-align:left"><strong>Couro Batido</strong></td><td style="text-align:center"><code>25 PP</code></td><td style="text-align:center"><code>+2</code></td><td style="text-align:center"><code>0</code></td><td style="text-align:left">Padrão de exploradores</td></tr><tr><td style="text-align:left"><strong>Cota de Malha</strong></td><td style="text-align:center"><code>75 PP</code></td><td style="text-align:center"><code>+3</code></td><td style="text-align:center"><code>-2</code></td><td style="text-align:left">Boa proteção contra cortes</td></tr><tr><td style="text-align:left"><strong>Brigantina / Meia-Placa</strong></td><td style="text-align:center"><code>180 PP</code></td><td style="text-align:center"><code>+4</code></td><td style="text-align:center"><code>-3</code></td><td style="text-align:left">Favorita de mercenários veteranos</td></tr><tr><td style="text-align:left"><strong>Placas Completas</strong></td><td style="text-align:center"><code>450 PP</code></td><td style="text-align:center"><code>+5</code></td><td style="text-align:center"><code>-5</code></td><td style="text-align:left">Exige <code>FOR 13+</code></td></tr><tr><td style="text-align:left"><strong>Broquel / Escudo Médio / Torre</strong></td><td style="text-align:center"><code>10 / 20 / 45 PP</code></td><td style="text-align:center"><code>+1 / +2 / +3</code></td><td style="text-align:center"><code>0 / -1 / -3</code></td><td style="text-align:left">Torre dá <code>+2</code> extra em <em>Proteger Aliado</em></td></tr></tbody></table></div>
+<h3 id="o-adamante-de-aurora-metal-estratégico-33">O Adamante de Aurora <em>(Metal Estratégico)</em></h3>
+<ul>
+<li><strong>Armas de Adamante</strong> <em>(raríssimas — a partir de <code>800–2.000 PP</code> ou concessão real)</em>: nunca perdem o fio, concedem <strong><code>+1</code> no acerto e <code>+2</code> no dano</strong>, e ignoram até <code>3</code> pontos de <code>RD Especial</code>.</li>
+<li><strong>Peças de Armadura em Adamante Puro / Relíquias Antigas</strong>: única fonte de <strong><code>RD Especial</code></strong> (<code>RD 2</code> a <code>RD 5</code>, arbitrado pelo Mestre).</li>
+</ul>
+<hr/>
+<h2 id="10-magia-rituais-e-fé-verdadeira-calibrados-34">10. Magia, Rituais e Fé Verdadeira (Calibrados)</h2>
+<p>A magia em Alenia é rara, lenta, perigosa e cercada de lendas — <strong>não existem magias instantâneas de combate</strong>. Testes de rituais ancestrais ou milagres sutis utilizam <strong><code>1d20 + Dom Antigo</code></strong> ou <strong><code>1d20 + Fé Verdadeira</code></strong> (sempre mediante aval narrativo do Mestre).</p>
+<h3 id="dificuldades-e-preparação-ritualística-35">Dificuldades e Preparação Ritualística</h3>
+<p>Como <code>1d20 + Atributo Especial (máx. 5)</code> alcança naturalmente até <code>25</code>, <strong>ritos maiores exigem preparação concreta</strong> para acumular bônus antes da rolagem:</p>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Grau do Rito / Prodígio</th><th style="text-align:center">CD</th><th style="text-align:left">Exemplos</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Sutil / Presságio</strong></td><td style="text-align:center"><code>15</code></td><td style="text-align:left">Sonho profético vago, acalmar medo de um grupo, pressentir mentira ou perigo próximo</td></tr><tr><td style="text-align:left"><strong>Menor / Bênção</strong></td><td style="text-align:center"><code>20</code></td><td style="text-align:left">Estancar praga em um enfermo, visão dirigida pelo fogo, selar uma porta contra horrores</td></tr><tr><td style="text-align:left"><strong>Maior / Proibido</strong></td><td style="text-align:center"><code>25</code></td><td style="text-align:left">Maldição de sangue, despertar ecos em ruínas de Kelgore, desviar um golpe mortal</td></tr><tr><td style="text-align:left"><strong>Lendário <em>(Exige Preparo)</strong></em></td><td style="text-align:center"><code>28–30</code></td><td style="text-align:left">Rito colossal ligado aos segredos de Incognito ou Thanatos</td></tr></tbody></table></div>
+<p><strong>Modificadores de Preparação Ritualística</strong> <em>(cumulativos até <code>+8</code>)</em>:</p>
+<ul>
+<li><strong>Tempo e Concentração</strong> <em>(horas de vigília, jejum ou canto)</em>: <strong><code>+2</code></strong></li>
+<li><strong>Componentes Raros</strong> <em>(ervas da Ilha das Safiras, cinzas de Thanatos, relíquia verdadeira)</em>: <strong><code>+2</code></strong></li>
+<li><strong>Local de Poder / Consagração</strong> <em>(santuário antigo, ruínas de Kelgore, eclipse observado)</em>: <strong><code>+2</code></strong></li>
+<li><strong>Sacrifício de Sangue / Vitalidade</strong> <em>(sofrer <code>1d6</code> a <code>2d6</code> de dano não mitigável ou 1 nível de Exaustão)</em>: <strong><code>+2</code> a <code>+4</code></strong></li>
+<li><strong>Auxílio de Acólitos / Coro de Fiéis</strong>: <strong><code>+1</code> por par de ajudantes</strong> <em>(máx. <code>+2</code>)</em></li>
+</ul>
+<h3 id="o-simbionte-da-comunhão-regras-dos-4-estágios-remoção-36">O Simbionte da Comunhão <em>(Regras dos 4 Estágios &amp; Remoção)</em></h3>
+<p>Quando um personagem entra em contato prolongado com águas de uma colônia ativa, recebe implantação deliberada ou passa por um falso rito de cura ligado ao <strong>Regente das Cinzas</strong>, uma larva simbionte pode se alojar no corpo. A progressão <strong>não tem velocidade fixa</strong> — avança conforme exposição à rede, luto extremo ou escolha voluntária do hospedeiro:</p>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Estágio</th><th style="text-align:left">Benefício Mecânico e Narrativo</th><th style="text-align:left">Consequência e Teste</th></tr></thead><tbody><tr><td style="text-align:left"><strong>I. Contato</strong></td><td style="text-align:left">Conforto emocional, sono sem pesadelos e <strong><code>+1</code></strong> em testes contra medo ou desespero.</td><td style="text-align:left">Sonhos compartilhados e sensações ou lembranças sem origem clara.</td></tr><tr><td style="text-align:left"><strong>II. Enlace</strong></td><td style="text-align:left"><strong>1× por cena</strong>, acessa a memória de outro hospedeiro para receber <strong><code>+3</code></strong> em um teste de perícia que não domina <em>(ex.: corrente marítima, idioma ou ofício antigo)</em>.</td><td style="text-align:left">Emoções alheias atravessam decisões e relações; em gatilhos ligados à rede, faz <strong>SAB CD 14</strong> <em>(soma <code>Fé Verdadeira</code>)</em> para não ceder ao impulso.</td></tr><tr><td style="text-align:left"><strong>III. Confluência</strong></td><td style="text-align:left">Coordenação silenciosa com outros conectados (<strong><code>+2</code></strong> em Iniciativa e Flanqueio quando juntos) e <strong><code>+3</code></strong> em testes de CON contra <em>Golpe Devastador</em> e <em>Exaustão</em>.</td><td style="text-align:left">Fronteiras pessoais se dissolvem; agir diretamente contra uma colônia ou emissário exige <strong>SAB CD 17</strong> <em>(soma <code>Fé Verdadeira</code>)</em>.</td></tr><tr><td style="text-align:left"><strong>IV. Entrega</strong></td><td style="text-align:left">Participação plena na memória coletiva; imune a medo comum e recupera <code>+1d6</code> PV extras em descansos perto de uma colônia.</td><td style="text-align:left">O indivíduo já não consegue recusar diretivas centrais do Regente <em>(pode ser aceita voluntariamente por NPCs; <strong>para PJs, jamais ocorre sem aviso claro e acordo prévio com o jogador</strong>)</em>.</td></tr></tbody></table></div>
+<ul>
+<li><strong>Remoção do Simbionte <em>(Custo Físico e Dramático)</strong></em>: nos <strong>Estágios I e II</strong>, a extração é viável por <strong>cirurgia especializada</strong> (<em>Medicina &amp; Cirurgia CD 20</em>, reduzida para <code>17</code> com extratos da <em>Ilha das Safiras</em> ou rito de <em>Fé Verdadeira</em>; causa <code>2d6</code> de dano e exige 1 semana de repouso). No <strong>Estágio III</strong>, exige cirurgia extrema (<code>CD 25</code>) + separação da influência de adamante; no <strong>Estágio IV</strong> ou em <strong>Despertos de Thanatos</strong>, a remoção simples pode ser fatal sem o método multicultural desenvolvido em campanha. Além do risco físico, o hospedeiro perde subitamente o conforto e as vozes de entes queridos que só ouvia pela Comunhão.</li>
+</ul>
+        </article>
+    </main>
+    <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
+        <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const lb = document.getElementById('atlas-lightbox');
+    const lbImg = document.getElementById('atlas-lightbox-img');
+    if (lb && lbImg) {
+        document.querySelectorAll('.atlas-plate img').forEach(img => {
+            img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+        });
+        lb.addEventListener('click', () => lb.classList.remove('open'));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+    }
+});
+</script>
+</body>
+</html>

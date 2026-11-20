@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: alenia-rpg
+    runtime: static
+    staticPublishPath: ./livros_html
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=300

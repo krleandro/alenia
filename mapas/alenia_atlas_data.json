@@ -1,0 +1,518 @@
+{
+  "title": "Alenia — Mapa-Múndi",
+  "base_image": "alenia_mapa_continentes_hd.png",
+  "output_image": "alenia_mapa_mundi_atualizado.png",
+  "output_jpg": "alenia_mapa_mundi_atualizado.jpg",
+  "custom_islands": [
+    {
+      "name": "Ilha das Safiras",
+      "style": "sapphire_forest",
+      "seed": 42,
+      "islands": [
+        {"cx": 2345, "cy": 1222, "rx": 62, "ry": 36, "rot": -0.18},
+        {"cx": 2418, "cy": 1236, "rx": 18, "ry": 12, "rot": 0.3}
+      ]
+    },
+    {
+      "name": "Ilha de Thanatos",
+      "style": "dark_frost",
+      "seed": 77,
+      "islands": [
+        {"cx": 1472, "cy": 324, "rx": 34, "ry": 17, "rot": 0.12},
+        {"cx": 1430, "cy": 334, "rx": 11, "ry": 7, "rot": -0.25}
+      ]
+    },
+    {
+      "name": "Arquipélago Ravena",
+      "style": "dark_crag",
+      "seed": 109,
+      "islands": [
+        {"cx": 1955, "cy": 1135, "rx": 28, "ry": 18, "rot": -0.35},
+        {"cx": 2005, "cy": 1110, "rx": 20, "ry": 13, "rot": 0.25},
+        {"cx": 1982, "cy": 1172, "rx": 17, "ry": 11, "rot": 0.1},
+        {"cx": 1922, "cy": 1168, "rx": 14, "ry": 9, "rot": -0.5},
+        {"cx": 2032, "cy": 1148, "rx": 12, "ry": 8, "rot": 0.4},
+        {"cx": 1962, "cy": 1096, "rx": 10, "ry": 7, "rot": -0.15}
+      ]
+    }
+  ],
+  "cities": [
+    {
+      "name": "Altavanne",
+      "region": "Aurora",
+      "type": "capital",
+      "notes": "Capital de Aurora; cidade rica com muitos nobres",
+      "x": 1470,
+      "y": 740,
+      "label_anchor": "right",
+      "dx": 15,
+      "dy": -3
+    },
+    {
+      "name": "Merlinport",
+      "region": "Aurora",
+      "type": "port",
+      "notes": "Cidade portuária com forte comércio",
+      "x": 1055,
+      "y": 735,
+      "label_anchor": "left",
+      "dx": -15,
+      "dy": -4
+    },
+    {
+      "name": "Yõketsu",
+      "region": "Aurora",
+      "type": "port",
+      "notes": "Cidade oriental",
+      "x": 1768,
+      "y": 768,
+      "label_anchor": "right",
+      "dx": 15,
+      "dy": -2
+    },
+    {
+      "name": "Cidade Suspensa",
+      "region": "Aurora",
+      "type": "special",
+      "notes": "A cidade suspensa do povo das florestas",
+      "x": 1665,
+      "y": 540,
+      "label_anchor": "right",
+      "dx": 14,
+      "dy": -6
+    },
+    {
+      "name": "Aeraneas",
+      "region": "Aurora",
+      "type": "citadel",
+      "notes": "Cidade das terras altas ao norte de Aurora",
+      "x": 1355,
+      "y": 510,
+      "label_anchor": "above",
+      "dx": 0,
+      "dy": -16
+    },
+    {
+      "name": "Dahrma",
+      "region": "Aurora",
+      "type": "city",
+      "notes": "Cidade do vale ocidental de Aurora",
+      "x": 1225,
+      "y": 795,
+      "label_anchor": "below",
+      "dx": 0,
+      "dy": 13
+    },
+    {
+      "name": "Vaarsa",
+      "region": "Aurora",
+      "type": "citadel",
+      "notes": "Cidade próxima à cordilheira sul de Aurora",
+      "x": 1645,
+      "y": 850,
+      "label_anchor": "below",
+      "dx": 14,
+      "dy": 12
+    },
+    {
+      "name": "Alineus",
+      "region": "Corallis",
+      "type": "city",
+      "notes": "Cidade de Corallis",
+      "x": 638,
+      "y": 705,
+      "label_anchor": "right",
+      "dx": 14,
+      "dy": -6
+    },
+    {
+      "name": "Stoneforge",
+      "region": "Corallis",
+      "type": "citadel",
+      "notes": "Cidade nas terras altas de Corallis",
+      "x": 318,
+      "y": 732,
+      "label_anchor": "above",
+      "dx": 12,
+      "dy": -15
+    },
+    {
+      "name": "Baldbella",
+      "region": "Corallis",
+      "type": "port",
+      "notes": "Cidade costeira de Corallis voltada ao Mar dos Corais",
+      "x": 545,
+      "y": 935,
+      "label_anchor": "right",
+      "dx": 14,
+      "dy": -4
+    },
+    {
+      "name": "Biemont",
+      "region": "Corallis",
+      "type": "port",
+      "notes": "Cidade ao sul de Corallis",
+      "x": 360,
+      "y": 1085,
+      "label_anchor": "left",
+      "dx": -14,
+      "dy": 2
+    },
+    {
+      "name": "OX",
+      "region": "Gaddra",
+      "type": "city",
+      "notes": "Cidade árida em Gaddra",
+      "x": 1240,
+      "y": 1215,
+      "label_anchor": "left",
+      "dx": -14,
+      "dy": -4
+    },
+    {
+      "name": "Naasar",
+      "region": "Gaddra",
+      "type": "city",
+      "notes": "Cidade junto à bacia/oásis oriental de Gaddra",
+      "x": 1690,
+      "y": 1020,
+      "label_anchor": "above",
+      "dx": 0,
+      "dy": -15
+    },
+    {
+      "name": "Vargheim",
+      "region": "Gaddra",
+      "type": "citadel",
+      "notes": "Cidade das escarpas meridionais de Gaddra",
+      "x": 1625,
+      "y": 1260,
+      "label_anchor": "right",
+      "dx": 14,
+      "dy": -4
+    },
+    {
+      "name": "Cidadela de Kalgard",
+      "region": "Kalis",
+      "type": "citadel",
+      "notes": "Grande cidadela de Kalis",
+      "x": 2275,
+      "y": 670,
+      "label_anchor": "above",
+      "dx": 12,
+      "dy": -16
+    },
+    {
+      "name": "Dobalbek",
+      "region": "Kalis",
+      "type": "port",
+      "notes": "Cidade do noroeste de Kalis",
+      "x": 2112,
+      "y": 595,
+      "label_anchor": "left",
+      "dx": -14,
+      "dy": -4
+    },
+    {
+      "name": "Drakenhall",
+      "region": "Kalis",
+      "type": "citadel",
+      "notes": "Fortaleza das montanhas orientais de Kalis",
+      "x": 2580,
+      "y": 715,
+      "label_anchor": "left",
+      "dx": -14,
+      "dy": -16
+    },
+    {
+      "name": "Fugong",
+      "region": "Kalis",
+      "type": "port",
+      "notes": "Cidade costeira do sudoeste de Kalis",
+      "x": 2205,
+      "y": 1020,
+      "label_anchor": "left",
+      "dx": -14,
+      "dy": -2
+    },
+    {
+      "name": "Kalima",
+      "region": "Kalis",
+      "type": "city",
+      "notes": "Cidade do sul-leste de Kalis",
+      "x": 2475,
+      "y": 1060,
+      "label_anchor": "below",
+      "dx": 0,
+      "dy": 13
+    }
+  ],
+  "landmarks": [
+    {
+      "name": "Academia de Sellene",
+      "region": "Corallis",
+      "type": "academy",
+      "notes": "Grande centro acadêmico e de pesquisa em Corallis",
+      "x": 472,
+      "y": 670,
+      "label_anchor": "above",
+      "dx": 18,
+      "dy": -15
+    },
+    {
+      "name": "Observatório Helmer",
+      "region": "Corallis",
+      "type": "observatory",
+      "notes": "Observatório nas alturas ocidentais de Corallis",
+      "x": 238,
+      "y": 958,
+      "label_anchor": "below",
+      "dx": -18,
+      "dy": 14
+    },
+    {
+      "name": "As Ruínas de Kelgore",
+      "region": "Corallis",
+      "type": "ruins",
+      "notes": "Antigas ruínas em Corallis",
+      "x": 200,
+      "y": 620,
+      "label_anchor": "above",
+      "dx": 18,
+      "dy": -15
+    },
+    {
+      "name": "O Ferro Velho",
+      "region": "Corallis",
+      "type": "wreck",
+      "notes": "Cemitério de navios e destroços no Mar dos Corais",
+      "x": 520,
+      "y": 1272,
+      "label_anchor": "below",
+      "dx": 8,
+      "dy": 15
+    },
+    {
+      "name": "Os Poços de Piche",
+      "region": "Incognito",
+      "type": "hazard",
+      "theme": "light_on_dark",
+      "notes": "Poços vulcânicos de piche em Incognito",
+      "x": 1835,
+      "y": 245,
+      "label_anchor": "below",
+      "dx": 15,
+      "dy": 15
+    },
+    {
+      "name": "O Punho de Pedra",
+      "region": "Gaddra",
+      "type": "crag",
+      "notes": "Formação rochosa imponente em Gaddra",
+      "x": 1842,
+      "y": 1020,
+      "label_anchor": "below",
+      "dx": -18,
+      "dy": 18
+    },
+    {
+      "name": "Ilha de Thanatos",
+      "region": "Norte de Aurora",
+      "type": "outpost",
+      "theme": "light_on_dark",
+      "notes": "O último lugar conhecido entre Aurora e Incognito",
+      "x": 1472,
+      "y": 324,
+      "label_anchor": "right",
+      "dx": 42,
+      "dy": -2
+    },
+    {
+      "name": "Altrax",
+      "region": "Aurora",
+      "type": "fort",
+      "notes": "Forte Alto (Alt-arx, Síncope) nos contrafortes noroeste de Aurora",
+      "x": 1152,
+      "y": 498,
+      "label_anchor": "above",
+      "dx": -4,
+      "dy": -14
+    },
+    {
+      "name": "Lavroga",
+      "region": "Aurora",
+      "type": "fort",
+      "notes": "Pedreira/Forte da Rocha (Lapi-rocca, Sonorização) no passo sudoeste",
+      "x": 1150,
+      "y": 872,
+      "label_anchor": "left",
+      "dx": -12,
+      "dy": 2
+    },
+    {
+      "name": "Vergod",
+      "region": "Aurora",
+      "type": "fort",
+      "notes": "Foz da Mata (Aber-coed, Sonorização Silvestre), entreposto da Cidade Suspensa",
+      "x": 1765,
+      "y": 482,
+      "label_anchor": "right",
+      "dx": 12,
+      "dy": -2
+    },
+    {
+      "name": "Portocala",
+      "region": "Corallis",
+      "type": "fort",
+      "notes": "Porto da Enseada (Port-cala, Talassocrático) ao sul-oeste de Corallis",
+      "x": 388,
+      "y": 1168,
+      "label_anchor": "left",
+      "dx": -12,
+      "dy": 4
+    },
+    {
+      "name": "Qal-Zahar",
+      "region": "Gaddra",
+      "type": "fort",
+      "notes": "Forte do Sol/Ouro (V. Solar) nas rotas ocidentais de Gaddra",
+      "x": 1082,
+      "y": 1288,
+      "label_anchor": "left",
+      "dx": -12,
+      "dy": 2
+    },
+    {
+      "name": "Suq-Ramad",
+      "region": "Gaddra",
+      "type": "fort",
+      "notes": "Feira das Cinzas (V. Solar) nos vales áridos ao sul de Gaddra",
+      "x": 1425,
+      "y": 1358,
+      "label_anchor": "below",
+      "dx": 0,
+      "dy": 12
+    },
+    {
+      "name": "Kragstad",
+      "region": "Kalis",
+      "type": "fort",
+      "notes": "Cidade/Forte da Rocha (II. Setentrional) no nordeste de Kalis",
+      "x": 2525,
+      "y": 542,
+      "label_anchor": "above",
+      "dx": 0,
+      "dy": -14
+    }
+  ],
+  "regions": [
+    {
+      "name": "Ilhas de Syleth e Lystra",
+      "region": "Corallis",
+      "style": "island_label",
+      "theme": "light_on_dark",
+      "x": 315,
+      "y": 415
+    },
+    {
+      "name": "Pântanos Nebulosos",
+      "region": "Aurora",
+      "style": "region_italic",
+      "x": 1165,
+      "y": 580
+    },
+    {
+      "name": "Pântano de Voernock",
+      "region": "Aurora",
+      "style": "region_italic",
+      "x": 1685,
+      "y": 648
+    },
+    {
+      "name": "Estepes Amaldiçoadas",
+      "region": "Gaddra",
+      "style": "region_italic",
+      "x": 1195,
+      "y": 1025
+    },
+    {
+      "name": "A Floresta Negra",
+      "region": "Kalis",
+      "style": "region_italic",
+      "x": 2368,
+      "y": 935
+    },
+    {
+      "name": "Ilha das Safiras",
+      "region": "Sul de Kalis",
+      "style": "island_label",
+      "theme": "light_on_dark",
+      "x": 2350,
+      "y": 1278
+    },
+    {
+      "name": "Mar\nIntransponível",
+      "region": "Oceano Oriental",
+      "style": "sea_italic",
+      "x": 1978,
+      "y": 975
+    },
+    {
+      "name": "Arquipélago Ravena",
+      "region": "Mar Intransponível",
+      "style": "island_label",
+      "theme": "light_on_dark",
+      "x": 1978,
+      "y": 1212
+    },
+    {
+      "name": "Montes Ferraur",
+      "region": "Aurora",
+      "style": "geo_sub",
+      "x": 1545,
+      "y": 445
+    },
+    {
+      "name": "Picos de Rubecina",
+      "region": "Aurora / Gaddra",
+      "style": "geo_sub",
+      "x": 1412,
+      "y": 904
+    },
+    {
+      "name": "Rio Aurélio",
+      "region": "Aurora",
+      "style": "geo_sub",
+      "x": 1335,
+      "y": 732
+    },
+    {
+      "name": "Lago Bayd",
+      "region": "Gaddra",
+      "style": "geo_sub",
+      "x": 1656,
+      "y": 1112
+    },
+    {
+      "name": "Montes Pedramar",
+      "region": "Corallis",
+      "style": "geo_sub",
+      "x": 164,
+      "y": 798
+    },
+    {
+      "name": "Mar das Cinzas",
+      "region": "Norte",
+      "style": "sea_italic",
+      "x": 965,
+      "y": 425
+    },
+    {
+      "name": "Mar de Zahar",
+      "region": "Sul",
+      "style": "sea_italic",
+      "x": 1120,
+      "y": 1425
+    }
+  ]
+}

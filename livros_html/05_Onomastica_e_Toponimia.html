@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Onomástica &amp; Toponímia — Alenia RPG</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+    --desk: #171512;
+    --vellum: #f7f1e3;
+    --vellum-alt: #efe6d2;
+    --vellum-card: #f2ead8;
+    --ink: #221c16;
+    --ink-soft: #4e4336;
+    --crimson: #7a1f1d;
+    --crimson-dark: #571412;
+    --gold: #9a7b3b;
+    --gold-light: #cdb06e;
+    --border: #cfc2a5;
+    --sidebar-w: 280px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--desk); color: var(--ink); }
+body {
+    margin: 0;
+    font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.66;
+    background: radial-gradient(circle at top, #27221c 0%, #171512 58%, #100e0c 100%);
+    min-height: 100vh;
+}
+
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 54px;
+    background: rgba(18, 16, 13, 0.96);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.45);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-brand {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+}
+.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-nav a, .btn-print {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none;
+    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    transition: all 0.16s ease; cursor: pointer; background: transparent;
+}
+.topbar-nav a:hover, .topbar-nav a.active {
+    color: var(--gold-light); border-color: rgba(154, 123, 59, 0.55); background: rgba(154, 123, 59, 0.12);
+}
+.btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
+.btn-print:hover { background: #922624; color: #fff; }
+
+.sidebar {
+    position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 18px 14px 32px; overflow-y: auto; z-index: 900;
+}
+.sidebar-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold-light);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 12px 0;
+}
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin: 2px 0; }
+.toc-list a {
+    display: block; text-decoration: none; color: #cfc6b4; font-size: 14.5px;
+    line-height: 1.35; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
+}
+.toc-list a:hover { color: var(--gold-light); background: rgba(154, 123, 59, 0.1); border-left-color: var(--gold); }
+.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 6px; }
+.toc-h3 a { padding-left: 16px; font-size: 13.5px; color: #b5ab98; }
+
+.book-shell { margin-left: var(--sidebar-w); padding: 80px 26px 64px; display: flex; justify-content: center; }
+.book-shell.no-sidebar { margin-left: 0; }
+.book-page {
+    width: 100%; max-width: 920px; background: var(--vellum); color: var(--ink);
+    padding: 52px 60px 70px;
+    box-shadow: 0 24px 65px rgba(0,0,0,0.62), 0 0 0 1px rgba(154, 123, 59, 0.35);
+    border-radius: 3px; position: relative;
+}
+.book-page::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px solid rgba(154, 123, 59, 0.32); pointer-events: none;
+}
+
+.cover-page {
+    min-height: 760px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 54px 44px; margin-bottom: 52px;
+    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -8px;
+    background: radial-gradient(circle at center, #fbf7ee 0%, #f3ead6 100%);
+    page-break-after: always; break-after: page;
+}
+.cover-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 13px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--crimson); margin-bottom: 14px;
+}
+.cover-rule {
+    width: 180px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
+    margin: 18px auto;
+}
+.cover-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 40px; font-weight: 800; line-height: 1.15;
+    letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
+}
+.cover-subtitle {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 21px;
+    color: var(--ink-soft); margin: 14px 0 8px; max-width: 640px;
+}
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 560px; margin: 24px auto 14px; }
+.cover-thumb {
+    max-width: 100%; max-height: 310px; border: 2px solid var(--gold);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.22); margin: 16px auto; border-radius: 2px;
+}
+.cover-edition {
+    margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
+h1.book-h1 {
+    font-size: 28px; letter-spacing: 0.05em; text-transform: uppercase;
+    border-bottom: 2px solid var(--crimson); padding-bottom: 10px; margin: 0 0 22px 0;
+}
+h2 { font-size: 21px; letter-spacing: 0.04em; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--gold); }
+h3 { font-size: 16.5px; letter-spacing: 0.03em; margin: 22px 0 8px; color: #3d2415; }
+p { margin: 0 0 13px; text-align: justify; hyphens: auto; }
+ul, ol { margin: 6px 0 16px; padding-left: 24px; }
+li { margin-bottom: 6px; }
+strong { color: #17120d; }
+code {
+    font-family: Consolas, 'Courier New', monospace; font-size: 0.86em;
+    background: rgba(154, 123, 59, 0.14); border: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 1px 5px; border-radius: 3px; color: #5b1d18;
+}
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 28px 0; }
+a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 3px; }
+
+blockquote {
+    margin: 18px 0 22px; padding: 14px 20px; background: var(--vellum-card);
+    border-left: 4px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
+}
+.callout {
+    margin: 20px 0; padding: 14px 18px; border-radius: 2px; border: 1px solid var(--border);
+    border-left: 5px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid;
+}
+.callout-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); margin-bottom: 6px;
+}
+.callout.warning { border-left-color: #b4691e; background: #f6ecd7; }
+.callout.warning .callout-title { color: #8c4d10; }
+
+.formula-box {
+    margin: 16px 0 20px; padding: 12px 18px; background: #efe5cf;
+    border: 1px solid var(--gold); border-radius: 3px; text-align: center;
+    font-size: 18.5px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
+}
+
+.table-wrap { width: 100%; overflow-x: auto; margin: 16px 0 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.44; border: 1px solid var(--gold); }
+thead th {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.05em;
+    text-transform: uppercase; background: var(--crimson); color: #f7f1e3;
+    padding: 9px 9px; border: 1px solid #5f1816; text-align: left;
+}
+tbody td { padding: 8px 9px; border: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--vellum-alt); }
+tr { break-inside: avoid; }
+
+.atlas-plate {
+    margin: 22px 0 28px; padding: 10px; background: #ebe1ca;
+    border: 1px solid var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+    text-align: center; break-inside: avoid;
+}
+.atlas-plate img { width: 100%; height: auto; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.atlas-caption {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 8px;
+}
+
+.entry-card {
+    margin: 16px 0 20px; padding: 14px 18px 12px; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
+}
+.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 5px; }
+
+.lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
+    z-index: 2000; padding: 24px; align-items: center; justify-content: center; cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 96vw; max-height: 92vh; border: 2px solid var(--gold); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 22px 0 32px; }
+.portal-card {
+    display: flex; flex-direction: column; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 4px solid var(--crimson);
+    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
+.portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
+.portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
+.portal-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.48; margin: 0; text-align: left; }
+.portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+.tome-divider { page-break-before: always; break-before: page; }
+
+@media (max-width: 1020px) {
+    .sidebar { display: none; }
+    .book-shell { margin-left: 0; padding: 72px 14px 40px; }
+    .book-page { padding: 30px 24px 42px; }
+}
+
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@media print {
+    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
+    .topbar, .sidebar, .lightbox { display: none !important; }
+    .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
+    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    .book-page::before { display: none !important; }
+    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: var(--crimson-dark); text-decoration: none; }
+    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+}
+</style>
+</head>
+<body>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html" class="active">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#princípio-de-flexibilidade-linguística-0">Princípio de Flexibilidade Linguística</a></li><li class="toc-h2"><a href="#parte-i-fichas-matriz-de-registro-cultural-1">Parte I — Fichas Matriz de Registro Cultural</a></li><li class="toc-h3"><a href="#1-reino-capital-de-aurora-2">1. Reino Capital de Aurora</a></li><li class="toc-h3"><a href="#2-povo-das-florestas-cidade-suspensa-subcultura-de-aurora-3">2. Povo das Florestas (Cidade Suspensa — Subcultura de Aurora)</a></li><li class="toc-h3"><a href="#3-liga-talassocrática-de-corallis-e-o-mar-dos-corais-4">3. Liga Talassocrática de Corallis (e o Mar dos Corais)</a></li><li class="toc-h3"><a href="#4-confederação-tribal-de-gaddra-5">4. Confederação Tribal de Gaddra</a></li><li class="toc-h3"><a href="#5-despotado-velado-de-kalis-e-o-mar-intransponível-6">5. Despotado Velado de Kalis (e o Mar Intransponível)</a></li><li class="toc-h2"><a href="#parte-ii-notas-de-substrato-enclaves-e-terras-limítrofes-7">Parte II — Notas de Substrato, Enclaves e Terras Limítrofes</a></li><li class="toc-h2"><a href="#parte-iii-etimologia-oficial-dos-topônimos-do-atlas-8">Parte III — Etimologia Oficial dos Topônimos do Atlas</a></li></ul></aside>
+    <main class="book-shell">
+        <article class="book-page">
+            
+    <section class="cover-page">
+        <div class="cover-kicker">ALENIA RPG • TOMO V</div>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title">Onomástica &amp; Toponímia</h1>
+        <div class="cover-subtitle">Tendências Fonéticas, Substratos Históricos, Casas Nobres &amp; Etimologia</div>
+        <div class="cover-rule"></div>
+        
+        <p class="cover-epigraph">“A verossimilhança de um cenário medieval nasce da coesão invisível entre os nomes que habitam esse território.”</p>
+        <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
+    </section>
+    
+<h1 id="alenia-rpg-compêndio-de-onomástica-e-toponímia-oficial-edição-revisada-v20-0" class="book-h1">ALENIA RPG — Compêndio de Onomástica e Toponímia Oficial (Edição Revisada v2.0)</h1>
+<blockquote>Este compêndio fixa as <strong>tendências fonéticas</strong>, radicais históricos, fórmulas heráldicas e regras sociais de nomeação de <strong>Alenia</strong>, separando claramente <strong>língua local</strong>, <strong>tradução vernácula para a mesa</strong> e <strong>substratos herdados</strong>.</blockquote>
+<hr/>
+<h2 id="princípio-de-flexibilidade-linguística-0">Princípio de Flexibilidade Linguística</h2>
+<p>Em um mundo medieval vivo, nenhuma fronteira é hermeticamente fechada. Por isso, este guia distingue três camadas de nomes:</p>
+<ol>
+<li><strong>Tendência Fonética Local</strong>: os sons preferidos (e os evitados na língua nativa clássica) ao criar novos nomes próprios e vilarejos.</li>
+<li><strong>Tradução Vernácula para o Leitor</strong>: ofícios, títulos e sobrenomes traduzidos para o português da mesa <em>(como Ferraz, Cinza, Coral, Mar dos Corais, A Floresta Negra)</em> — que naturalmente usam sons do português sem violar a fonética da língua local!</li>
+<li><strong>Substrato Herdado / Enclave</strong>: nomes preservados de povos anteriores, migrações ou enclaves comerciais <em>(como <code>Stoneforge</code>, <code>Vargheim</code>, <code>Yõketsu</code> e <code>As Ruínas de Kelgore</code>)</em>.</li>
+</ol>
+<hr/>
+<h2 id="parte-i-fichas-matriz-de-registro-cultural-1">Parte I — Fichas Matriz de Registro Cultural</h2>
+<h3 id="1-reino-capital-de-aurora-2">1. Reino Capital de Aurora</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Registro Oficial</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Designador &amp; Gentílico</strong></td><td style="text-align:left"><strong>Reino Capital de Aurora</strong> <em>(Auroriano / Auroriana)</em></td></tr><tr><td style="text-align:left"><strong>Tronco Fonético de Base</strong></td><td style="text-align:left"><strong>I. Imperial / Clássico</strong> <em>(autonomia Silvestre na Cidade Suspensa; enclave oriental em Yõketsu)</em></td></tr><tr><td style="text-align:left"><strong>Tendência Sonora Dominante</strong></td><td style="text-align:left"><code>L, R, V, M, N, S, T, C</code> \</td><td style="text-align:left"><code>A, E, I, O</code>; ditongos <code>ae, ia, eo, au</code></td></tr><tr><td style="text-align:left"><strong>Sons Evitados na Língua Nativa</strong></td><td style="text-align:left"><code>K, W, Z, SH, KH</code> <em>(aparecem apenas em traduções vernáculas como &quot;Cinza/Ferraz&quot;, estrangeirismos ou no enclave de Yõketsu)</em></td></tr><tr><td style="text-align:left"><strong>3 Sufixos Padrão de Cidades / Fortes</strong></td><td style="text-align:left"><code>-rocca / -arx</code> <em>(envelhecido: <code>-trax</code>, <code>-ris</code>)</em>, <code>-port / -ostia</code>, <code>-vanne / -urbe / -villa</code></td></tr><tr><td style="text-align:left"><strong>3 Radicais Geográficos Recorrentes</strong></td><td style="text-align:left"><code>Aur-</code> <em>(Ouro/Sol/Adamante)</em>, <code>Alt- / Mont-</code> <em>(Alto/Monte)</em>, <code>Fluv- / Silv-</code> <em>(Rio/Mata)</em></td></tr><tr><td style="text-align:left"><strong>Fórmula das Casas Nobres Locais</strong></td><td style="text-align:left"><strong>Feudal-Locativo (<code>de / d&#x27;</code>)</strong> + <strong>Dinástico Arcaico (<code>-ion, -aris, -is</code>)</strong> + <strong>Composto Clássico</strong> <em>(Casa Valerion, Casa d&#x27;Altrax, Casa Leonastis, Casa Scutauria)</em></td></tr><tr><td style="text-align:left"><strong>Patronímico / Cidadão Livre</strong></td><td style="text-align:left">Ofício da guilda <em>(em vernáculo)</em> ou <code>de [Pai/Local]</code> <em>(ex.: Cassian Armeiro, Loreo de Pontáuria, Martinho Ferraz em vernáculo)</em></td></tr><tr><td style="text-align:left"><strong>Sobrenome Regional de Bastardos</strong></td><td style="text-align:left"><strong>Cinza</strong> <em>(ex.: Caelen Cinza, Aurelia Cinza)</em></td></tr><tr><td style="text-align:left"><strong>Títulos Exclusivos</strong></td><td style="text-align:left"><strong>Alto Rei / Rainha de Aurora</strong>, <strong>Grão-Lorde do Adamante</strong>, <strong>Castelão</strong>, <strong>Preboste da Coroa</strong></td></tr><tr><td style="text-align:left"><strong>Banco de 5 Nomes Masc. &amp; 5 Fem.</strong></td><td style="text-align:left"><strong>Masc.</strong>: <code>Cassian</code>, <code>Severor</code>, <code>Aemilius</code>, <code>Valen</code>, <code>Lucian</code> \</td><td style="text-align:left"><strong>Fem.</strong>: <code>Valora</code>, <code>Sabina</code>, <code>Aurelia</code>, <code>Caelea</code>, <code>Serina</code></td></tr></tbody></table></div>
+<hr/>
+<h3 id="2-povo-das-florestas-cidade-suspensa-subcultura-de-aurora-3">2. Povo das Florestas <em>(Cidade Suspensa — Subcultura de Aurora)</em></h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Registro Oficial</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Designador &amp; Gentílico</strong></td><td style="text-align:left"><strong>Conselho das Copas / Povo das Florestas</strong> <em>(Silvano / Silvana)</em></td></tr><tr><td style="text-align:left"><strong>Tronco Fonético de Base</strong></td><td style="text-align:left"><strong>III. Silvestre / Antigo</strong></td></tr><tr><td style="text-align:left"><strong>Tendência Sonora Dominante</strong></td><td style="text-align:left"><code>L, N, W, F, GW, LL, DH, RH, M, S</code> \</td><td style="text-align:left"><code>E, I, Y, A</code>; encontros <code>ei, wy, ae, io</code></td></tr><tr><td style="text-align:left"><strong>Sons Evitados na Língua Nativa</strong></td><td style="text-align:left"><code>Z, Q, X, B duro, P seco</code> <em>(a partícula genealógica nativa usa forma suave <code>ab / ferch</code>, frequentemente transcrita como <code>ap / ferch</code> nos registros de Aurora; &quot;Bruma&quot; é a tradução vernácula de <code>Ceth</code>)</em></td></tr><tr><td style="text-align:left"><strong>3 Sufixos Padrão de Assentamentos</strong></td><td style="text-align:left"><code>-wen / -lyn</code>, <code>-gorth / -din</code>, <code>-gwyl / -rath</code></td></tr><tr><td style="text-align:left"><strong>3 Radicais Geográficos Recorrentes</strong></td><td style="text-align:left"><code>Coed- / Derw-</code> <em>(Floresta/Carvalho)</em>, <code>Avon- / Llyn-</code> <em>(Rio/Lago)</em>, <code>Gwyn- / Ceth-</code> <em>(Claro/Névoa)</em></td></tr><tr><td style="text-align:left"><strong>Fórmula das Linhagens / Clãs</strong></td><td style="text-align:left"><strong>Clânico-Silvestre (<code>ab / ferch</code>)</strong> + <strong>Composto Antigo</strong> <em>(Clã Brancaden, Linhagem Gwaedlyn, Cleddwen)</em></td></tr><tr><td style="text-align:left"><strong>Patronímico / Matronímico</strong></td><td style="text-align:left"><code>ab / ap</code> <em>(filho de)</em> e <code>ferch</code> <em>(filha de)</em> — ex.: <code>Cadwyn ap Merion</code>, <code>Aerwen ferch Moriel</code></td></tr><tr><td style="text-align:left"><strong>Sobrenome Regional de Bastardos</strong></td><td style="text-align:left"><strong>Bruma</strong> <em>(em língua silvestre: <code>Ceth</code> — ex.: Merion Bruma, Lirys Bruma)</em></td></tr><tr><td style="text-align:left"><strong>Títulos Exclusivos</strong></td><td style="text-align:left"><strong>Guardião das Copas</strong>, <strong>Ancião do Ramo</strong>, <strong>Vigia das Folhas</strong>, <strong>Juiz do Círculo</strong></td></tr><tr><td style="text-align:left"><strong>Banco de 5 Nomes Masc. &amp; 5 Fem.</strong></td><td style="text-align:left"><strong>Masc.</strong>: <code>Taldor</code>, <code>Cadwyn</code>, <code>Merion</code>, <code>Finlas</code>, <code>Aerdor</code> \</td><td style="text-align:left"><strong>Fem.</strong>: <code>Aerwen</code>, <code>Moriel</code>, <code>Lirys</code>, <code>Gwenlin</code>, <code>Rhianeth</code></td></tr></tbody></table></div>
+<hr/>
+<h3 id="3-liga-talassocrática-de-corallis-e-o-mar-dos-corais-4">3. Liga Talassocrática de Corallis <em>(e o Mar dos Corais)</em></h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Registro Oficial</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Designador &amp; Gentílico</strong></td><td style="text-align:left"><strong>Liga Talassocrática de Corallis</strong> <em>(Corallino / Corallina)</em></td></tr><tr><td style="text-align:left"><strong>Tronco Fonético de Base</strong></td><td style="text-align:left"><strong>IV. Talassocrático / Mercantil</strong> <em>(substratos antigos preservados em <code>Stoneforge</code>, <code>Kelgore</code> e <code>Syleth e Lystra</code>)</em></td></tr><tr><td style="text-align:left"><strong>Tendência Sonora Dominante</strong></td><td style="text-align:left"><code>C, Z, L, S, P, F, V, TR, BR, NT</code> \</td><td style="text-align:left"><code>O, A, E, I</code>; finais vocálicos sonoros (<code>-o, -a, -i, -e</code>)</td></tr><tr><td style="text-align:left"><strong>Sons Evitados na Língua Nativa</strong></td><td style="text-align:left"><code>K, W, Y, TH, GH</code> <em>(tolerados apenas em topônimos pré-Liga herdados por Substrato Conquistado)</em></td></tr><tr><td style="text-align:left"><strong>3 Sufixos Padrão de Cidades / Portos</strong></td><td style="text-align:left"><code>-bella / -mont</code>, <code>-cala / -porto</code>, <code>-fori / -vela</code></td></tr><tr><td style="text-align:left"><strong>3 Radicais Geográficos Recorrentes</strong></td><td style="text-align:left"><code>Mar- / Pelag-</code> <em>(Mar)</em>, <code>Petra- / Rupe-</code> <em>(Rocha/Recife)</em>, <code>Clar- / Lit-</code> <em>(Farol/Litoral)</em></td></tr><tr><td style="text-align:left"><strong>Fórmula das Casas Mercantis</strong></td><td style="text-align:left"><strong>Talassocrático (<code>dal / della</code>)</strong> + <strong>Dinastia Mercante</strong> <em>(Casa della Rocca, Casa dal Pelago, Casa Falcenzo, Casa Corvella)</em></td></tr><tr><td style="text-align:left"><strong>Patronímico / Cidadão Livre</strong></td><td style="text-align:left">Ofício da Guilda ou <code>-i</code> familiar <em>(ex.: Loreo Cartógrafo, Corardo Seleni, Vittiora dei Coralli)</em></td></tr><tr><td style="text-align:left"><strong>Sobrenome Regional de Bastardos</strong></td><td style="text-align:left"><strong>Coral</strong> <em>(ex.: Fioresca Coral, Niccolo Coral)</em></td></tr><tr><td style="text-align:left"><strong>Títulos Exclusivos</strong></td><td style="text-align:left"><strong>Doge / Arconte da Liga</strong>, <strong>Arquimestre de Sellene</strong>, <strong>Almirante dos Recifes</strong>, <strong>Síndico Portuário</strong></td></tr><tr><td style="text-align:left"><strong>Banco de 5 Nomes Masc. &amp; 5 Fem.</strong></td><td style="text-align:left"><strong>Masc.</strong>: <code>Falcenzo</code>, <code>Corardo</code>, <code>Loreo</code>, <code>Matteo</code>, <code>Sandro</code> \</td><td style="text-align:left"><strong>Fem.</strong>: <code>Fioresca</code>, <code>Vittiora</code>, <code>Corina</code>, <code>Lorenza</code>, <code>Benetta</code></td></tr></tbody></table></div>
+<hr/>
+<h3 id="4-confederação-tribal-de-gaddra-5">4. Confederação Tribal de Gaddra</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Registro Oficial</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Designador &amp; Gentílico</strong></td><td style="text-align:left"><strong>Confederação Tribal de Gaddra</strong> <em>(Gaddrani / Gaddrita)</em></td></tr><tr><td style="text-align:left"><strong>Tronco Fonético de Base</strong></td><td style="text-align:left"><strong>V. Solar / Árido</strong> <em>(com substrato Setentrional nos clãs montanheses de <code>Vargheim</code>)</em></td></tr><tr><td style="text-align:left"><strong>Tendência Sonora Dominante</strong></td><td style="text-align:left"><code>Q, Z, K, SH, KH, J, R, N, S, H</code> \</td><td style="text-align:left"><code>A, U, I</code>; vogais longas <code>aa, uu, ii</code> <em>(como em <code>Naasar</code>)</em></td></tr><tr><td style="text-align:left"><strong>Sons Evitados na Língua Nativa</strong></td><td style="text-align:left"><code>P, V, LH, NH</code>, encontros <code>BL/PL</code> <em>(exceto nos clãs de fronteira/substrato como <code>Vargheim</code>)</em></td></tr><tr><td style="text-align:left"><strong>3 Sufixos Padrão de Assentamentos</strong></td><td style="text-align:left"><code>Qal- / -kale</code> <em>(Forte)</em>, <code>Madin- / -abad / -shahr</code> <em>(Cidade)</em>, <code>Dar- / Suq- / Kafar-</code> <em>(Oásis/Feira)</em></td></tr><tr><td style="text-align:left"><strong>3 Radicais Geográficos Recorrentes</strong></td><td style="text-align:left"><code>Qar- / Hajar-</code> <em>(Rocha/Pedra)</em>, <code>Wad- / Sahl-</code> <em>(Vale seco/Estepe)</em>, <code>Shams- / Zahar-</code> <em>(Sol/Ouro)</em></td></tr><tr><td style="text-align:left"><strong>Fórmula dos Clãs / Linhagens</strong></td><td style="text-align:left"><strong>Solar (<code>al- / ibn</code>)</strong> + <strong>Dinástico (<code>-id</code>)</strong> + <strong>Emblemático Guerreiro</strong> <em>(Clã Zaharid, Clã al-Hajar, Clã Qarsol, Clã Sangue-Seco)</em></td></tr><tr><td style="text-align:left"><strong>Patronímico / Matronímico</strong></td><td style="text-align:left"><code>ibn</code> <em>(filho de)</em> / <code>bint</code> <em>(filha de)</em> — ex.: <code>Qasir ibn Tarash</code>, <code>Nadira bint Malid</code></td></tr><tr><td style="text-align:left"><strong>Sobrenome Regional de Bastardos</strong></td><td style="text-align:left"><strong>Duna</strong> <em>(ex.: Tarash Duna, Soraya Duna)</em></td></tr><tr><td style="text-align:left"><strong>Títulos Exclusivos</strong></td><td style="text-align:left"><strong>Grande Cã / Xeique das Dunas</strong>, <strong>Senhor da Água</strong>, <strong>Voz do Clã</strong>, <strong>Árbitro do Sangue</strong></td></tr><tr><td style="text-align:left"><strong>Banco de 5 Nomes Masc. &amp; 5 Fem.</strong></td><td style="text-align:left"><strong>Masc.</strong>: <code>Qasir</code>, <code>Tarash</code>, <code>Malid</code>, <code>Khalur</code>, <code>Rashan</code> \</td><td style="text-align:left"><strong>Fem.</strong>: <code>Nadira</code>, <code>Soraya</code>, <code>Miris</code>, <code>Zayra</code>, <code>Samira</code></td></tr></tbody></table></div>
+<hr/>
+<h3 id="5-despotado-velado-de-kalis-e-o-mar-intransponível-6">5. Despotado Velado de Kalis <em>(e o Mar Intransponível)</em></h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Registro Oficial</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Designador &amp; Gentílico</strong></td><td style="text-align:left"><strong>Despotado Velado de Kalis</strong> <em>(Kalita / Kalisiano)</em></td></tr><tr><td style="text-align:left"><strong>Tronco Fonético de Base</strong></td><td style="text-align:left"><strong>II. Setentrional / Ferro</strong> <em>(enclaves costeiros históricos em <code>Fugong</code> e <code>Kalima</code>)</em></td></tr><tr><td style="text-align:left"><strong>Tendência Sonora Dominante</strong></td><td style="text-align:left"><code>K, G, D, B, T, R, H, TH, SK, ST, DR</code> \</td><td style="text-align:left"><code>O, U, A, Y</code> curto; pouca nasalização</td></tr><tr><td style="text-align:left"><strong>Sons Evitados na Língua Nativa</strong></td><td style="text-align:left"><code>Ç, J, LH, NH, V suave</code> <em>(partícula feudal <code>von</code> representa a pronúncia dura /f/ do tronco setentrional)</em></td></tr><tr><td style="text-align:left"><strong>3 Sufixos Padrão de Cidades / Fortes</strong></td><td style="text-align:left"><code>-gard / -burg / -fast</code> <em>(<code>Kalgard</code>)</em>, <code>-bek / -stad / -hall</code> <em>(<code>Dobalbek</code>, <code>Kragstad</code>, <code>Drakenhall</code>)</em>, <code>-havn / -holm / -skans</code></td></tr><tr><td style="text-align:left"><strong>3 Radicais Geográficos Recorrentes</strong></td><td style="text-align:left"><code>Svart- / Myrk- / Kol-</code> <em>(Negro/Sombra)</em>, <code>Kar- / Krag-</code> <em>(Rocha/Escarpa)</em>, <code>Jarn- / Wald-</code> <em>(Ferro/Mata)</em></td></tr><tr><td style="text-align:left"><strong>Fórmula das Casas Nobres</strong></td><td style="text-align:left"><strong>Setentrional (<code>von</code>)</strong> + <strong>Composto Etimológico Duro</strong> <em>(Casa von Kragstad, Casa Ulscold, Casa Hrafngard, Casa Drakenvorn)</em></td></tr><tr><td style="text-align:left"><strong>Patronímico / Matronímico</strong></td><td style="text-align:left"><code>-son / -sen</code> <em>(ex.: Halgar Torson, Sigrun Grimsen)</em></td></tr><tr><td style="text-align:left"><strong>Sobrenome Regional de Bastardos</strong></td><td style="text-align:left"><strong>Sombra</strong> <em>(ex.: Tordan Sombra, Astrid Sombra)</em></td></tr><tr><td style="text-align:left"><strong>Títulos Exclusivos</strong></td><td style="text-align:left"><strong>Déspota de Kalgard</strong>, <strong>Jarl das Sombras</strong>, <strong>Juiz do Véu</strong>, <strong>Lorde-Vigia</strong></td></tr><tr><td style="text-align:left"><strong>Banco de 5 Nomes Masc. &amp; 5 Fem.</strong></td><td style="text-align:left"><strong>Masc.</strong>: <code>Tordan</code>, <code>Halgar</code>, <code>Grimrik</code>, <code>Ragnar</code>, <code>Haksten</code> \</td><td style="text-align:left"><strong>Fem.</strong>: <code>Sigrun</code>, <code>Borhild</code>, <code>Astrid</code>, <code>Freydis</code>, <code>Alrun</code></td></tr></tbody></table></div>
+<hr/>
+<h2 id="parte-ii-notas-de-substrato-enclaves-e-terras-limítrofes-7">Parte II — Notas de Substrato, Enclaves e Terras Limítrofes</h2>
+<ul>
+<li><strong>Yõketsu (Costa Leste de Aurora)</strong>: enclave cultural oriental fundado por navegadores ancestrais; preserva fonética própria (<code>k, y, ts, õ</code>).</li>
+<li><strong>Vargheim (Gaddra) e Stoneforge (Corallis)</strong>: exemplos de <strong>Substrato Herdado</strong> — antigos assentamentos de forjadores e clãs setentrionais assimilados às fronteiras de Gaddra e Corallis.</li>
+<li><strong>Ilha das Safiras (Sul de Kalis)</strong>: batizada por navegadores pelo brilho azul-esverdeado que a bruma cria sobre sua mata intensa ao amanhecer (e pelos raros seixos de coríndon em seus riachos).</li>
+<li><strong>Ilha de Thanatos &amp; Incognito</strong>: <strong>Incognito</strong> não possui povo vivo nem matriz cultural ativa; <strong>Thanatos</strong> também não abriga sociedade estabelecida — é cercada pelo mistério dos <strong>despertos</strong> <em>(pessoas comprovadamente mortas que, segundo relatos, acordam vivas em suas praias negras)</em>. Seus nomes conhecidos (<em>Thanatos</em>, <em>Os Poços de Piche</em>, <em>Cabo dos Náufragos</em>) vêm de crônicas de marinheiros de Aurora e estudiosos de Corallis.</li>
+</ul>
+<hr/>
+<h2 id="parte-iii-etimologia-oficial-dos-topônimos-do-atlas-8">Parte III — Etimologia Oficial dos Topônimos do Atlas</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Topônimo</th><th style="text-align:left">Região</th><th style="text-align:left">Tronco</th><th style="text-align:left">Raízes &amp; Deriva Fonética</th><th style="text-align:left">Função no Cenário</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Altrax</strong></td><td style="text-align:left">Aurora (NO)</td><td style="text-align:left">I. Imperial</td><td style="text-align:left"><code>Alt-</code> + <code>-arx</code> (<em>Síncope</em>)</td><td style="text-align:left">Forte vigiando os Pântanos Nebulosos e os Montes Ferraur.</td></tr><tr><td style="text-align:left"><strong>Lavroga</strong></td><td style="text-align:left">Aurora (SO)</td><td style="text-align:left">I. Imperial</td><td style="text-align:left"><code>Lapi-</code> + <code>-rocca</code> (<em>Sonorização</em>)</td><td style="text-align:left">Pedreira e posto no passo sudoeste rumo às Estepes.</td></tr><tr><td style="text-align:left"><strong>Montes Ferraur</strong></td><td style="text-align:left">Aurora (N)</td><td style="text-align:left">I. Imperial</td><td style="text-align:left"><code>Ferr-</code> + <code>Aur-</code> (<em>Síncope</em>)</td><td style="text-align:left">Cordilheira onde se concentram as reservas de adamante.</td></tr><tr><td style="text-align:left"><strong>Picos de Rubecina</strong></td><td style="text-align:left">Aurora / Gaddra</td><td style="text-align:left">I. Imperial</td><td style="text-align:left"><code>Rupe-</code> + <code>Cin-</code> (<em>Sonorização + Redundância</em>)</td><td style="text-align:left">Muralha alpina que separa Aurora de Gaddra.</td></tr><tr><td style="text-align:left"><strong>Rio Aurélio / Pontáuria</strong></td><td style="text-align:left">Aurora (Centro)</td><td style="text-align:left">I. Imperial</td><td style="text-align:left"><code>Aur-</code> + <code>Pont-</code> (<em>Composição Clássica</em>)</td><td style="text-align:left">Artéria fluvial de Altavanne a Merlinport e sua ponte central.</td></tr><tr><td style="text-align:left"><strong>Vergod / Derwlyn</strong></td><td style="text-align:left">Aurora (NE)</td><td style="text-align:left">III. Silvestre</td><td style="text-align:left"><code>Aber-coed</code> (<em>Sonorização</em>) / <code>Derw-llyn</code></td><td style="text-align:left">Entreposto tolerado e clareira sagrada da Cidade Suspensa.</td></tr><tr><td style="text-align:left"><strong>Montes Pedramar / Portocala</strong></td><td style="text-align:left">Corallis</td><td style="text-align:left">IV. Talassocrático</td><td style="text-align:left"><code>Petra-Mar</code> (<em>Sonorização</em>) / <code>Port-cala</code></td><td style="text-align:left">Cordilheira oeste e porto pesqueiro meridional.</td></tr><tr><td style="text-align:left"><strong>Claramar / Pelagosa / Litore</strong></td><td style="text-align:left">Corallis</td><td style="text-align:left">IV. Talassocrático</td><td style="text-align:left"><code>Clar-Mar</code> / <code>Pelag-</code> / <code>Lit-</code></td><td style="text-align:left">Farol de entrada, vila pesqueira e cais dos corais.</td></tr><tr><td style="text-align:left"><strong>Qal-Zahar / Suq-Ramad / Lago Bayd</strong></td><td style="text-align:left">Gaddra</td><td style="text-align:left">V. Solar / Árido</td><td style="text-align:left"><code>Qal-Zahar</code> / <code>Suq-Ramad</code> / <code>Bayd-</code></td><td style="text-align:left">Forte sudoeste, feira sazonal sul e bacia salina de Naasar.</td></tr><tr><td style="text-align:left"><strong>Al-May / Dar-Shams / Kafar-Hajar / Burj-Qar</strong></td><td style="text-align:left">Gaddra</td><td style="text-align:left">V. Solar / Árido</td><td style="text-align:left"><code>May-</code> / <code>Dar-Shams</code> / <code>Kafar-Hajar</code> / <code>Burj-Qar</code></td><td style="text-align:left">Oásis central, acampamento, vila de pedra e torre de vigia.</td></tr><tr><td style="text-align:left"><strong>Kragstad / Myrkholm / Jarnham / Skans-Kold</strong></td><td style="text-align:left">Kalis</td><td style="text-align:left">II. Setentrional</td><td style="text-align:left"><code>Krag-stad</code> / <code>Myrk-holm</code> / <code>Jarn-ham</code> / <code>Skans-Kold</code></td><td style="text-align:left">Fortaleza nordeste, vila da Floresta Negra, aldeia de ferro e torre costeira.</td></tr><tr><td style="text-align:left"><strong>Mar das Cinzas / Mar de Zahar</strong></td><td style="text-align:left">Oceanos</td><td style="text-align:left">Imperial / Solar</td><td style="text-align:left"><code>Cin-</code> / <code>Zahar-</code></td><td style="text-align:left">Estreito gélido de Thanatos e oceano dourado meridional.</td></tr></tbody></table></div>
+        </article>
+    </main>
+    <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
+        <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const lb = document.getElementById('atlas-lightbox');
+    const lbImg = document.getElementById('atlas-lightbox-img');
+    if (lb && lbImg) {
+        document.querySelectorAll('.atlas-plate img').forEach(img => {
+            img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+        });
+        lb.addEventListener('click', () => lb.classList.remove('open'));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+    }
+});
+</script>
+</body>
+</html>

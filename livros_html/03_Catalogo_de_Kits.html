@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Catálogo de Kits Universais — Alenia RPG</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+    --desk: #171512;
+    --vellum: #f7f1e3;
+    --vellum-alt: #efe6d2;
+    --vellum-card: #f2ead8;
+    --ink: #221c16;
+    --ink-soft: #4e4336;
+    --crimson: #7a1f1d;
+    --crimson-dark: #571412;
+    --gold: #9a7b3b;
+    --gold-light: #cdb06e;
+    --border: #cfc2a5;
+    --sidebar-w: 280px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--desk); color: var(--ink); }
+body {
+    margin: 0;
+    font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.66;
+    background: radial-gradient(circle at top, #27221c 0%, #171512 58%, #100e0c 100%);
+    min-height: 100vh;
+}
+
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 54px;
+    background: rgba(18, 16, 13, 0.96);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.45);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-brand {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+}
+.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-nav a, .btn-print {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none;
+    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    transition: all 0.16s ease; cursor: pointer; background: transparent;
+}
+.topbar-nav a:hover, .topbar-nav a.active {
+    color: var(--gold-light); border-color: rgba(154, 123, 59, 0.55); background: rgba(154, 123, 59, 0.12);
+}
+.btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
+.btn-print:hover { background: #922624; color: #fff; }
+
+.sidebar {
+    position: fixed; top: 54px; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 18px 14px 32px; overflow-y: auto; z-index: 900;
+}
+.sidebar-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold-light);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 12px 0;
+}
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin: 2px 0; }
+.toc-list a {
+    display: block; text-decoration: none; color: #cfc6b4; font-size: 14.5px;
+    line-height: 1.35; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
+}
+.toc-list a:hover { color: var(--gold-light); background: rgba(154, 123, 59, 0.1); border-left-color: var(--gold); }
+.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 6px; }
+.toc-h3 a { padding-left: 16px; font-size: 13.5px; color: #b5ab98; }
+
+.book-shell { margin-left: var(--sidebar-w); padding: 80px 26px 64px; display: flex; justify-content: center; }
+.book-shell.no-sidebar { margin-left: 0; }
+.book-page {
+    width: 100%; max-width: 920px; background: var(--vellum); color: var(--ink);
+    padding: 52px 60px 70px;
+    box-shadow: 0 24px 65px rgba(0,0,0,0.62), 0 0 0 1px rgba(154, 123, 59, 0.35);
+    border-radius: 3px; position: relative;
+}
+.book-page::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px solid rgba(154, 123, 59, 0.32); pointer-events: none;
+}
+
+.cover-page {
+    min-height: 760px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 54px 44px; margin-bottom: 52px;
+    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -8px;
+    background: radial-gradient(circle at center, #fbf7ee 0%, #f3ead6 100%);
+    page-break-after: always; break-after: page;
+}
+.cover-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 13px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--crimson); margin-bottom: 14px;
+}
+.cover-rule {
+    width: 180px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
+    margin: 18px auto;
+}
+.cover-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 40px; font-weight: 800; line-height: 1.15;
+    letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
+}
+.cover-subtitle {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 21px;
+    color: var(--ink-soft); margin: 14px 0 8px; max-width: 640px;
+}
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 560px; margin: 24px auto 14px; }
+.cover-thumb {
+    max-width: 100%; max-height: 310px; border: 2px solid var(--gold);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.22); margin: 16px auto; border-radius: 2px;
+}
+.cover-edition {
+    margin-top: auto; padding-top: 26px; font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
+h1.book-h1 {
+    font-size: 28px; letter-spacing: 0.05em; text-transform: uppercase;
+    border-bottom: 2px solid var(--crimson); padding-bottom: 10px; margin: 0 0 22px 0;
+}
+h2 { font-size: 21px; letter-spacing: 0.04em; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--gold); }
+h3 { font-size: 16.5px; letter-spacing: 0.03em; margin: 22px 0 8px; color: #3d2415; }
+p { margin: 0 0 13px; text-align: justify; hyphens: auto; }
+ul, ol { margin: 6px 0 16px; padding-left: 24px; }
+li { margin-bottom: 6px; }
+strong { color: #17120d; }
+code {
+    font-family: Consolas, 'Courier New', monospace; font-size: 0.86em;
+    background: rgba(154, 123, 59, 0.14); border: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 1px 5px; border-radius: 3px; color: #5b1d18;
+}
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 28px 0; }
+a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 3px; }
+
+blockquote {
+    margin: 18px 0 22px; padding: 14px 20px; background: var(--vellum-card);
+    border-left: 4px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
+}
+.callout {
+    margin: 20px 0; padding: 14px 18px; border-radius: 2px; border: 1px solid var(--border);
+    border-left: 5px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid;
+}
+.callout-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); margin-bottom: 6px;
+}
+.callout.warning { border-left-color: #b4691e; background: #f6ecd7; }
+.callout.warning .callout-title { color: #8c4d10; }
+
+.formula-box {
+    margin: 16px 0 20px; padding: 12px 18px; background: #efe5cf;
+    border: 1px solid var(--gold); border-radius: 3px; text-align: center;
+    font-size: 18.5px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
+}
+
+.table-wrap { width: 100%; overflow-x: auto; margin: 16px 0 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.44; border: 1px solid var(--gold); }
+thead th {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.05em;
+    text-transform: uppercase; background: var(--crimson); color: #f7f1e3;
+    padding: 9px 9px; border: 1px solid #5f1816; text-align: left;
+}
+tbody td { padding: 8px 9px; border: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--vellum-alt); }
+tr { break-inside: avoid; }
+
+.atlas-plate {
+    margin: 22px 0 28px; padding: 10px; background: #ebe1ca;
+    border: 1px solid var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+    text-align: center; break-inside: avoid;
+}
+.atlas-plate img { width: 100%; height: auto; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.atlas-caption {
+    font-family: 'Cinzel', Georgia, serif; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 8px;
+}
+
+.entry-card {
+    margin: 16px 0 20px; padding: 14px 18px 12px; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
+}
+.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 5px; }
+
+.lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
+    z-index: 2000; padding: 24px; align-items: center; justify-content: center; cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 96vw; max-height: 92vh; border: 2px solid var(--gold); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 22px 0 32px; }
+.portal-card {
+    display: flex; flex-direction: column; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 4px solid var(--crimson);
+    padding: 18px 18px 16px; text-decoration: none; color: var(--ink);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
+.portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
+.portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
+.portal-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.48; margin: 0; text-align: left; }
+.portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+.tome-divider { page-break-before: always; break-before: page; }
+
+@media (max-width: 1020px) {
+    .sidebar { display: none; }
+    .book-shell { margin-left: 0; padding: 72px 14px 40px; }
+    .book-page { padding: 30px 24px 42px; }
+}
+
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@media print {
+    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; }
+    .topbar, .sidebar, .lightbox { display: none !important; }
+    .book-shell { margin: 0 !important; padding: 0 !important; display: block !important; }
+    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    .book-page::before { display: none !important; }
+    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: var(--crimson-dark); text-decoration: none; }
+    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+}
+</style>
+</head>
+<body>
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html" class="active">36 Kits</a><a href="04_Bestiario_de_Alenia.html">Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button class="btn-print" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#como-funcionam-os-kits-na-edição-v20-0">Como Funcionam os Kits na Edição v2.0</a></li><li class="toc-h2"><a href="#00-sem-kit-livre-média-padrão-1">00. Sem Kit (Livre / Média Padrão)</a></li><li class="toc-h2"><a href="#grupo-i-aço-guerra-proteção-8-kits-2">Grupo I — Aço, Guerra &amp; Proteção (8 Kits)</a></li><li class="toc-h3"><a href="#01-mercenário-3">01. Mercenário</a></li><li class="toc-h3"><a href="#02-cavaleiro-4">02. Cavaleiro</a></li><li class="toc-h3"><a href="#03-soldado-veterano-5">03. Soldado / Veterano</a></li><li class="toc-h3"><a href="#04-duelista-esgrimista-6">04. Duelista / Esgrimista</a></li><li class="toc-h3"><a href="#05-bárbaro-berserker-7">05. Bárbaro / Berserker</a></li><li class="toc-h3"><a href="#06-guarda-costas-sentinela-8">06. Guarda-Costas / Sentinela</a></li><li class="toc-h3"><a href="#07-arqueiro-franco-atirador-9">07. Arqueiro / Franco-Atirador</a></li><li class="toc-h3"><a href="#08-lutador-pugilista-10">08. Lutador / Pugilista</a></li><li class="toc-h2"><a href="#grupo-ii-sombras-crime-intriga-7-kits-11">Grupo II — Sombras, Crime &amp; Intriga (7 Kits)</a></li><li class="toc-h3"><a href="#09-ladino-12">09. Ladino</a></li><li class="toc-h3"><a href="#10-assassino-13">10. Assassino</a></li><li class="toc-h3"><a href="#11-espião-14">11. Espião</a></li><li class="toc-h3"><a href="#12-contrabandista-15">12. Contrabandista</a></li><li class="toc-h3"><a href="#13-caçador-de-recompensas-16">13. Caçador de Recompensas</a></li><li class="toc-h3"><a href="#14-charlatão-vigário-17">14. Charlatão / Vigário</a></li><li class="toc-h3"><a href="#15-saqueador-de-tumbas-18">15. Saqueador de Tumbas</a></li><li class="toc-h2"><a href="#grupo-iii-mares-estradas-exploração-6-kits-19">Grupo III — Mares, Estradas &amp; Exploração (6 Kits)</a></li><li class="toc-h3"><a href="#16-pirata-20">16. Pirata</a></li><li class="toc-h3"><a href="#17-navegador-marinheiro-21">17. Navegador / Marinheiro</a></li><li class="toc-h3"><a href="#18-explorador-cartógrafo-22">18. Explorador / Cartógrafo</a></li><li class="toc-h3"><a href="#19-patrulheiro-rastreador-23">19. Patrulheiro / Rastreador</a></li><li class="toc-h3"><a href="#20-mercador-caravaneiro-24">20. Mercador / Caravaneiro</a></li><li class="toc-h3"><a href="#21-domador-cavaleiro-de-estrada-25">21. Domador / Cavaleiro de Estrada</a></li><li class="toc-h2"><a href="#grupo-iv-ofícios-ciência-saber-8-kits-26">Grupo IV — Ofícios, Ciência &amp; Saber (8 Kits)</a></li><li class="toc-h3"><a href="#22-ferreiro-armeiro-27">22. Ferreiro / Armeiro</a></li><li class="toc-h3"><a href="#23-alquimista-28">23. Alquimista</a></li><li class="toc-h3"><a href="#24-médico-cirurgião-29">24. Médico / Cirurgião</a></li><li class="toc-h3"><a href="#25-erudito-historiador-30">25. Erudito / Historiador</a></li><li class="toc-h3"><a href="#26-engenheiro-artífice-31">26. Engenheiro / Artífice</a></li><li class="toc-h3"><a href="#27-herbalista-boticário-32">27. Herbalista / Boticário</a></li><li class="toc-h3"><a href="#28-astrônomo-sábio-33">28. Astrônomo / Sábio</a></li><li class="toc-h3"><a href="#29-carpinteiro-artesão-34">29. Carpinteiro / Artesão</a></li><li class="toc-h2"><a href="#grupo-v-corte-arte-fé-mistério-7-kits-35">Grupo V — Corte, Arte, Fé &amp; Mistério (7 Kits)</a></li><li class="toc-h3"><a href="#30-nobre-36">30. Nobre</a></li><li class="toc-h3"><a href="#31-diplomata-conselheiro-37">31. Diplomata / Conselheiro</a></li><li class="toc-h3"><a href="#32-bardo-menestrel-38">32. Bardo / Menestrel</a></li><li class="toc-h3"><a href="#33-sacerdote-clérigo-39">33. Sacerdote / Clérigo</a></li><li class="toc-h3"><a href="#34-inquisidor-40">34. Inquisidor</a></li><li class="toc-h3"><a href="#35-ermitão-sobrevivente-41">35. Ermitão / Sobrevivente</a></li><li class="toc-h3"><a href="#36-tocado-pelo-dom-antigo-raríssimo-requer-aval-do-mestre-42">36. Tocado pelo Dom Antigo (Raríssimo — Requer Aval do Mestre)</a></li></ul></aside>
+    <main class="book-shell">
+        <article class="book-page">
+            
+    <section class="cover-page">
+        <div class="cover-kicker">ALENIA RPG • TOMO III</div>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title">Catálogo de Kits Universais</h1>
+        <div class="cover-subtitle">36 Ofícios de Exploradores • Dados de Vida &amp; Habilidades Calibradas</div>
+        <div class="cover-rule"></div>
+        
+        <p class="cover-epigraph">“Em Alenia, nenhum explorador sobrevive apenas pelo sangue — mas pelo ofício que carrega nas mãos.”</p>
+        <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
+    </section>
+    
+<h1 id="alenia-rpg-catálogo-oficial-de-kits-universais-edição-revisada-v20-0" class="book-h1">ALENIA RPG — Catálogo Oficial de Kits Universais (Edição Revisada v2.0)</h1>
+<blockquote>Em <strong>Alenia</strong>, os personagens são exploradores livres que viajam entre continentes. <strong>Origem / Cidade Natal</strong> é escolhida separadamente — todos os <strong>36 Kits</strong> abaixo são <strong>Ofícios Universais</strong> do Patamar <strong>Recruta (Níveis 1–10)</strong>.<br/><em>Nota de Expansão</em>: A ficha do Firecast já reserva espaço para futuros <strong>Kits de Lenda (Nív. 11–20)</strong> e <strong>Kits Épicos (Nív. 21–30)</strong>.</blockquote>
+<hr/>
+<h2 id="como-funcionam-os-kits-na-edição-v20-0">Como Funcionam os Kits na Edição v2.0</h2>
+<ul>
+<li><strong>Dado de Vida (<code>DV</code>)</strong>: define o crescimento de PV por nível (<code>1d6</code>, <code>1d8</code>, <code>1d10</code> ou <code>1d12</code> + <code>Mod. CON</code>, mín. 1). No <strong>Nível 1</strong>, o personagem começa com <strong><code>Máximo do DV + CON Bruto</code></strong>.</li>
+<li><strong>Perícias por Nível</strong>: <code>máx(1, ⌊(Base + máx(0, Mod. INT) × Mult. INT) × Fator de Patamar⌋)</code> <em>(Recruta <code>1×</code>, Lenda <code>1,5×</code>, Épico <code>2×</code>)</em>. Custos: <code>Treinado (+3)</code> = <code>2 pts</code>, <code>Especialista (+8)</code> = <code>+5 pts</code> (Nív. 5+), <code>Mestre (+12)</code> = <code>+10 pts</code> (Nív. 11+).</li>
+<li><strong>Troca de Kit em Campanha</strong>: o Kit não é uma prisão permanente — ao treinar outro ofício em jogo, você mantém as perícias e a habilidade já adquiridas e passa a evoluir usando o DV e os multiplicadores do novo Kit.</li>
+</ul>
+<hr/>
+<h2 id="00-sem-kit-livre-média-padrão-1">00. Sem Kit (Livre / Média Padrão)</h2>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Escolha 3 perícias quaisquer</li>
+<li><strong>Equipamento Inicial</strong>: Adaga, roupa de viagem resistente, mochila, cantil, rações (5 dias) e <code>25 PP</code>.</li>
+<li><strong>Habilidade — Caminho Próprio</strong>: Flexibilidade total; começa com <code>+2</code> Pontos de Perícia extras no Nível 1.</li>
+</ul>
+<hr/>
+<h2 id="grupo-i-aço-guerra-proteção-8-kits-2">Grupo I — Aço, Guerra &amp; Proteção (8 Kits)</h2>
+<div class="entry-card">
+<h3 id="01-mercenário-3">01. Mercenário</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d10</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas Brancas, Aparar, Sobrevivência, Intimidação, Barganha &amp; Comércio</li>
+<li><strong>Equipamento Inicial</strong>: Espada longa, couro batido, capa de estrada, pedra de amolar, mochila e <code>30 PP</code>.</li>
+<li><strong>Habilidade — Sobrevivente de Contrato</strong>: <code>+2</code> em Iniciativa e pode trocar de arma como ação livre 1×/turno.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="02-cavaleiro-4">02. Cavaleiro</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d10</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Status <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas Brancas, Aparar, Escudos, Cavalgar, Etiqueta &amp; Corte</li>
+<li><strong>Equipamento Inicial</strong>: Espada longa, escudo médio, cota de malha, tabardo com brasão, sela e <code>40 PP</code>.</li>
+<li><strong>Habilidade — Juramento de Aço</strong>: <code>+2</code> em Cavalgar em combate e <code>+2</code> na Defesa ao usar <em>Proteger Aliado</em> com escudo.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="03-soldado-veterano-5">03. Soldado / Veterano</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d10</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.50</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas Brancas, Escudos, Aparar, Atletismo, Percepção</li>
+<li><strong>Equipamento Inicial</strong>: Lança de infantaria, espada curta, escudo médio, cota de malha, cantil e <code>20 PP</code>.</li>
+<li><strong>Habilidade — Linha de Frente</strong>: Quando adjacente a pelo menos um aliado, ambos recebem <code>+1</code> na Defesa corpo a corpo.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="04-duelista-esgrimista-6">04. Duelista / Esgrimista</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas Brancas, Aparar, Esquiva, Acrobacia, Intuição</li>
+<li><strong>Equipamento Inicial</strong>: Florete (ou lâmina oriental), adaga de aparar, gibão reforçado fino, luvas de couro e <code>35 PP</code>.</li>
+<li><strong>Habilidade — Cadência Letal</strong>: Em duelos 1-contra-1, reduz em <code>1</code> a penalidade adicional da regra de <em>Múltiplas Ações</em> (mín. 0).</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="05-bárbaro-berserker-7">05. Bárbaro / Berserker</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d12</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.50</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas Brancas, Atletismo, Sobrevivência, Intimidação, Escalada</li>
+<li><strong>Equipamento Inicial</strong>: Machado grande (ou machado de batalha), peles reforçadas (Def +1), troféu de caça, cantil e <code>15 PP</code>.</li>
+<li><strong>Habilidade — Fúria Indomável</strong>: 1×/combate por <code>3</code> rodadas: <code>+2</code> no dano corpo a corpo e <code>+3</code> em testes de CON contra <em>Golpe Devastador</em>, sofrendo <code>-2</code> na Defesa.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="06-guarda-costas-sentinela-8">06. Guarda-Costas / Sentinela</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d10</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.50</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas Brancas, Aparar, Escudos, Percepção, Intuição</li>
+<li><strong>Equipamento Inicial</strong>: Espada longa, escudo torre (ou médio), brigantina, lanterna de vigia, apito e <code>25 PP</code>.</li>
+<li><strong>Habilidade — Escudo Vivo</strong>: Ao usar <em>Proteger Aliado</em>, impõe <code>-2</code> extras ao atacante e pode mover <code>3m</code> como Reação para interceptar um golpe.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="07-arqueiro-franco-atirador-9">07. Arqueiro / Franco-Atirador</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas à Distância, Esquiva, Furtividade, Percepção, Sobrevivência</li>
+<li><strong>Equipamento Inicial</strong>: Arco longo (30 flechas), adaga, couro batido, capa camuflada e <code>25 PP</code>.</li>
+<li><strong>Habilidade — Olho de Falcão</strong>: Ao gastar seu Movimento para mirar sem sair do lugar, ganha <code>+2</code> no acerto e reduz em <code>1</code> a Margem de Crítico do disparo.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="08-lutador-pugilista-10">08. Lutador / Pugilista</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d10</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.50</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Luta Desarmada, Esquiva, Atletismo, Acrobacia, Intimidação</li>
+<li><strong>Equipamento Inicial</strong>: Bandagens reforçadas/soqueiras de couro fervido, gibão reforçado, unguento e <code>20 PP</code>.</li>
+<li><strong>Habilidade — Punhos de Ferro</strong>: Ataques desarmados causam <code>1d6 + FOR</code>, podem aparar golpes leves e ganham <code>+3</code> em manobras de <em>Agarrar</em> e <em>Derrubar</em>.</li>
+</ul>
+</div>
+<hr/>
+<h2 id="grupo-ii-sombras-crime-intriga-7-kits-11">Grupo II — Sombras, Crime &amp; Intriga (7 Kits)</h2>
+<div class="entry-card">
+<h3 id="09-ladino-12">09. Ladino</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Furtividade, Ladinagem &amp; Fechaduras, Esquiva, Percepção, Prestidigitação, Acrobacia</li>
+<li><strong>Equipamento Inicial</strong>: 2 adagas, espada curta, couro batido escuro, gazuas, corda fina (15m) e <code>25 PP</code>.</li>
+<li><strong>Habilidade — Golpe Oportunista</strong>: Contra alvos desprevenidos ou flanqueados, soma <code>+1d6</code> de dano após a rolagem (sobe para <code>+2d6</code> em Lenda e <code>+3d6</code> em Épico; não multiplica em crítico).</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="10-assassino-13">10. Assassino</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Influência no Submundo <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas Brancas, Furtividade, Alquimia &amp; Venenos, Disfarce, Esquiva</li>
+<li><strong>Equipamento Inicial</strong>: Adaga estilizada, espada curta, capa com capuz, 2 doses de veneno fraco (<code>1d6</code>, CON CD 14), kit disfarce e <code>30 PP</code>.</li>
+<li><strong>Habilidade — Ponto Vital</strong>: Contra alvos surpresos, reduz em <code>1</code> a Margem de Crítico e impõe <code>-2</code> no teste de CON contra <em>Golpe Devastador</em>.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="11-espião-14">11. Espião</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Influência no Submundo <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Disfarce, Enganação, Investigação, Intuição, Idiomas &amp; Cifras, Furtividade</li>
+<li><strong>Equipamento Inicial</strong>: Adaga oculta, kit de disfarce, tintas invisíveis, vestes de 2 estratos sociais e <code>40 PP</code>.</li>
+<li><strong>Habilidade — Rede de Sussurros</strong>: Após 24h em uma cidade e gastando <code>5 PP</code> em subornos/bebidas, localiza um informante local e recebe <code>+3</code> para apurar rumores discretamente.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="12-contrabandista-15">12. Contrabandista</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 2</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Influência no Submundo <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Barganha &amp; Comércio, Enganação, Navegação &amp; Náutica, Furtividade, Esquiva</li>
+<li><strong>Equipamento Inicial</strong>: Sabre curto, besta leve, capa com bolsos falsos, baú de fundo duplo, mapas de enseadas e <code>35 PP</code>.</li>
+<li><strong>Habilidade — Passagem Oculta</strong>: <code>+3</code> para esconder cargas em revistas, negociar com guardas portuários corruptos ou localizar saídas discretas de cidades muradas.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="13-caçador-de-recompensas-16">13. Caçador de Recompensas</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas à Distância, Sobrevivência, Investigação, Intimidação, Percepção</li>
+<li><strong>Equipamento Inicial</strong>: Besta leve (20 virotes), espada curta, algemas, rede de captura, couro batido e <code>25 PP</code>.</li>
+<li><strong>Habilidade — Presa Marcada</strong>: Ao estudar pistas/descrição de um alvo específico por 1 hora, recebe <code>+2</code> para rastreá-lo e <code>+1</code> em ataques contra ele até capturá-lo ou trocar de alvo.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="14-charlatão-vigário-17">14. Charlatão / Vigário</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Enganação, Persuasão, Prestidigitação, Disfarce, Etiqueta &amp; Corte, Intuição</li>
+<li><strong>Equipamento Inicial</strong>: Adaga escondida, documentos falsos com selos de cera, dados viciados, roupas finas e <code>40 PP</code>.</li>
+<li><strong>Habilidade — Língua de Prata</strong>: 1× por cena social, pode re-rolar um teste falho de Enganação ou Persuasão, ficando com o segundo resultado.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="15-saqueador-de-tumbas-18">15. Saqueador de Tumbas</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 2</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Ladinagem &amp; Fechaduras, Escalada, Investigação, História &amp; Lendas, Percepção</li>
+<li><strong>Equipamento Inicial</strong>: Espada curta, pé-de-cabra, lanterna blindada com óleo, gazuas, corda (20m) com arpéu, giz e <code>20 PP</code>.</li>
+<li><strong>Habilidade — Instinto de Ruína</strong>: <code>+3</code> em Percepção e Esquiva contra armadilhas mecânicas, alçapões e desabamentos.</li>
+</ul>
+</div>
+<hr/>
+<h2 id="grupo-iii-mares-estradas-exploração-6-kits-19">Grupo III — Mares, Estradas &amp; Exploração (6 Kits)</h2>
+<div class="entry-card">
+<h3 id="16-pirata-20">16. Pirata</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Influência no Submundo <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Armas Brancas, Navegação &amp; Náutica, Escalada, Acrobacia, Intimidação</li>
+<li><strong>Equipamento Inicial</strong>: Sabre/cimitarra, adaga de abordagem, gancho com corda, roupas marítimas reforçadas, rum e <code>25 PP</code>.</li>
+<li><strong>Habilidade — Abordagem Selvagem</strong>: Ignora penalidade de convés/recifes instáveis e recebe <code>+2</code> no ataque no 1º turno de uma abordagem ou emboscada.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="17-navegador-marinheiro-21">17. Navegador / Marinheiro</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 2</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Navegação &amp; Náutica, Geografia &amp; Cartografia, Natação, Percepção, Sobrevivência</li>
+<li><strong>Equipamento Inicial</strong>: Espada curta, bússola/astrolábio de latão, cartas náuticas em tubo selado, capa impermeável e <code>30 PP</code>.</li>
+<li><strong>Habilidade — Olho da Tempestade</strong>: Recebe <code>+3</code> em Navegação para conduzir embarcações por recifes, correntes e nevoeiros, e percebe sinais de tempestade com horas de antecedência (CD 15).</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="18-explorador-cartógrafo-22">18. Explorador / Cartógrafo</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Geografia &amp; Cartografia, Sobrevivência, Percepção, Escalada, Idiomas &amp; Cifras</li>
+<li><strong>Equipamento Inicial</strong>: Espada curta ou arco curto, estojo de cartografia, luneta simples, botas reforçadas, tenda leve e <code>30 PP</code>.</li>
+<li><strong>Habilidade — Sem Fronteiras</strong>: Recebe <code>+4</code> em testes para não se perder sob céu aberto ou terreno mapeável e reduz em 25% o tempo de marcha em clima bom <em>(neblinas fechadas, tempestades e o interior de Incognito ainda exigem testes normais)</em>.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="19-patrulheiro-rastreador-23">19. Patrulheiro / Rastreador</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Sobrevivência, Armas à Distância, Furtividade, Percepção, Herbalismo &amp; Natureza</li>
+<li><strong>Equipamento Inicial</strong>: Arco curto/longo (20 flechas), machadinha, couro batido, laços de caça, capa camuflada e <code>20 PP</code>.</li>
+<li><strong>Habilidade — Caçador das Ermas</strong>: Em biomas com fauna ou flora, gastando 2 horas de busca (deixando rastros), obtém alimento e água para até 4 viajantes com Sobrevivência CD 12; em desertos extremos ou terras áridas, recebe <code>+3</code> para localizar poços/oásis e faz rações renderem 50% mais.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="20-mercador-caravaneiro-24">20. Mercador / Caravaneiro</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Status <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Barganha &amp; Comércio, Persuasão, Idiomas &amp; Cifras, Cavalgar, Intuição</li>
+<li><strong>Equipamento Inicial</strong>: Besta leve, adaga, livro-razão, balança portátil, mula de carga com alforjes e <code>60 PP</code>.</li>
+<li><strong>Habilidade — Olhar de Ouro</strong>: Estima rapidamente a faixa de valor de mercadorias comuns, recebe <code>+4</code> para detectar falsificações/fraudes e negocia até 15% de margem melhor <em>(relíquias inéditas ou ligas raras ainda exigem análise e teste)</em>.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="21-domador-cavaleiro-de-estrada-25">21. Domador / Cavaleiro de Estrada</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Cavalgar, Sobrevivência, Herbalismo &amp; Natureza, Armas Brancas, Percepção</li>
+<li><strong>Equipamento Inicial</strong>: Lança leve ou sabre, couro batido, cavalo treinado (ou cão de caça fiel), arreios e <code>20 PP</code>.</li>
+<li><strong>Habilidade — Elo da Sela</strong>: Sua montaria/animal treinado recebe <code>+3</code> em testes contra pânico e <code>+2</code> na Defesa enquanto guiado por você.</li>
+</ul>
+</div>
+<hr/>
+<h2 id="grupo-iv-ofícios-ciência-saber-8-kits-26">Grupo IV — Ofícios, Ciência &amp; Saber (8 Kits)</h2>
+<div class="entry-card">
+<h3 id="22-ferreiro-armeiro-27">22. Ferreiro / Armeiro</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Forja &amp; Metalurgia, Armas Brancas, Atletismo, Barganha &amp; Comércio, Engenharia &amp; Mecânica</li>
+<li><strong>Equipamento Inicial</strong>: Martelo de guerra/forja, avental de couro pesado (Def +2), ferramentas portáteis de reparo, pedra de afiar e <code>30 PP</code>.</li>
+<li><strong>Habilidade — Têmpera de Mestre</strong>: Em um descanso longo com ferramentas, afia e ajusta até 3 armas/armaduras (<code>+1</code> no dano em armas comuns até o próximo descanso longo).</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="23-alquimista-28">23. Alquimista</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Alquimia &amp; Venenos, Herbalismo &amp; Natureza, Investigação, Medicina &amp; Cirurgia, Barganha &amp; Comércio</li>
+<li><strong>Equipamento Inicial</strong>: Adaga, bolsa alquímica, 2 frascos de ácido (<code>2d4</code>), 2 bombas de fumaça, 1 antídoto e <code>35 PP</code>.</li>
+<li><strong>Habilidade — Preparos de Campanha</strong>: Em descanso longo (gastando <code>3 PP</code> de reagentes por dose), prepara até <code>1 + máx(0, Mod. INT)</code> misturas mundanas (bálsamo <code>1d6 PV</code>, antídoto, fumaça densa, ácido <code>2d4</code> ou óleo inflamável).</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="24-médico-cirurgião-29">24. Médico / Cirurgião</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Medicina &amp; Cirurgia, Herbalismo &amp; Natureza, Investigação, Intuição, Alquimia &amp; Venenos</li>
+<li><strong>Equipamento Inicial</strong>: Bisturis de aço fino, agulhas e fio cirúrgico, álcool destilado, ataduras limpas, bálsamos, adaga e <code>35 PP</code>.</li>
+<li><strong>Habilidade — Mãos que Salvam</strong>: Estabiliza moribundos com <code>+4</code> em Medicina, estanca sangramentos usando apenas seu <strong>Movimento</strong> (em vez da Ação Principal), cura <code>1d6 + máx(0, Mod. INT)</code> PV em primeiros socorros (1×/alvo após combate) e concede <code>+4</code> para evitar sequelas permanentes.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="25-erudito-historiador-30">25. Erudito / Historiador</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.25</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: História &amp; Lendas, Idiomas &amp; Cifras, Geografia &amp; Cartografia, Investigação, Religião &amp; Ocultismo, Etiqueta &amp; Corte</li>
+<li><strong>Equipamento Inicial</strong>: Bastão ferrado, diários de viagem, tinteiro selado, lupas, cartas de recomendação e <code>40 PP</code>.</li>
+<li><strong>Habilidade — Memória Enciclopédica</strong>: Maior multiplicador de Inteligência do sistema (<code>1,25×</code>); 1× por sessão pode obter uma pista concreta sobre história, heráldica ou idioma antigo sem rolar (se for conhecimento acessível em arquivos).</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="26-engenheiro-artífice-31">26. Engenheiro / Artífice</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Engenharia &amp; Mecânica, Forja &amp; Metalurgia, Ladinagem &amp; Fechaduras, Investigação, Armas à Distância</li>
+<li><strong>Equipamento Inicial</strong>: Besta de precisão (sem pólvora), estojo mecânico, polias, arames, compasso e <code>35 PP</code>.</li>
+<li><strong>Habilidade — Engenhosidade Mecânica</strong>: Constrói e desarma armadilhas, fechaduras complexas e engenhos na metade do tempo com <code>+3</code>.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="27-herbalista-boticário-32">27. Herbalista / Boticário</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Herbalismo &amp; Natureza, Medicina &amp; Cirurgia, Sobrevivência, Alquimia &amp; Venenos, Percepção</li>
+<li><strong>Equipamento Inicial</strong>: Foice curva/adaga, prensa de ervas, pilão portátil, bolsa de raízes secas, 3 cataplasmas e <code>25 PP</code>.</li>
+<li><strong>Habilidade — Farmácia Viva</strong>: Em matas, pântanos ou oásis (1 hora de coleta + Herbalismo CD 13), prepara até 2 cataplasmas (<code>+2</code> em cura/descanso) ou um sonífero leve sem gastar moedas.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="28-astrônomo-sábio-33">28. Astrônomo / Sábio</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.25</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Geografia &amp; Cartografia, Navegação &amp; Náutica, História &amp; Lendas, Percepção, Intuição</li>
+<li><strong>Equipamento Inicial</strong>: Bastão/adaga, luneta de latão, astrolábio de bolso, mapas estelares, caderno e <code>35 PP</code>.</li>
+<li><strong>Habilidade — Leitura dos Céus</strong>: Recebe <code>+4</code> em orientação noturna, previsão de marés comuns e cálculo de rotas sob céu limpo <em>(tempestades do Mar Intransponível e anomalias de Incognito permanecem imprevisíveis)</em>.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="29-carpinteiro-artesão-34">29. Carpinteiro / Artesão</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Engenharia &amp; Mecânica, Atletismo, Sobrevivência, Navegação &amp; Náutica, Barganha &amp; Comércio</li>
+<li><strong>Equipamento Inicial</strong>: Machadinha de ofício, serra, pregos, martelo, cordas, gibão reforçado e <code>25 PP</code>.</li>
+<li><strong>Habilidade — Mãos de Obra</strong>: Repara cascos de barcos (<code>+2d6</code> de integridade por hora com madeira), carroças e barricadas rapidamente, dobrando a resistência de fortificações improvisadas.</li>
+</ul>
+</div>
+<hr/>
+<h2 id="grupo-v-corte-arte-fé-mistério-7-kits-35">Grupo V — Corte, Arte, Fé &amp; Mistério (7 Kits)</h2>
+<div class="entry-card">
+<h3 id="30-nobre-36">30. Nobre</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Status <code>2</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Etiqueta &amp; Corte, Persuasão, História &amp; Lendas, Cavalgar, Armas Brancas</li>
+<li><strong>Equipamento Inicial</strong>: Florete ou espada longa fina, anel de sinete, vestes nobres, manto de viagem, cavalo e <code>80 PP</code>.</li>
+<li><strong>Habilidade — Peso do Nome</strong>: Invoca hospitalidade, audiências e crédito em cidades que reconheçam sua linhagem usando seu <code>Status</code> sem rolar em pedidos rotineiros.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="31-diplomata-conselheiro-37">31. Diplomata / Conselheiro</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Status <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Persuasão, Intuição, Etiqueta &amp; Corte, Enganação, Idiomas &amp; Cifras</li>
+<li><strong>Equipamento Inicial</strong>: Adaga discreta, cartas credenciais, pergaminhos e lacres, roupas de corte e <code>55 PP</code>.</li>
+<li><strong>Habilidade — Palavra que Desarma</strong>: <code>+3</code> em Persuasão e Intuição para firmar tréguas, ganhar tempo ou extrair concessões políticas.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="32-bardo-menestrel-38">32. Bardo / Menestrel</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Persuasão, Enganação, História &amp; Lendas, Etiqueta &amp; Corte, Disfarce, Percepção</li>
+<li><strong>Equipamento Inicial</strong>: Instrumento musical, adaga ou espada curta, roupas discretas e de apresentação, caderno e <code>30 PP</code>.</li>
+<li><strong>Habilidade — Crônica de Taverna</strong>: Cobre hospedagem e refeições simples tocando em estalagens e recebe <code>+3</code> para captar boatos e segredos de viajantes.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="33-sacerdote-clérigo-39">33. Sacerdote / Clérigo</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Fé Verdadeira <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Religião &amp; Ocultismo, Persuasão, Medicina &amp; Cirurgia, Intuição, História &amp; Lendas</li>
+<li><strong>Equipamento Inicial</strong>: Cajado ou maça simples, símbolo sagrado autêntico, vestes clericais, unguentos e <code>25 PP</code>.</li>
+<li><strong>Habilidade — Conforto da Fé</strong>: 1× por descanso, uma prece sincera concede <code>+2</code> em testes mentais e contra medo/horror para aliados na cena.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="34-inquisidor-40">34. Inquisidor</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Fé Verdadeira <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Intimidação, Investigação, Religião &amp; Ocultismo, Intuição, Armas Brancas</li>
+<li><strong>Equipamento Inicial</strong>: Espada longa ou martelo de guerra, manto com insígnia, algemas, couro batido e <code>30 PP</code>.</li>
+<li><strong>Habilidade — Vontade Inabalável</strong>: Soma <code>Fé Verdadeira</code> em todos os testes contra medo, intimidação, manipulações mentais e horrores sobrenaturais.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="35-ermitão-sobrevivente-41">35. Ermitão / Sobrevivente</h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d8</code> | <code>Per. Base 1</code> (<code>Mult. INT 0.75</code>)</li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Sobrevivência, Herbalismo &amp; Natureza, Percepção, Intuição, Furtividade</li>
+<li><strong>Equipamento Inicial</strong>: Lança de caça ou cajado, facão, manto espesso contra frio/chuva, pederneira e <code>10 PP</code>.</li>
+<li><strong>Habilidade — Casca Grossa</strong>: <code>+3</code> em testes contra frio extremo, calor desértico, doenças comuns e níveis de Exaustão.</li>
+</ul>
+</div>
+<div class="entry-card">
+<h3 id="36-tocado-pelo-dom-antigo-raríssimo-requer-aval-do-mestre-42">36. Tocado pelo Dom Antigo <em>(Raríssimo — Requer Aval do Mestre)</em></h3>
+<ul>
+<li><strong>Evolução</strong>: <code>DV 1d6</code> | <code>Per. Base 2</code> (<code>Mult. INT 1.00</code>)</li>
+<li><strong>Atributo Especial Inicial</strong>: <strong>Dom Antigo <code>1</code></strong></li>
+<li><strong>Perícias Iniciais (<code>+3</code>)</strong>: Religião &amp; Ocultismo, Intuição, História &amp; Lendas, Sobrevivência, Percepção</li>
+<li><strong>Equipamento Inicial</strong>: Adaga ritualística antiga, amuleto de origem desconhecida, manto gasto, caderno de visões e <code>15 PP</code>.</li>
+<li><strong>Habilidade — Ecos do Que Não Dorme</strong>: Recebe presságios enigmáticos em sonhos ou diante do fogo/ruínas (a critério do Mestre) e pode realizar rituais ancestrais conforme a Seção 10 do Livro de Regras.</li>
+</ul>
+</div>
+        </article>
+    </main>
+    <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
+        <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const lb = document.getElementById('atlas-lightbox');
+    const lbImg = document.getElementById('atlas-lightbox-img');
+    if (lb && lbImg) {
+        document.querySelectorAll('.atlas-plate img').forEach(img => {
+            img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+        });
+        lb.addEventListener('click', () => lb.classList.remove('open'));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+    }
+});
+</script>
+</body>
+</html>

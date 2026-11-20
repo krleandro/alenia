@@ -1,0 +1,1608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form name="frmAleniaFicha" formType="sheetTemplate" dataType="br.com.alenia.rpg_oficial.ficha" title="Alenia RPG - Ficha Oficial" align="client" theme="dark">
+    <script><![CDATA[
+local KITS = {
+    ["sem_kit"] = { nome="00 - Sem Kit (Livre / Media Padrao)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={  }, equip="Adaga, roupa de viagem resistente, mochila, cantil, racoes (5 dias) e 25 PP.", hab="Caminho Proprio: Flexibilidade total; comeca com +2 Pontos de Pericia extras no Nivel 1." },
+    ["mercenario"] = { nome="01 - Mercenario (1d10)", dv=10, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_aparar", "per_sobrevivencia", "per_intimidacao", "per_barganha" }, equip="Espada longa, couro batido, capa de estrada, pedra de amolar, mochila e 30 PP.", hab="Sobrevivente de Contrato: +2 em Iniciativa e troca de arma como acao livre 1x/turno." },
+    ["cavaleiro"] = { nome="02 - Cavaleiro (1d10)", dv=10, perBase=1, multInt=0.75, espField="esp_status", espVal=1, pericias={ "per_armas_brancas", "per_aparar", "per_escudos", "per_cavalgar", "per_etiqueta" }, equip="Espada longa, escudo medio, cota de malha, tabardo com brasao, sela e 40 PP.", hab="Juramento de Aco: +2 em Cavalgar em combate e +2 na Defesa ao usar Proteger Aliado com escudo." },
+    ["soldado"] = { nome="03 - Soldado / Veterano (1d10)", dv=10, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_escudos", "per_aparar", "per_atletismo", "per_percepcao" }, equip="Lanca de infantaria, espada curta, escudo medio, cota de malha, cantil e 20 PP.", hab="Linha de Frente: Quando adjacente a um aliado, ambos ganham +1 na Defesa corpo a corpo." },
+    ["duelista"] = { nome="04 - Duelista / Esgrimista (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_aparar", "per_esquiva", "per_acrobacia", "per_intuicao" }, equip="Florete (ou lamina oriental), adaga de aparar, gibao reforcado fino e 35 PP.", hab="Cadencia Letal: Em duelos 1x1, reduz em 1 a penalidade adicional de Multiplas Acoes (min. 0)." },
+    ["barbaro"] = { nome="05 - Barbaro / Berserker (1d12)", dv=12, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_atletismo", "per_sobrevivencia", "per_intimidacao", "per_escalada" }, equip="Machado grande, peles reforcadas (Def +1), trofeu de caca, cantil e 15 PP.", hab="Furia Indomavel: 1x/combate por 3 rodadas: +2 dano corpo a corpo e +3 CON vs Golpe Devastador (-2 Defesa)." },
+    ["guarda_costas"] = { nome="06 - Guarda-Costas / Sentinela (1d10)", dv=10, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_aparar", "per_escudos", "per_percepcao", "per_intuicao" }, equip="Espada longa, escudo torre, brigantina, lanterna de vigia, apito e 25 PP.", hab="Escudo Vivo: Ao usar Proteger Aliado, impoe -2 extra no atacante e pode mover 3m como reacao." },
+    ["arqueiro"] = { nome="07 - Arqueiro / Franco-Atirador (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_dist", "per_esquiva", "per_furtividade", "per_percepcao", "per_sobrevivencia" }, equip="Arco longo (30 flechas), adaga, couro batido, capa camuflada e 25 PP.", hab="Olho de Falcao: Gastando Movimento para mirar parado, ganha +2 no acerto e -1 na Margem de Critico." },
+    ["lutador"] = { nome="08 - Lutador / Pugilista (1d10)", dv=10, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_luta_desarm", "per_esquiva", "per_atletismo", "per_acrobacia", "per_intimidacao" }, equip="Bandagens reforcadas/soqueiras de couro, gibao reforcado, unguento e 20 PP.", hab="Punhos de Ferro: Dano desarmado 1d6+FOR, pode aparar golpes leves e ganha +3 para agarrar/derrubar." },
+    ["ladino"] = { nome="09 - Ladino (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_furtividade", "per_ladinagem", "per_esquiva", "per_percepcao", "per_prestidig", "per_acrobacia" }, equip="2 adagas, espada curta, couro batido escuro, gazuas, corda fina (15m) e 25 PP.", hab="Golpe Oportunista: +1d6 dano contra desprevenidos ou flanqueados (+2d6 Lenda, +3d6 Epico; nao multiplica no critico)." },
+    ["assassino"] = { nome="10 - Assassino (1d6)", dv=6, perBase=2, multInt=0.75, espField="esp_submundo", espVal=1, pericias={ "per_armas_brancas", "per_furtividade", "per_alquimia", "per_disfarce", "per_esquiva" }, equip="Adaga estilizada, espada curta, capa com capuz, 2 doses veneno fraco, kit disfarce e 30 PP.", hab="Ponto Vital: Contra alvo surpreso, reduz Margem de Critico em 1 e impoe -2 no teste de CON vs Golpe Devastador." },
+    ["espiao"] = { nome="11 - Espiao (1d6)", dv=6, perBase=2, multInt=1.0, espField="esp_submundo", espVal=1, pericias={ "per_disfarce", "per_enganacao", "per_investigacao", "per_intuicao", "per_idiomas", "per_furtividade" }, equip="Adaga oculta, kit de disfarce, tintas invisiveis, vestes de 2 estratos e 40 PP.", hab="Rede de Sussurros: Apos 24h na cidade (5 PP em subornos), localiza informante e ganha +3 para apurar segredos." },
+    ["contrabandista"] = { nome="12 - Contrabandista (1d8)", dv=8, perBase=2, multInt=0.75, espField="esp_submundo", espVal=1, pericias={ "per_barganha", "per_enganacao", "per_navegacao", "per_furtividade", "per_esquiva" }, equip="Sabre curto, besta leve, capa com bolsos falsos, bau de fundo duplo, mapas e 35 PP.", hab="Passagem Oculta: +3 para esconder cargas em revistas, subornar guardas ou achar saidas discretas." },
+    ["cacador_rec"] = { nome="13 - Cacador de Recompensas (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_dist", "per_sobrevivencia", "per_investigacao", "per_intimidacao", "per_percepcao" }, equip="Besta leve (20 virotes), espada curta, algemas, rede de captura, couro batido e 25 PP.", hab="Presa Marcada: Estudando pistas de 1 alvo por 1h, recebe +2 para rastrea-lo e +1 em ataques contra ele." },
+    ["charlatao"] = { nome="14 - Charlatao / Vigario (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_enganacao", "per_persuasao", "per_prestidig", "per_disfarce", "per_etiqueta", "per_intuicao" }, equip="Adaga escondida, documentos falsos, selos de cera, dados viciados, roupas finas e 40 PP.", hab="Lingua de Prata: 1x por cena social, re-rola um teste falho de Enganacao ou Persuasao." },
+    ["saqueador"] = { nome="15 - Saqueador de Tumbas (1d8)", dv=8, perBase=2, multInt=0.75, espField=nil, espVal=0, pericias={ "per_ladinagem", "per_escalada", "per_investigacao", "per_historia", "per_percepcao" }, equip="Espada curta, pe-de-cabra, lanterna blindada, gazuas, corda 20m com arpeu, giz e 20 PP.", hab="Instinto de Ruina: +3 em Percepcao e Esquiva contra armadilhas mecanicas e desabamentos." },
+    ["pirata"] = { nome="16 - Pirata (1d8)", dv=8, perBase=1, multInt=0.75, espField="esp_submundo", espVal=1, pericias={ "per_armas_brancas", "per_navegacao", "per_escalada", "per_acrobacia", "per_intimidacao" }, equip="Sabre/cimitarra, adaga de abordagem, gancho com corda, roupas maritimas, rum e 25 PP.", hab="Abordagem Selvagem: Ignora penalidade de conves/recifes e ganha +2 no ataque no 1o turno de abordagem." },
+    ["navegador"] = { nome="17 - Navegador / Marinheiro (1d8)", dv=8, perBase=2, multInt=0.75, espField=nil, espVal=0, pericias={ "per_navegacao", "per_geografia", "per_natacao", "per_percepcao", "per_sobrevivencia" }, equip="Espada curta, astrolabio/bussola de latao, cartas nauticas, capa impermeavel e 30 PP.", hab="Olho da Tempestade: +3 em Navegacao por recifes e neblina; percebe tempestades horas antes (CD 15)." },
+    ["explorador"] = { nome="18 - Explorador / Cartografo (1d8)", dv=8, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_geografia", "per_sobrevivencia", "per_percepcao", "per_escalada", "per_idiomas" }, equip="Espada curta ou arco curto, estojo de cartografia, luneta, botas reforcadas, tenda e 30 PP.", hab="Sem Fronteiras: +4 para nao se perder sob ceu aberto e -25% no tempo de marcha em clima bom (neblina/Incognito exigem teste)." },
+    ["patrulheiro"] = { nome="19 - Patrulheiro / Rastreador (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_sobrevivencia", "per_armas_dist", "per_furtividade", "per_percepcao", "per_herbalismo" }, equip="Arco curto/longo (20 flechas), machadinha, couro batido, lacos de caca, capa e 20 PP.", hab="Cacador das Ermas: Em biomas com fauna/flora (2h, CD 12), sustenta ate 4 viajantes; em desertos, +3 para achar pocos e racoes rendem +50%." },
+    ["mercador"] = { nome="20 - Mercador / Caravaneiro (1d6)", dv=6, perBase=2, multInt=1.0, espField="esp_status", espVal=1, pericias={ "per_barganha", "per_persuasao", "per_idiomas", "per_cavalgar", "per_intuicao" }, equip="Besta leve, adaga, livro-razao, balanca portatil, mula com alforjes e 60 PP.", hab="Olhar de Ouro: Estima faixas de valor comuns, +4 contra fraudes e ate 15% de vantagem comercial (reliquias raras exigem teste)." },
+    ["domador"] = { nome="21 - Domador / Cavaleiro de Estrada (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_cavalgar", "per_sobrevivencia", "per_herbalismo", "per_armas_brancas", "per_percepcao" }, equip="Lanca leve ou sabre, couro batido, cavalo treinado (ou cao fiel), arreios e 20 PP.", hab="Elo da Sela: Sua montaria/animal recebe +3 contra panico e +2 na Defesa enquanto guiado por voce." },
+    ["ferreiro"] = { nome="22 - Ferreiro / Armeiro (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_forja", "per_armas_brancas", "per_atletismo", "per_barganha", "per_engenharia" }, equip="Martelo de guerra/forja, avental de couro pesado (Def +2), ferramentas de reparo e 30 PP.", hab="Tempera de Mestre: Em descanso longo, ajusta ate 3 armas/armaduras (+1 dano em armas comuns ate o proximo descanso)." },
+    ["alquimista"] = { nome="23 - Alquimista (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_alquimia", "per_herbalismo", "per_investigacao", "per_medicina", "per_barganha" }, equip="Adaga, bolsa alquimica, 2 frascos de acido (2d4), 2 bombas de fumaca, antidoto e 35 PP.", hab="Preparos de Campanha: Em descanso longo (3 PP/dose), prepara 1+max(0,INT) misturas mundanas (balsamo 1d6, acido 2d4, fumaca, antidoto)." },
+    ["medico"] = { nome="24 - Medico / Cirurgiao (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_medicina", "per_herbalismo", "per_investigacao", "per_intuicao", "per_alquimia" }, equip="Bisturis de aco fino, agulhas e fio cirurgico, alcool, ataduras, balsamos, adaga e 35 PP.", hab="Maos que Salvam: +4 para estabilizar moribundos, estanca sangramento usando Movimento, cura 1d6+max(0,INT) pos-combate e +4 contra sequelas." },
+    ["erudito"] = { nome="25 - Erudito / Historiador (1d6)", dv=6, perBase=2, multInt=1.25, espField=nil, espVal=0, pericias={ "per_historia", "per_idiomas", "per_geografia", "per_investigacao", "per_religiao", "per_etiqueta" }, equip="Bastao ferrado, diarios de viagem, tinteiro, lupas, cartas academicas e 40 PP.", hab="Memoria Enciclopedica: Maior mult. de INT (1.25x); 1x/sessao obtem pista concreta de historia, heraldica ou idioma sem rolar." },
+    ["engenheiro"] = { nome="26 - Engenheiro / Artifice (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_engenharia", "per_forja", "per_ladinagem", "per_investigacao", "per_armas_dist" }, equip="Besta de precisao (sem polvora), ferramentas mecanicas, polias, arames, compasso e 35 PP.", hab="Engenhosidade Mecanica: Constroi e desarma armadilhas, fechaduras e engenhos na metade do tempo com +3." },
+    ["herbalista"] = { nome="27 - Herbalista / Boticario (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_herbalismo", "per_medicina", "per_sobrevivencia", "per_alquimia", "per_percepcao" }, equip="Foice curva/adaga, prensa de ervas, pilao, bolsa de raizes, 3 cataplasmas e 25 PP.", hab="Farmacia Viva: Em matas, pantanos ou oasis (1h, CD 13), prepara 2 cataplasmas ou sonifero leve sem gastar moedas." },
+    ["astronomo"] = { nome="28 - Astronomo / Sabio (1d6)", dv=6, perBase=2, multInt=1.25, espField=nil, espVal=0, pericias={ "per_geografia", "per_navegacao", "per_historia", "per_percepcao", "per_intuicao" }, equip="Bastao/adaga, luneta de latao, astrolabio de bolso, mapas estelares, caderno e 35 PP.", hab="Leitura dos Ceus: +4 em orientacao noturna, previsao de mares e rotas sob ceu limpo (Mar Intransponivel/Incognito permanecem incertos)." },
+    ["carpinteiro"] = { nome="29 - Carpinteiro / Artesao (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_engenharia", "per_atletismo", "per_sobrevivencia", "per_navegacao", "per_barganha" }, equip="Machadinha, serra, pregos, martelo, cordas, gibao reforcado e 25 PP.", hab="Maos de Obra: Repara cascos (+2d6 integridade/hora), carrocas e barricadas dobrando resistencia de fortificacoes." },
+    ["nobre"] = { nome="30 - Nobre (1d6)", dv=6, perBase=2, multInt=0.75, espField="esp_status", espVal=2, pericias={ "per_etiqueta", "per_persuasao", "per_historia", "per_cavalgar", "per_armas_brancas" }, equip="Florete ou espada longa fina, anel de sinete, vestes nobres, manto, cavalo e 80 PP.", hab="Peso do Nome: Invoca hospitalidade, audiencias e credito em cidades usando Status sem rolar em pedidos rotineiros." },
+    ["diplomata"] = { nome="31 - Diplomata / Conselheiro (1d6)", dv=6, perBase=2, multInt=1.0, espField="esp_status", espVal=1, pericias={ "per_persuasao", "per_intuicao", "per_etiqueta", "per_enganacao", "per_idiomas" }, equip="Adaga discreta, cartas credenciais, pergaminhos e lacres, roupas de corte e 55 PP.", hab="Palavra que Desarma: +3 em Persuasao/Intuicao para firmar treguas ou extrair concessoes politicas." },
+    ["bardo"] = { nome="32 - Bardo / Menestrel (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_persuasao", "per_enganacao", "per_historia", "per_etiqueta", "per_disfarce", "per_percepcao" }, equip="Instrumento musical, adaga ou espada curta, roupas discretas e de apresentacao, caderno e 30 PP.", hab="Cronica de Taverna: Cobre hospedagem simples tocando e recebe +3 para captar boatos e segredos de viajantes." },
+    ["sacerdote"] = { nome="33 - Sacerdote / Clerigo (1d6)", dv=6, perBase=2, multInt=0.75, espField="esp_fe", espVal=1, pericias={ "per_religiao", "per_persuasao", "per_medicina", "per_intuicao", "per_historia" }, equip="Cajado ou maca simples, simbolo sagrado autentico, vestes clericais, unguentos e 25 PP.", hab="Conforto da Fe: 1x/descanso, prece sincera concede +2 em testes mentais e contra medo/horror para aliados na cena." },
+    ["inquisidor"] = { nome="34 - Inquisidor (1d8)", dv=8, perBase=1, multInt=0.75, espField="esp_fe", espVal=1, pericias={ "per_intimidacao", "per_investigacao", "per_religiao", "per_intuicao", "per_armas_brancas" }, equip="Espada longa ou martelo de guerra, manto com insignia, algemas, couro batido e 30 PP.", hab="Vontade Inabalavel: Soma Fe Verdadeira em testes contra medo, intimidacao, manipulacoes e horrores." },
+    ["ermitao"] = { nome="35 - Ermitao / Sobrevivente (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_sobrevivencia", "per_herbalismo", "per_percepcao", "per_intuicao", "per_furtividade" }, equip="Lanca de caca ou cajado, facao, manto espesso contra frio/chuva, pederneira e 10 PP.", hab="Casca Grossa: +3 em testes contra frio extremo, calor desertico, doencas comuns e niveis de Exaustao." },
+    ["dom_antigo"] = { nome="36 - Tocado pelo Dom Antigo (1d6 | Mestre)", dv=6, perBase=2, multInt=1.0, espField="esp_dom", espVal=1, pericias={ "per_religiao", "per_intuicao", "per_historia", "per_sobrevivencia", "per_percepcao" }, equip="Adaga ritualistica antiga, amuleto de origem desconhecida, manto gasto, caderno de visoes e 15 PP.", hab="Ecos do Que Nao Dorme: Visoes/pressagios raros a criterio do Mestre; rituais ancestrais (Secao 10 do Livro de Regras)." },
+};
+
+local SKILLS = {
+    { field="per_armas_brancas", nome="Armas Brancas", attr="forca" },
+    { field="per_armas_dist", nome="Armas a Distancia", attr="destreza" },
+    { field="per_luta_desarm", nome="Luta Desarmada", attr="forca" },
+    { field="per_aparar", nome="Aparar", attr="forca" },
+    { field="per_esquiva", nome="Esquiva", attr="destreza" },
+    { field="per_escudos", nome="Escudos", attr="forca" },
+    { field="per_atletismo", nome="Atletismo", attr="forca" },
+    { field="per_acrobacia", nome="Acrobacia", attr="destreza" },
+    { field="per_furtividade", nome="Furtividade", attr="destreza" },
+    { field="per_escalada", nome="Escalada", attr="forca" },
+    { field="per_natacao", nome="Natacao", attr="forca" },
+    { field="per_cavalgar", nome="Cavalgar", attr="destreza" },
+    { field="per_sobrevivencia", nome="Sobrevivencia", attr="sabedoria" },
+    { field="per_navegacao", nome="Navegacao e Nautica", attr="sabedoria" },
+    { field="per_percepcao", nome="Percepcao", attr="sabedoria" },
+    { field="per_investigacao", nome="Investigacao", attr="inteligencia" },
+    { field="per_disfarce", nome="Disfarce", attr="carisma" },
+    { field="per_ladinagem", nome="Ladinagem e Fechaduras", attr="destreza" },
+    { field="per_prestidig", nome="Prestidigitacao", attr="destreza" },
+    { field="per_persuasao", nome="Persuasao", attr="carisma" },
+    { field="per_enganacao", nome="Enganacao", attr="carisma" },
+    { field="per_intimidacao", nome="Intimidacao", attr="carisma" },
+    { field="per_intuicao", nome="Intuicao", attr="sabedoria" },
+    { field="per_etiqueta", nome="Etiqueta e Corte", attr="carisma" },
+    { field="per_barganha", nome="Barganha e Comercio", attr="carisma" },
+    { field="per_medicina", nome="Medicina e Cirurgia", attr="inteligencia" },
+    { field="per_alquimia", nome="Alquimia e Venenos", attr="inteligencia" },
+    { field="per_forja", nome="Forja e Metalurgia", attr="inteligencia" },
+    { field="per_engenharia", nome="Engenharia e Mecanica", attr="inteligencia" },
+    { field="per_herbalismo", nome="Herbalismo e Natureza", attr="sabedoria" },
+    { field="per_historia", nome="Historia e Lendas", attr="inteligencia" },
+    { field="per_geografia", nome="Geografia e Cartografia", attr="inteligencia" },
+    { field="per_idiomas", nome="Idiomas e Cifras", attr="inteligencia" },
+    { field="per_religiao", nome="Religiao e Ocultismo", attr="sabedoria" },
+};
+
+local recalcularFicha;
+local atualizarPaginaCustomSkills;
+
+local function num(v, def)
+    local n = tonumber(v);
+    if n == nil then return def or 0; end;
+    return n;
+end;
+
+local function fmtMod(m)
+    if m >= 0 then return "+" .. tostring(m); end;
+    return tostring(m);
+end;
+
+local function getMod(attrField)
+    if sheet == nil then return 0; end;
+    local raw = sheet[attrField];
+    if raw == nil or tostring(raw) == "" then return 0; end;
+    local val = tonumber(raw);
+    if val == nil then return 0; end;
+    return math.floor((val - 10) / 2);
+end;
+
+local function getPatamarInfo(nivel)
+    if nivel >= 21 then
+        return "Epico (2x Per)", 2.0;
+    elseif nivel >= 11 then
+        return "Lenda (1.5x Per)", 1.5;
+    else
+        return "Recruta (1x Per)", 1.0;
+    end;
+end;
+
+local function enviarChatOuMsg(texto)
+    local mesa = Firecast.getMesaDe(sheet);
+    if mesa ~= nil and mesa.activeChat ~= nil then
+        mesa.activeChat:enviarMensagem(texto);
+    else
+        showMessage(texto);
+    end;
+end;
+
+local function rolarD20(titulo, modTotal, detalheExtra)
+    if sheet == nil then return; end;
+    local modStr = "";
+    if modTotal >= 0 then
+        modStr = " + " .. tostring(modTotal);
+    else
+        modStr = " - " .. tostring(math.abs(modTotal));
+    end;
+    local rolagem = Firecast.interpretarRolagem("1d20" .. modStr);
+    local nomeChar = sheet.nome or "Explorador";
+    local cabecalho = "[" .. nomeChar .. "] " .. titulo;
+    local mesa = Firecast.getMesaDe(sheet);
+    if mesa ~= nil and mesa.activeChat ~= nil then
+        mesa.activeChat:rolarDados(rolagem, cabecalho,
+            function(rolado)
+                local d20Nat = nil;
+                if rolado ~= nil and rolado.ops ~= nil then
+                    for i = 1, #rolado.ops do
+                        local op = rolado.ops[i];
+                        if op.tipo == "dado" and op.resultados ~= nil and #op.resultados >= 1 then
+                            d20Nat = op.resultados[1];
+                            break;
+                        end;
+                    end;
+                end;
+                if d20Nat == 20 then
+                    mesa.activeChat:enviarMensagem("[20 NATURAL] Sucesso Critico de " .. nomeChar .. " em " .. titulo .. "!");
+                elseif d20Nat == 1 then
+                    mesa.activeChat:enviarMensagem("[1 NATURAL] Falha Critica de " .. nomeChar .. " em " .. titulo .. "!");
+                elseif detalheExtra ~= nil and detalheExtra ~= "" then
+                    mesa.activeChat:enviarMensagem(detalheExtra);
+                end;
+            end);
+    else
+        rolagem:rolarLocalmente();
+        showMessage(cabecalho .. "\nResultado: " .. tostring(rolagem.resultado));
+    end;
+end;
+
+local function rolarAtributosIniciais()
+    if sheet == nil then return; end;
+    local campos = {
+        { field="forca", label="FOR" },
+        { field="destreza", label="DES" },
+        { field="constituicao", label="CON" },
+        { field="inteligencia", label="INT" },
+        { field="sabedoria", label="SAB" },
+        { field="carisma", label="CAR" }
+    };
+    for i = 1, #campos do
+        local v = sheet[campos[i].field];
+        if v ~= nil and tostring(v):gsub("%s+", "") ~= "" then
+            showMessage("A rolagem inicial 4d6 so funciona quando TODOS os 6 atributos base estiverem vazios! Limpe os campos apenas com permissao do Mestre.");
+            return;
+        end;
+    end;
+
+    math.randomseed(os.time() + math.floor((os.clock() or 0) * 10000));
+    local linhas = {};
+    local nomeChar = sheet.nome or "Novo Explorador";
+    table.insert(linhas, "=== ROLAGEM INICIAL DE ATRIBUTOS (4d6 descarta menor) — " .. nomeChar .. " ===");
+    local somaTotal = 0;
+
+    for i = 1, #campos do
+        local d = { math.random(1, 6), math.random(1, 6), math.random(1, 6), math.random(1, 6) };
+        local menorIdx = 1;
+        for j = 2, 4 do
+            if d[j] < d[menorIdx] then menorIdx = j; end;
+        end;
+        local total = (d[1] + d[2] + d[3] + d[4]) - d[menorIdx];
+        sheet[campos[i].field] = tostring(total);
+        somaTotal = somaTotal + total;
+        local mod = math.floor((total - 10) / 2);
+        table.insert(linhas, campos[i].label .. ": [" .. d[1] .. ", " .. d[2] .. ", " .. d[3] .. ", " .. d[4] .. "] (descarta " .. d[menorIdx] .. ") => " .. total .. " (" .. fmtMod(mod) .. ")");
+    end;
+    table.insert(linhas, "Soma dos 6 Atributos: " .. tostring(somaTotal));
+
+    recalcularFicha();
+    enviarChatOuMsg(table.concat(linhas, "\n"));
+end;
+
+local function rolarSubirNivelPV()
+    if sheet == nil then return; end;
+    local dv = math.max(4, math.floor(num(sheet.kitDvFaces, 8)));
+    local mCon = getMod("constituicao");
+    local modStr = "";
+    if mCon >= 0 then modStr = " + " .. tostring(mCon);
+    else modStr = " - " .. tostring(math.abs(mCon)); end;
+
+    local nomeChar = sheet.nome or "Explorador";
+    local expr = "1d" .. tostring(dv) .. modStr;
+    local rolagem = Firecast.interpretarRolagem(expr);
+    local titulo = "[" .. nomeChar .. "] Subir Nivel — PV (1d" .. tostring(dv) .. modStr .. ")";
+
+    local function aplicarGanho(res)
+        local ganho = math.max(1, res);
+        local pvM = num(sheet.pvMax, 0) + ganho;
+        local pvA = num(sheet.pvAtual, 0) + ganho;
+        sheet.pvMax = tostring(pvM);
+        sheet.pvAtual = tostring(pvA);
+        local niv = math.min(30, math.floor(num(sheet.nivel, 1)) + 1);
+        sheet.nivel = tostring(niv);
+        recalcularFicha();
+    end;
+
+    local mesa = Firecast.getMesaDe(sheet);
+    if mesa ~= nil and mesa.activeChat ~= nil then
+        mesa.activeChat:rolarDados(rolagem, titulo,
+            function(rolado)
+                if rolado ~= nil then
+                    local ganho = math.max(1, rolado.resultado);
+                    aplicarGanho(ganho);
+                    mesa.activeChat:enviarMensagem("[" .. nomeChar .. "] Avancou para Nivel " .. tostring(sheet.nivel) .. "! Ganhou +" .. tostring(ganho) .. " PV (Novo PV Max: " .. tostring(sheet.pvMax) .. ").");
+                end;
+            end);
+    else
+        rolagem:rolarLocalmente();
+        local ganho = math.max(1, rolagem.resultado);
+        aplicarGanho(ganho);
+        showMessage(titulo .. "\nGanho: +" .. tostring(ganho) .. " PV (Nivel " .. tostring(sheet.nivel) .. ", PV Max: " .. tostring(sheet.pvMax) .. ")");
+    end;
+end;
+
+-- Custos v2.0: Treinado (+3)=2, Especialista (+8)=7 (Niv 5+), Mestre (+12)=17 (Niv 11+)
+local function custoGrau(grau)
+    local g = num(grau, 0);
+    if g >= 12 then return 17;
+    elseif g >= 8 then return 7;
+    elseif g >= 3 then return 2;
+    else return 0; end;
+end;
+
+recalcularFicha = function()
+    if sheet == nil then return; end;
+
+    local mFor = getMod("forca");
+    local mDes = getMod("destreza");
+    local mCon = getMod("constituicao");
+    local mInt = getMod("inteligencia");
+    local mSab = getMod("sabedoria");
+    local mCar = getMod("carisma");
+
+    sheet.mod_for = fmtMod(mFor);
+    sheet.mod_des = fmtMod(mDes);
+    sheet.mod_con = fmtMod(mCon);
+    sheet.mod_int = fmtMod(mInt);
+    sheet.mod_sab = fmtMod(mSab);
+    sheet.mod_car = fmtMod(mCar);
+
+    local nivel = math.max(1, math.min(30, math.floor(num(sheet.nivel, 1))));
+    local patNome, _ = getPatamarInfo(nivel);
+    sheet.patamarTexto = patNome;
+
+    local kitId = sheet.kitSelecionado or "sem_kit";
+    local kit = KITS[kitId] or KITS["sem_kit"];
+
+    local dvFaces = math.max(4, math.floor(num(sheet.kitDvFaces, kit.dv)));
+    local perBase = num(sheet.kitPerBase, kit.perBase);
+    local multInt = num(sheet.kitMultInt, kit.multInt);
+
+    local conRaw = num(sheet.constituicao, 10);
+    local intPos = math.max(0, mInt);
+
+    -- PV Medio Sugerido (Niv 1 = DV_Max + CON bruto; Niv 2+ = media fixa ceil(DV/2)+1 + Mod CON, min 1)
+    local mediaDv = math.floor(dvFaces / 2) + 1;
+    local ganhoFixoPv = math.max(1, mediaDv + mCon);
+    local pvCalc = (dvFaces + conRaw) + (nivel - 1) * ganhoFixoPv;
+
+    -- Pericias Recalibradas v2.0 (sem x2 inflado no Niv 1; aplica max(0, Mod INT) uniformemente)
+    local perCalc = math.max(2, math.floor(perBase + intPos * multInt));
+    for lv = 2, nivel do
+        local _, fm = getPatamarInfo(lv);
+        local ganhoPer = math.max(1, math.floor((perBase + intPos * multInt) * fm));
+        perCalc = perCalc + ganhoPer;
+    end;
+
+    local _, proxFm = getPatamarInfo(math.min(30, nivel + 1));
+    local proxPer = math.max(1, math.floor((perBase + intPos * multInt) * proxFm));
+    local aumentosAttr = math.floor(nivel / 3);
+
+    sheet.pvSugerido = tostring(pvCalc);
+    sheet.proxNivelPv = "1d" .. tostring(dvFaces) .. fmtMod(mCon) .. " (fixo +" .. tostring(ganhoFixoPv) .. ")";
+    sheet.periciasSugeridas = tostring(perCalc);
+    sheet.proxNivelPer = "+" .. tostring(proxPer) .. " pts/niv";
+    sheet.aumentosAtributo = tostring(aumentosAttr);
+
+    local pvMax = num(sheet.pvMax, pvCalc);
+    if pvMax <= 0 then pvMax = pvCalc; end;
+    local limiarDev = math.floor((pvMax * 2) / 3) + 1;
+    sheet.limiarDevastador = tostring(limiarDev) .. "+ dano";
+
+    local forRaw = num(sheet.forca, 10);
+    sheet.cargaMax = tostring(forRaw * 5) .. " kg";
+
+    -- Desconta 2 pts gratuitos das pericias iniciais do Kit atual
+    local kitGratis = {};
+    for i = 1, #kit.pericias do kitGratis[kit.pericias[i]] = true; end;
+
+    local ptsGastos = 0;
+    for i = 1, #SKILLS do
+        local sk = SKILLS[i];
+        local grau = num(sheet[sk.field .. "_grau"], 0);
+        local outros = num(sheet[sk.field .. "_outros"], 0);
+        local tot = getMod(sk.attr) + grau + outros;
+        sheet[sk.field .. "_total"] = fmtMod(tot);
+        local c = custoGrau(grau);
+        if kitGratis[sk.field] and c >= 2 then c = c - 2; end;
+        ptsGastos = ptsGastos + c;
+    end;
+
+    local pagina = math.max(1, math.floor(num(sheet.customSkillPage, 1)));
+    sheet.customSkillPageLabel = "Pag. " .. tostring(pagina);
+    if sheet.customSkills ~= nil then
+        local filhos = NDB.getChildNodes(sheet.customSkills);
+        for i = 1, #filhos do
+            ptsGastos = ptsGastos + custoGrau(filhos[i].grau);
+        end;
+    end;
+    sheet.periciasGastas = tostring(ptsGastos);
+
+    atualizarPaginaCustomSkills();
+
+    local armDef = num(sheet.armaduraDef, 0);
+    local escDef = num(sheet.escudoDef, 0);
+    local defOutros = num(sheet.defesaOutros, 0);
+    local trAparar = num(sheet.per_aparar_grau, 0) + num(sheet.per_aparar_outros, 0);
+    local trEsquiva = num(sheet.per_esquiva_grau, 0) + num(sheet.per_esquiva_outros, 0);
+
+    sheet.defAparar = tostring(10 + mDes + armDef + escDef + trAparar + defOutros);
+    sheet.defEsquiva = tostring(10 + mDes + armDef + escDef + trEsquiva + defOutros);
+    sheet.defDesprevenido = tostring(10 + armDef + escDef + defOutros);
+
+    local trPerc = num(sheet.per_percepcao_grau, 0);
+    sheet.iniciativaTotal = fmtMod(mDes + math.floor(trPerc / 3) + num(sheet.iniciativaOutros, 0));
+
+    for idx = 1, 4 do
+        local aAttr = sheet["arma" .. idx .. "_attr"] or "forca";
+        local aPer = sheet["arma" .. idx .. "_per"] or "per_armas_brancas";
+        local aExtra = num(sheet["arma" .. idx .. "_extra"], 0);
+        local atkTot = getMod(aAttr) + num(sheet[aPer .. "_grau"], 0) + num(sheet[aPer .. "_outros"], 0) + aExtra;
+        sheet["arma" .. idx .. "_atk"] = fmtMod(atkTot);
+    end;
+end;
+
+local function aplicarKitSelecionado()
+    if sheet == nil then return; end;
+    local kitId = sheet.kitSelecionado or "sem_kit";
+    local kit = KITS[kitId] or KITS["sem_kit"];
+
+    sheet.kitNomeAtual = kit.nome;
+    sheet.kitDvFaces = tostring(kit.dv);
+    sheet.kitPerBase = tostring(kit.perBase);
+    sheet.kitMultInt = tostring(kit.multInt);
+    sheet.kitHabilidade = kit.hab;
+
+    for i = 1, #kit.pericias do
+        local pf = kit.pericias[i] .. "_grau";
+        local atual = num(sheet[pf], 0);
+        if atual < 3 then
+            sheet[pf] = "3";
+        end;
+    end;
+
+    if kit.espField ~= nil and kit.espVal > 0 then
+        local atualEsp = num(sheet[kit.espField], 0);
+        if atualEsp < kit.espVal then
+            sheet[kit.espField] = tostring(kit.espVal);
+        end;
+    end;
+
+    local invAtual = sheet.equipamentoMochila or "";
+    if invAtual:gsub("%s+", "") == "" then
+        sheet.equipamentoMochila = "[Equipamento do Kit - " .. kit.nome .. "]\n" .. kit.equip;
+    else
+        sheet.equipamentoMochila = invAtual .. "\n\n[Kit Aplicado - " .. kit.nome .. "]\n" .. kit.equip;
+    end;
+
+    recalcularFicha();
+
+    if sheet.pvMax == nil or tostring(sheet.pvMax):gsub("%s+", "") == "" or num(sheet.pvMax, 0) <= 0 then
+        sheet.pvMax = sheet.pvSugerido;
+        sheet.pvAtual = sheet.pvSugerido;
+    end;
+
+    showMessage("Kit aplicado: " .. kit.nome .. "\nDado de Vida: 1d" .. tostring(kit.dv) .. " | Pericias Base: " .. tostring(kit.perBase) .. " (Mult INT " .. tostring(kit.multInt) .. "x)");
+end;
+
+local function rolarPericia(fieldId, nomePer, attrField)
+    if sheet == nil then return; end;
+    local tot = getMod(attrField) + num(sheet[fieldId .. "_grau"], 0) + num(sheet[fieldId .. "_outros"], 0);
+    rolarD20("Pericia: " .. nomePer, tot, "");
+end;
+
+local function maxAcoesPorGrau(grau)
+    local g = num(grau, 0);
+    if g >= 12 then return 4;
+    elseif g >= 8 then return 3;
+    elseif g >= 3 then return 2;
+    else return 1; end;
+end;
+
+local function rolarArma(idx)
+    if sheet == nil then return; end;
+    local nomeArma = sheet["arma" .. idx .. "_nome"];
+    if nomeArma == nil or nomeArma == "" then nomeArma = "Arma " .. tostring(idx); end;
+    local aAttr = sheet["arma" .. idx .. "_attr"] or "forca";
+    local aPer = sheet["arma" .. idx .. "_per"] or "per_armas_brancas";
+    local aExtra = num(sheet["arma" .. idx .. "_extra"], 0);
+    local margem = num(sheet["arma" .. idx .. "_margem"], 20);
+    local mult = num(sheet["arma" .. idx .. "_mult"], 2);
+    local nAcoes = math.max(1, math.min(4, math.floor(num(sheet.multiAcoes, 1))));
+
+    local grauPer = num(sheet[aPer .. "_grau"], 0);
+    local limiteN = maxAcoesPorGrau(grauPer);
+    if nAcoes > limiteN then
+        showMessage("Multiplas Acoes bloqueadas pela regra v2.0!\nSeu grau nesta pericia (+" .. tostring(grauPer) .. ") permite no maximo " .. tostring(limiteN) .. " acao(oes) por turno.");
+        return;
+    end;
+
+    local bonusBase = getMod(aAttr) + grauPer + num(sheet[aPer .. "_outros"], 0) + aExtra;
+    local bonusFinal = bonusBase;
+    if nAcoes > 1 then
+        bonusFinal = math.floor(bonusBase / nAcoes) - nAcoes;
+        if bonusFinal < 0 then
+            showMessage("Multiplas Acoes bloqueadas (Regra Anti-Abuso v2.0)!\nDividir +" .. tostring(bonusBase) .. " em " .. tostring(nAcoes) .. " acoes resulta em bonus negativo (" .. tostring(bonusFinal) .. "). Reduza o numero de acoes!");
+            return;
+        end;
+    end;
+
+    local nomeChar = sheet.nome or "Explorador";
+    local mesa = Firecast.getMesaDe(sheet);
+
+    for k = 1, nAcoes do
+        local sufixo = "";
+        if nAcoes > 1 then
+            sufixo = " (Acao " .. tostring(k) .. "/" .. tostring(nAcoes) .. " — Storyteller)";
+        end;
+        local modStr = "";
+        if bonusFinal >= 0 then modStr = " + " .. tostring(bonusFinal);
+        else modStr = " - " .. tostring(math.abs(bonusFinal)); end;
+
+        local rolagem = Firecast.interpretarRolagem("1d20" .. modStr);
+        local titulo = "[" .. nomeChar .. "] Ataque com " .. nomeArma .. sufixo;
+        if mesa ~= nil and mesa.activeChat ~= nil then
+            mesa.activeChat:rolarDados(rolagem, titulo,
+                function(rolado)
+                    local d20Nat = nil;
+                    if rolado ~= nil and rolado.ops ~= nil then
+                        for i = 1, #rolado.ops do
+                            local op = rolado.ops[i];
+                            if op.tipo == "dado" and op.resultados ~= nil and #op.resultados >= 1 then
+                                d20Nat = op.resultados[1];
+                                break;
+                            end;
+                        end;
+                    end;
+                    if d20Nat ~= nil then
+                        if d20Nat >= margem then
+                            mesa.activeChat:enviarMensagem("[CRITICO! Dado " .. tostring(d20Nat) .. " | Margem " .. tostring(margem) .. "-20] " .. nomeArma .. " multiplica (arma + attr + fixo) por x" .. tostring(mult) .. "!");
+                        elseif d20Nat == 1 then
+                            mesa.activeChat:enviarMensagem("[FALHA CRITICA! 1 Natural] Abertura tatica ou complicacao com " .. nomeArma .. "!");
+                        end;
+                    end;
+                end);
+        else
+            rolagem:rolarLocalmente();
+            showMessage(titulo .. "\nResultado: " .. tostring(rolagem.resultado));
+        end;
+    end;
+end;
+
+local function rolarDanoArma(idx, isCrit)
+    if sheet == nil then return; end;
+    local nomeArma = sheet["arma" .. idx .. "_nome"];
+    if nomeArma == nil or nomeArma == "" then nomeArma = "Arma " .. tostring(idx); end;
+    local dado = sheet["arma" .. idx .. "_dano"];
+    if dado == nil or dado == "" then dado = "1d6"; end;
+    local aAttr = sheet["arma" .. idx .. "_attr"] or "forca";
+    local modDano = getMod(aAttr) + num(sheet["arma" .. idx .. "_danoExtra"], 0);
+    local mult = num(sheet["arma" .. idx .. "_mult"], 2);
+
+    local expr = dado;
+    if modDano > 0 then expr = expr .. " + " .. tostring(modDano);
+    elseif modDano < 0 then expr = expr .. " - " .. tostring(math.abs(modDano)); end;
+
+    if isCrit then
+        expr = "(" .. expr .. ") * " .. tostring(mult);
+    end;
+
+    local rolagem = Firecast.interpretarRolagem(expr);
+    local nomeChar = sheet.nome or "Explorador";
+    local tag = isCrit and ("DANO CRITICO (x" .. tostring(mult) .. ") — ") or "Dano — ";
+    local titulo = "[" .. nomeChar .. "] " .. tag .. nomeArma;
+    local mesa = Firecast.getMesaDe(sheet);
+    if mesa ~= nil and mesa.activeChat ~= nil then
+        mesa.activeChat:rolarDados(rolagem, titulo,
+            function(rolado)
+                if rolado ~= nil then
+                    mesa.activeChat:enviarMensagem("Lembrete: se o dano (" .. tostring(rolado.resultado) .. ") superar 2/3 do PV Maximo do alvo, ele faz teste de CON ou sofre MORTE INSTANTANEA! (Dados bonus como veneno/Oportunista somam apos o critico.)");
+                end;
+            end);
+    else
+        rolagem:rolarLocalmente();
+        showMessage(titulo .. "\nResultado: " .. tostring(rolagem.resultado));
+    end;
+end;
+
+local function acaoDefensiva(modo)
+    if sheet == nil then return; end;
+    local nomeChar = sheet.nome or "Explorador";
+    local maxTreino = math.max(num(sheet.per_aparar_grau, 0), num(sheet.per_esquiva_grau, 0), num(sheet.per_escudos_grau, 0));
+    local bonus = 4;
+    if maxTreino >= 12 then bonus = 8;
+    elseif maxTreino >= 8 then bonus = 6; end;
+
+    if modo == "propria" then
+        enviarChatOuMsg("[ACAO DEFENSIVA — " .. nomeChar .. "] Sacrifica seu ataque para DEFESA TOTAL: recebe +" .. tostring(bonus) .. " na Defesa ate o proximo turno e impoe -2 nos ataques corpo a corpo contra si!");
+    else
+        enviarChatOuMsg("[PROTEGER ALIADO — " .. nomeChar .. "] Sacrifica seu ataque para defender um aliado adjacente: atacantes sofrem -" .. tostring(bonus) .. " no ataque contra o aliado (e " .. nomeChar .. " pode interceptar o golpe)!");
+    end;
+end;
+
+local function getCustomSlotNode(slotIdx)
+    if sheet == nil then return nil; end;
+    if sheet.customSkills == nil then sheet.customSkills = {}; end;
+    local pagina = math.max(1, math.floor(num(sheet.customSkillPage, 1)));
+    local globalIdx = (pagina - 1) * 10 + slotIdx;
+    local key = "sk" .. tostring(globalIdx);
+    if sheet.customSkills[key] == nil then
+        sheet.customSkills[key] = {};
+    end;
+    return sheet.customSkills[key], globalIdx;
+end;
+
+atualizarPaginaCustomSkills = function()
+    if sheet == nil then return; end;
+    sheet._updatingCustom = true;
+    for i = 1, 10 do
+        local node = getCustomSlotNode(i);
+        local nome = (node ~= nil and node.nome) or "";
+        local attr = (node ~= nil and node.attr) or "inteligencia";
+        local grau = (node ~= nil and node.grau) or "0";
+        local outros = (node ~= nil and node.outros) or "0";
+        sheet["csk" .. i .. "_nome"] = nome;
+        sheet["csk" .. i .. "_attr"] = attr;
+        sheet["csk" .. i .. "_grau"] = tostring(grau);
+        sheet["csk" .. i .. "_outros"] = tostring(outros);
+        local tot = getMod(attr) + num(grau, 0) + num(outros, 0);
+        sheet["csk" .. i .. "_total"] = fmtMod(tot);
+    end;
+    sheet._updatingCustom = false;
+end;
+
+local function salvarCustomSlot(slotIdx)
+    if sheet == nil or sheet._updatingCustom then return; end;
+    local node = getCustomSlotNode(slotIdx);
+    if node == nil then return; end;
+    node.nome = sheet["csk" .. slotIdx .. "_nome"] or "";
+    node.attr = sheet["csk" .. slotIdx .. "_attr"] or "inteligencia";
+    node.grau = sheet["csk" .. slotIdx .. "_grau"] or "0";
+    node.outros = sheet["csk" .. slotIdx .. "_outros"] or "0";
+    local tot = getMod(node.attr) + num(node.grau, 0) + num(node.outros, 0);
+    sheet["csk" .. slotIdx .. "_total"] = fmtMod(tot);
+end;
+
+local function mudarPaginaCustom(delta)
+    if sheet == nil then return; end;
+    local pag = math.max(1, math.floor(num(sheet.customSkillPage, 1)) + delta);
+    sheet.customSkillPage = tostring(pag);
+    sheet.customSkillPageLabel = "Pag. " .. tostring(pag);
+    atualizarPaginaCustomSkills();
+end;
+
+local function rolarCustomSkill(slotIdx)
+    if sheet == nil then return; end;
+    local nome = sheet["csk" .. slotIdx .. "_nome"];
+    if nome == nil or nome == "" then nome = "Pericia Livre #" .. tostring(slotIdx); end;
+    local attr = sheet["csk" .. slotIdx .. "_attr"] or "inteligencia";
+    local grau = num(sheet["csk" .. slotIdx .. "_grau"], 0);
+    local outros = num(sheet["csk" .. slotIdx .. "_outros"], 0);
+    rolarD20("Pericia Livre: " .. nome, getMod(attr) + grau + outros, "");
+end;
+
+    ]]></script>
+
+    <rectangle align="client" color="#121419">
+        <!-- CABECALHO FIXO AMPLIADO -->
+        <rectangle align="top" height="112" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" margins="{left=6, right=6, top=6, bottom=4}" xradius="6" yradius="6">
+            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.0" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+            <label left="278" top="6" width="170" height="24" field="patamarTexto" fontColor="#E5736E" fontSize="14" fontStyle="bold"/>
+            <label left="452" top="6" width="352" height="24" field="kitNomeAtual" fontColor="#A6AEBF" fontSize="14"/>
+            <label left="810" top="6" width="220" height="24" text="Golpe Devastador (&gt;2/3):" fontColor="#E5736E" fontSize="13" horzTextAlign="trailing"/>
+
+            <label left="12" top="34" width="240" height="18" text="NOME DO PERSONAGEM" fontColor="#A6AEBF" fontSize="12"/>
+            <edit left="12" top="54" width="246" height="40" field="nome" textPrompt="Nome do explorador..." fontColor="#EAE4D6" fontSize="16" fontStyle="bold"/>
+
+            <label left="268" top="34" width="240" height="18" text="ORIGEM / CIDADE NATAL" fontColor="#A6AEBF" fontSize="12"/>
+            <edit left="268" top="54" width="236" height="40" field="origem" textPrompt="Altavanne, Baldbella, OX..." fontColor="#EAE4D6" fontSize="15"/>
+
+            <label left="514" top="34" width="76" height="18" text="NIVEL" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+            <edit left="514" top="54" width="76" height="40" field="nivel" type="number" fontColor="#D9B96A" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
+
+            <label left="600" top="34" width="164" height="18" text="PV (ATUAL / MAX)" fontColor="#E5736E" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+            <edit left="600" top="54" width="74" height="40" field="pvAtual" type="number" fontColor="#EAE4D6" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
+            <label left="674" top="54" width="16" height="40" text="/" fontColor="#A6AEBF" fontSize="18" horzTextAlign="center" vertTextAlign="center"/>
+            <edit left="690" top="54" width="74" height="40" field="pvMax" type="number" fontColor="#E5736E" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
+
+            <rectangle left="774" top="54" width="128" height="40" color="#14171E" strokeColor="#8A2B28" strokeSize="1" xradius="4" yradius="4">
+                <label align="client" field="limiarDevastador" fontColor="#E5736E" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+            </rectangle>
+
+            <button left="912" top="54" width="118" height="40" text="Iniciativa" fontSize="14">
+                <event name="onClick"><![CDATA[rolarD20("Iniciativa", getMod("destreza") + math.floor(num(sheet.per_percepcao_grau, 0) / 3) + num(sheet.iniciativaOutros, 0), "");]]></event>
+            </button>
+        </rectangle>
+
+        <!-- 5 ABAS PRINCIPAIS -->
+        <tabControl align="client" margins="{left=6, right=6, top=0, bottom=6}">
+
+            <!-- ABA 1: PRINCIPAL & KIT -->
+            <tab title="Principal &amp; Kit">
+                <scrollBox align="client">
+                    <layout left="0" top="0" width="1056" height="860">
+                        <!-- ATRIBUTOS BASE -->
+                        <rectangle left="6" top="6" width="1036" height="194" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="12" width="540" height="26" text="ATRIBUTOS BASE (3 a 18 | Mod = floor((Valor-10)/2))" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <button left="632" top="10" width="390" height="34" text="Rolar Atributos Iniciais (4d6 descarta menor)" fontSize="14">
+                                <event name="onClick"><![CDATA[rolarAtributosIniciais();]]></event>
+                            </button>
+                            
+            <rectangle left="12" top="54" width="160" height="126" color="#212530" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                <label left="6" top="6" width="148" height="22" text="FORCA" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <edit left="14" top="32" width="66" height="42" field="forca" type="number" fontColor="#EAE4D6" fontSize="22" fontStyle="bold" horzTextAlign="center"/>
+                <rectangle left="86" top="32" width="60" height="42" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                    <label align="client" field="mod_for" fontColor="#D9B96A" fontSize="20" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <button left="14" top="84" width="132" height="32" text="Rolar FOR" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo FORCA", getMod("forca"), "");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="182" top="54" width="160" height="126" color="#212530" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                <label left="6" top="6" width="148" height="22" text="DESTREZA" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <edit left="14" top="32" width="66" height="42" field="destreza" type="number" fontColor="#EAE4D6" fontSize="22" fontStyle="bold" horzTextAlign="center"/>
+                <rectangle left="86" top="32" width="60" height="42" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                    <label align="client" field="mod_des" fontColor="#D9B96A" fontSize="20" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <button left="14" top="84" width="132" height="32" text="Rolar DES" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo DESTREZA", getMod("destreza"), "");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="352" top="54" width="160" height="126" color="#212530" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                <label left="6" top="6" width="148" height="22" text="CONSTITUICAO" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <edit left="14" top="32" width="66" height="42" field="constituicao" type="number" fontColor="#EAE4D6" fontSize="22" fontStyle="bold" horzTextAlign="center"/>
+                <rectangle left="86" top="32" width="60" height="42" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                    <label align="client" field="mod_con" fontColor="#D9B96A" fontSize="20" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <button left="14" top="84" width="132" height="32" text="Rolar CON" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo CONSTITUICAO", getMod("constituicao"), "");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="54" width="160" height="126" color="#212530" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                <label left="6" top="6" width="148" height="22" text="INTELIGENCIA" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <edit left="14" top="32" width="66" height="42" field="inteligencia" type="number" fontColor="#EAE4D6" fontSize="22" fontStyle="bold" horzTextAlign="center"/>
+                <rectangle left="86" top="32" width="60" height="42" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                    <label align="client" field="mod_int" fontColor="#D9B96A" fontSize="20" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <button left="14" top="84" width="132" height="32" text="Rolar INT" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo INTELIGENCIA", getMod("inteligencia"), "");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="692" top="54" width="160" height="126" color="#212530" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                <label left="6" top="6" width="148" height="22" text="SABEDORIA" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <edit left="14" top="32" width="66" height="42" field="sabedoria" type="number" fontColor="#EAE4D6" fontSize="22" fontStyle="bold" horzTextAlign="center"/>
+                <rectangle left="86" top="32" width="60" height="42" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                    <label align="client" field="mod_sab" fontColor="#D9B96A" fontSize="20" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <button left="14" top="84" width="132" height="32" text="Rolar SAB" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo SABEDORIA", getMod("sabedoria"), "");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="862" top="54" width="160" height="126" color="#212530" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                <label left="6" top="6" width="148" height="22" text="CARISMA" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <edit left="14" top="32" width="66" height="42" field="carisma" type="number" fontColor="#EAE4D6" fontSize="22" fontStyle="bold" horzTextAlign="center"/>
+                <rectangle left="86" top="32" width="60" height="42" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                    <label align="client" field="mod_car" fontColor="#D9B96A" fontSize="20" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                </rectangle>
+                <button left="14" top="84" width="132" height="32" text="Rolar CAR" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo CARISMA", getMod("carisma"), "");]]></event>
+                </button>
+            </rectangle>
+                        </rectangle>
+
+                        <!-- ATRIBUTOS ESPECIAIS (FEITOS) -->
+                        <rectangle left="6" top="208" width="1036" height="164" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="1010" height="26" text="ATRIBUTOS ESPECIAIS (0 a 5 — NAO SOBEM COM NIVEL, APENAS POR FEITOS)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            
+            <rectangle left="12" top="46" width="196" height="104" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                <label left="6" top="6" width="184" height="22" text="Status (0-5)" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <label left="4" top="28" width="188" height="18" text="Nobreza, patente, renome" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                <edit left="14" top="54" width="62" height="38" field="esp_status" type="number" fontColor="#EAE4D6" fontSize="20" fontStyle="bold" horzTextAlign="center"/>
+                <button left="84" top="54" width="98" height="38" text="Rolar" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo Especial: Status", num(sheet.esp_status, 0), "");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="216" top="46" width="196" height="104" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                <label left="6" top="6" width="184" height="22" text="Fe Verdadeira (0-5)" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <label left="4" top="28" width="188" height="18" text="Conviccao plural" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                <edit left="14" top="54" width="62" height="38" field="esp_fe" type="number" fontColor="#EAE4D6" fontSize="20" fontStyle="bold" horzTextAlign="center"/>
+                <button left="84" top="54" width="98" height="38" text="Rolar" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo Especial: Fe Verdadeira", num(sheet.esp_fe, 0), "");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="420" top="46" width="196" height="104" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                <label left="6" top="6" width="184" height="22" text="Submundo (0-5)" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <label left="4" top="28" width="188" height="18" text="Redes de Kalis/guildas" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                <edit left="14" top="54" width="62" height="38" field="esp_submundo" type="number" fontColor="#EAE4D6" fontSize="20" fontStyle="bold" horzTextAlign="center"/>
+                <button left="84" top="54" width="98" height="38" text="Rolar" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo Especial: Submundo", num(sheet.esp_submundo, 0), "");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="624" top="46" width="196" height="104" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                <label left="6" top="6" width="184" height="22" text="Dom Antigo (0-5)" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <label left="4" top="28" width="188" height="18" text="Rarissimo (Aval Mestre)" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                <edit left="14" top="54" width="62" height="38" field="esp_dom" type="number" fontColor="#EAE4D6" fontSize="20" fontStyle="bold" horzTextAlign="center"/>
+                <button left="84" top="54" width="98" height="38" text="Rolar" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Atributo Especial: Dom Antigo", num(sheet.esp_dom, 0), "");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="828" top="46" width="196" height="104" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                <edit left="8" top="8" width="180" height="32" field="esp_livre_nome" textPrompt="Especial Livre" fontColor="#D9B96A" fontSize="13" horzTextAlign="center"/>
+                <edit left="14" top="54" width="62" height="38" field="esp_livre" type="number" fontColor="#EAE4D6" fontSize="20" fontStyle="bold" horzTextAlign="center"/>
+                <button left="84" top="54" width="98" height="38" text="Rolar" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarD20("Especial: " .. (sheet.esp_livre_nome or "Livre"), num(sheet.esp_livre, 0), "");]]></event>
+                </button>
+            </rectangle>
+                        </rectangle>
+
+                        <!-- SELETOR & AUTOMACAO DE KITS UNIVERSAIS -->
+                        <rectangle left="6" top="380" width="1036" height="296" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="800" height="26" text="KIT DE PERSONAGEM (36 OFICIOS UNIVERSAIS — DV 1d6 a 1d12)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <label left="12" top="44" width="110" height="34" text="Escolher Kit:" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                            <comboBox left="124" top="44" width="470" height="36" field="kitSelecionado" items="{'00 - Sem Kit (Livre / Media Padrao)', '01 - Mercenario (1d10)', '02 - Cavaleiro (1d10)', '03 - Soldado / Veterano (1d10)', '04 - Duelista / Esgrimista (1d8)', '05 - Barbaro / Berserker (1d12)', '06 - Guarda-Costas / Sentinela (1d10)', '07 - Arqueiro / Franco-Atirador (1d8)', '08 - Lutador / Pugilista (1d10)', '09 - Ladino (1d6)', '10 - Assassino (1d6)', '11 - Espiao (1d6)', '12 - Contrabandista (1d8)', '13 - Cacador de Recompensas (1d8)', '14 - Charlatao / Vigario (1d6)', '15 - Saqueador de Tumbas (1d8)', '16 - Pirata (1d8)', '17 - Navegador / Marinheiro (1d8)', '18 - Explorador / Cartografo (1d8)', '19 - Patrulheiro / Rastreador (1d8)', '20 - Mercador / Caravaneiro (1d6)', '21 - Domador / Cavaleiro de Estrada (1d8)', '22 - Ferreiro / Armeiro (1d8)', '23 - Alquimista (1d6)', '24 - Medico / Cirurgiao (1d6)', '25 - Erudito / Historiador (1d6)', '26 - Engenheiro / Artifice (1d6)', '27 - Herbalista / Boticario (1d6)', '28 - Astronomo / Sabio (1d6)', '29 - Carpinteiro / Artesao (1d8)', '30 - Nobre (1d6)', '31 - Diplomata / Conselheiro (1d6)', '32 - Bardo / Menestrel (1d6)', '33 - Sacerdote / Clerigo (1d6)', '34 - Inquisidor (1d8)', '35 - Ermitao / Sobrevivente (1d8)', '36 - Tocado pelo Dom Antigo (1d6 | Mestre)'}" values="{'sem_kit', 'mercenario', 'cavaleiro', 'soldado', 'duelista', 'barbaro', 'guarda_costas', 'arqueiro', 'lutador', 'ladino', 'assassino', 'espiao', 'contrabandista', 'cacador_rec', 'charlatao', 'saqueador', 'pirata', 'navegador', 'explorador', 'patrulheiro', 'mercador', 'domador', 'ferreiro', 'alquimista', 'medico', 'erudito', 'engenheiro', 'herbalista', 'astronomo', 'carpinteiro', 'nobre', 'diplomata', 'bardo', 'sacerdote', 'inquisidor', 'ermitao', 'dom_antigo'}" fontSize="14"/>
+                            <button left="604" top="44" width="150" height="36" text="Aplicar Kit" fontSize="15">
+                                <event name="onClick"><![CDATA[aplicarKitSelecionado();]]></event>
+                            </button>
+                            <button left="762" top="44" width="260" height="36" text="Subir Nivel (Rolar 1dX+CON)" fontSize="14">
+                                <event name="onClick"><![CDATA[rolarSubirNivelPV();]]></event>
+                            </button>
+
+                            <label left="12" top="92" width="180" height="20" text="Dado de Vida (DV)" fontColor="#D9B96A" fontSize="13"/>
+                            <comboBox left="12" top="114" width="180" height="34" field="kitDvFaces" items="{'1d6 (Esp/Erud)', '1d8 (Expl/Hib)', '1d10 (Comb)', '1d12 (Brutal)'}" values="{'6', '8', '10', '12'}" fontSize="13"/>
+
+                            <label left="204" top="92" width="120" height="20" text="Per. Base/Niv." fontColor="#A6AEBF" fontSize="13"/>
+                            <edit left="204" top="114" width="110" height="34" field="kitPerBase" type="number" horzTextAlign="center" fontSize="15"/>
+
+                            <label left="326" top="92" width="120" height="20" text="Mult. INT (Per.)" fontColor="#A6AEBF" fontSize="13"/>
+                            <edit left="326" top="114" width="110" height="34" field="kitMultInt" horzTextAlign="center" fontSize="15"/>
+
+                            <button left="448" top="114" width="136" height="34" text="Usar PV Medio" fontSize="13">
+                                <event name="onClick"><![CDATA[recalcularFicha(); sheet.pvMax = sheet.pvSugerido; sheet.pvAtual = sheet.pvSugerido;]]></event>
+                            </button>
+
+                            <label left="596" top="92" width="206" height="20" text="Kit de Lenda (Niv. 11-20)" fontColor="#D9B96A" fontSize="13"/>
+                            <edit left="596" top="114" width="206" height="34" field="kitLenda" textPrompt="(Futuro — Niv. 11+)" fontSize="14"/>
+
+                            <label left="814" top="92" width="208" height="20" text="Kit Epico (Niv. 21-30)" fontColor="#E5736E" fontSize="13"/>
+                            <edit left="814" top="114" width="208" height="34" field="kitEpico" textPrompt="(Futuro — Niv. 21+)" fontSize="14"/>
+
+                            <label left="12" top="158" width="460" height="22" text="HABILIDADE EXCLUSIVA DO KIT" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
+                            <textEditor left="12" top="184" width="1010" height="100" field="kitHabilidade" fontSize="14"/>
+                        </rectangle>
+
+                        <!-- PAINEL AUTOMATICO DE EVOLUCAO -->
+                        <rectangle left="6" top="684" width="1036" height="162" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="1012" height="24" text="EVOLUCAO v2.0 (PV = 1dX+CON/niv | Pericias: Recruta 1x, Lenda 1.5x, Epico 2x | Custos: Tr 2, Esp 7 [N5+], Mst 17 [N11+])" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+
+                            <rectangle left="12" top="42" width="194" height="106" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                                <label left="4" top="8" width="186" height="20" text="PV MEDIO SUGERIDO" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="32" width="186" height="38" field="pvSugerido" fontColor="#7FC48C" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="76" width="186" height="20" field="proxNivelPv" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                            </rectangle>
+
+                            <rectangle left="216" top="42" width="194" height="106" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                                <label left="4" top="8" width="186" height="20" text="PTS PERICIA TOTAIS" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="32" width="186" height="38" field="periciasSugeridas" fontColor="#D9B96A" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="76" width="186" height="20" field="proxNivelPer" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center"/>
+                            </rectangle>
+
+                            <rectangle left="420" top="42" width="194" height="106" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                                <label left="4" top="8" width="186" height="20" text="PTS PERICIA GASTOS" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="32" width="186" height="38" field="periciasGastas" fontColor="#EAE4D6" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="76" width="186" height="20" text="Tr:2 / Esp:7 / Mst:17" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                            </rectangle>
+
+                            <rectangle left="624" top="42" width="194" height="106" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                                <label left="4" top="8" width="186" height="20" text="AUMENTOS ATTR." fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="32" width="186" height="38" field="aumentosAtributo" fontColor="#D9B96A" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="76" width="186" height="20" text="1 pt a cada 3 niveis" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                            </rectangle>
+
+                            <rectangle left="828" top="42" width="196" height="106" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                                <label left="4" top="8" width="188" height="20" text="PATAMAR ATUAL" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="36" width="188" height="34" field="patamarTexto" fontColor="#E5736E" fontSize="17" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="12" top="76" width="90" height="20" text="Iniciativa:" fontColor="#A6AEBF" fontSize="13" horzTextAlign="leading"/>
+                                <label left="96" top="76" width="88" height="20" field="iniciativaTotal" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="trailing"/>
+                            </rectangle>
+                        </rectangle>
+                    </layout>
+                </scrollBox>
+            </tab>
+
+            <!-- ABA 2: COMBATE & FERIMENTOS -->
+            <tab title="Combate &amp; Ferimentos">
+                <scrollBox align="client">
+                    <layout left="0" top="0" width="1056" height="840">
+                        <rectangle left="6" top="6" width="1036" height="204" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="1012" height="24" text="DEFESA SITUACIONAL (10 + DES + Armadura + Escudo + Pericia | Armaduras comuns JAMAIS dao RD)" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
+
+                            <rectangle left="12" top="42" width="180" height="92" color="#212530" strokeColor="#9A7E42" strokeSize="1" xradius="5" yradius="5">
+                                <label left="4" top="6" width="172" height="20" text="DEFESA APARAR" fontColor="#D9B96A" fontSize="13" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="26" width="172" height="40" field="defAparar" fontColor="#EAE4D6" fontSize="28" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="68" width="172" height="18" text="Corpo a Corpo" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                            </rectangle>
+
+                            <rectangle left="202" top="42" width="180" height="92" color="#212530" strokeColor="#9A7E42" strokeSize="1" xradius="5" yradius="5">
+                                <label left="4" top="6" width="172" height="20" text="DEFESA ESQUIVA" fontColor="#D9B96A" fontSize="13" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="26" width="172" height="40" field="defEsquiva" fontColor="#EAE4D6" fontSize="28" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="68" width="172" height="18" text="Flechas / Projeteis" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                            </rectangle>
+
+                            <rectangle left="392" top="42" width="154" height="92" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="5" yradius="5">
+                                <label left="4" top="6" width="146" height="20" text="DESPREVENIDO" fontColor="#A6AEBF" fontSize="13" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="26" width="146" height="40" field="defDesprevenido" fontColor="#EAE4D6" fontSize="26" fontStyle="bold" horzTextAlign="center"/>
+                                <label left="4" top="68" width="146" height="18" text="Sem DES / Per." fontColor="#A6AEBF" fontSize="12" horzTextAlign="center"/>
+                            </rectangle>
+
+                            <label left="560" top="46" width="114" height="20" text="Armadura (+Def)" fontColor="#A6AEBF" fontSize="12"/>
+                            <edit left="560" top="70" width="98" height="38" field="armaduraDef" type="number" horzTextAlign="center" fontSize="18"/>
+
+                            <label left="676" top="46" width="104" height="20" text="Escudo (+Def)" fontColor="#A6AEBF" fontSize="12"/>
+                            <edit left="676" top="70" width="94" height="38" field="escudoDef" type="number" horzTextAlign="center" fontSize="18"/>
+
+                            <label left="786" top="46" width="104" height="20" text="Outros (+Def)" fontColor="#A6AEBF" fontSize="12"/>
+                            <edit left="786" top="70" width="94" height="38" field="defesaOutros" type="number" horzTextAlign="center" fontSize="18"/>
+
+                            <label left="894" top="46" width="134" height="20" text="RD Especial (Raro!)" fontColor="#E5736E" fontSize="12" fontStyle="bold"/>
+                            <edit left="894" top="70" width="126" height="38" field="rdEspecial" type="number" horzTextAlign="center" fontColor="#E5736E" fontSize="18" fontStyle="bold"/>
+
+                            <button left="12" top="148" width="248" height="42" text="Defesa Total (Sacrifica Ataque)" fontSize="14">
+                                <event name="onClick"><![CDATA[acaoDefensiva("propria");]]></event>
+                            </button>
+                            <button left="268" top="148" width="260" height="42" text="Proteger Aliado (Sacrifica Ataque)" fontSize="14">
+                                <event name="onClick"><![CDATA[acaoDefensiva("aliado");]]></event>
+                            </button>
+                            <button left="536" top="148" width="318" height="42" text="CON vs Golpe Devastador (&gt;2/3 PV)" fontSize="14">
+                                <event name="onClick"><![CDATA[rolarD20("CON contra Golpe Devastador (Morte Instantanea)", getMod("constituicao"), "Limiar de Golpe Devastador deste personagem: " .. (sheet.limiarDevastador or ""));]]></event>
+                            </button>
+                            <button left="862" top="148" width="160" height="42" text="Moribundo (CON)" fontSize="14">
+                                <event name="onClick"><![CDATA[rolarD20("Teste de Moribundo (CD 12 — 3 sucessos estabiliza)", getMod("constituicao"), "");]]></event>
+                            </button>
+                        </rectangle>
+
+                        <rectangle left="6" top="218" width="1036" height="320" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="12" width="490" height="26" text="ARSENAL &amp; MULTIPLAS ACOES (Trava: Destr 1 | Tr 2 | Esp 3 | Mst 4)" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
+                            <label left="516" top="12" width="180" height="26" text="Acoes no Turno (N):" fontColor="#EAE4D6" fontSize="14" horzTextAlign="trailing" vertTextAlign="center"/>
+                            <comboBox left="704" top="8" width="318" height="34" field="multiAcoes" items="{'1 Acao (Bonus Integral)', '2 Acoes (floor(Bonus/2) - 2)', '3 Acoes (floor(Bonus/3) - 3)', '4 Acoes (floor(Bonus/4) - 4)'}" values="{'1', '2', '3', '4'}" fontSize="14"/>
+
+                            <label left="16" top="52" width="210" height="20" text="ARMA" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <label left="232" top="52" width="70" height="20" text="ATTR" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="306" top="52" width="136" height="20" text="PERICIA" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="446" top="52" width="48" height="20" text="EXT" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="498" top="52" width="54" height="20" text="TOTAL" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="556" top="52" width="76" height="20" text="DANO" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="636" top="52" width="46" height="20" text="+DMG" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="686" top="52" width="48" height="20" text="MARG" fontColor="#E5736E" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="738" top="52" width="44" height="20" text="MULT" fontColor="#E5736E" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="788" top="52" width="230" height="20" text="ROLAGENS NO CHAT" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+
+                            
+            <rectangle left="10" top="78" width="1016" height="50" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                <edit left="6" top="7" width="210" height="36" field="arma1_nome" textPrompt="Arma 1 (ex: Espada Longa)" fontSize="14"/>
+                <comboBox left="222" top="7" width="70" height="36" field="arma1_attr" items="{'FOR', 'DES'}" values="{'forca', 'destreza'}" fontSize="13"/>
+                <comboBox left="296" top="7" width="136" height="36" field="arma1_per" items="{'Armas Brancas', 'Armas Dist.', 'Desarmada'}" values="{'per_armas_brancas', 'per_armas_dist', 'per_luta_desarm'}" fontSize="13"/>
+                <edit left="436" top="7" width="48" height="36" field="arma1_extra" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="488" top="7" width="54" height="36" field="arma1_atk" fontColor="#D9B96A" fontSize="16" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="546" top="7" width="76" height="36" field="arma1_dano" textPrompt="1d8" horzTextAlign="center" fontSize="14"/>
+                <edit left="626" top="7" width="46" height="36" field="arma1_danoExtra" type="number" horzTextAlign="center" fontSize="14"/>
+                <edit left="676" top="7" width="48" height="36" field="arma1_margem" type="number" horzTextAlign="center" fontSize="14"/>
+                <edit left="728" top="7" width="44" height="36" field="arma1_mult" type="number" horzTextAlign="center" fontSize="14"/>
+                <button left="778" top="7" width="84" height="36" text="Atacar" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarArma(1);]]></event>
+                </button>
+                <button left="866" top="7" width="70" height="36" text="Dano" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarDanoArma(1, false);]]></event>
+                </button>
+                <button left="940" top="7" width="68" height="36" text="Crit" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarDanoArma(1, true);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="136" width="1016" height="50" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                <edit left="6" top="7" width="210" height="36" field="arma2_nome" textPrompt="Arma 2 (ex: Espada Longa)" fontSize="14"/>
+                <comboBox left="222" top="7" width="70" height="36" field="arma2_attr" items="{'FOR', 'DES'}" values="{'forca', 'destreza'}" fontSize="13"/>
+                <comboBox left="296" top="7" width="136" height="36" field="arma2_per" items="{'Armas Brancas', 'Armas Dist.', 'Desarmada'}" values="{'per_armas_brancas', 'per_armas_dist', 'per_luta_desarm'}" fontSize="13"/>
+                <edit left="436" top="7" width="48" height="36" field="arma2_extra" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="488" top="7" width="54" height="36" field="arma2_atk" fontColor="#D9B96A" fontSize="16" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="546" top="7" width="76" height="36" field="arma2_dano" textPrompt="1d8" horzTextAlign="center" fontSize="14"/>
+                <edit left="626" top="7" width="46" height="36" field="arma2_danoExtra" type="number" horzTextAlign="center" fontSize="14"/>
+                <edit left="676" top="7" width="48" height="36" field="arma2_margem" type="number" horzTextAlign="center" fontSize="14"/>
+                <edit left="728" top="7" width="44" height="36" field="arma2_mult" type="number" horzTextAlign="center" fontSize="14"/>
+                <button left="778" top="7" width="84" height="36" text="Atacar" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarArma(2);]]></event>
+                </button>
+                <button left="866" top="7" width="70" height="36" text="Dano" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarDanoArma(2, false);]]></event>
+                </button>
+                <button left="940" top="7" width="68" height="36" text="Crit" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarDanoArma(2, true);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="194" width="1016" height="50" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                <edit left="6" top="7" width="210" height="36" field="arma3_nome" textPrompt="Arma 3 (ex: Espada Longa)" fontSize="14"/>
+                <comboBox left="222" top="7" width="70" height="36" field="arma3_attr" items="{'FOR', 'DES'}" values="{'forca', 'destreza'}" fontSize="13"/>
+                <comboBox left="296" top="7" width="136" height="36" field="arma3_per" items="{'Armas Brancas', 'Armas Dist.', 'Desarmada'}" values="{'per_armas_brancas', 'per_armas_dist', 'per_luta_desarm'}" fontSize="13"/>
+                <edit left="436" top="7" width="48" height="36" field="arma3_extra" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="488" top="7" width="54" height="36" field="arma3_atk" fontColor="#D9B96A" fontSize="16" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="546" top="7" width="76" height="36" field="arma3_dano" textPrompt="1d8" horzTextAlign="center" fontSize="14"/>
+                <edit left="626" top="7" width="46" height="36" field="arma3_danoExtra" type="number" horzTextAlign="center" fontSize="14"/>
+                <edit left="676" top="7" width="48" height="36" field="arma3_margem" type="number" horzTextAlign="center" fontSize="14"/>
+                <edit left="728" top="7" width="44" height="36" field="arma3_mult" type="number" horzTextAlign="center" fontSize="14"/>
+                <button left="778" top="7" width="84" height="36" text="Atacar" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarArma(3);]]></event>
+                </button>
+                <button left="866" top="7" width="70" height="36" text="Dano" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarDanoArma(3, false);]]></event>
+                </button>
+                <button left="940" top="7" width="68" height="36" text="Crit" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarDanoArma(3, true);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="252" width="1016" height="50" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                <edit left="6" top="7" width="210" height="36" field="arma4_nome" textPrompt="Arma 4 (ex: Espada Longa)" fontSize="14"/>
+                <comboBox left="222" top="7" width="70" height="36" field="arma4_attr" items="{'FOR', 'DES'}" values="{'forca', 'destreza'}" fontSize="13"/>
+                <comboBox left="296" top="7" width="136" height="36" field="arma4_per" items="{'Armas Brancas', 'Armas Dist.', 'Desarmada'}" values="{'per_armas_brancas', 'per_armas_dist', 'per_luta_desarm'}" fontSize="13"/>
+                <edit left="436" top="7" width="48" height="36" field="arma4_extra" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="488" top="7" width="54" height="36" field="arma4_atk" fontColor="#D9B96A" fontSize="16" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="546" top="7" width="76" height="36" field="arma4_dano" textPrompt="1d8" horzTextAlign="center" fontSize="14"/>
+                <edit left="626" top="7" width="46" height="36" field="arma4_danoExtra" type="number" horzTextAlign="center" fontSize="14"/>
+                <edit left="676" top="7" width="48" height="36" field="arma4_margem" type="number" horzTextAlign="center" fontSize="14"/>
+                <edit left="728" top="7" width="44" height="36" field="arma4_mult" type="number" horzTextAlign="center" fontSize="14"/>
+                <button left="778" top="7" width="84" height="36" text="Atacar" fontSize="14">
+                    <event name="onClick"><![CDATA[rolarArma(4);]]></event>
+                </button>
+                <button left="866" top="7" width="70" height="36" text="Dano" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarDanoArma(4, false);]]></event>
+                </button>
+                <button left="940" top="7" width="68" height="36" text="Crit" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarDanoArma(4, true);]]></event>
+                </button>
+            </rectangle>
+                        </rectangle>
+
+                        <rectangle left="6" top="546" width="1036" height="280" color="#1B1E26" strokeColor="#8A2B28" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="1010" height="24" text="FERIMENTOS GRAVES, EXAUSTAO &amp; CICATRIZES PERMANENTES (Arbitragem Livre do Mestre)" fontColor="#E5736E" fontSize="15" fontStyle="bold"/>
+
+                            <label left="12" top="40" width="500" height="20" text="FERIMENTOS ATIVOS / CONDICOES / EXAUSTAO (1-5)" fontColor="#A6AEBF" fontSize="13"/>
+                            <textEditor left="12" top="64" width="500" height="202" field="ferimentosAtivos" fontSize="14"/>
+
+                            <label left="524" top="40" width="500" height="20" text="CICATRIZES &amp; SEQUELAS PERMANENTES (Decisao do Mestre)" fontColor="#D9B96A" fontSize="13"/>
+                            <textEditor left="524" top="64" width="500" height="202" field="cicatrizesPermanentes" fontSize="14"/>
+                        </rectangle>
+                    </layout>
+                </scrollBox>
+            </tab>
+
+            <!-- ABA 3: PERICIAS & TALENTOS -->
+            <tab title="Pericias &amp; Talentos">
+                <scrollBox align="client">
+                    <layout left="0" top="0" width="1056" height="1280">
+                        <rectangle left="6" top="6" width="1036" height="784" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="690" height="24" text="34 PERICIAS (Tr +3 [2p] | Esp +8 [7p, Niv 5+] | Mst +12 [17p, Niv 11+])" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
+                            <label left="704" top="10" width="176" height="24" text="Pts Gastos / Sugeridos:" fontColor="#A6AEBF" fontSize="13" horzTextAlign="trailing" vertTextAlign="center"/>
+                            <label left="884" top="10" width="56" height="24" field="periciasGastas" fontColor="#EAE4D6" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            <label left="940" top="10" width="16" height="24" text="/" fontColor="#A6AEBF" fontSize="15" horzTextAlign="center" vertTextAlign="center"/>
+                            <label left="956" top="10" width="64" height="24" field="periciasSugeridas" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+
+                            <label left="18" top="38" width="180" height="18" text="PERICIA" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <label left="200" top="38" width="40" height="18" text="ATTR" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="244" top="38" width="122" height="18" text="GRAU" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="370" top="38" width="40" height="18" text="OUT" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="414" top="38" width="42" height="18" text="TOT" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+
+                            <label left="530" top="38" width="180" height="18" text="PERICIA" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <label left="712" top="38" width="40" height="18" text="ATTR" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="756" top="38" width="122" height="18" text="GRAU" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="882" top="38" width="40" height="18" text="OUT" fontColor="#A6AEBF" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="926" top="38" width="42" height="18" text="TOT" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+
+                            
+            <rectangle left="10" top="60" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Armas Brancas" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_armas_brancas_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_armas_brancas_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_armas_brancas_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_armas_brancas", "Armas Brancas", "forca");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="102" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Armas a Distancia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_armas_dist_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_armas_dist_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_armas_dist_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_armas_dist", "Armas a Distancia", "destreza");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="144" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Luta Desarmada" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_luta_desarm_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_luta_desarm_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_luta_desarm_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_luta_desarm", "Luta Desarmada", "forca");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="186" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Aparar" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_aparar_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_aparar_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_aparar_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_aparar", "Aparar", "forca");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="228" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Esquiva" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_esquiva_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_esquiva_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_esquiva_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_esquiva", "Esquiva", "destreza");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="270" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Escudos" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_escudos_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_escudos_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_escudos_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_escudos", "Escudos", "forca");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="312" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Atletismo" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_atletismo_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_atletismo_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_atletismo_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_atletismo", "Atletismo", "forca");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="354" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Acrobacia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_acrobacia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_acrobacia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_acrobacia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_acrobacia", "Acrobacia", "destreza");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="396" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Furtividade" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_furtividade_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_furtividade_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_furtividade_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_furtividade", "Furtividade", "destreza");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="438" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Escalada" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_escalada_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_escalada_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_escalada_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_escalada", "Escalada", "forca");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="480" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Natacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="FOR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_natacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_natacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_natacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_natacao", "Natacao", "forca");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="522" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Cavalgar" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_cavalgar_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_cavalgar_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_cavalgar_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_cavalgar", "Cavalgar", "destreza");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="564" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Sobrevivencia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_sobrevivencia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_sobrevivencia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_sobrevivencia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_sobrevivencia", "Sobrevivencia", "sabedoria");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="606" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Navegacao e Nautica" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_navegacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_navegacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_navegacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_navegacao", "Navegacao e Nautica", "sabedoria");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="648" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Percepcao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_percepcao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_percepcao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_percepcao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_percepcao", "Percepcao", "sabedoria");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="690" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Investigacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_investigacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_investigacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_investigacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_investigacao", "Investigacao", "inteligencia");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="732" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Disfarce" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_disfarce_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_disfarce_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_disfarce_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_disfarce", "Disfarce", "carisma");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="60" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Ladinagem e Fechaduras" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_ladinagem_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_ladinagem_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_ladinagem_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_ladinagem", "Ladinagem e Fechaduras", "destreza");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="102" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Prestidigitacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="DES" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_prestidig_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_prestidig_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_prestidig_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_prestidig", "Prestidigitacao", "destreza");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="144" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Persuasao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_persuasao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_persuasao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_persuasao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_persuasao", "Persuasao", "carisma");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="186" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Enganacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_enganacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_enganacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_enganacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_enganacao", "Enganacao", "carisma");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="228" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Intimidacao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_intimidacao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_intimidacao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_intimidacao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_intimidacao", "Intimidacao", "carisma");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="270" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Intuicao" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_intuicao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_intuicao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_intuicao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_intuicao", "Intuicao", "sabedoria");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="312" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Etiqueta e Corte" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_etiqueta_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_etiqueta_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_etiqueta_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_etiqueta", "Etiqueta e Corte", "carisma");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="354" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Barganha e Comercio" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="CAR" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_barganha_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_barganha_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_barganha_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_barganha", "Barganha e Comercio", "carisma");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="396" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Medicina e Cirurgia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_medicina_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_medicina_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_medicina_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_medicina", "Medicina e Cirurgia", "inteligencia");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="438" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Alquimia e Venenos" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_alquimia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_alquimia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_alquimia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_alquimia", "Alquimia e Venenos", "inteligencia");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="480" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Forja e Metalurgia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_forja_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_forja_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_forja_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_forja", "Forja e Metalurgia", "inteligencia");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="522" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Engenharia e Mecanica" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_engenharia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_engenharia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_engenharia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_engenharia", "Engenharia e Mecanica", "inteligencia");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="564" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Herbalismo e Natureza" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_herbalismo_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_herbalismo_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_herbalismo_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_herbalismo", "Herbalismo e Natureza", "sabedoria");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="606" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Historia e Lendas" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_historia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_historia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_historia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_historia", "Historia e Lendas", "inteligencia");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="648" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Geografia e Cartografia" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_geografia_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_geografia_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_geografia_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_geografia", "Geografia e Cartografia", "inteligencia");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="690" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Idiomas e Cifras" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="INT" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_idiomas_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_idiomas_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_idiomas_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_idiomas", "Idiomas e Cifras", "inteligencia");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="732" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <label left="8" top="4" width="180" height="30" text="Religiao e Ocultismo" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                <label left="190" top="4" width="40" height="30" text="SAB" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center" vertTextAlign="center"/>
+                <comboBox left="234" top="4" width="122" height="30" field="per_religiao_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="per_religiao_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="per_religiao_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarPericia("per_religiao", "Religiao e Ocultismo", "sabedoria");]]></event>
+                </button>
+            </rectangle>
+                        </rectangle>
+
+                        <rectangle left="6" top="798" width="1036" height="292" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="560" height="26" text="PERICIAS LIVRES / PERSONALIZADAS (CRIE QUANTAS QUISER!)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <button left="590" top="8" width="136" height="32" text="&lt; Pag. Ant." fontSize="13">
+                                <event name="onClick"><![CDATA[mudarPaginaCustom(-1);]]></event>
+                            </button>
+                            <label left="732" top="10" width="96" height="26" field="customSkillPageLabel" fontColor="#D9B96A" fontSize="14" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            <button left="834" top="8" width="190" height="32" text="Proxima / +10 Slots &gt;" fontSize="13">
+                                <event name="onClick"><![CDATA[mudarPaginaCustom(1);]]></event>
+                            </button>
+                            <label left="12" top="44" width="1010" height="20" text="Digite qualquer pericia nova (ex: Forja de Adamante, Navegacao nos Corais, Dialeto de Yoketsu) e avance paginas para mais." fontColor="#A6AEBF" fontSize="12"/>
+
+                            
+            <rectangle left="10" top="70" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk1_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk1_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk1_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk1_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk1_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(1);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="112" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk2_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk2_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk2_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk2_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk2_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(2);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="154" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk3_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk3_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk3_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk3_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk3_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(3);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="196" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk4_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk4_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk4_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk4_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk4_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(4);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="238" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk5_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk5_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk5_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk5_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk5_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(5);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="70" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk6_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk6_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk6_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk6_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk6_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(6);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="112" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk7_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk7_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk7_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk7_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk7_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(7);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="154" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk8_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk8_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk8_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk8_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk8_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(8);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="196" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk9_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk9_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk9_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk9_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk9_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(9);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="522" top="238" width="504" height="38" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="4" top="4" width="156" height="30" field="csk10_nome" textPrompt="Nova Pericia..." fontSize="13"/>
+                <comboBox left="164" top="4" width="66" height="30" field="csk10_attr" items="{'FOR', 'DES', 'CON', 'INT', 'SAB', 'CAR'}" values="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'}" fontSize="13"/>
+                <comboBox left="234" top="4" width="122" height="30" field="csk10_grau" items="{'Destr. (+0)', 'Trein. (+3)', 'Espec. (+8)', 'Mestre (+12)'}" values="{'0', '3', '8', '12'}" fontSize="13"/>
+                <edit left="360" top="4" width="40" height="30" field="csk10_outros" type="number" horzTextAlign="center" fontSize="14"/>
+                <label left="404" top="4" width="42" height="30" field="csk10_total" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <button left="450" top="4" width="48" height="30" text="d20" fontSize="13">
+                    <event name="onClick"><![CDATA[rolarCustomSkill(10);]]></event>
+                </button>
+            </rectangle>
+                        </rectangle>
+
+                        <rectangle left="6" top="1098" width="1036" height="170" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="1010" height="24" text="TALENTOS, MANOBRAS DE COMBATE &amp; ESPECIALIZACOES (Niveis pares ou treino)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <textEditor left="12" top="38" width="1012" height="120" field="talentosManobras" fontSize="14"/>
+                        </rectangle>
+                    </layout>
+                </scrollBox>
+            </tab>
+
+            <!-- ABA 4: INVENTARIO -->
+            <tab title="Inventario">
+                <scrollBox align="client">
+                    <layout left="0" top="0" width="1056" height="780">
+                        <rectangle left="6" top="6" width="1036" height="86" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="14" top="10" width="146" height="20" text="MOEDAS DE OURO" fontColor="#D9B96A" fontSize="12" fontStyle="bold"/>
+                            <edit left="14" top="34" width="136" height="38" field="moedasOuro" type="number" horzTextAlign="center" fontSize="17"/>
+
+                            <label left="166" top="10" width="146" height="20" text="MOEDAS DE PRATA" fontColor="#EAE4D6" fontSize="12" fontStyle="bold"/>
+                            <edit left="166" top="34" width="136" height="38" field="moedasPrata" type="number" horzTextAlign="center" fontSize="17"/>
+
+                            <label left="318" top="10" width="146" height="20" text="MOEDAS DE COBRE" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <edit left="318" top="34" width="136" height="38" field="moedasCobre" type="number" horzTextAlign="center" fontSize="17"/>
+
+                            <label left="510" top="10" width="166" height="20" text="CARGA ATUAL (kg)" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <edit left="510" top="34" width="150" height="38" field="cargaAtual" horzTextAlign="center" fontSize="17"/>
+
+                            <label left="686" top="10" width="260" height="20" text="CAPACIDADE MAXIMA (FOR x 5)" fontColor="#D9B96A" fontSize="12" fontStyle="bold"/>
+                            <rectangle left="686" top="34" width="180" height="38" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" field="cargaMax" fontColor="#D9B96A" fontSize="18" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+                        </rectangle>
+
+                        <rectangle left="6" top="100" width="512" height="666" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="488" height="24" text="MOCHILA, EQUIPAMENTO DE KIT &amp; PROVISOES" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <textEditor left="12" top="40" width="488" height="614" field="equipamentoMochila" fontSize="14"/>
+                        </rectangle>
+
+                        <rectangle left="528" top="100" width="514" height="328" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="490" height="24" text="ARMADURAS, ADAMANTE &amp; RELIQUIAS RARAS (RD)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <textEditor left="12" top="40" width="490" height="276" field="reliquiasAdamante" fontSize="14"/>
+                        </rectangle>
+
+                        <rectangle left="528" top="438" width="514" height="328" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="490" height="24" text="ALQUIMIA, VENENOS, ERVAS &amp; FERRAMENTAS" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <textEditor left="12" top="40" width="490" height="276" field="alquimiaSuprimentos" fontSize="14"/>
+                        </rectangle>
+                    </layout>
+                </scrollBox>
+            </tab>
+
+            <!-- ABA 5: HISTORIA & NOTAS -->
+            <tab title="Historia &amp; Notas">
+                <scrollBox align="client">
+                    <layout left="0" top="0" width="1056" height="780">
+                        <rectangle left="6" top="6" width="1036" height="106" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="8" width="110" height="20" text="IDADE" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <edit left="12" top="30" width="104" height="34" field="idade" fontSize="15"/>
+
+                            <label left="128" top="8" width="150" height="20" text="ALTURA / PORTE" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <edit left="128" top="30" width="166" height="34" field="altura" fontSize="15"/>
+
+                            <label left="306" top="8" width="220" height="20" text="RELIGIAO / CREDO" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
+                            <edit left="306" top="30" width="260" height="34" field="religiao" fontSize="15"/>
+
+                            <label left="578" top="8" width="440" height="20" text="OBJETIVO COMO EXPLORADOR EM ALENIA" fontColor="#D9B96A" fontSize="12" fontStyle="bold"/>
+                            <edit left="578" top="30" width="446" height="34" field="objetivoExplorador" fontSize="15"/>
+
+                            <label left="12" top="72" width="1010" height="22" text="Lembrete: Atributos Especiais (Status, Fe Verdadeira, Submundo, Dom Antigo) evoluem APENAS por Feitos registrados abaixo." fontColor="#A6AEBF" fontSize="13"/>
+                        </rectangle>
+
+                        <rectangle left="6" top="120" width="512" height="320" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="488" height="24" text="DIARIO DE FEITOS (EVOLUCAO DE ESPECIAIS)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <textEditor left="12" top="40" width="488" height="268" field="registroFeitos" fontSize="14"/>
+                        </rectangle>
+
+                        <rectangle left="528" top="120" width="514" height="320" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="490" height="24" text="HISTORIA, APARENCIA &amp; PASSADO" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <textEditor left="12" top="40" width="490" height="268" field="historiaPersonagem" fontSize="14"/>
+                        </rectangle>
+
+                        <rectangle left="6" top="450" width="512" height="316" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="488" height="24" text="CONTATOS, ALIADOS, RIVAIS &amp; ROTAS" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <textEditor left="12" top="40" width="488" height="264" field="contatosAliados" fontSize="14"/>
+                        </rectangle>
+
+                        <rectangle left="528" top="450" width="514" height="316" color="#1B1E26" strokeColor="#8A2B28" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="490" height="24" text="MISTERIOS ANTIGOS, PRESSAGIOS &amp; SEGREDOS" fontColor="#E5736E" fontSize="15" fontStyle="bold"/>
+                            <textEditor left="12" top="40" width="490" height="264" field="misteriosSegredos" fontSize="14"/>
+                        </rectangle>
+                    </layout>
+                </scrollBox>
+            </tab>
+        </tabControl>
+    </rectangle>
+
+    <!-- DATALINKS NA RAIZ DO FORM (REGRA 2 DO SDK 3.7b) -->
+    <dataLink fields="{'nivel', 'kitSelecionado', 'kitNomeAtual', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'pvAtual', 'pvMax', 'armaduraDef', 'escudoDef', 'rdEspecial', 'defesaOutros', 'iniciativaOutros', 'multiAcoes', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'customSkillPage', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma1_danoExtra', 'arma1_margem', 'arma1_mult', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma2_danoExtra', 'arma2_margem', 'arma2_mult', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma3_danoExtra', 'arma3_margem', 'arma3_mult', 'arma4_attr', 'arma4_per', 'arma4_extra', 'arma4_danoExtra', 'arma4_margem', 'arma4_mult', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros'}" defaultValues="{'1', 'sem_kit', '00 - Sem Kit (Livre / Media Padrao)', '8', '1', '0.75', '18', '18', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '1', '0', '25', '0', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}"/>
+
+    <dataLink fields="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'nivel', 'pvMax', 'kitSelecionado', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'armaduraDef', 'escudoDef', 'defesaOutros', 'iniciativaOutros', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma4_attr', 'arma4_per', 'arma4_extra'}">
+        <event name="onChange"><![CDATA[recalcularFicha();]]></event>
+    </dataLink>
+    
+    <dataLink fields="{'csk1_nome', 'csk1_attr', 'csk1_grau', 'csk1_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(1); recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'csk2_nome', 'csk2_attr', 'csk2_grau', 'csk2_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(2); recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'csk3_nome', 'csk3_attr', 'csk3_grau', 'csk3_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(3); recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'csk4_nome', 'csk4_attr', 'csk4_grau', 'csk4_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(4); recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'csk5_nome', 'csk5_attr', 'csk5_grau', 'csk5_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(5); recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'csk6_nome', 'csk6_attr', 'csk6_grau', 'csk6_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(6); recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'csk7_nome', 'csk7_attr', 'csk7_grau', 'csk7_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(7); recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'csk8_nome', 'csk8_attr', 'csk8_grau', 'csk8_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(8); recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'csk9_nome', 'csk9_attr', 'csk9_grau', 'csk9_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(9); recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'csk10_nome', 'csk10_attr', 'csk10_grau', 'csk10_outros'}">
+        <event name="onChange"><![CDATA[salvarCustomSlot(10); recalcularFicha();]]></event>
+    </dataLink>
+</form>
