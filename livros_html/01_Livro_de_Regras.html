@@ -68,13 +68,13 @@ body {
 /* SIDEBAR TOC */
 .sidebar {
     position: fixed; top: var(--topbar-h); left: 0; bottom: var(--footbar-h); width: var(--sidebar-w);
-    background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
-    padding: 16px 12px 24px; overflow-y: auto; z-index: 900;
+    background: rgba(20, 18, 16, 0.98); border-right: 1px solid rgba(154, 123, 59, 0.38);
+    padding: 16px 12px 24px; overflow-y: auto; z-index: 950;
     transition: transform 0.22s ease;
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
 }
-body.sidebar-hidden .sidebar { transform: translateX(-100%); }
-body.sidebar-hidden .book-shell,
-body.sidebar-hidden .reader-stage { margin-left: 0; }
+body.sidebar-hidden .sidebar { transform: translateX(-100%); box-shadow: none; }
+body.sidebar-hidden .book-shell { margin-left: 0; }
 .sidebar-title {
     font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--gold-light);
@@ -100,21 +100,21 @@ body.book-mode {
 }
 
 .reader-stage {
-    margin-left: var(--sidebar-w);
+    margin-left: 0;
     margin-top: var(--topbar-h);
     height: calc(100vh - var(--topbar-h) - var(--footbar-h));
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 18px 22px;
+    padding: 6px 46px;
     position: relative;
-    transition: margin-left 0.22s ease;
 }
 
 /* Source container hidden when in paginated book-mode, visible in scroll-mode or print */
 body.book-mode .book-shell { display: none; }
 body.scroll-mode .reader-stage,
-body.scroll-mode .reader-footer-bar .pager-controls { display: none; }
+body.scroll-mode .reader-footer-bar .pager-controls,
+body.scroll-mode .font-scale-group { display: none; }
 body.scroll-mode { overflow: auto; }
 body.scroll-mode .book-shell { padding-bottom: 84px; }
 
@@ -124,7 +124,7 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     align-items: stretch;
     justify-content: center;
     background: linear-gradient(135deg, #3c2218 0%, #26140e 50%, #3a2016 100%);
-    padding: 10px 12px;
+    padding: 6px 8px;
     border-radius: 7px;
     border: 1px solid rgba(154, 123, 59, 0.55);
     box-shadow:
@@ -151,8 +151,8 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 }
 
 .leaf {
-    width: var(--leaf-w, 520px);
-    height: var(--leaf-h, 710px);
+    width: var(--leaf-w, 660px);
+    height: var(--leaf-h, 780px);
     background: var(--vellum);
     color: var(--ink);
     position: relative;
@@ -165,15 +165,15 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 .leaf.leaf-left {
     border-radius: 3px 0 0 3px;
     border-right: none;
-    background: linear-gradient(90deg, #f3ecdc 0%, #f8f2e4 8%, #f8f2e4 90%, #e7dcc4 98%, #d7c7a7 100%);
-    box-shadow: inset -14px 0 22px -12px rgba(45, 30, 15, 0.34);
+    background: linear-gradient(90deg, #f3ecdc 0%, #f8f2e4 7%, #f8f2e4 91%, #e7dcc4 98%, #d7c7a7 100%);
+    box-shadow: inset -16px 0 24px -12px rgba(45, 30, 15, 0.34);
 }
 
 .leaf.leaf-right {
     border-radius: 0 3px 3px 0;
     border-left: 1px solid rgba(72, 52, 32, 0.22);
-    background: linear-gradient(90deg, #d8c8a9 0%, #e9dec7 3%, #f8f2e4 11%, #f8f2e4 92%, #f1e8d6 100%);
-    box-shadow: inset 14px 0 22px -12px rgba(45, 30, 15, 0.34);
+    background: linear-gradient(90deg, #d8c8a9 0%, #e9dec7 3%, #f8f2e4 10%, #f8f2e4 93%, #f1e8d6 100%);
+    box-shadow: inset 16px 0 24px -12px rgba(45, 30, 15, 0.34);
 }
 
 .leaf.leaf-single {
@@ -192,42 +192,50 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 
 .leaf-header {
     height: 30px;
-    padding: 8px 28px 0;
+    padding: 8px 34px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-family: 'Cinzel', Georgia, serif;
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--ink-soft);
-    opacity: 0.78;
+    opacity: 0.8;
     flex-shrink: 0;
 }
 
 .leaf-body {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 8px 30px 10px;
+    padding: 10px 36px 10px;
     overflow-y: auto;
     overflow-x: hidden;
+    font-size: calc(18px * var(--font-scale, 1));
+    line-height: 1.56;
     scrollbar-width: thin;
     scrollbar-color: rgba(154, 123, 59, 0.4) transparent;
 }
-.leaf-body table { font-size: 13px; line-height: 1.35; }
-.leaf-body thead th { padding: 5px 6px; font-size: 9.5px; }
-.leaf-body tbody td { padding: 5px 6px; }
+.leaf-body h1.book-h1 { font-size: calc(25px * var(--font-scale, 1)); }
+.leaf-body h2 { font-size: calc(20px * var(--font-scale, 1)); margin: 16px 0 9px; }
+.leaf-body h3 { font-size: calc(16.5px * var(--font-scale, 1)); margin: 13px 0 6px; }
+.leaf-body table { font-size: calc(14.5px * var(--font-scale, 1)); line-height: 1.38; }
+.leaf-body thead th { padding: 6px 8px; font-size: calc(10.5px * var(--font-scale, 1)); }
+.leaf-body tbody td { padding: 6px 8px; }
 .leaf-body tbody td code,
 .leaf-body .nowrap-cell { white-space: nowrap; }
+.leaf-body .callout,
+.leaf-body .entry-card { font-size: calc(16.5px * var(--font-scale, 1)); }
+.leaf-body .atlas-plate img { max-height: calc(var(--leaf-h, 760px) * 0.64); }
 
 .leaf-footer {
     height: 30px;
-    padding: 0 28px 8px;
+    padding: 0 34px 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Cinzel', Georgia, serif;
-    font-size: 11px;
+    font-size: 11.5px;
     letter-spacing: 0.12em;
     color: var(--ink-soft);
     flex-shrink: 0;
@@ -240,7 +248,7 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     margin: auto;
     font-family: 'Cinzel', Georgia, serif;
     color: rgba(154, 123, 59, 0.38);
-    font-size: 26px;
+    font-size: 28px;
     letter-spacing: 0.2em;
 }
 
@@ -249,13 +257,13 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 42px;
-    height: 64px;
-    background: rgba(20, 17, 14, 0.82);
+    width: 34px;
+    height: 70px;
+    background: rgba(20, 17, 14, 0.85);
     color: var(--gold-light);
     border: 1px solid rgba(154, 123, 59, 0.5);
     border-radius: 4px;
-    font-size: 26px;
+    font-size: 24px;
     line-height: 1;
     cursor: pointer;
     z-index: 50;
@@ -270,8 +278,21 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     border-color: var(--gold-light);
 }
 .side-turn-btn:disabled { opacity: 0.22; cursor: default; }
-.side-turn-prev { left: 10px; }
-.side-turn-next { right: 10px; }
+.side-turn-prev { left: 6px; }
+.side-turn-next { right: 6px; }
+
+.font-scale-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.font-scale-label {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    color: #bfb5a2;
+    min-width: 38px;
+    text-align: center;
+}
 
 /* BOTTOM READER BAR */
 .reader-footer-bar {
@@ -394,17 +415,17 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     margin: 14px auto;
 }
 .cover-title {
-    font-family: 'Cinzel', Georgia, serif; font-size: 32px; font-weight: 800; line-height: 1.14;
+    font-family: 'Cinzel', Georgia, serif; font-size: 38px; font-weight: 800; line-height: 1.14;
     letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
 }
 .cover-subtitle {
-    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 18px;
-    color: var(--ink-soft); margin: 10px 0 6px; max-width: 520px;
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 20px;
+    color: var(--ink-soft); margin: 10px 0 6px; max-width: 560px;
 }
-.cover-epigraph { font-style: italic; font-size: 16px; color: var(--crimson-dark); max-width: 460px; margin: 16px auto 10px; }
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 500px; margin: 16px auto 10px; }
 .cover-thumb {
-    max-width: 100%; max-height: 220px; border: 2px solid var(--gold);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin: 12px auto; border-radius: 2px;
+    max-width: 100%; max-height: 290px; border: 2px solid var(--gold);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin: 14px auto; border-radius: 2px;
 }
 .cover-edition {
     margin-top: auto; padding-top: 18px; font-family: 'Cinzel', Georgia, serif;
@@ -573,7 +594,7 @@ tr { break-inside: avoid; }
 }
 </style>
 </head>
-<body class="book-mode" data-book-title="Livro de Regras">
+<body class="book-mode sidebar-hidden" data-book-title="Livro de Regras">
     <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Mostrar/Ocultar Sumário">☰ Sumário</button><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html" class="active">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">🔒 Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">🔒 Aventura</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
     <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-e-proposta-do-sistema-0">1. Visão Geral e Proposta do Sistema</a></li><li class="toc-h3"><a href="#pilares-fundamentais-1">Pilares Fundamentais</a></li><li class="toc-h2"><a href="#2-atributos-base-e-geração-de-personagem-2">2. Atributos Base e Geração de Personagem</a></li><li class="toc-h3"><a href="#cálculo-do-modificador-3">Cálculo do Modificador</a></li><li class="toc-h3"><a href="#geração-inicial-de-atributos-4">Geração Inicial de Atributos</a></li><li class="toc-h2"><a href="#3-atributos-especiais-opcionais-evolução-exclusiva-por-feitos-5">3. Atributos Especiais (Opcionais — Evolução Exclusiva por Feitos)</a></li><li class="toc-h2"><a href="#4-testes-dificuldades-e-perícias-recalibradas-6">4. Testes, Dificuldades e Perícias (Recalibradas)</a></li><li class="toc-h3"><a href="#teste-básico-7">Teste Básico</a></li><li class="toc-h3"><a href="#graus-de-treino-custos-e-travas-de-patamar-8">Graus de Treino, Custos e Travas de Patamar</a></li><li class="toc-h3"><a href="#pontos-de-perícia-uniforme-e-equilibrado-9">Pontos de Perícia (Uniforme e Equilibrado)</a></li><li class="toc-h3"><a href="#lista-oficial-de-perícias-34-perícias-perícias-livres-ilimitadas-10">Lista Oficial de Perícias (34 Perícias + Perícias Livres Ilimitadas)</a></li><li class="toc-h2"><a href="#5-níveis-dados-de-vida-patamares-e-troca-de-kit-níveis-1-a-30-11">5. Níveis, Dados de Vida, Patamares e Troca de Kit (Níveis 1 a 30)</a></li><li class="toc-h3"><a href="#como-e-quando-subir-de-nível-12">Como e Quando Subir de Nível</a></li><li class="toc-h3"><a href="#pontos-de-vida-por-dado-de-vida-estilo-dd-conforme-a-natureza-do-kit-13">Pontos de Vida por Dado de Vida (Estilo D&amp;D conforme a Natureza do Kit)</a></li><li class="toc-h3"><a href="#os-3-patamares-dinâmicos-14">Os 3 Patamares Dinâmicos</a></li><li class="toc-h2"><a href="#6-combate-ágil-tático-e-mortal-15">6. Combate Ágil, Tático e Mortal</a></li><li class="toc-h3"><a href="#turno-economia-de-ações-e-iniciativa-16">Turno, Economia de Ações e Iniciativa</a></li><li class="toc-h3"><a href="#defesa-situacional-surpresa-e-condições-17">Defesa Situacional, Surpresa e Condições</a></li><li class="toc-h3"><a href="#múltiplas-ações-regra-storyteller-com-trava-de-treino-18">Múltiplas Ações (Regra Storyteller — Com Trava de Treino)</a></li><li class="toc-h3"><a href="#ações-defensivas-sacrificando-o-ataque-19">Ações Defensivas (Sacrificando o Ataque)</a></li><li class="toc-h3"><a href="#críticos-por-arma-e-o-que-multiplica-20">Críticos por Arma e O Que Multiplica</a></li><li class="toc-h3"><a href="#golpe-devastador-23-do-pv-máximo-morte-instantânea-21">Golpe Devastador (&gt; 2/3 do PV Máximo) — Morte Instantânea</a></li><li class="toc-h2"><a href="#7-procedimentos-de-mesa-moribundo-cura-manobras-e-sobrevivência-22">7. Procedimentos de Mesa: Moribundo, Cura, Manobras e Sobrevivência</a></li><li class="toc-h3"><a href="#estado-moribundo-estabilização-23">Estado Moribundo &amp; Estabilização</a></li><li class="toc-h3"><a href="#descanso-recuperação-natural-e-ferimentos-graves-24">Descanso, Recuperação Natural e Ferimentos Graves</a></li><li class="toc-h3"><a href="#manobras-táticas-e-ataque-de-oportunidade-25">Manobras Táticas e Ataque de Oportunidade</a></li><li class="toc-h3"><a href="#fome-sede-friocalor-e-exaustão-níveis-1-a-5-26">Fome, Sede, Frio/Calor e Exaustão (Níveis 1 a 5)</a></li><li class="toc-h3"><a href="#perseguições-e-acidentes-marítimos-27">Perseguições e Acidentes Marítimos</a></li><li class="toc-h2"><a href="#8-talentos-e-manobras-níveis-pares-28">8. Talentos e Manobras (Níveis Pares)</a></li><li class="toc-h2"><a href="#9-equipamentos-economia-e-tabela-de-preços-de-referência-29">9. Equipamentos, Economia e Tabela de Preços de Referência</a></li><li class="toc-h3"><a href="#tabela-de-preços-do-cotidiano-viagem-30">Tabela de Preços do Cotidiano &amp; Viagem</a></li><li class="toc-h3"><a href="#tabela-de-armas-comuns-31">Tabela de Armas Comuns</a></li><li class="toc-h3"><a href="#armaduras-e-escudos-bônus-de-defesa-zero-rd-32">Armaduras e Escudos (Bônus de Defesa — Zero RD)</a></li><li class="toc-h3"><a href="#o-adamante-de-aurora-metal-estratégico-33">O Adamante de Aurora (Metal Estratégico)</a></li><li class="toc-h2"><a href="#10-magia-rituais-e-fé-verdadeira-calibrados-34">10. Magia, Rituais e Fé Verdadeira (Calibrados)</a></li><li class="toc-h3"><a href="#dificuldades-e-preparação-ritualística-35">Dificuldades e Preparação Ritualística</a></li></ul></aside>
     
@@ -596,7 +617,11 @@ tr { break-inside: avoid; }
             <input id="pager-jump" class="pager-jump" type="number" min="1" value="1" title="Ir para página" aria-label="Número da página"/>
             <button class="pager-btn btn-next-page" type="button">Próxima ›</button>
         </div>
-        <div style="font-family:'Cinzel',Georgia,serif; font-size:10px; letter-spacing:0.1em; color:#8f8574; white-space:nowrap;">SETAS ← / →</div>
+        <div class="font-scale-group" title="Tamanho da letra do livro">
+            <button id="btn-font-down" class="mode-btn" type="button" title="Diminuir fonte">A−</button>
+            <span id="font-scale-label" class="font-scale-label">100%</span>
+            <button id="btn-font-up" class="mode-btn" type="button" title="Aumentar fonte">A+</button>
+        </div>
     </footer>
         
     <main class="book-shell">
@@ -811,7 +836,7 @@ tr { break-inside: avoid; }
 </ul>
 
     <div class="gm-vault" data-locked="true">
-        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"Q+giIvwPY7f3kphLDWjW7Q==","i":"vctEayILZwN2RmAd","c":"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"}</script>
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"b+3tKFnLxqflI/tDaRUrQQ==","i":"kECbYuJ3cyAswUvZ","c":"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"}</script>
         <div class="gm-gate-box">
             <div class="gm-seal-icon">🔒</div>
             <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
@@ -835,6 +860,7 @@ tr { break-inside: avoid; }
 (function() {
     const SESSION_KEY = 'alenia_gm_unlock_key';
     const MODE_KEY = 'alenia_reader_mode';
+    const FONT_KEY = 'alenia_font_scale';
 
     function b64ToBytes(b64) {
         const bin = atob(b64);
@@ -879,17 +905,25 @@ tr { break-inside: avoid; }
         currentIdx: 0,  // index of left (or single) page shown
         bookTitle: '',
 
+        fontScale: 1,
+
         async init() {
             const stage = document.getElementById('reader-stage');
             if (!stage) return; // index.html portal does not paginate
             this.enabled = true;
             this.bookTitle = document.body.dataset.bookTitle || 'Alenia RPG';
 
+            const savedScale = parseFloat(localStorage.getItem(FONT_KEY) || '1');
+            if (!isNaN(savedScale) && savedScale >= 0.8 && savedScale <= 1.4) {
+                this.fontScale = Math.round(savedScale * 20) / 20;
+            }
+            this.applyFontScale(this.fontScale, false);
+
             const savedMode = localStorage.getItem(MODE_KEY);
             if (savedMode === 'spread' || savedMode === 'single' || savedMode === 'scroll') {
                 this.mode = savedMode;
             } else {
-                this.mode = window.innerWidth >= 1120 ? 'spread' : 'single';
+                this.mode = window.innerWidth >= 1040 ? 'spread' : 'single';
             }
 
             // Wait briefly for web fonts so initial page count is accurate on first paint
@@ -936,6 +970,21 @@ tr { break-inside: avoid; }
             });
         },
 
+        applyFontScale(scale, repaginate = true) {
+            this.fontScale = Math.max(0.85, Math.min(1.35, Math.round(scale * 20) / 20));
+            document.documentElement.style.setProperty('--font-scale', String(this.fontScale));
+            const lbl = document.getElementById('font-scale-label');
+            if (lbl) lbl.textContent = Math.round(this.fontScale * 100) + '%';
+            if (repaginate) {
+                localStorage.setItem(FONT_KEY, String(this.fontScale));
+                if (this.mode !== 'scroll') {
+                    const prev = this.currentIdx;
+                    this.paginate();
+                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                }
+            }
+        },
+
         effectiveMode() {
             if (this.mode === 'scroll') return 'scroll';
             if (this.mode === 'spread' && window.innerWidth < 1040) return 'single';
@@ -944,16 +993,19 @@ tr { break-inside: avoid; }
 
         computeLeafDimensions() {
             const eff = this.effectiveMode();
-            const sidebarVisible = window.innerWidth > 1020 && !document.body.classList.contains('sidebar-hidden');
-            const availW = window.innerWidth - (sidebarVisible ? 256 : 0) - 120;
-            const availH = window.innerHeight - 52 - 56 - 48;
-            let leafH = Math.max(460, Math.min(790, availH));
+            // Full-width book stage (sidebar opens as overlay drawer so book is ALWAYS large & centered!)
+            const availW = window.innerWidth - 96;
+            const availH = window.innerHeight - 52 - 56 - 16;
+            const leafH = Math.max(500, Math.min(1040, availH));
             let leafW;
             if (eff === 'spread') {
-                leafW = Math.min(540, Math.floor(availW / 2) - 8);
-                leafW = Math.max(360, leafW);
+                // Generous open hardcover spread filling ~88-94% of desktop viewport
+                const maxByAspect = Math.round(leafH * 0.90);
+                leafW = Math.min(820, maxByAspect, Math.floor(availW / 2) - 9);
+                leafW = Math.max(380, leafW);
             } else {
-                leafW = Math.min(680, Math.max(320, availW));
+                const maxByAspect = Math.round(leafH * 0.92);
+                leafW = Math.min(880, maxByAspect, Math.max(320, availW));
             }
             document.documentElement.style.setProperty('--leaf-w', leafW + 'px');
             document.documentElement.style.setProperty('--leaf-h', leafH + 'px');
@@ -1325,6 +1377,11 @@ tr { break-inside: avoid; }
             if (persist) localStorage.setItem(MODE_KEY, newMode);
             document.body.classList.toggle('book-mode', newMode !== 'scroll');
             document.body.classList.toggle('scroll-mode', newMode === 'scroll');
+            if (newMode === 'scroll' && window.innerWidth > 1020) {
+                document.body.classList.remove('sidebar-hidden');
+            } else if (newMode !== 'scroll') {
+                document.body.classList.add('sidebar-hidden');
+            }
             document.querySelectorAll('.mode-btn').forEach(b => {
                 b.classList.toggle('active', b.dataset.mode === newMode);
             });
@@ -1350,6 +1407,11 @@ tr { break-inside: avoid; }
                 b.addEventListener('click', () => this.applyMode(b.dataset.mode, true));
             });
 
+            const btnFontDown = document.getElementById('btn-font-down');
+            const btnFontUp = document.getElementById('btn-font-up');
+            if (btnFontDown) btnFontDown.addEventListener('click', () => this.applyFontScale(this.fontScale - 0.1, true));
+            if (btnFontUp) btnFontUp.addEventListener('click', () => this.applyFontScale(this.fontScale + 0.1, true));
+
             const tocBtn = document.getElementById('btn-toc-toggle');
             if (tocBtn) {
                 tocBtn.addEventListener('click', () => {
@@ -1357,11 +1419,17 @@ tr { break-inside: avoid; }
                         document.body.classList.toggle('sidebar-open-mobile');
                     } else {
                         document.body.classList.toggle('sidebar-hidden');
-                        if (this.mode !== 'scroll') {
-                            const prev = this.currentIdx;
-                            this.paginate();
-                            this.goToPage(prev);
-                        }
+                    }
+                });
+            }
+
+            // Close overlay TOC drawer if clicking on the book stage outside sidebar
+            const stage = document.getElementById('reader-stage');
+            if (stage) {
+                stage.addEventListener('click', () => {
+                    if (this.mode !== 'scroll') {
+                        document.body.classList.add('sidebar-hidden');
+                        document.body.classList.remove('sidebar-open-mobile');
                     }
                 });
             }
@@ -1384,6 +1452,7 @@ tr { break-inside: avoid; }
                     if (this.anchorMap[id] !== undefined) {
                         e.preventDefault();
                         this.goToPage(this.anchorMap[id]);
+                        document.body.classList.add('sidebar-hidden');
                         document.body.classList.remove('sidebar-open-mobile');
                     }
                 });

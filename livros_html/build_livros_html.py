@@ -247,13 +247,13 @@ body {
 /* SIDEBAR TOC */
 .sidebar {
     position: fixed; top: var(--topbar-h); left: 0; bottom: var(--footbar-h); width: var(--sidebar-w);
-    background: #141210; border-right: 1px solid rgba(154, 123, 59, 0.28);
-    padding: 16px 12px 24px; overflow-y: auto; z-index: 900;
+    background: rgba(20, 18, 16, 0.98); border-right: 1px solid rgba(154, 123, 59, 0.38);
+    padding: 16px 12px 24px; overflow-y: auto; z-index: 950;
     transition: transform 0.22s ease;
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
 }
-body.sidebar-hidden .sidebar { transform: translateX(-100%); }
-body.sidebar-hidden .book-shell,
-body.sidebar-hidden .reader-stage { margin-left: 0; }
+body.sidebar-hidden .sidebar { transform: translateX(-100%); box-shadow: none; }
+body.sidebar-hidden .book-shell { margin-left: 0; }
 .sidebar-title {
     font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--gold-light);
@@ -279,21 +279,21 @@ body.book-mode {
 }
 
 .reader-stage {
-    margin-left: var(--sidebar-w);
+    margin-left: 0;
     margin-top: var(--topbar-h);
     height: calc(100vh - var(--topbar-h) - var(--footbar-h));
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 18px 22px;
+    padding: 6px 46px;
     position: relative;
-    transition: margin-left 0.22s ease;
 }
 
 /* Source container hidden when in paginated book-mode, visible in scroll-mode or print */
 body.book-mode .book-shell { display: none; }
 body.scroll-mode .reader-stage,
-body.scroll-mode .reader-footer-bar .pager-controls { display: none; }
+body.scroll-mode .reader-footer-bar .pager-controls,
+body.scroll-mode .font-scale-group { display: none; }
 body.scroll-mode { overflow: auto; }
 body.scroll-mode .book-shell { padding-bottom: 84px; }
 
@@ -303,7 +303,7 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     align-items: stretch;
     justify-content: center;
     background: linear-gradient(135deg, #3c2218 0%, #26140e 50%, #3a2016 100%);
-    padding: 10px 12px;
+    padding: 6px 8px;
     border-radius: 7px;
     border: 1px solid rgba(154, 123, 59, 0.55);
     box-shadow:
@@ -330,8 +330,8 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 }
 
 .leaf {
-    width: var(--leaf-w, 520px);
-    height: var(--leaf-h, 710px);
+    width: var(--leaf-w, 660px);
+    height: var(--leaf-h, 780px);
     background: var(--vellum);
     color: var(--ink);
     position: relative;
@@ -344,15 +344,15 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 .leaf.leaf-left {
     border-radius: 3px 0 0 3px;
     border-right: none;
-    background: linear-gradient(90deg, #f3ecdc 0%, #f8f2e4 8%, #f8f2e4 90%, #e7dcc4 98%, #d7c7a7 100%);
-    box-shadow: inset -14px 0 22px -12px rgba(45, 30, 15, 0.34);
+    background: linear-gradient(90deg, #f3ecdc 0%, #f8f2e4 7%, #f8f2e4 91%, #e7dcc4 98%, #d7c7a7 100%);
+    box-shadow: inset -16px 0 24px -12px rgba(45, 30, 15, 0.34);
 }
 
 .leaf.leaf-right {
     border-radius: 0 3px 3px 0;
     border-left: 1px solid rgba(72, 52, 32, 0.22);
-    background: linear-gradient(90deg, #d8c8a9 0%, #e9dec7 3%, #f8f2e4 11%, #f8f2e4 92%, #f1e8d6 100%);
-    box-shadow: inset 14px 0 22px -12px rgba(45, 30, 15, 0.34);
+    background: linear-gradient(90deg, #d8c8a9 0%, #e9dec7 3%, #f8f2e4 10%, #f8f2e4 93%, #f1e8d6 100%);
+    box-shadow: inset 16px 0 24px -12px rgba(45, 30, 15, 0.34);
 }
 
 .leaf.leaf-single {
@@ -371,42 +371,50 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 
 .leaf-header {
     height: 30px;
-    padding: 8px 28px 0;
+    padding: 8px 34px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-family: 'Cinzel', Georgia, serif;
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--ink-soft);
-    opacity: 0.78;
+    opacity: 0.8;
     flex-shrink: 0;
 }
 
 .leaf-body {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 8px 30px 10px;
+    padding: 10px 36px 10px;
     overflow-y: auto;
     overflow-x: hidden;
+    font-size: calc(18px * var(--font-scale, 1));
+    line-height: 1.56;
     scrollbar-width: thin;
     scrollbar-color: rgba(154, 123, 59, 0.4) transparent;
 }
-.leaf-body table { font-size: 13px; line-height: 1.35; }
-.leaf-body thead th { padding: 5px 6px; font-size: 9.5px; }
-.leaf-body tbody td { padding: 5px 6px; }
+.leaf-body h1.book-h1 { font-size: calc(25px * var(--font-scale, 1)); }
+.leaf-body h2 { font-size: calc(20px * var(--font-scale, 1)); margin: 16px 0 9px; }
+.leaf-body h3 { font-size: calc(16.5px * var(--font-scale, 1)); margin: 13px 0 6px; }
+.leaf-body table { font-size: calc(14.5px * var(--font-scale, 1)); line-height: 1.38; }
+.leaf-body thead th { padding: 6px 8px; font-size: calc(10.5px * var(--font-scale, 1)); }
+.leaf-body tbody td { padding: 6px 8px; }
 .leaf-body tbody td code,
 .leaf-body .nowrap-cell { white-space: nowrap; }
+.leaf-body .callout,
+.leaf-body .entry-card { font-size: calc(16.5px * var(--font-scale, 1)); }
+.leaf-body .atlas-plate img { max-height: calc(var(--leaf-h, 760px) * 0.64); }
 
 .leaf-footer {
     height: 30px;
-    padding: 0 28px 8px;
+    padding: 0 34px 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Cinzel', Georgia, serif;
-    font-size: 11px;
+    font-size: 11.5px;
     letter-spacing: 0.12em;
     color: var(--ink-soft);
     flex-shrink: 0;
@@ -419,7 +427,7 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     margin: auto;
     font-family: 'Cinzel', Georgia, serif;
     color: rgba(154, 123, 59, 0.38);
-    font-size: 26px;
+    font-size: 28px;
     letter-spacing: 0.2em;
 }
 
@@ -428,13 +436,13 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 42px;
-    height: 64px;
-    background: rgba(20, 17, 14, 0.82);
+    width: 34px;
+    height: 70px;
+    background: rgba(20, 17, 14, 0.85);
     color: var(--gold-light);
     border: 1px solid rgba(154, 123, 59, 0.5);
     border-radius: 4px;
-    font-size: 26px;
+    font-size: 24px;
     line-height: 1;
     cursor: pointer;
     z-index: 50;
@@ -449,8 +457,21 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     border-color: var(--gold-light);
 }
 .side-turn-btn:disabled { opacity: 0.22; cursor: default; }
-.side-turn-prev { left: 10px; }
-.side-turn-next { right: 10px; }
+.side-turn-prev { left: 6px; }
+.side-turn-next { right: 6px; }
+
+.font-scale-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.font-scale-label {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    color: #bfb5a2;
+    min-width: 38px;
+    text-align: center;
+}
 
 /* BOTTOM READER BAR */
 .reader-footer-bar {
@@ -573,17 +594,17 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     margin: 14px auto;
 }
 .cover-title {
-    font-family: 'Cinzel', Georgia, serif; font-size: 32px; font-weight: 800; line-height: 1.14;
+    font-family: 'Cinzel', Georgia, serif; font-size: 38px; font-weight: 800; line-height: 1.14;
     letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
 }
 .cover-subtitle {
-    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 18px;
-    color: var(--ink-soft); margin: 10px 0 6px; max-width: 520px;
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 20px;
+    color: var(--ink-soft); margin: 10px 0 6px; max-width: 560px;
 }
-.cover-epigraph { font-style: italic; font-size: 16px; color: var(--crimson-dark); max-width: 460px; margin: 16px auto 10px; }
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 500px; margin: 16px auto 10px; }
 .cover-thumb {
-    max-width: 100%; max-height: 220px; border: 2px solid var(--gold);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin: 12px auto; border-radius: 2px;
+    max-width: 100%; max-height: 290px; border: 2px solid var(--gold);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin: 14px auto; border-radius: 2px;
 }
 .cover-edition {
     margin-top: auto; padding-top: 18px; font-family: 'Cinzel', Georgia, serif;
@@ -756,6 +777,7 @@ SHARED_JS = r"""
 (function() {
     const SESSION_KEY = 'alenia_gm_unlock_key';
     const MODE_KEY = 'alenia_reader_mode';
+    const FONT_KEY = 'alenia_font_scale';
 
     function b64ToBytes(b64) {
         const bin = atob(b64);
@@ -800,17 +822,25 @@ SHARED_JS = r"""
         currentIdx: 0,  // index of left (or single) page shown
         bookTitle: '',
 
+        fontScale: 1,
+
         async init() {
             const stage = document.getElementById('reader-stage');
             if (!stage) return; // index.html portal does not paginate
             this.enabled = true;
             this.bookTitle = document.body.dataset.bookTitle || 'Alenia RPG';
 
+            const savedScale = parseFloat(localStorage.getItem(FONT_KEY) || '1');
+            if (!isNaN(savedScale) && savedScale >= 0.8 && savedScale <= 1.4) {
+                this.fontScale = Math.round(savedScale * 20) / 20;
+            }
+            this.applyFontScale(this.fontScale, false);
+
             const savedMode = localStorage.getItem(MODE_KEY);
             if (savedMode === 'spread' || savedMode === 'single' || savedMode === 'scroll') {
                 this.mode = savedMode;
             } else {
-                this.mode = window.innerWidth >= 1120 ? 'spread' : 'single';
+                this.mode = window.innerWidth >= 1040 ? 'spread' : 'single';
             }
 
             // Wait briefly for web fonts so initial page count is accurate on first paint
@@ -857,6 +887,21 @@ SHARED_JS = r"""
             });
         },
 
+        applyFontScale(scale, repaginate = true) {
+            this.fontScale = Math.max(0.85, Math.min(1.35, Math.round(scale * 20) / 20));
+            document.documentElement.style.setProperty('--font-scale', String(this.fontScale));
+            const lbl = document.getElementById('font-scale-label');
+            if (lbl) lbl.textContent = Math.round(this.fontScale * 100) + '%';
+            if (repaginate) {
+                localStorage.setItem(FONT_KEY, String(this.fontScale));
+                if (this.mode !== 'scroll') {
+                    const prev = this.currentIdx;
+                    this.paginate();
+                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                }
+            }
+        },
+
         effectiveMode() {
             if (this.mode === 'scroll') return 'scroll';
             if (this.mode === 'spread' && window.innerWidth < 1040) return 'single';
@@ -865,16 +910,19 @@ SHARED_JS = r"""
 
         computeLeafDimensions() {
             const eff = this.effectiveMode();
-            const sidebarVisible = window.innerWidth > 1020 && !document.body.classList.contains('sidebar-hidden');
-            const availW = window.innerWidth - (sidebarVisible ? 256 : 0) - 120;
-            const availH = window.innerHeight - 52 - 56 - 48;
-            let leafH = Math.max(460, Math.min(790, availH));
+            // Full-width book stage (sidebar opens as overlay drawer so book is ALWAYS large & centered!)
+            const availW = window.innerWidth - 96;
+            const availH = window.innerHeight - 52 - 56 - 16;
+            const leafH = Math.max(500, Math.min(1040, availH));
             let leafW;
             if (eff === 'spread') {
-                leafW = Math.min(540, Math.floor(availW / 2) - 8);
-                leafW = Math.max(360, leafW);
+                // Generous open hardcover spread filling ~88-94% of desktop viewport
+                const maxByAspect = Math.round(leafH * 0.90);
+                leafW = Math.min(820, maxByAspect, Math.floor(availW / 2) - 9);
+                leafW = Math.max(380, leafW);
             } else {
-                leafW = Math.min(680, Math.max(320, availW));
+                const maxByAspect = Math.round(leafH * 0.92);
+                leafW = Math.min(880, maxByAspect, Math.max(320, availW));
             }
             document.documentElement.style.setProperty('--leaf-w', leafW + 'px');
             document.documentElement.style.setProperty('--leaf-h', leafH + 'px');
@@ -1246,6 +1294,11 @@ SHARED_JS = r"""
             if (persist) localStorage.setItem(MODE_KEY, newMode);
             document.body.classList.toggle('book-mode', newMode !== 'scroll');
             document.body.classList.toggle('scroll-mode', newMode === 'scroll');
+            if (newMode === 'scroll' && window.innerWidth > 1020) {
+                document.body.classList.remove('sidebar-hidden');
+            } else if (newMode !== 'scroll') {
+                document.body.classList.add('sidebar-hidden');
+            }
             document.querySelectorAll('.mode-btn').forEach(b => {
                 b.classList.toggle('active', b.dataset.mode === newMode);
             });
@@ -1271,6 +1324,11 @@ SHARED_JS = r"""
                 b.addEventListener('click', () => this.applyMode(b.dataset.mode, true));
             });
 
+            const btnFontDown = document.getElementById('btn-font-down');
+            const btnFontUp = document.getElementById('btn-font-up');
+            if (btnFontDown) btnFontDown.addEventListener('click', () => this.applyFontScale(this.fontScale - 0.1, true));
+            if (btnFontUp) btnFontUp.addEventListener('click', () => this.applyFontScale(this.fontScale + 0.1, true));
+
             const tocBtn = document.getElementById('btn-toc-toggle');
             if (tocBtn) {
                 tocBtn.addEventListener('click', () => {
@@ -1278,11 +1336,17 @@ SHARED_JS = r"""
                         document.body.classList.toggle('sidebar-open-mobile');
                     } else {
                         document.body.classList.toggle('sidebar-hidden');
-                        if (this.mode !== 'scroll') {
-                            const prev = this.currentIdx;
-                            this.paginate();
-                            this.goToPage(prev);
-                        }
+                    }
+                });
+            }
+
+            // Close overlay TOC drawer if clicking on the book stage outside sidebar
+            const stage = document.getElementById('reader-stage');
+            if (stage) {
+                stage.addEventListener('click', () => {
+                    if (this.mode !== 'scroll') {
+                        document.body.classList.add('sidebar-hidden');
+                        document.body.classList.remove('sidebar-open-mobile');
                     }
                 });
             }
@@ -1305,6 +1369,7 @@ SHARED_JS = r"""
                     if (this.anchorMap[id] !== undefined) {
                         e.preventDefault();
                         this.goToPage(this.anchorMap[id]);
+                        document.body.classList.add('sidebar-hidden');
                         document.body.classList.remove('sidebar-open-mobile');
                     }
                 });
@@ -1812,7 +1877,7 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
     reader_ui = ""
     body_cls = ""
     if enable_book_reader:
-        body_cls = ' class="book-mode"'
+        body_cls = ' class="book-mode sidebar-hidden"'
         reader_ui = """
     <section id="reader-stage" class="reader-stage" aria-label="Leitor em Formato de Livro">
         <button class="side-turn-btn side-turn-prev btn-prev-page" type="button" title="Página Anterior (←)">‹</button>
@@ -1833,7 +1898,11 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
             <input id="pager-jump" class="pager-jump" type="number" min="1" value="1" title="Ir para página" aria-label="Número da página"/>
             <button class="pager-btn btn-next-page" type="button">Próxima ›</button>
         </div>
-        <div style="font-family:'Cinzel',Georgia,serif; font-size:10px; letter-spacing:0.1em; color:#8f8574; white-space:nowrap;">SETAS ← / →</div>
+        <div class="font-scale-group" title="Tamanho da letra do livro">
+            <button id="btn-font-down" class="mode-btn" type="button" title="Diminuir fonte">A−</button>
+            <span id="font-scale-label" class="font-scale-label">100%</span>
+            <button id="btn-font-up" class="mode-btn" type="button" title="Aumentar fonte">A+</button>
+        </div>
     </footer>
         """
 
