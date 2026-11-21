@@ -2,43 +2,43 @@
 <form name="frmAleniaFicha" formType="sheetTemplate" dataType="br.com.alenia.rpg_oficial.ficha" title="Alenia RPG - Ficha Oficial" align="client" theme="dark">
     <script><![CDATA[
 local KITS = {
-    ["sem_kit"] = { nome="00 - Sem Kit (Livre / Media Padrao)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={  }, equip="Adaga, roupa de viagem resistente, mochila, cantil, racoes (5 dias) e 25 PP.", hab="Caminho Proprio: Flexibilidade total; comeca com +2 Pontos de Pericia extras no Nivel 1." },
-    ["mercenario"] = { nome="01 - Mercenario (1d10)", dv=10, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_aparar", "per_sobrevivencia", "per_intimidacao", "per_barganha" }, equip="Espada longa, couro batido, capa de estrada, pedra de amolar, mochila e 30 PP.", hab="Sobrevivente de Contrato: +2 em Iniciativa e troca de arma como acao livre 1x/turno." },
-    ["cavaleiro"] = { nome="02 - Cavaleiro (1d10)", dv=10, perBase=1, multInt=0.75, espField="esp_status", espVal=1, pericias={ "per_armas_brancas", "per_aparar", "per_escudos", "per_cavalgar", "per_etiqueta" }, equip="Espada longa, escudo medio, cota de malha, tabardo com brasao, sela e 40 PP.", hab="Juramento de Aco: +2 em Cavalgar em combate e +2 na Defesa ao usar Proteger Aliado com escudo." },
-    ["soldado"] = { nome="03 - Soldado / Veterano (1d10)", dv=10, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_escudos", "per_aparar", "per_atletismo", "per_percepcao" }, equip="Lanca de infantaria, espada curta, escudo medio, cota de malha, cantil e 20 PP.", hab="Linha de Frente: Quando adjacente a um aliado, ambos ganham +1 na Defesa corpo a corpo." },
-    ["duelista"] = { nome="04 - Duelista / Esgrimista (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_aparar", "per_esquiva", "per_acrobacia", "per_intuicao" }, equip="Florete (ou lamina oriental), adaga de aparar, gibao reforcado fino e 35 PP.", hab="Cadencia Letal: Em duelos 1x1, reduz em 1 a penalidade adicional de Multiplas Acoes (min. 0)." },
-    ["barbaro"] = { nome="05 - Barbaro / Berserker (1d12)", dv=12, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_atletismo", "per_sobrevivencia", "per_intimidacao", "per_escalada" }, equip="Machado grande, peles reforcadas (Def +1), trofeu de caca, cantil e 15 PP.", hab="Furia Indomavel: 1x/combate por 3 rodadas: +2 dano corpo a corpo e +3 CON vs Golpe Devastador (-2 Defesa)." },
-    ["guarda_costas"] = { nome="06 - Guarda-Costas / Sentinela (1d10)", dv=10, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_aparar", "per_escudos", "per_percepcao", "per_intuicao" }, equip="Espada longa, escudo torre, brigantina, lanterna de vigia, apito e 25 PP.", hab="Escudo Vivo: Ao usar Proteger Aliado, impoe -2 extra no atacante e pode mover 3m como reacao." },
-    ["arqueiro"] = { nome="07 - Arqueiro / Franco-Atirador (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_dist", "per_esquiva", "per_furtividade", "per_percepcao", "per_sobrevivencia" }, equip="Arco longo (30 flechas), adaga, couro batido, capa camuflada e 25 PP.", hab="Olho de Falcao: Gastando Movimento para mirar parado, ganha +2 no acerto e -1 na Margem de Critico." },
-    ["lutador"] = { nome="08 - Lutador / Pugilista (1d10)", dv=10, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_luta_desarm", "per_esquiva", "per_atletismo", "per_acrobacia", "per_intimidacao" }, equip="Bandagens reforcadas/soqueiras de couro, gibao reforcado, unguento e 20 PP.", hab="Punhos de Ferro: Dano desarmado 1d6+FOR, pode aparar golpes leves e ganha +3 para agarrar/derrubar." },
-    ["ladino"] = { nome="09 - Ladino (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_furtividade", "per_ladinagem", "per_esquiva", "per_percepcao", "per_prestidig", "per_acrobacia" }, equip="2 adagas, espada curta, couro batido escuro, gazuas, corda fina (15m) e 25 PP.", hab="Golpe Oportunista: +1d6 dano contra desprevenidos ou flanqueados (+2d6 Lenda, +3d6 Epico; nao multiplica no critico)." },
-    ["assassino"] = { nome="10 - Assassino (1d6)", dv=6, perBase=2, multInt=0.75, espField="esp_submundo", espVal=1, pericias={ "per_armas_brancas", "per_furtividade", "per_alquimia", "per_disfarce", "per_esquiva" }, equip="Adaga estilizada, espada curta, capa com capuz, 2 doses veneno fraco, kit disfarce e 30 PP.", hab="Ponto Vital: Contra alvo surpreso, reduz Margem de Critico em 1 e impoe -2 no teste de CON vs Golpe Devastador." },
-    ["espiao"] = { nome="11 - Espiao (1d6)", dv=6, perBase=2, multInt=1.0, espField="esp_submundo", espVal=1, pericias={ "per_disfarce", "per_enganacao", "per_investigacao", "per_intuicao", "per_idiomas", "per_furtividade" }, equip="Adaga oculta, kit de disfarce, tintas invisiveis, vestes de 2 estratos e 40 PP.", hab="Rede de Sussurros: Apos 24h na cidade (5 PP em subornos), localiza informante e ganha +3 para apurar segredos." },
-    ["contrabandista"] = { nome="12 - Contrabandista (1d8)", dv=8, perBase=2, multInt=0.75, espField="esp_submundo", espVal=1, pericias={ "per_barganha", "per_enganacao", "per_navegacao", "per_furtividade", "per_esquiva" }, equip="Sabre curto, besta leve, capa com bolsos falsos, bau de fundo duplo, mapas e 35 PP.", hab="Passagem Oculta: +3 para esconder cargas em revistas, subornar guardas ou achar saidas discretas." },
-    ["cacador_rec"] = { nome="13 - Cacador de Recompensas (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_dist", "per_sobrevivencia", "per_investigacao", "per_intimidacao", "per_percepcao" }, equip="Besta leve (20 virotes), espada curta, algemas, rede de captura, couro batido e 25 PP.", hab="Presa Marcada: Estudando pistas de 1 alvo por 1h, recebe +2 para rastrea-lo e +1 em ataques contra ele." },
-    ["charlatao"] = { nome="14 - Charlatao / Vigario (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_enganacao", "per_persuasao", "per_prestidig", "per_disfarce", "per_etiqueta", "per_intuicao" }, equip="Adaga escondida, documentos falsos, selos de cera, dados viciados, roupas finas e 40 PP.", hab="Lingua de Prata: 1x por cena social, re-rola um teste falho de Enganacao ou Persuasao." },
-    ["saqueador"] = { nome="15 - Saqueador de Tumbas (1d8)", dv=8, perBase=2, multInt=0.75, espField=nil, espVal=0, pericias={ "per_ladinagem", "per_escalada", "per_investigacao", "per_historia", "per_percepcao" }, equip="Espada curta, pe-de-cabra, lanterna blindada, gazuas, corda 20m com arpeu, giz e 20 PP.", hab="Instinto de Ruina: +3 em Percepcao e Esquiva contra armadilhas mecanicas e desabamentos." },
-    ["pirata"] = { nome="16 - Pirata (1d8)", dv=8, perBase=1, multInt=0.75, espField="esp_submundo", espVal=1, pericias={ "per_armas_brancas", "per_navegacao", "per_escalada", "per_acrobacia", "per_intimidacao" }, equip="Sabre/cimitarra, adaga de abordagem, gancho com corda, roupas maritimas, rum e 25 PP.", hab="Abordagem Selvagem: Ignora penalidade de conves/recifes e ganha +2 no ataque no 1o turno de abordagem." },
-    ["navegador"] = { nome="17 - Navegador / Marinheiro (1d8)", dv=8, perBase=2, multInt=0.75, espField=nil, espVal=0, pericias={ "per_navegacao", "per_geografia", "per_natacao", "per_percepcao", "per_sobrevivencia" }, equip="Espada curta, astrolabio/bussola de latao, cartas nauticas, capa impermeavel e 30 PP.", hab="Olho da Tempestade: +3 em Navegacao por recifes e neblina; percebe tempestades horas antes (CD 15)." },
-    ["explorador"] = { nome="18 - Explorador / Cartografo (1d8)", dv=8, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_geografia", "per_sobrevivencia", "per_percepcao", "per_escalada", "per_idiomas" }, equip="Espada curta ou arco curto, estojo de cartografia, luneta, botas reforcadas, tenda e 30 PP.", hab="Sem Fronteiras: +4 para nao se perder sob ceu aberto e -25% no tempo de marcha em clima bom (neblina/Incognito exigem teste)." },
-    ["patrulheiro"] = { nome="19 - Patrulheiro / Rastreador (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_sobrevivencia", "per_armas_dist", "per_furtividade", "per_percepcao", "per_herbalismo" }, equip="Arco curto/longo (20 flechas), machadinha, couro batido, lacos de caca, capa e 20 PP.", hab="Cacador das Ermas: Em biomas com fauna/flora (2h, CD 12), sustenta ate 4 viajantes; em desertos, +3 para achar pocos e racoes rendem +50%." },
-    ["mercador"] = { nome="20 - Mercador / Caravaneiro (1d6)", dv=6, perBase=2, multInt=1.0, espField="esp_status", espVal=1, pericias={ "per_barganha", "per_persuasao", "per_idiomas", "per_cavalgar", "per_intuicao" }, equip="Besta leve, adaga, livro-razao, balanca portatil, mula com alforjes e 60 PP.", hab="Olhar de Ouro: Estima faixas de valor comuns, +4 contra fraudes e ate 15% de vantagem comercial (reliquias raras exigem teste)." },
-    ["domador"] = { nome="21 - Domador / Cavaleiro de Estrada (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_cavalgar", "per_sobrevivencia", "per_herbalismo", "per_armas_brancas", "per_percepcao" }, equip="Lanca leve ou sabre, couro batido, cavalo treinado (ou cao fiel), arreios e 20 PP.", hab="Elo da Sela: Sua montaria/animal recebe +3 contra panico e +2 na Defesa enquanto guiado por voce." },
-    ["ferreiro"] = { nome="22 - Ferreiro / Armeiro (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_forja", "per_armas_brancas", "per_atletismo", "per_barganha", "per_engenharia" }, equip="Martelo de guerra/forja, avental de couro pesado (Def +2), ferramentas de reparo e 30 PP.", hab="Tempera de Mestre: Em descanso longo, ajusta ate 3 armas/armaduras (+1 dano em armas comuns ate o proximo descanso)." },
-    ["alquimista"] = { nome="23 - Alquimista (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_alquimia", "per_herbalismo", "per_investigacao", "per_medicina", "per_barganha" }, equip="Adaga, bolsa alquimica, 2 frascos de acido (2d4), 2 bombas de fumaca, antidoto e 35 PP.", hab="Preparos de Campanha: Em descanso longo (3 PP/dose), prepara 1+max(0,INT) misturas mundanas (balsamo 1d6, acido 2d4, fumaca, antidoto)." },
-    ["medico"] = { nome="24 - Medico / Cirurgiao (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_medicina", "per_herbalismo", "per_investigacao", "per_intuicao", "per_alquimia" }, equip="Bisturis de aco fino, agulhas e fio cirurgico, alcool, ataduras, balsamos, adaga e 35 PP.", hab="Maos que Salvam: +4 para estabilizar moribundos, estanca sangramento usando Movimento, cura 1d6+max(0,INT) pos-combate e +4 contra sequelas." },
-    ["erudito"] = { nome="25 - Erudito / Historiador (1d6)", dv=6, perBase=2, multInt=1.25, espField=nil, espVal=0, pericias={ "per_historia", "per_idiomas", "per_geografia", "per_investigacao", "per_religiao", "per_etiqueta" }, equip="Bastao ferrado, diarios de viagem, tinteiro, lupas, cartas academicas e 40 PP.", hab="Memoria Enciclopedica: Maior mult. de INT (1.25x); 1x/sessao obtem pista concreta de historia, heraldica ou idioma sem rolar." },
-    ["engenheiro"] = { nome="26 - Engenheiro / Artifice (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_engenharia", "per_forja", "per_ladinagem", "per_investigacao", "per_armas_dist" }, equip="Besta de precisao (sem polvora), ferramentas mecanicas, polias, arames, compasso e 35 PP.", hab="Engenhosidade Mecanica: Constroi e desarma armadilhas, fechaduras e engenhos na metade do tempo com +3." },
-    ["herbalista"] = { nome="27 - Herbalista / Boticario (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_herbalismo", "per_medicina", "per_sobrevivencia", "per_alquimia", "per_percepcao" }, equip="Foice curva/adaga, prensa de ervas, pilao, bolsa de raizes, 3 cataplasmas e 25 PP.", hab="Farmacia Viva: Em matas, pantanos ou oasis (1h, CD 13), prepara 2 cataplasmas ou sonifero leve sem gastar moedas." },
-    ["astronomo"] = { nome="28 - Astronomo / Sabio (1d6)", dv=6, perBase=2, multInt=1.25, espField=nil, espVal=0, pericias={ "per_geografia", "per_navegacao", "per_historia", "per_percepcao", "per_intuicao" }, equip="Bastao/adaga, luneta de latao, astrolabio de bolso, mapas estelares, caderno e 35 PP.", hab="Leitura dos Ceus: +4 em orientacao noturna, previsao de mares e rotas sob ceu limpo (Mar Intransponivel/Incognito permanecem incertos)." },
-    ["carpinteiro"] = { nome="29 - Carpinteiro / Artesao (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_engenharia", "per_atletismo", "per_sobrevivencia", "per_navegacao", "per_barganha" }, equip="Machadinha, serra, pregos, martelo, cordas, gibao reforcado e 25 PP.", hab="Maos de Obra: Repara cascos (+2d6 integridade/hora), carrocas e barricadas dobrando resistencia de fortificacoes." },
-    ["nobre"] = { nome="30 - Nobre (1d6)", dv=6, perBase=2, multInt=0.75, espField="esp_status", espVal=2, pericias={ "per_etiqueta", "per_persuasao", "per_historia", "per_cavalgar", "per_armas_brancas" }, equip="Florete ou espada longa fina, anel de sinete, vestes nobres, manto, cavalo e 80 PP.", hab="Peso do Nome: Invoca hospitalidade, audiencias e credito em cidades usando Status sem rolar em pedidos rotineiros." },
-    ["diplomata"] = { nome="31 - Diplomata / Conselheiro (1d6)", dv=6, perBase=2, multInt=1.0, espField="esp_status", espVal=1, pericias={ "per_persuasao", "per_intuicao", "per_etiqueta", "per_enganacao", "per_idiomas" }, equip="Adaga discreta, cartas credenciais, pergaminhos e lacres, roupas de corte e 55 PP.", hab="Palavra que Desarma: +3 em Persuasao/Intuicao para firmar treguas ou extrair concessoes politicas." },
-    ["bardo"] = { nome="32 - Bardo / Menestrel (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_persuasao", "per_enganacao", "per_historia", "per_etiqueta", "per_disfarce", "per_percepcao" }, equip="Instrumento musical, adaga ou espada curta, roupas discretas e de apresentacao, caderno e 30 PP.", hab="Cronica de Taverna: Cobre hospedagem simples tocando e recebe +3 para captar boatos e segredos de viajantes." },
-    ["sacerdote"] = { nome="33 - Sacerdote / Clerigo (1d6)", dv=6, perBase=2, multInt=0.75, espField="esp_fe", espVal=1, pericias={ "per_religiao", "per_persuasao", "per_medicina", "per_intuicao", "per_historia" }, equip="Cajado ou maca simples, simbolo sagrado autentico, vestes clericais, unguentos e 25 PP.", hab="Conforto da Fe: 1x/descanso, prece sincera concede +2 em testes mentais e contra medo/horror para aliados na cena." },
-    ["inquisidor"] = { nome="34 - Inquisidor (1d8)", dv=8, perBase=1, multInt=0.75, espField="esp_fe", espVal=1, pericias={ "per_intimidacao", "per_investigacao", "per_religiao", "per_intuicao", "per_armas_brancas" }, equip="Espada longa ou martelo de guerra, manto com insignia, algemas, couro batido e 30 PP.", hab="Vontade Inabalavel: Soma Fe Verdadeira em testes contra medo, intimidacao, manipulacoes e horrores." },
-    ["ermitao"] = { nome="35 - Ermitao / Sobrevivente (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_sobrevivencia", "per_herbalismo", "per_percepcao", "per_intuicao", "per_furtividade" }, equip="Lanca de caca ou cajado, facao, manto espesso contra frio/chuva, pederneira e 10 PP.", hab="Casca Grossa: +3 em testes contra frio extremo, calor desertico, doencas comuns e niveis de Exaustao." },
-    ["dom_antigo"] = { nome="36 - Tocado pelo Dom Antigo (1d6 | Mestre)", dv=6, perBase=2, multInt=1.0, espField="esp_dom", espVal=1, pericias={ "per_religiao", "per_intuicao", "per_historia", "per_sobrevivencia", "per_percepcao" }, equip="Adaga ritualistica antiga, amuleto de origem desconhecida, manto gasto, caderno de visoes e 15 PP.", hab="Ecos do Que Nao Dorme: Visoes/pressagios raros a criterio do Mestre; rituais ancestrais (Secao 10 do Livro de Regras)." },
+    ["sem_kit"] = { nome="00 - Sem Kit (Livre / Media Padrao)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={  }, equip="Adaga, roupa de viagem resistente, mochila, cantil, racoes (5 dias) e 25 PP.", hab="Caminho Proprio: Flexibilidade total; comeca com +2 Pontos de Pericia extras no Nivel 1.", pp=25, armDef=0, escDef=0, arma1={ nome="Adaga", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, arma2=nil, itens={ { nome="Adaga", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2 | Leve, Agil, Arremesso 6m" }, { nome="Roupas Comuns de Viagem", tipo="equip", qtd=1, peso=1.5, nota="Tunica grossa, calcas reforcadas e capa simples" }, { nome="Mochila de Couro Reforcado", tipo="equip", qtd=1, peso=1.5, nota="Comporta ate 18 kg de carga" }, { nome="Cantil de Latao ou Barro (1 L)", tipo="equip", qtd=1, peso=0.4, nota="Conserva agua fresca de viagem" }, { nome="Racao Seca de Viagem (Dia)", tipo="cons", qtd=5, peso=0.5, nota="Consome 1 dia de racao seca (sustenta 1 dia sem Exaustao por fome)." } } },
+    ["mercenario"] = { nome="01 - Mercenario (1d10)", dv=10, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_aparar", "per_sobrevivencia", "per_intimidacao", "per_barganha" }, equip="Espada longa, couro batido, capa de estrada, pedra de amolar, mochila e 30 PP.", hab="Sobrevivente de Contrato: +2 em Iniciativa e troca de arma como acao livre 1x/turno.", pp=30, armDef=2, escDef=0, arma1={ nome="Espada Longa", attr="forca", per="per_armas_brancas", dano="1d8", margem="19", mult="2" }, arma2=nil, itens={ { nome="Espada Longa", tipo="arma", qtd=1, peso=1.5, nota="Dano 1d8+FOR (1d10 em 2 maos) | Crit 19-20/x2" }, { nome="Couro Batido", tipo="armadura", qtd=1, peso=6.0, nota="Defesa +2 | Penalidade 0 | Zero RD" }, { nome="Capa de Estrada", tipo="equip", qtd=1, peso=1.0, nota="Protege contra vento e chuva leve" }, { nome="Pedra de Amolar", tipo="equip", qtd=1, peso=0.3, nota="Mantem o fio das laminas em campanha" }, { nome="Mochila de Couro Reforcado", tipo="equip", qtd=1, peso=1.5, nota="Comporta ate 18 kg de carga" } } },
+    ["cavaleiro"] = { nome="02 - Cavaleiro (1d10)", dv=10, perBase=1, multInt=0.75, espField="esp_status", espVal=1, pericias={ "per_armas_brancas", "per_aparar", "per_escudos", "per_cavalgar", "per_etiqueta" }, equip="Espada longa, escudo medio, cota de malha, tabardo com brasao, sela e 40 PP.", hab="Juramento de Aco: +2 em Cavalgar em combate e +2 na Defesa ao usar Proteger Aliado com escudo.", pp=40, armDef=3, escDef=2, arma1={ nome="Espada Longa", attr="forca", per="per_armas_brancas", dano="1d8", margem="19", mult="2" }, arma2=nil, itens={ { nome="Espada Longa", tipo="arma", qtd=1, peso=1.5, nota="Dano 1d8+FOR (1d10 em 2 maos) | Crit 19-20/x2" }, { nome="Escudo Medio", tipo="armadura", qtd=1, peso=3.5, nota="Escudo Defesa +2 | Penalidade -1" }, { nome="Cota de Malha", tipo="armadura", qtd=1, peso=12.0, nota="Defesa +3 | Penalidade -2 | Zero RD" }, { nome="Tabardo com Brasao", tipo="equip", qtd=1, peso=0.6, nota="Identifica linhagem, ordem ou casa nobre" }, { nome="Sela, Freio & Estribos", tipo="equip", qtd=1, peso=7.0, nota="Equipamento completo para montaria" } } },
+    ["soldado"] = { nome="03 - Soldado / Veterano (1d10)", dv=10, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_escudos", "per_aparar", "per_atletismo", "per_percepcao" }, equip="Lanca de infantaria, espada curta, escudo medio, cota de malha, cantil e 20 PP.", hab="Linha de Frente: Quando adjacente a um aliado, ambos ganham +1 na Defesa corpo a corpo.", pp=20, armDef=3, escDef=2, arma1={ nome="Lanca de Infantaria", attr="forca", per="per_armas_brancas", dano="1d8", margem="20", mult="3" }, arma2={ nome="Espada Curta", attr="forca", per="per_armas_brancas", dano="1d6", margem="19", mult="2" }, itens={ { nome="Lanca de Infantaria", tipo="arma", qtd=1, peso=2.0, nota="Dano 1d8+FOR | Crit 20/x3 | Versatil/Alcance" }, { nome="Espada Curta", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 19-20/x2 | Leve" }, { nome="Escudo Medio", tipo="armadura", qtd=1, peso=3.5, nota="Escudo Defesa +2 | Penalidade -1" }, { nome="Cota de Malha", tipo="armadura", qtd=1, peso=12.0, nota="Defesa +3 | Penalidade -2 | Zero RD" }, { nome="Cantil de Latao ou Barro (1 L)", tipo="equip", qtd=1, peso=0.4, nota="Agua de marcha militar" } } },
+    ["duelista"] = { nome="04 - Duelista / Esgrimista (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_aparar", "per_esquiva", "per_acrobacia", "per_intuicao" }, equip="Florete (ou lamina oriental), adaga de aparar, gibao reforcado fino e 35 PP.", hab="Cadencia Letal: Em duelos 1x1, reduz em 1 a penalidade adicional de Multiplas Acoes (min. 0).", pp=35, armDef=1, escDef=0, arma1={ nome="Florete", attr="destreza", per="per_armas_brancas", dano="1d6", margem="18", mult="2" }, arma2={ nome="Adaga de Aparar", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, itens={ { nome="Florete", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 18-20/x2 | Agil (DES), Perfurante" }, { nome="Adaga de Aparar", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2 | Auxilia aparar em duelo" }, { nome="Gibao Reforcado Fino", tipo="armadura", qtd=1, peso=4.0, nota="Defesa +1 | Penalidade 0 | Zero RD | Discreto" } } },
+    ["barbaro"] = { nome="05 - Barbaro / Berserker (1d12)", dv=12, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_atletismo", "per_sobrevivencia", "per_intimidacao", "per_escalada" }, equip="Machado grande, peles reforcadas (Def +1), trofeu de caca, cantil e 15 PP.", hab="Furia Indomavel: 1x/combate por 3 rodadas: +2 dano corpo a corpo e +3 CON vs Golpe Devastador (-2 Defesa).", pp=15, armDef=1, escDef=0, arma1={ nome="Machado Grande", attr="forca", per="per_armas_brancas", dano="1d12", margem="20", mult="3" }, arma2=nil, itens={ { nome="Machado Grande", tipo="arma", qtd=1, peso=3.5, nota="Dano 1d12+FOR | Crit 20/x3 | Duas maos, Pesada" }, { nome="Peles Reforcadas", tipo="armadura", qtd=1, peso=4.0, nota="Defesa +1 | Zero RD | Protecao contra frio" }, { nome="Trofeu de Caca", tipo="equip", qtd=1, peso=0.5, nota="Marca de bravura tribal" }, { nome="Cantil de Couro", tipo="equip", qtd=1, peso=0.3, nota="Odre resistente de viagem" } } },
+    ["guarda_costas"] = { nome="06 - Guarda-Costas / Sentinela (1d10)", dv=10, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_armas_brancas", "per_aparar", "per_escudos", "per_percepcao", "per_intuicao" }, equip="Espada longa, escudo torre, brigantina, lanterna de vigia, apito e 25 PP.", hab="Escudo Vivo: Ao usar Proteger Aliado, impoe -2 extra no atacante e pode mover 3m como reacao.", pp=25, armDef=4, escDef=3, arma1={ nome="Espada Longa", attr="forca", per="per_armas_brancas", dano="1d8", margem="19", mult="2" }, arma2=nil, itens={ { nome="Espada Longa", tipo="arma", qtd=1, peso=1.5, nota="Dano 1d8+FOR | Crit 19-20/x2" }, { nome="Escudo Torre", tipo="armadura", qtd=1, peso=8.0, nota="Escudo Defesa +3 | Penalidade -3 | +2 em Proteger Aliado" }, { nome="Brigantina / Meia-Placa", tipo="armadura", qtd=1, peso=16.0, nota="Defesa +4 | Penalidade -3 | Zero RD" }, { nome="Lanterna Comum de Ferro", tipo="equip", qtd=1, peso=1.0, nota="Ilumina 9m (+6m penumbra) em vigilia" }, { nome="Apito de Osso ou Latao", tipo="equip", qtd=1, peso=0.1, nota="Sinal sonoro de alerta ate 250m" } } },
+    ["arqueiro"] = { nome="07 - Arqueiro / Franco-Atirador (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_dist", "per_esquiva", "per_furtividade", "per_percepcao", "per_sobrevivencia" }, equip="Arco longo (30 flechas), adaga, couro batido, capa camuflada e 25 PP.", hab="Olho de Falcao: Gastando Movimento para mirar parado, ganha +2 no acerto e -1 na Margem de Critico.", pp=25, armDef=2, escDef=0, arma1={ nome="Arco Longo", attr="destreza", per="per_armas_dist", dano="1d8", margem="20", mult="3" }, arma2={ nome="Adaga", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, itens={ { nome="Arco Longo", tipo="arma", qtd=1, peso=1.5, nota="Dano 1d8 | Crit 20/x3 | 2 maos, Alcance 45m (sem +FOR)" }, { nome="Flecha (Aljava)", tipo="cons", qtd=30, peso=0.03, nota="Dispara 1 flecha de arco longo." }, { nome="Adaga", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2 | Defesa proxima" }, { nome="Couro Batido", tipo="armadura", qtd=1, peso=6.0, nota="Defesa +2 | Penalidade 0 | Zero RD" }, { nome="Capa Camuflada", tipo="equip", qtd=1, peso=1.0, nota="Ajuda a ocultar silhueta em matas e rochas" } } },
+    ["lutador"] = { nome="08 - Lutador / Pugilista (1d10)", dv=10, perBase=1, multInt=0.5, espField=nil, espVal=0, pericias={ "per_luta_desarm", "per_esquiva", "per_atletismo", "per_acrobacia", "per_intimidacao" }, equip="Bandagens reforcadas/soqueiras de couro, gibao reforcado, unguento e 20 PP.", hab="Punhos de Ferro: Dano desarmado 1d6+FOR, pode aparar golpes leves e ganha +3 para agarrar/derrubar.", pp=20, armDef=1, escDef=0, arma1={ nome="Punhos de Ferro (Desarmado)", attr="forca", per="per_luta_desarm", dano="1d6", margem="20", mult="2" }, arma2=nil, itens={ { nome="Bandagens & Soqueiras de Couro", tipo="equip", qtd=1, peso=0.4, nota="Protegem os punhos em combate desarmado (1d6+FOR)" }, { nome="Gibao Reforcado", tipo="armadura", qtd=1, peso=4.0, nota="Defesa +1 | Penalidade 0 | Zero RD" }, { nome="Cataplasma de Ervas", tipo="cons", qtd=1, peso=0.2, nota="Aplicado no Descanso Curto/Longo: soma +1d4 PV extras na recuperacao." } } },
+    ["ladino"] = { nome="09 - Ladino (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_furtividade", "per_ladinagem", "per_esquiva", "per_percepcao", "per_prestidig", "per_acrobacia" }, equip="2 adagas, espada curta, couro batido escuro, gazuas, corda fina (15m) e 25 PP.", hab="Golpe Oportunista: +1d6 dano contra desprevenidos ou flanqueados (+2d6 Lenda, +3d6 Epico; nao multiplica no critico).", pp=25, armDef=2, escDef=0, arma1={ nome="Espada Curta", attr="destreza", per="per_armas_brancas", dano="1d6", margem="19", mult="2" }, arma2={ nome="Adaga", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, itens={ { nome="Adaga", tipo="arma", qtd=2, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2 | Leve, Agil, Arremesso 6m" }, { nome="Espada Curta", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 19-20/x2 | Leve, Agil" }, { nome="Couro Batido Escuro", tipo="armadura", qtd=1, peso=6.0, nota="Defesa +2 | Penalidade 0 | Zero RD" }, { nome="Jogo de Gazuas Comum", tipo="equip", qtd=1, peso=0.4, nota="Ferramenta base para Ladinagem e Fechaduras" }, { nome="Corda de Seda Trancada (15m)", tipo="equip", qtd=1, peso=2.0, nota="Suporta 450 kg | +1 em Escalada" } } },
+    ["assassino"] = { nome="10 - Assassino (1d6)", dv=6, perBase=2, multInt=0.75, espField="esp_submundo", espVal=1, pericias={ "per_armas_brancas", "per_furtividade", "per_alquimia", "per_disfarce", "per_esquiva" }, equip="Adaga estilizada, espada curta, capa com capuz, 2 doses veneno fraco, kit disfarce e 30 PP.", hab="Ponto Vital: Contra alvo surpreso, reduz Margem de Critico em 1 e impoe -2 no teste de CON vs Golpe Devastador.", pp=30, armDef=0, escDef=0, arma1={ nome="Adaga Estilizada", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, arma2={ nome="Espada Curta", attr="destreza", per="per_armas_brancas", dano="1d6", margem="19", mult="2" }, itens={ { nome="Adaga Estilizada", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2 | Agil, discreta" }, { nome="Espada Curta", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 19-20/x2 | Agil" }, { nome="Capa com Capuz", tipo="equip", qtd=1, peso=0.8, nota="Oculta feicoes e armas sob a sombra" }, { nome="Veneno Fraco (Dose)", tipo="cons", qtd=2, peso=0.1, nota="Aplica veneno na lamina (CON CD 14 ou +1d6 dano venenoso)." }, { nome="Estojo de Disfarce & Maquiagem", tipo="equip", qtd=1, peso=1.5, nota="Permite alterar rosto, voz e identidade" } } },
+    ["espiao"] = { nome="11 - Espiao (1d6)", dv=6, perBase=2, multInt=1.0, espField="esp_submundo", espVal=1, pericias={ "per_disfarce", "per_enganacao", "per_investigacao", "per_intuicao", "per_idiomas", "per_furtividade" }, equip="Adaga oculta, kit de disfarce, tintas invisiveis, vestes de 2 estratos e 40 PP.", hab="Rede de Sussurros: Apos 24h na cidade (5 PP em subornos), localiza informante e ganha +3 para apurar segredos.", pp=40, armDef=0, escDef=0, arma1={ nome="Adaga Oculta", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, arma2=nil, itens={ { nome="Adaga Oculta", tipo="arma", qtd=1, peso=0.4, nota="Dano 1d4+FOR | Crit 19-20/x2 | Escondida sob a manga/bota" }, { nome="Estojo de Disfarce & Maquiagem", tipo="equip", qtd=1, peso=1.5, nota="Habilita testes complexos de Disfarce" }, { nome="Tinta Invisivel (Dose)", tipo="cons", qtd=5, peso=0.04, nota="Escreve mensagem secreta revelada apenas sobre chama de vela." }, { nome="Vestes de 2 Estratos Sociais", tipo="equip", qtd=2, peso=1.5, nota="Traje comum e traje fino para infiltracao" } } },
+    ["contrabandista"] = { nome="12 - Contrabandista (1d8)", dv=8, perBase=2, multInt=0.75, espField="esp_submundo", espVal=1, pericias={ "per_barganha", "per_enganacao", "per_navegacao", "per_furtividade", "per_esquiva" }, equip="Sabre curto, besta leve, capa com bolsos falsos, bau de fundo duplo, mapas e 35 PP.", hab="Passagem Oculta: +3 para esconder cargas em revistas, subornar guardas ou achar saidas discretas.", pp=35, armDef=0, escDef=0, arma1={ nome="Sabre Curto", attr="destreza", per="per_armas_brancas", dano="1d6", margem="18", mult="2" }, arma2={ nome="Besta Leve", attr="destreza", per="per_armas_dist", dano="1d8", margem="19", mult="2" }, itens={ { nome="Sabre Curto", tipo="arma", qtd=1, peso=1.1, nota="Dano 1d6+FOR | Crit 18-20/x2 | Agil (DES)" }, { nome="Besta Leve", tipo="arma", qtd=1, peso=2.5, nota="Dano 1d8 | Crit 19-20/x2 | Recarga (Movimento)" }, { nome="Virote de Besta", tipo="cons", qtd=15, peso=0.04, nota="Dispara 1 virote de besta leve." }, { nome="Capa com Bolsos Falsos", tipo="equip", qtd=1, peso=1.0, nota="Oculta pacotes pequenos em revistas" }, { nome="Cartas & Mapas de Rotas", tipo="equip", qtd=1, peso=0.3, nota="Mapeia enseadas, portos e passagens discretas" } } },
+    ["cacador_rec"] = { nome="13 - Cacador de Recompensas (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_armas_dist", "per_sobrevivencia", "per_investigacao", "per_intimidacao", "per_percepcao" }, equip="Besta leve (20 virotes), espada curta, algemas, rede de captura, couro batido e 25 PP.", hab="Presa Marcada: Estudando pistas de 1 alvo por 1h, recebe +2 para rastrea-lo e +1 em ataques contra ele.", pp=25, armDef=2, escDef=0, arma1={ nome="Besta Leve", attr="destreza", per="per_armas_dist", dano="1d8", margem="19", mult="2" }, arma2={ nome="Espada Curta", attr="forca", per="per_armas_brancas", dano="1d6", margem="19", mult="2" }, itens={ { nome="Besta Leve", tipo="arma", qtd=1, peso=2.5, nota="Dano 1d8 | Crit 19-20/x2 | Recarga (Movimento)" }, { nome="Virote de Besta", tipo="cons", qtd=20, peso=0.04, nota="Dispara 1 virote de besta leve." }, { nome="Espada Curta", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 19-20/x2" }, { nome="Algemas de Ferro com Chave", tipo="equip", qtd=1, peso=1.2, nota="Prendem pulsos (Ladinagem CD 16 / FOR CD 20)" }, { nome="Rede de Captura", tipo="equip", qtd=1, peso=2.0, nota="Imobiliza alvos vivos sem matar" }, { nome="Couro Batido", tipo="armadura", qtd=1, peso=6.0, nota="Defesa +2 | Penalidade 0 | Zero RD" } } },
+    ["charlatao"] = { nome="14 - Charlatao / Vigario (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_enganacao", "per_persuasao", "per_prestidig", "per_disfarce", "per_etiqueta", "per_intuicao" }, equip="Adaga escondida, documentos falsos, selos de cera, dados viciados, roupas finas e 40 PP.", hab="Lingua de Prata: 1x por cena social, re-rola um teste falho de Enganacao ou Persuasao.", pp=40, armDef=0, escDef=0, arma1={ nome="Adaga Escondida", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, arma2=nil, itens={ { nome="Adaga Escondida", tipo="arma", qtd=1, peso=0.4, nota="Dano 1d4+FOR | Crit 19-20/x2" }, { nome="Documentos Falsos", tipo="equip", qtd=1, peso=0.2, nota="Salvo-condutos e cartas de apresentacao forjadas" }, { nome="Bastao de Lacre & Selo", tipo="cons", qtd=5, peso=0.06, nota="Sela carta ou documento com cera quente." }, { nome="Dados Viciados", tipo="equip", qtd=1, peso=0.1, nota="+3 em apostas de taverna (Percepcao CD 18 nota)" }, { nome="Traje Fino de Corte", tipo="equip", qtd=1, peso=2.0, nota="Abre portas em saloes e casas mercantis" } } },
+    ["saqueador"] = { nome="15 - Saqueador de Tumbas (1d8)", dv=8, perBase=2, multInt=0.75, espField=nil, espVal=0, pericias={ "per_ladinagem", "per_escalada", "per_investigacao", "per_historia", "per_percepcao" }, equip="Espada curta, pe-de-cabra, lanterna blindada, gazuas, corda 20m com arpeu, giz e 20 PP.", hab="Instinto de Ruina: +3 em Percepcao e Esquiva contra armadilhas mecanicas e desabamentos.", pp=20, armDef=0, escDef=0, arma1={ nome="Espada Curta", attr="destreza", per="per_armas_brancas", dano="1d6", margem="19", mult="2" }, arma2=nil, itens={ { nome="Espada Curta", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 19-20/x2" }, { nome="Pe-de-Cabra de Aco", tipo="equip", qtd=1, peso=2.2, nota="+2 em FOR/Atletismo para arrombar portas e tampas" }, { nome="Lanterna Blindada (Furta-Fogo)", tipo="equip", qtd=1, peso=1.2, nota="Fecha luz em Acao Livre ou foca feixe de 15m" }, { nome="Jogo de Gazuas Comum", tipo="equip", qtd=1, peso=0.4, nota="Abre fechaduras e desarma armadilhas" }, { nome="Corda com Arpeu (20m)", tipo="equip", qtd=1, peso=6.0, nota="Escalada em ruinas, muralhas e pocos" }, { nome="Giz & Po Fino (Porcao)", tipo="cons", qtd=10, peso=0.03, nota="Marca caminhos em ruinas ou detecta correntes de ar/armadilhas." } } },
+    ["pirata"] = { nome="16 - Pirata (1d8)", dv=8, perBase=1, multInt=0.75, espField="esp_submundo", espVal=1, pericias={ "per_armas_brancas", "per_navegacao", "per_escalada", "per_acrobacia", "per_intimidacao" }, equip="Sabre/cimitarra, adaga de abordagem, gancho com corda, roupas maritimas, rum e 25 PP.", hab="Abordagem Selvagem: Ignora penalidade de conves/recifes e ganha +2 no ataque no 1o turno de abordagem.", pp=25, armDef=0, escDef=0, arma1={ nome="Sabre / Cimitarra", attr="destreza", per="per_armas_brancas", dano="1d6", margem="18", mult="2" }, arma2={ nome="Adaga de Abordagem", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, itens={ { nome="Sabre / Cimitarra", tipo="arma", qtd=1, peso=1.3, nota="Dano 1d6+FOR | Crit 18-20/x2 | Agil (DES), ideal em conves" }, { nome="Adaga de Abordagem", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2" }, { nome="Gancho de Abordagem com Corda", tipo="equip", qtd=1, peso=3.0, nota="Prende velames e amuradas inimigas" }, { nome="Roupas Maritimas", tipo="equip", qtd=1, peso=1.5, nota="Resistentes a sal e vento" }, { nome="Rum / Destilado (Dose)", tipo="cons", qtd=4, peso=0.25, nota="Dose de rum para moral ou limpar ferimentos de emergencia." } } },
+    ["navegador"] = { nome="17 - Navegador / Marinheiro (1d8)", dv=8, perBase=2, multInt=0.75, espField=nil, espVal=0, pericias={ "per_navegacao", "per_geografia", "per_natacao", "per_percepcao", "per_sobrevivencia" }, equip="Espada curta, astrolabio/bussola de latao, cartas nauticas, capa impermeavel e 30 PP.", hab="Olho da Tempestade: +3 em Navegacao por recifes e neblina; percebe tempestades horas antes (CD 15).", pp=30, armDef=0, escDef=0, arma1={ nome="Espada Curta", attr="destreza", per="per_armas_brancas", dano="1d6", margem="19", mult="2" }, arma2=nil, itens={ { nome="Espada Curta", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 19-20/x2" }, { nome="Astrolabio / Bussola de Latao", tipo="equip", qtd=1, peso=0.8, nota="+2 em Navegacao & Nautica em alto-mar" }, { nome="Cartas Nauticas Seladas", tipo="equip", qtd=1, peso=0.3, nota="Mapeiam correntes, farois e recifes" }, { nome="Capa Impermeavel Oleada", tipo="equip", qtd=1, peso=1.5, nota="Protege contra chuva forte e mar revolto" } } },
+    ["explorador"] = { nome="18 - Explorador / Cartografo (1d8)", dv=8, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_geografia", "per_sobrevivencia", "per_percepcao", "per_escalada", "per_idiomas" }, equip="Espada curta ou arco curto, estojo de cartografia, luneta, botas reforcadas, tenda e 30 PP.", hab="Sem Fronteiras: +4 para nao se perder sob ceu aberto e -25% no tempo de marcha em clima bom (neblina/Incognito exigem teste).", pp=30, armDef=0, escDef=0, arma1={ nome="Espada Curta", attr="destreza", per="per_armas_brancas", dano="1d6", margem="19", mult="2" }, arma2={ nome="Arco Curto", attr="destreza", per="per_armas_dist", dano="1d6", margem="20", mult="3" }, itens={ { nome="Espada Curta", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 19-20/x2" }, { nome="Estojo de Cartografia", tipo="equip", qtd=1, peso=0.6, nota="Pergaminhos, penas, tinta e compasso" }, { nome="Luneta Simples", tipo="equip", qtd=1, peso=0.5, nota="+2 em Percepcao a longa distancia" }, { nome="Botas Reforcadas de Marcha", tipo="equip", qtd=1, peso=1.2, nota="Evita penalidades em marchas longas" }, { nome="Tenda Simples (1-2 pessoas)", tipo="equip", qtd=1, peso=4.5, nota="Abrigo contra vento e chuva" } } },
+    ["patrulheiro"] = { nome="19 - Patrulheiro / Rastreador (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_sobrevivencia", "per_armas_dist", "per_furtividade", "per_percepcao", "per_herbalismo" }, equip="Arco curto/longo (20 flechas), machadinha, couro batido, lacos de caca, capa e 20 PP.", hab="Cacador das Ermas: Em biomas com fauna/flora (2h, CD 12), sustenta ate 4 viajantes; em desertos, +3 para achar pocos e racoes rendem +50%.", pp=20, armDef=2, escDef=0, arma1={ nome="Arco Longo", attr="destreza", per="per_armas_dist", dano="1d8", margem="20", mult="3" }, arma2={ nome="Machadinha de Lenhador", attr="forca", per="per_armas_brancas", dano="1d6", margem="20", mult="3" }, itens={ { nome="Arco Longo", tipo="arma", qtd=1, peso=1.5, nota="Dano 1d8 | Crit 20/x3 | Alcance 45m" }, { nome="Flecha (Aljava)", tipo="cons", qtd=20, peso=0.03, nota="Dispara 1 flecha de caca/combate." }, { nome="Machadinha de Lenhador", tipo="arma", qtd=1, peso=1.2, nota="Dano 1d6+FOR | Crit 20/x3 | Ferramenta e arma" }, { nome="Couro Batido", tipo="armadura", qtd=1, peso=6.0, nota="Defesa +2 | Penalidade 0 | Zero RD" }, { nome="Laco de Arame (Armadilha)", tipo="cons", qtd=6, peso=0.08, nota="Armadilha discreta para caca miuda (Sobrevivencia CD 13)." } } },
+    ["mercador"] = { nome="20 - Mercador / Caravaneiro (1d6)", dv=6, perBase=2, multInt=1.0, espField="esp_status", espVal=1, pericias={ "per_barganha", "per_persuasao", "per_idiomas", "per_cavalgar", "per_intuicao" }, equip="Besta leve, adaga, livro-razao, balanca portatil, mula com alforjes e 60 PP.", hab="Olhar de Ouro: Estima faixas de valor comuns, +4 contra fraudes e ate 15% de vantagem comercial (reliquias raras exigem teste).", pp=60, armDef=0, escDef=0, arma1={ nome="Besta Leve", attr="destreza", per="per_armas_dist", dano="1d8", margem="19", mult="2" }, arma2={ nome="Adaga", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, itens={ { nome="Besta Leve", tipo="arma", qtd=1, peso=2.5, nota="Dano 1d8 | Crit 19-20/x2 | Defesa de caravana" }, { nome="Virote de Besta", tipo="cons", qtd=10, peso=0.04, nota="Dispara 1 virote de besta leve." }, { nome="Adaga", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2" }, { nome="Livro-Razao & Balanca Portatil", tipo="equip", qtd=1, peso=1.0, nota="Pesa moedas contra raspagem e registra contratos" }, { nome="Mula de Carga com Alforjes", tipo="equip", qtd=1, peso=0.0, nota="Carrega ate 180 kg em estradas e montanhas" } } },
+    ["domador"] = { nome="21 - Domador / Cavaleiro de Estrada (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_cavalgar", "per_sobrevivencia", "per_herbalismo", "per_armas_brancas", "per_percepcao" }, equip="Lanca leve ou sabre, couro batido, cavalo treinado (ou cao fiel), arreios e 20 PP.", hab="Elo da Sela: Sua montaria/animal recebe +3 contra panico e +2 na Defesa enquanto guiado por voce.", pp=20, armDef=2, escDef=0, arma1={ nome="Lanca Leve / Sabre", attr="forca", per="per_armas_brancas", dano="1d8", margem="20", mult="3" }, arma2=nil, itens={ { nome="Lanca Leve / Sabre", tipo="arma", qtd=1, peso=1.8, nota="Dano 1d8+FOR | Ideal para combate montado" }, { nome="Couro Batido", tipo="armadura", qtd=1, peso=6.0, nota="Defesa +2 | Penalidade 0 | Zero RD" }, { nome="Cavalo Treinado (ou Cao Fiel)", tipo="equip", qtd=1, peso=0.0, nota="Companheiro animal leal (+3 contra panico, +2 Def guiado)" }, { nome="Sela, Freio & Estribos", tipo="equip", qtd=1, peso=7.0, nota="Arreios completos de cavalgada" } } },
+    ["ferreiro"] = { nome="22 - Ferreiro / Armeiro (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_forja", "per_armas_brancas", "per_atletismo", "per_barganha", "per_engenharia" }, equip="Martelo de guerra/forja, avental de couro pesado (Def +2), ferramentas de reparo e 30 PP.", hab="Tempera de Mestre: Em descanso longo, ajusta ate 3 armas/armaduras (+1 dano em armas comuns ate o proximo descanso).", pp=30, armDef=2, escDef=0, arma1={ nome="Martelo de Guerra / Forja", attr="forca", per="per_armas_brancas", dano="1d8", margem="20", mult="3" }, arma2=nil, itens={ { nome="Martelo de Guerra / Forja", tipo="arma", qtd=1, peso=2.2, nota="Dano 1d8+FOR | Crit 20/x3 | Contundente" }, { nome="Avental de Couro Pesado", tipo="armadura", qtd=1, peso=5.0, nota="Defesa +2 | Zero RD | Resiste a fagulhas e cortes" }, { nome="Ferramentas Portateis de Ferreiro", tipo="equip", qtd=1, peso=6.0, nota="Habilita Forja & Metalurgia e Tempera de Mestre" } } },
+    ["alquimista"] = { nome="23 - Alquimista (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_alquimia", "per_herbalismo", "per_investigacao", "per_medicina", "per_barganha" }, equip="Adaga, bolsa alquimica, 2 frascos de acido (2d4), 2 bombas de fumaca, antidoto e 35 PP.", hab="Preparos de Campanha: Em descanso longo (3 PP/dose), prepara 1+max(0,INT) misturas mundanas (balsamo 1d6, acido 2d4, fumaca, antidoto).", pp=35, armDef=0, escDef=0, arma1={ nome="Adaga", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, arma2=nil, itens={ { nome="Adaga", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2" }, { nome="Bolsa Alquimica Completa", tipo="equip", qtd=1, peso=4.0, nota="Alambiques, balanca e frascos para Alquimia & Venenos" }, { nome="Frasco de Acido Comum", tipo="cons", qtd=2, peso=0.5, nota="Arremesso 6m vs Defesa Esquiva sem armadura comum: 2d6 acido." }, { nome="Bomba de Fumaca Seca", tipo="cons", qtd=2, peso=0.4, nota="Arremesso 6m: nuvem densa de 4,5m de raio por 3 rodadas." }, { nome="Antidoto Comum", tipo="cons", qtd=1, peso=0.2, nota="+4 em testes de CON contra venenos naturais por 1 hora." } } },
+    ["medico"] = { nome="24 - Medico / Cirurgiao (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_medicina", "per_herbalismo", "per_investigacao", "per_intuicao", "per_alquimia" }, equip="Bisturis de aco fino, agulhas e fio cirurgico, alcool, ataduras, balsamos, adaga e 35 PP.", hab="Maos que Salvam: +4 para estabilizar moribundos, estanca sangramento usando Movimento, cura 1d6+max(0,INT) pos-combate e +4 contra sequelas.", pp=35, armDef=0, escDef=0, arma1={ nome="Adaga", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, arma2=nil, itens={ { nome="Adaga", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2" }, { nome="Estojo Medico & Cirurgico", tipo="equip", qtd=1, peso=2.0, nota="Bisturis, pincas, agulhas curvas e fios cirurgicos" }, { nome="Aguardente Antisseptica (Dose)", tipo="cons", qtd=3, peso=0.2, nota="Limpa feridas antes da sutura (+1 em Medicina contra infeccoes)." }, { nome="Atadura Limpa & Fio", tipo="cons", qtd=5, peso=0.08, nota="Reduz Medicina para CD 12 ao estancar sangramento/estabilizar." }, { nome="Cataplasma de Ervas", tipo="cons", qtd=2, peso=0.2, nota="Aplicado no Descanso Curto/Longo: soma +1d4 PV extras na recuperacao." } } },
+    ["erudito"] = { nome="25 - Erudito / Historiador (1d6)", dv=6, perBase=2, multInt=1.25, espField=nil, espVal=0, pericias={ "per_historia", "per_idiomas", "per_geografia", "per_investigacao", "per_religiao", "per_etiqueta" }, equip="Bastao ferrado, diarios de viagem, tinteiro, lupas, cartas academicas e 40 PP.", hab="Memoria Enciclopedica: Maior mult. de INT (1.25x); 1x/sessao obtem pista concreta de historia, heraldica ou idioma sem rolar.", pp=40, armDef=0, escDef=0, arma1={ nome="Bastao Ferrado", attr="forca", per="per_armas_brancas", dano="1d6", margem="20", mult="2" }, arma2=nil, itens={ { nome="Bastao Ferrado", tipo="arma", qtd=1, peso=1.5, nota="Dano 1d6+FOR | Contundente, apoio de viagem" }, { nome="Caderno de Pergaminho, Penas & Tinta", tipo="equip", qtd=1, peso=0.5, nota="Diarios de viagem e anotacoes academicas" }, { nome="Lupa de Relojoeiro (Sellene)", tipo="equip", qtd=1, peso=0.1, nota="+2 em Investigacao e exame de selos/inscricoes" }, { nome="Cartas Academicas", tipo="equip", qtd=1, peso=0.2, nota="Credenciais da Academia de Sellene ou bibliotecas" } } },
+    ["engenheiro"] = { nome="26 - Engenheiro / Artifice (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_engenharia", "per_forja", "per_ladinagem", "per_investigacao", "per_armas_dist" }, equip="Besta de precisao (sem polvora), ferramentas mecanicas, polias, arames, compasso e 35 PP.", hab="Engenhosidade Mecanica: Constroi e desarma armadilhas, fechaduras e engenhos na metade do tempo com +3.", pp=35, armDef=0, escDef=0, arma1={ nome="Besta Leve de Precisao", attr="destreza", per="per_armas_dist", dano="1d8", margem="19", mult="2" }, arma2=nil, itens={ { nome="Besta Leve de Precisao", tipo="arma", qtd=1, peso=2.5, nota="Dano 1d8 | Crit 19-20/x2 | Sem polvora" }, { nome="Virote de Besta", tipo="cons", qtd=15, peso=0.04, nota="Dispara 1 virote de besta." }, { nome="Kit de Engenharia & Mecanica (Stoneforge)", tipo="equip", qtd=1, peso=4.5, nota="Chaves, compassos, polias, arames e molas" } } },
+    ["herbalista"] = { nome="27 - Herbalista / Boticario (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_herbalismo", "per_medicina", "per_sobrevivencia", "per_alquimia", "per_percepcao" }, equip="Foice curva/adaga, prensa de ervas, pilao, bolsa de raizes, 3 cataplasmas e 25 PP.", hab="Farmacia Viva: Em matas, pantanos ou oasis (1h, CD 13), prepara 2 cataplasmas ou sonifero leve sem gastar moedas.", pp=25, armDef=0, escDef=0, arma1={ nome="Foice Curva / Adaga", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, arma2=nil, itens={ { nome="Foice Curva / Adaga", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Corte preciso de ervas e defesa" }, { nome="Prensa de Ervas, Pilao & Almofariz", tipo="equip", qtd=1, peso=2.0, nota="Ferramenta base de Herbalismo & Natureza" }, { nome="Bolsa de Raizes & Ervas Secas", tipo="equip", qtd=1, peso=0.8, nota="Ingredientes naturais para preparos" }, { nome="Cataplasma de Ervas", tipo="cons", qtd=3, peso=0.2, nota="Aplicado no Descanso Curto/Longo: soma +1d4 PV extras na recuperacao." } } },
+    ["astronomo"] = { nome="28 - Astronomo / Sabio (1d6)", dv=6, perBase=2, multInt=1.25, espField=nil, espVal=0, pericias={ "per_geografia", "per_navegacao", "per_historia", "per_percepcao", "per_intuicao" }, equip="Bastao/adaga, luneta de latao, astrolabio de bolso, mapas estelares, caderno e 35 PP.", hab="Leitura dos Ceus: +4 em orientacao noturna, previsao de mares e rotas sob ceu limpo (Mar Intransponivel/Incognito permanecem incertos).", pp=35, armDef=0, escDef=0, arma1={ nome="Bastao / Adaga", attr="forca", per="per_armas_brancas", dano="1d6", margem="20", mult="2" }, arma2=nil, itens={ { nome="Bastao / Adaga", tipo="arma", qtd=1, peso=1.2, nota="Dano 1d6+FOR | Defesa simples" }, { nome="Luneta Simples", tipo="equip", qtd=1, peso=0.5, nota="Observacao estelar e vigilancia a longa distancia" }, { nome="Astrolabio de Latao", tipo="equip", qtd=1, peso=0.8, nota="+2 em Navegacao e leitura celeste" }, { nome="Mapas Estelares & Caderno", tipo="equip", qtd=1, peso=0.5, nota="Registros de constelacoes e mares" } } },
+    ["carpinteiro"] = { nome="29 - Carpinteiro / Artesao (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_engenharia", "per_atletismo", "per_sobrevivencia", "per_navegacao", "per_barganha" }, equip="Machadinha, serra, pregos, martelo, cordas, gibao reforcado e 25 PP.", hab="Maos de Obra: Repara cascos (+2d6 integridade/hora), carrocas e barricadas dobrando resistencia de fortificacoes.", pp=25, armDef=1, escDef=0, arma1={ nome="Machadinha", attr="forca", per="per_armas_brancas", dano="1d6", margem="20", mult="3" }, arma2=nil, itens={ { nome="Machadinha", tipo="arma", qtd=1, peso=1.2, nota="Dano 1d6+FOR | Crit 20/x3" }, { nome="Gibao Reforcado", tipo="armadura", qtd=1, peso=4.0, nota="Defesa +1 | Penalidade 0 | Zero RD" }, { nome="Caixa de Ferramentas de Carpinteiro", tipo="equip", qtd=1, peso=5.0, nota="Serra, martelo, enxo e formoes" }, { nome="Pregos & Cravos (Lote 10 un.)", tipo="cons", qtd=5, peso=0.2, nota="Usado em barricadas (+2 resistencia) ou reparos estruturais." }, { nome="Corda de Canhamo (15 metros)", tipo="equip", qtd=1, peso=4.5, nota="Suporta 350 kg" } } },
+    ["nobre"] = { nome="30 - Nobre (1d6)", dv=6, perBase=2, multInt=0.75, espField="esp_status", espVal=2, pericias={ "per_etiqueta", "per_persuasao", "per_historia", "per_cavalgar", "per_armas_brancas" }, equip="Florete ou espada longa fina, anel de sinete, vestes nobres, manto, cavalo e 80 PP.", hab="Peso do Nome: Invoca hospitalidade, audiencias e credito em cidades usando Status sem rolar em pedidos rotineiros.", pp=80, armDef=0, escDef=0, arma1={ nome="Florete Fino", attr="destreza", per="per_armas_brancas", dano="1d6", margem="18", mult="2" }, arma2=nil, itens={ { nome="Florete Fino", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 18-20/x2 | Agil (DES)" }, { nome="Anel de Sinete da Casa", tipo="equip", qtd=1, peso=0.1, nota="Selo oficial de linhagem nobre" }, { nome="Vestes Aristocraticas com Brasao", tipo="equip", qtd=1, peso=3.0, nota="Reforca Status 2-5 em cortes de Aurora e Corallis" }, { nome="Cavalo de Estrada", tipo="equip", qtd=1, peso=0.0, nota="Montaria nobre (carrega 150 kg)" } } },
+    ["diplomata"] = { nome="31 - Diplomata / Conselheiro (1d6)", dv=6, perBase=2, multInt=1.0, espField="esp_status", espVal=1, pericias={ "per_persuasao", "per_intuicao", "per_etiqueta", "per_enganacao", "per_idiomas" }, equip="Adaga discreta, cartas credenciais, pergaminhos e lacres, roupas de corte e 55 PP.", hab="Palavra que Desarma: +3 em Persuasao/Intuicao para firmar treguas ou extrair concessoes politicas.", pp=55, armDef=0, escDef=0, arma1={ nome="Adaga Discreta", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, arma2=nil, itens={ { nome="Adaga Discreta", tipo="arma", qtd=1, peso=0.4, nota="Dano 1d4+FOR | Crit 19-20/x2" }, { nome="Cartas Credenciais & Pergaminhos", tipo="equip", qtd=1, peso=0.4, nota="Autorizacao diplomatica oficial" }, { nome="Bastao de Lacre & Selo", tipo="cons", qtd=5, peso=0.06, nota="Sela tratados e missivas oficiais." }, { nome="Traje Fino de Corte", tipo="equip", qtd=1, peso=2.0, nota="Vestimenta apropriada para audiencias" } } },
+    ["bardo"] = { nome="32 - Bardo / Menestrel (1d6)", dv=6, perBase=2, multInt=1.0, espField=nil, espVal=0, pericias={ "per_persuasao", "per_enganacao", "per_historia", "per_etiqueta", "per_disfarce", "per_percepcao" }, equip="Instrumento musical, adaga ou espada curta, roupas discretas e de apresentacao, caderno e 30 PP.", hab="Cronica de Taverna: Cobre hospedagem simples tocando e recebe +3 para captar boatos e segredos de viajantes.", pp=30, armDef=0, escDef=0, arma1={ nome="Espada Curta", attr="destreza", per="per_armas_brancas", dano="1d6", margem="19", mult="2" }, arma2=nil, itens={ { nome="Espada Curta", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Crit 19-20/x2 | Agil" }, { nome="Instrumento Musical", tipo="equip", qtd=1, peso=1.5, nota="Alaude, flauta ou rabeca para Cronica de Taverna" }, { nome="Roupas de Apresentacao & Viagem", tipo="equip", qtd=1, peso=1.8, nota="Versatil para tavernas e saloes" }, { nome="Caderno de Cronicas & Cantigas", tipo="equip", qtd=1, peso=0.4, nota="Anotacoes de lendas, nomes e boatos" } } },
+    ["sacerdote"] = { nome="33 - Sacerdote / Clerigo (1d6)", dv=6, perBase=2, multInt=0.75, espField="esp_fe", espVal=1, pericias={ "per_religiao", "per_persuasao", "per_medicina", "per_intuicao", "per_historia" }, equip="Cajado ou maca simples, simbolo sagrado autentico, vestes clericais, unguentos e 25 PP.", hab="Conforto da Fe: 1x/descanso, prece sincera concede +2 em testes mentais e contra medo/horror para aliados na cena.", pp=25, armDef=0, escDef=0, arma1={ nome="Cajado / Maca Simples", attr="forca", per="per_armas_brancas", dano="1d6", margem="20", mult="2" }, arma2=nil, itens={ { nome="Cajado / Maca Simples", tipo="arma", qtd=1, peso=1.5, nota="Dano 1d6+FOR | Contundente" }, { nome="Simbolo Sagrado Autentico", tipo="equip", qtd=1, peso=0.2, nota="Foco de devocao e autoridade espiritual" }, { nome="Vestes Clericais", tipo="equip", qtd=1, peso=1.5, nota="Identificacao da ordem ou credo" }, { nome="Cataplasma de Ervas", tipo="cons", qtd=2, peso=0.2, nota="Unguento de cura (+1d4 PV extras no descanso)." } } },
+    ["inquisidor"] = { nome="34 - Inquisidor (1d8)", dv=8, perBase=1, multInt=0.75, espField="esp_fe", espVal=1, pericias={ "per_intimidacao", "per_investigacao", "per_religiao", "per_intuicao", "per_armas_brancas" }, equip="Espada longa ou martelo de guerra, manto com insignia, algemas, couro batido e 30 PP.", hab="Vontade Inabalavel: Soma Fe Verdadeira em testes contra medo, intimidacao, manipulacoes e horrores.", pp=30, armDef=2, escDef=0, arma1={ nome="Espada Longa", attr="forca", per="per_armas_brancas", dano="1d8", margem="19", mult="2" }, arma2=nil, itens={ { nome="Espada Longa", tipo="arma", qtd=1, peso=1.5, nota="Dano 1d8+FOR | Crit 19-20/x2" }, { nome="Couro Batido", tipo="armadura", qtd=1, peso=6.0, nota="Defesa +2 | Penalidade 0 | Zero RD" }, { nome="Manto com Insignia da Ordem", tipo="equip", qtd=1, peso=1.0, nota="Autoridade de investigacao religiosa" }, { nome="Algemas de Ferro com Chave", tipo="equip", qtd=1, peso=1.2, nota="Detencao de hereges e suspeitos" } } },
+    ["ermitao"] = { nome="35 - Ermitao / Sobrevivente (1d8)", dv=8, perBase=1, multInt=0.75, espField=nil, espVal=0, pericias={ "per_sobrevivencia", "per_herbalismo", "per_percepcao", "per_intuicao", "per_furtividade" }, equip="Lanca de caca ou cajado, facao, manto espesso contra frio/chuva, pederneira e 10 PP.", hab="Casca Grossa: +3 em testes contra frio extremo, calor desertico, doencas comuns e niveis de Exaustao.", pp=10, armDef=0, escDef=0, arma1={ nome="Lanca de Caca", attr="forca", per="per_armas_brancas", dano="1d8", margem="20", mult="3" }, arma2={ nome="Facao de Mato", attr="forca", per="per_armas_brancas", dano="1d6", margem="19", mult="2" }, itens={ { nome="Lanca de Caca", tipo="arma", qtd=1, peso=1.8, nota="Dano 1d8+FOR | Crit 20/x3" }, { nome="Facao de Mato (Tercado)", tipo="arma", qtd=1, peso=1.0, nota="Dano 1d6+FOR | Abre trilhas e corta lenha" }, { nome="Manto de Inverno Forrado de Pele", tipo="equip", qtd=1, peso=3.0, nota="+3 em Sobrevivencia contra frio extremo e chuva" }, { nome="Pederneira, Aco e Caixa de Isca", tipo="equip", qtd=1, peso=0.3, nota="Acende fogueira em 1 minuto" } } },
+    ["dom_antigo"] = { nome="36 - Tocado pelo Dom Antigo (1d6 | Mestre)", dv=6, perBase=2, multInt=1.0, espField="esp_dom", espVal=1, pericias={ "per_religiao", "per_intuicao", "per_historia", "per_sobrevivencia", "per_percepcao" }, equip="Adaga ritualistica antiga, amuleto de origem desconhecida, manto gasto, caderno de visoes e 15 PP.", hab="Ecos do Que Nao Dorme: Visoes/pressagios raros a criterio do Mestre; rituais ancestrais (Secao 10 do Livro de Regras).", pp=15, armDef=0, escDef=0, arma1={ nome="Adaga Ritualistica Antiga", attr="destreza", per="per_armas_brancas", dano="1d4", margem="19", mult="2" }, arma2=nil, itens={ { nome="Adaga Ritualistica Antiga", tipo="arma", qtd=1, peso=0.5, nota="Dano 1d4+FOR | Crit 19-20/x2 | Gravuras desconhecidas" }, { nome="Amuleto de Origem Desconhecida", tipo="equip", qtd=1, peso=0.2, nota="Reliquia antiga vinculada ao Dom Antigo" }, { nome="Manto Gasto de Viajante", tipo="equip", qtd=1, peso=1.2, nota="Discreto nas estradas de Alenia" }, { nome="Caderno de Visoes & Pressagios", tipo="equip", qtd=1, peso=0.4, nota="Registros de sonhos, simbolos e ritos" } } },
 };
 
 local SKILLS = {
@@ -76,6 +76,68 @@ local SKILLS = {
     { field="per_geografia", nome="Geografia e Cartografia", attr="inteligencia" },
     { field="per_idiomas", nome="Idiomas e Cifras", attr="inteligencia" },
     { field="per_religiao", nome="Religiao e Ocultismo", attr="sabedoria" },
+};
+
+local TALENTOS_CATS = {
+    ["marciais"] = "1 - Marciais e Taticos (12)",
+    ["sobrevivencia"] = "2 - Sobrevivencia, Vigor e Exploracao (10)",
+    ["sociais"] = "3 - Sociais, Intriga e Lideranca (11)",
+    ["mentais"] = "4 - Mentais, Erudicao e Oficio (11)",
+};
+
+local TALENTOS_ITENS = {
+    ["marciais"] = {
+        { id="marciais_1", cat="marciais", nome="Aparar Relampago", label="Aparar Relampago  [DES 12+, Treinado em Aparar]", prereq="DES 12+, Treinado em Aparar", efeito="1x/rodada, usa sua Reacao para somar +2 na Defesa contra um ataque corpo a corpo." },
+        { id="marciais_2", cat="marciais", nome="Riposta Mortal", label="Riposta Mortal  [DES 14+, Especialista em Aparar, Aparar Relampago]", prereq="DES 14+, Especialista em Aparar, Aparar Relampago", efeito="Quando um ataque corpo a corpo contra voce errar apos Aparar Relampago ou Defesa Total, voce desfere imediatamente 1 contra-ataque basico contra o atacante (parte da mesma Reacao)." },
+        { id="marciais_3", cat="marciais", nome="Muralha de Aco", label="Muralha de Aco  [FOR 13+, Treinado em Escudos ou Aparar]", prereq="FOR 13+, Treinado em Escudos ou Aparar", efeito="Ao usar Proteger Aliado, cobre ate 2 aliados adjacentes e anula bonus de Flanquear contra eles." },
+        { id="marciais_4", cat="marciais", nome="Bastiao Inquebravel", label="Bastiao Inquebravel  [FOR 15+, CON 14+, Especialista em Escudos, Muralha de Aco]", prereq="FOR 15+, CON 14+, Especialista em Escudos, Muralha de Aco", efeito="Quando absorve golpe pelo aliado em Proteger Aliado ou mantem Defesa Total com escudo, reduz o dano desse impacto em [Mod. FOR + Mod. CON] (min. 2, bloqueio ativo - nao e RD passiva) e ignora Empurrar ou Derrubar." },
+        { id="marciais_5", cat="marciais", nome="Golpe Preciso", label="Golpe Preciso  [FOR 13+ ou DES 13+, Treinado em Armas Brancas ou Distancia]", prereq="FOR 13+ ou DES 13+, Treinado em Armas Brancas ou Distancia", efeito="Reduz em 1 a Margem de Critico de um tipo de arma escolhido (ex.: 19-20 -> 18-20; nao acumula na mesma arma)." },
+        { id="marciais_6", cat="marciais", nome="Anatomia Letal", label="Anatomia Letal  [INT 12+ ou SAB 13+, Niv. 6+, Golpe Preciso]", prereq="INT 12+ ou SAB 13+, Niv. 6+, Golpe Preciso", efeito="Em Acertos Criticos com a arma escolhida, reduz em 2 o limiar do Golpe Devastador do alvo ou impoe Sangramento (1d4 PV/turno ate Medicina CD 15)." },
+        { id="marciais_7", cat="marciais", nome="Fluxo de Laminas", label="Fluxo de Laminas  [DES 14+, Treinado em Armas Brancas ou Luta Desarmada]", prereq="DES 14+, Treinado em Armas Brancas ou Luta Desarmada", efeito="Reduz em 1 a penalidade -N em Multiplas Acoes (ex.: em 2 acoes subtrai 1 em vez de 2; mantem teto de treino e bonus minimo >= 0)." },
+        { id="marciais_8", cat="marciais", nome="Tempestade de Aco", label="Tempestade de Aco  [DES 16+, Patamar Lenda (Niv. 11+), Especialista em Armas Brancas, Fluxo de Laminas]", prereq="DES 16+, Patamar Lenda (Niv. 11+), Especialista em Armas Brancas, Fluxo de Laminas", efeito="Ao usar Multiplas Acoes contra inimigos distintos em alcance, o primeiro ataque em cada alvo diferente recebe +2 no acerto." },
+        { id="marciais_9", cat="marciais", nome="Tiro Firme", label="Tiro Firme  [DES 13+, Treinado em Armas a Distancia]", prereq="DES 13+, Treinado em Armas a Distancia", efeito="Ignora cobertura parcial e vento moderado com arcos/bestas; recarrega besta leve como Acao Livre 1x/turno." },
+        { id="marciais_10", cat="marciais", nome="Olho de Falcao", label="Olho de Falcao  [DES 15+, SAB 13+, Especialista em Armas a Distancia, Tiro Firme]", prereq="DES 15+, SAB 13+, Especialista em Armas a Distancia, Tiro Firme", efeito="Aumenta em +50% o alcance efetivo de arcos/bestas; se gastar seu Movimento mirando imovel antes de disparar 1 tiro unico, soma +3 no acerto e +1d6 no dano (nao multiplica em critico)." },
+        { id="marciais_11", cat="marciais", nome="Quebra-Guarda", label="Quebra-Guarda  [FOR 14+, Treinado em Armas Brancas ou Atletismo]", prereq="FOR 14+, Treinado em Armas Brancas ou Atletismo", efeito="+3 em Derrubar, Empurrar e Agarrar; ao derrubar um oponente com arma pesada ou haste, causa dano igual ao seu Mod. FOR (min. 1)." },
+        { id="marciais_12", cat="marciais", nome="Combate de Cais", label="Combate de Cais  [FOR 12+ ou DES 12+]", prereq="FOR 12+ ou DES 12+", efeito="Sem penalidade com armas improvisadas (1d6), +2 contra alvos Caidos ou Agarrados e pode usar Ajudar em combate como distracao suja (alvo testa DES CD 14 ou sofre -2 na proxima Defesa)." },
+    },
+    ["sobrevivencia"] = {
+        { id="sobrevivencia_1", cat="sobrevivencia", nome="Sangue Frio", label="Sangue Frio  [CON 12+ ou SAB 12+]", prereq="CON 12+ ou SAB 12+", efeito="+3 em testes de CON contra Golpe Devastador e em testes de SAB contra medo, panico e horrores sobrenaturais." },
+        { id="sobrevivencia_2", cat="sobrevivencia", nome="Vontade de Ferro", label="Vontade de Ferro  [CON 14+, SAB 13+, Niv. 6+, Sangue Frio]", prereq="CON 14+, SAB 13+, Niv. 6+, Sangue Frio", efeito="Exige 4 falhas (em vez de 3) para morrer no estado Moribundo; 1x/Descanso Longo, ignora os efeitos de 1 nivel de Exaustao durante uma cena inteira." },
+        { id="sobrevivencia_3", cat="sobrevivencia", nome="Passo Silencioso", label="Passo Silencioso  [DES 13+, Treinado em Furtividade]", prereq="DES 13+, Treinado em Furtividade", efeito="Move-se em velocidade normal (9m) em Furtividade sem penalidade e recebe +2 para ocultar rastros." },
+        { id="sobrevivencia_4", cat="sobrevivencia", nome="Fantasma da Bruma", label="Fantasma da Bruma  [DES 15+, Especialista em Furtividade, Passo Silencioso]", prereq="DES 15+, Especialista em Furtividade, Passo Silencioso", efeito="Em penumbra, neblina ou mata densa, pode tentar esconder-se novamente usando o Movimento apos agir (Percepcao oposta); seu primeiro ataque saindo de ocultacao soma +1d6 de dano (nao multiplica em critico)." },
+        { id="sobrevivencia_5", cat="sobrevivencia", nome="Lobo do Mar", label="Lobo do Mar  [DES 12+ ou SAB 12+, Treinado em Navegacao ou Acrobacia]", prereq="DES 12+ ou SAB 12+, Treinado em Navegacao ou Acrobacia", efeito="Ignora penalidades de conves instavel, recifes e embarcacoes sob tempestade; +2 em Natacao e Navegacao sob mau tempo." },
+        { id="sobrevivencia_6", cat="sobrevivencia", nome="Leme de Tempestade", label="Leme de Tempestade  [SAB 14+, Especialista em Navegacao & Nautica, Lobo do Mar]", prereq="SAB 14+, Especialista em Navegacao & Nautica, Lobo do Mar", efeito="Reduz em 3 a CD de navegacao em recifes/tempestades (Mar dos Corais / Mar Intransponivel) e reduz a metade qualquer avaria no casco sob seu comando." },
+        { id="sobrevivencia_7", cat="sobrevivencia", nome="Maos de Cirurgiao", label="Maos de Cirurgiao  [INT 12+ ou SAB 12+, Treinado em Medicina & Cirurgia]", prereq="INT 12+ ou SAB 12+, Treinado em Medicina & Cirurgia", efeito="+3 em Medicina para estabilizar, estancar sangramentos e reduzir pela metade o tempo de recuperacao de Ferimentos Graves." },
+        { id="sobrevivencia_8", cat="sobrevivencia", nome="Bisturi de Baldbella", label="Bisturi de Baldbella  [INT 14+, SAB 13+, Especialista em Medicina & Cirurgia, Maos de Cirurgiao]", prereq="INT 14+, SAB 13+, Especialista em Medicina & Cirurgia, Maos de Cirurgiao", efeito="Em Descanso Curto, um aliado tratado por voce recupera +1d6 PV extras e remove 1 veneno leve/sangramento; reduz em 3 a CD de cirurgias extremas (incluindo extracao de toxinas ou parasitas)." },
+        { id="sobrevivencia_9", cat="sobrevivencia", nome="Passo de Caravana", label="Passo de Caravana  [CON 13+, Treinado em Sobrevivencia]", prereq="CON 13+, Treinado em Sobrevivencia", efeito="Suporta o dobro do tempo sem agua ou abrigo antes de testar Exaustao e recebe +2 em Sobrevivencia para guiar e abrigar ate 6 companheiros." },
+        { id="sobrevivencia_10", cat="sobrevivencia", nome="Cacador de Fronteira", label="Cacador de Fronteira  [SAB 13+, Treinado em Sobrevivencia e Percepcao]", prereq="SAB 13+, Treinado em Sobrevivencia e Percepcao", efeito="Ao examinar rastros por 5 min, descobre direcao, numero aproximado e um habito/vulnerabilidade da presa (arbitrado pelo Mestre), ganhando +2 na Iniciativa se o confronto ocorrer na cena." },
+    },
+    ["sociais"] = {
+        { id="sociais_1", cat="sociais", nome="Voz de Comando", label="Voz de Comando  [CAR 12+]", prereq="CAR 12+", efeito="Como Acao Principal, concede +2 no proximo ataque ou na Defesa (ate seu proximo turno) de ate 4 aliados que possam ouvi-lo." },
+        { id="sociais_2", cat="sociais", nome="Estandarte Vivo", label="Estandarte Vivo  [CAR 15+, Niv. 6+, Voz de Comando]", prereq="CAR 15+, Niv. 6+, Voz de Comando", efeito="Sua Voz de Comando alcanca todos os aliados a ate 18m, soma +3 contra medo/horror e, 1x/combate, permite a 1 aliado realizar um Movimento livre (sem Ataque de Oportunidade) ou um novo teste contra medo/paralisia." },
+        { id="sociais_3", cat="sociais", nome="Lingua de Prata", label="Lingua de Prata  [CAR 13+, Treinado em Persuasao ou Enganacao]", prereq="CAR 13+, Treinado em Persuasao ou Enganacao", efeito="+2 em Persuasao e Enganacao em audiencias ou negociacoes; 1x/sessao, se falhar em um teste social por 3 ou menos, pode reformular o argumento e rolar novamente (aceitando o 2o resultado)." },
+        { id="sociais_4", cat="sociais", nome="Teia de Cortes", label="Teia de Cortes  [CAR 15+, INT 12+, Especialista em Etiqueta ou Persuasao, Lingua de Prata]", prereq="CAR 15+, INT 12+, Especialista em Etiqueta ou Persuasao, Lingua de Prata", efeito="Apos 1h em corte, taverna ou salao mercantil, identifica quem detem o poder real na sala e um conflito oculto entre faccoes locais, ganhando +3 em testes sociais usando essa alavanca na cena." },
+        { id="sociais_5", cat="sociais", nome="Mascara de Mil Rostos", label="Mascara de Mil Rostos  [CAR 13+, Treinado em Disfarce e Enganacao]", prereq="CAR 13+, Treinado em Disfarce e Enganacao", efeito="Monta disfarces em metade do tempo, imita sotaques regionais de Alenia sem penalidade e impoe -3 na Percepcao/Intuicao de quem tentar desmascara-lo." },
+        { id="sociais_6", cat="sociais", nome="Sussurro de Kalgard", label="Sussurro de Kalgard  [CAR 14+, SAB 13+, Especialista em Enganacao ou Intimidacao, Mascara de Mil Rostos ou Lingua de Prata]", prereq="CAR 14+, SAB 13+, Especialista em Enganacao ou Intimidacao, Mascara de Mil Rostos ou Lingua de Prata", efeito="Apos 10 min de conversa, pode plantar uma suspeita ou boato plausivel (Enganacao/Persuasao vs. Intuicao do alvo); em sucesso, o alvo age com cautela ou desconfianca contra o terceiro citado ate obter prova contraria." },
+        { id="sociais_7", cat="sociais", nome="Presenca Aterradora", label="Presenca Aterradora  [CAR 13+ ou FOR 14+, Treinado em Intimidacao]", prereq="CAR 13+ ou FOR 14+, Treinado em Intimidacao", efeito="+2 em Intimidacao; em combate, gasta Acao Principal para intimidar 1 inimigo inteligente a ate 9m (Intimidacao vs. SAB do alvo): em sucesso, o alvo sofre -2 nos ataques por 2 rodadas (1x/alvo/cena)." },
+        { id="sociais_8", cat="sociais", nome="Olhar do Arbitro", label="Olhar do Arbitro  [SAB 13+, Treinado em Intuicao]", prereq="SAB 13+, Treinado em Intuicao", efeito="+3 em Intuicao para detectar mentiras, coercao, emboscadas disfarcadas ou influencia emocional anomala; percebe na hora se alguem age sob chantagem ou medo oculto." },
+        { id="sociais_9", cat="sociais", nome="Credito de Porto", label="Credito de Porto  [CAR 12+ ou INT 12+, Treinado em Barganha & Comercio]", prereq="CAR 12+ ou INT 12+, Treinado em Barganha & Comercio", efeito="Consegue 15% de desconto em compras comuns e +15% na venda de cargas; em qualquer porto ou rota de caravana, obtem abrigo seguro, barco ou credito modesto (ate 50 PP) sem garantia imediata." },
+        { id="sociais_10", cat="sociais", nome="Rede de Informantes", label="Rede de Informantes  [CAR 14+ ou INT 14+, Submundo 1+ ou Status 1+, Credito de Porto ou Lingua de Prata]", prereq="CAR 14+ ou INT 14+, Submundo 1+ ou Status 1+, Credito de Porto ou Lingua de Prata", efeito="1x/aventura (ou ao chegar a uma grande cidade), aciona contatos para obter sem rolagem um mapa de acesso, salvo-conduto discreto, rota de fuga ou dossie basico sobre um NPC (o Mestre define o favor futuro)." },
+        { id="sociais_11", cat="sociais", nome="Coracao de Cronista", label="Coracao de Cronista  [CAR 13+]", prereq="CAR 13+", efeito="Durante Descanso Curto ou Longo, suas historias, cantos ou discursos elevam o moral: ate 5 aliados recuperam +1d4 PV extras no Descanso Curto ou ganham +2 no primeiro teste contra medo/Exaustao do dia seguinte." },
+    },
+    ["mentais"] = {
+        { id="mentais_1", cat="mentais", nome="Mente Analitica", label="Mente Analitica  [INT 13+, Treinado em Investigacao]", prereq="INT 13+, Treinado em Investigacao", efeito="+3 em Investigacao e Historia & Lendas para reconstruir cenas, detectar documentos forjados ou estudar ruinas; encontra pistas secundarias em metade do tempo." },
+        { id="mentais_2", cat="mentais", nome="Deducao de Campo", label="Deducao de Campo  [INT 15+, SAB 13+, Especialista em Investigacao, Mente Analitica]", prereq="INT 15+, SAB 13+, Especialista em Investigacao, Mente Analitica", efeito="Como Acao Principal em combate (ou 1 min observando antes), testa Investigacao/Intuicao CD 15 contra um inimigo visivel; em sucesso, descobre sua fraqueza (menor Defesa, vulnerabilidade ou RD) e voce + 1 aliado ganham +2 no acerto contra ele por 3 rodadas." },
+        { id="mentais_3", cat="mentais", nome="Estrategista de Batalha", label="Estrategista de Batalha  [INT 14+, SAB 12+]", prereq="INT 14+, SAB 12+", efeito="Usa Mod. INT no lugar de Mod. DES na Iniciativa; no inicio do combate, pode trocar sua posicao na ordem de Iniciativa com 1 aliado voluntario que possa ouvi-lo." },
+        { id="mentais_4", cat="mentais", nome="Mestre Tatico", label="Mestre Tatico  [INT 16+, Niv. 8+, Estrategista de Batalha]", prereq="INT 16+, Niv. 8+, Estrategista de Batalha", efeito="Ao usar a acao Ajudar em combate, orienta ate 2 aliados a ate 9m por voz (sem precisar ficar adjacente a 1,5m), concedendo +2 a cada um ate seu proximo turno." },
+        { id="mentais_5", cat="mentais", nome="Sentidos Agucados", label="Sentidos Agucados  [SAB 13+, Treinado em Percepcao]", prereq="SAB 13+, Treinado em Percepcao", efeito="+3 em Percepcao e +2 fixo na Iniciativa; nao pode ser surpreendido por emboscadas mundanas enquanto estiver consciente e nao incapacitado." },
+        { id="mentais_6", cat="mentais", nome="Memoria Enciclopedica", label="Memoria Enciclopedica  [INT 13+]", prereq="INT 13+", efeito="Recorda mapas, brasoes, tratados e dialogos com precisao; +2 em Historia, Geografia, Religiao e Idiomas, e pode realizar testes de conhecimento mesmo em pericias Destreinadas sem penalidade por falta de biblioteca." },
+        { id="mentais_7", cat="mentais", nome="Poliglota das Cinco Terras", label="Poliglota das Cinco Terras  [INT 13+, Treinado em Idiomas & Cifras]", prereq="INT 13+, Treinado em Idiomas & Cifras", efeito="Aprende imediatamente 2 idiomas/dialetos ou cifras de Alenia, recebe +3 para decifrar codigos de Kalis e inscricoes de Kelgore/Incognito, e capta o sentido geral de linguas desconhecidas apos breve contato." },
+        { id="mentais_8", cat="mentais", nome="Maos de Alquimista", label="Maos de Alquimista  [INT 13+, Treinado em Alquimia & Venenos ou Herbalismo]", prereq="INT 13+, Treinado em Alquimia & Venenos ou Herbalismo", efeito="Reduz em 25% o custo de reagentes e pela metade o tempo de preparo de venenos, antidotos, oleo incendiario e extratos; aumenta em +2 a CD das misturas que voce mesmo preparar." },
+        { id="mentais_9", cat="mentais", nome="Engenho de Armadilhas", label="Engenho de Armadilhas  [INT 13+, Treinado em Engenharia & Mecanica]", prereq="INT 13+, Treinado em Engenharia & Mecanica", efeito="+3 para montar ou desarmar armadilhas, fechaduras complexas e mecanismos antigos; em 10 min com materiais de campo, monta armadilha improvisada (alerta, laco que derruba ou estacas de 1d8, Percepcao CD 15 + Mod. INT)." },
+        { id="mentais_10", cat="mentais", nome="Mente Blindada", label="Mente Blindada  [SAB 14+]", prereq="SAB 14+", efeito="+3 em testes de SAB contra manipulacao, intimidacao, ilusoes sensoriais, sussurros de Thanatos/Incognito e impulsos psiquicos; 1x/sessao, pode refazer um teste de SAB fracassado contra horror ou coercao." },
+        { id="mentais_11", cat="mentais", nome="Vigia dos Ritos Antigos", label="Vigia dos Ritos Antigos  [INT 14+ ou SAB 14+, Fe Verdadeira 1+ ou Dom Antigo 1+, Treinado em Religiao & Ocultismo]", prereq="INT 14+ ou SAB 14+, Fe Verdadeira 1+ ou Dom Antigo 1+, Treinado em Religiao & Ocultismo", efeito="Soma +2 adicional na Preparacao Ritualistica (respeitando o teto de +8), reduz em 1d6 qualquer dano de sacrificio ritual (min. 1) e pressente reliquias de Incognito ou condutores ativos de adamante a ate 18m." },
+    },
 };
 
 local EMPORIO_CATS = {
@@ -293,12 +355,13 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "2.1";
+local PLUGIN_VERSION = "2.2";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
 
 local _formRef = nil;
 local _ultimaCatEmporio = nil;
+local _ultimaCatTalento = nil;
 
 -- Tabela Oficial de XP Acumulada (Niveis 1 a 30)
 local XP_TABELA = {
@@ -329,6 +392,8 @@ local recalcularFicha;
 local atualizarPaginaCustomSkills;
 local atualizarPaginaInventario;
 local recalcularPesoInventario;
+local adicionarOuEmpilharNoInventario;
+local atualizarPaginaTalentos;
 
 local function num(v, def)
     local n = tonumber(v);
@@ -766,6 +831,7 @@ recalcularFicha = function()
 
     local ajustadas = {};
     local acimaTeto = {};
+    local acimaBonusExt = {};
     local ptsGastos = 0;
     for i = 1, #SKILLS do
         local sk = SKILLS[i];
@@ -782,6 +848,9 @@ recalcularFicha = function()
         end;
         local gEf = math.min(gRaw, tetoGrad);
         local outros = num(sheet[sk.field .. "_outros"], 0);
+        if outros > 6 then
+            table.insert(acimaBonusExt, sk.nome .. " (+" .. tostring(outros) .. ")");
+        end;
         local tot = getMod(sk.attr) + gEf + outros;
         sheet[sk.field .. "_total"] = fmtMod(tot);
         sheet[sk.field .. "_rank"] = nomeGrau(gRaw, nivel);
@@ -796,8 +865,13 @@ recalcularFicha = function()
         local filhos = NDB.getChildNodes(sheet.customSkills);
         for i = 1, #filhos do
             local cgEf, excedeu = grauEfetivo(filhos[i].grau, nivel);
+            local cNome = (filhos[i].nome and filhos[i].nome ~= "" and filhos[i].nome) or "Pericia Livre";
             if excedeu then
-                table.insert(acimaTeto, (filhos[i].nome and filhos[i].nome ~= "" and filhos[i].nome) or "Pericia Livre");
+                table.insert(acimaTeto, cNome);
+            end;
+            local cOut = num(filhos[i].outros, 0);
+            if cOut > 6 then
+                table.insert(acimaBonusExt, cNome .. " (+" .. tostring(cOut) .. ")");
             end;
             ptsGastos = ptsGastos + custoGrau(cgEf);
         end;
@@ -812,12 +886,21 @@ recalcularFicha = function()
         sheet.avisoTetoGrad = "Dentro do Teto de Graduacao do Nivel " .. tostring(nivel) .. " (max +" .. tostring(tetoGrad) .. " | Teto Absoluto Alenia: +16 no Niv. 26-30).";
     end;
 
+    if #acimaBonusExt > 0 then
+        sheet.avisoBonusExt = "AVISO TETO EXTERNO (+6): Coluna OUT acima de +6 em: " .. table.concat(acimaBonusExt, ", ") .. " (ferramentas nao acumulam; teto externo +6, excecao: Rituais +8).";
+    else
+        sheet.avisoBonusExt = "Bonus externos (OUT) dentro da regra oficial: apenas maior equipamento aplica | teto combinado +6 (excecao: Preparacao Ritualistica +8).";
+    end;
+
     atualizarPaginaCustomSkills();
     if atualizarPaginaInventario ~= nil then
         atualizarPaginaInventario();
     end;
     if recalcularPesoInventario ~= nil then
         recalcularPesoInventario(false);
+    end;
+    if atualizarPaginaTalentos ~= nil then
+        atualizarPaginaTalentos();
     end;
 
     local armDef = num(sheet.armaduraDef, 0);
@@ -840,6 +923,14 @@ recalcularFicha = function()
         local gArma = grauEfetivo(sheet[aPer .. "_grau"], nivel);
         local atkTot = getMod(aAttr) + gArma + num(sheet[aPer .. "_outros"], 0) + aExtra;
         sheet["arma" .. idx .. "_atk"] = fmtMod(atkTot);
+    end;
+
+    if self ~= nil and self.imgRetrato ~= nil and not sheet._retratoInit then
+        sheet._retratoInit = true;
+        pcall(function()
+            self.imgRetrato:setEditable(true);
+            self.imgRetrato:setCenter(true);
+        end);
     end;
 
     sheet.pluginVersaoAtual = "v" .. PLUGIN_VERSION;
@@ -874,13 +965,6 @@ local function aplicarKitSelecionado()
         end;
     end;
 
-    local invAtual = sheet.equipamentoMochila or "";
-    if invAtual:gsub("%s+", "") == "" then
-        sheet.equipamentoMochila = "[Equipamento do Kit - " .. kit.nome .. "]\n" .. kit.equip;
-    else
-        sheet.equipamentoMochila = invAtual .. "\n\n[Kit Aplicado - " .. kit.nome .. "]\n" .. kit.equip;
-    end;
-
     recalcularFicha();
 
     if sheet.pvMax == nil or tostring(sheet.pvMax):gsub("%s+", "") == "" or num(sheet.pvMax, 0) <= 0 then
@@ -888,7 +972,138 @@ local function aplicarKitSelecionado()
         sheet.pvAtual = sheet.pvSugerido;
     end;
 
-    showMessage("Kit aplicado: " .. kit.nome .. "\nDado de Vida: 1d" .. tostring(kit.dv) .. " | Pericias Base: " .. tostring(kit.perBase) .. " (Mult INT " .. tostring(kit.multInt) .. "x)");
+    local function preencherEquipamentoInicial()
+        -- Moedas iniciais do Kit (Padrao Prata)
+        if kit.pp ~= nil and kit.pp > 0 then
+            sheet.moedasOuro = "0";
+            sheet.moedasPrata = tostring(kit.pp);
+            sheet.moedasCobre = "0";
+        end;
+        -- Armadura & Escudo iniciais na Aba Combate
+        if kit.armDef ~= nil then
+            sheet.armaduraDef = tostring(kit.armDef);
+        end;
+        if kit.escDef ~= nil then
+            sheet.escudoDef = tostring(kit.escDef);
+        end;
+        -- Arma 1 e Arma 2 iniciais na Aba Combate
+        local function gravarArma(slotNum, aObj)
+            if aObj == nil then return; end;
+            sheet["arma" .. slotNum .. "_nome"] = aObj.nome;
+            sheet["arma" .. slotNum .. "_attr"] = aObj.attr;
+            sheet["arma" .. slotNum .. "_per"] = aObj.per;
+            sheet["arma" .. slotNum .. "_extra"] = "0";
+            sheet["arma" .. slotNum .. "_dano"] = aObj.dano;
+            sheet["arma" .. slotNum .. "_danoExtra"] = "0";
+            sheet["arma" .. slotNum .. "_margem"] = aObj.margem;
+            sheet["arma" .. slotNum .. "_mult"] = aObj.mult;
+        end;
+        if kit.arma1 ~= nil then gravarArma(1, kit.arma1); end;
+        if kit.arma2 ~= nil then gravarArma(2, kit.arma2); end;
+
+        -- Itens & Consumiveis iniciais nos Slots de Inventario
+        local qtdItens = 0;
+        if kit.itens ~= nil and adicionarOuEmpilharNoInventario ~= nil then
+            for j = 1, #kit.itens do
+                local it = kit.itens[j];
+                adicionarOuEmpilharNoInventario(it.nome, it.tipo or "equip", it.qtd or 1, it.peso or 0, it.nota or "");
+                qtdItens = qtdItens + 1;
+            end;
+            sheet.invPage = "1";
+            if atualizarPaginaInventario ~= nil then atualizarPaginaInventario(); end;
+            if recalcularPesoInventario ~= nil then recalcularPesoInventario(true); end;
+        end;
+
+        recalcularFicha();
+        showMessage(
+            "Kit completo aplicado: " .. kit.nome .. "\n\n" ..
+            "- Dado de Vida: 1d" .. tostring(kit.dv) .. " | Pericias Base: " .. tostring(kit.perBase) .. " (Mult INT " .. tostring(kit.multInt) .. "x)\n" ..
+            "- Moedas iniciais definidas: " .. tostring(kit.pp or 0) .. " PP\n" ..
+            "- Armadura Def +" .. tostring(kit.armDef or 0) .. " | Escudo Def +" .. tostring(kit.escDef or 0) .. "\n" ..
+            "- Arma inicial configurada na Aba Combate" .. (kit.arma2 ~= nil and " (2 armas!)" or "") .. "\n" ..
+            "- " .. tostring(qtdItens) .. " itens/consumiveis adicionados aos Slots de Inventario!"
+        );
+    end;
+
+    local resumoEquip = "Moedas: " .. tostring(kit.pp or 25) .. " PP | Armadura +" .. tostring(kit.armDef or 0) .. " / Escudo +" .. tostring(kit.escDef or 0) ..
+        (kit.arma1 ~= nil and (" | Arma: " .. kit.arma1.nome) or "") ..
+        (kit.itens ~= nil and (" | " .. tostring(#kit.itens) .. " itens nos Slots") or "");
+
+    if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+        DialogsMod.confirmYesNo(
+            "Kit aplicado: " .. kit.nome .. " (DV 1d" .. tostring(kit.dv) .. ").\n\n" ..
+            "Deseja tambem preencher automaticamente o equipamento inicial completo do Kit?\n(" .. resumoEquip .. ")\n\n" ..
+            "[Sim] = Preenche moedas, arma(s) na Aba Combate, armadura e itens nos Slots\n" ..
+            "[Nao] = Aplica apenas DV, pericias iniciais e habilidade do Kit",
+            function(sim)
+                if sim then
+                    preencherEquipamentoInicial();
+                else
+                    showMessage("Kit aplicado: " .. kit.nome .. "\nDado de Vida: 1d" .. tostring(kit.dv) .. " | Pericias Base: " .. tostring(kit.perBase) .. " (Mult INT " .. tostring(kit.multInt) .. "x)");
+                end;
+            end
+        );
+    else
+        preencherEquipamentoInicial();
+    end;
+end;
+
+local function receberDano()
+    if sheet == nil then return; end;
+    if DialogsMod == nil or type(DialogsMod.inputQuery) ~= "function" then
+        showMessage("Edite diretamente o campo PV Atual no cabecalho.");
+        return;
+    end;
+    local rd = math.max(0, math.floor(num(sheet.rdEspecial, 0)));
+    local promptRd = (rd > 0) and (" (sua RD Especial de " .. tostring(rd) .. " sera descontada automaticamente)") or "";
+    DialogsMod.inputQuery(
+        "Receber Dano — Alenia RPG",
+        "Digite o dano bruto sofrido neste golpe" .. promptRd .. ":",
+        "",
+        function(valorStr)
+            local limpo = tostring(valorStr or ""):gsub("%s+", "");
+            local danoBruto = tonumber(limpo);
+            if danoBruto == nil or danoBruto <= 0 then
+                showMessage("Informe um valor inteiro positivo de dano (ex: 12).");
+                return;
+            end;
+            danoBruto = math.floor(danoBruto);
+            local rdNow = math.max(0, math.floor(num(sheet.rdEspecial, 0)));
+            local danoEf = math.max(0, danoBruto - rdNow);
+            local pvMax = math.max(1, math.floor(num(sheet.pvMax, 1)));
+            local pvAnt = math.floor(num(sheet.pvAtual, pvMax));
+            local pvNovo = math.max(0, pvAnt - danoEf);
+            sheet.pvAtual = tostring(pvNovo);
+            recalcularFicha();
+
+            local limiar = math.floor((pvMax * 2) / 3) + 1;
+            local devastador = (danoEf >= limiar);
+            local nomeChar = sheet.nome or "Explorador";
+            local rdMsg = (rdNow > 0) and (" (RD Especial -" .. tostring(rdNow) .. " -> " .. tostring(danoEf) .. " efetivo)") or "";
+            local alertasChat = "";
+            local alertasPopup = "";
+
+            if devastador then
+                local cdDev = 15 + math.floor((danoEf - limiar) / 2);
+                alertasChat = alertasChat .. "  *** GOLPE DEVASTADOR! (>2/3 PV Max: " .. tostring(limiar) .. "+) — Teste de CON CD " .. tostring(cdDev) .. " (Falha = Morte Instantanea | Sucesso = Ferimento Grave!) ***";
+                alertasPopup = alertasPopup .. "\n\n[GOLPE DEVASTADOR!]\nEste golpe atingiu/superou " .. tostring(limiar) .. " de dano (>2/3 do seu PV Max)!\nRole imediatamente Teste de CON CD " .. tostring(cdDev) .. ":\n- Falha: Morte Instantanea\n- Sucesso: Sobrevive com Ferimento Grave!";
+            end;
+            if pvNovo <= 0 then
+                alertasChat = alertasChat .. "  [CAIU A 0 PV — INCONSCIENTE / MORIBUNDO! Teste CON CD 12 por turno]";
+                alertasPopup = alertasPopup .. "\n\n[CAIU A 0 PV — MORIBUNDO!]\nVoce caiu inconsciente! A cada turno role CON CD 12 (3 sucessos estabiliza / 3 falhas morre).";
+            end;
+
+            enviarChatOuMsg(
+                "[" .. nomeChar .. "] Recebeu " .. tostring(danoBruto) .. " de dano" .. rdMsg ..
+                " | PV: " .. tostring(pvAnt) .. " -> " .. tostring(pvNovo) .. "/" .. tostring(pvMax) .. alertasChat
+            );
+            if alertasPopup ~= "" then
+                showMessage("Dano aplicado: -" .. tostring(danoEf) .. " PV (Atual: " .. tostring(pvNovo) .. "/" .. tostring(pvMax) .. ")" .. alertasPopup);
+            end;
+        end,
+        function() end,
+        false
+    );
 end;
 
 local function rolarPericia(fieldId, nomePer, attrField)
@@ -1384,7 +1599,7 @@ local function mudarPaginaInventario(delta)
     atualizarPaginaInventario();
 end;
 
-local function adicionarOuEmpilharNoInventario(nome, tipo, qtdAdd, pesoUn, nota)
+adicionarOuEmpilharNoInventario = function(nome, tipo, qtdAdd, pesoUn, nota)
     if sheet == nil then return 1, 1, false; end;
     if sheet.invSlots == nil then sheet.invSlots = {}; end;
     local filhos = NDB.getChildNodes(sheet.invSlots);
@@ -1457,6 +1672,60 @@ local function usarSlotInventario(slotIdx)
         local pesoMsg = (pesoUn > 0) and (" | -" .. fmtPesoNum(pesoUn) .. " kg") or "";
         local restoMsg = (novaQtd == 0) and " [ESGOTADO!]" or (" [Restam: " .. tostring(novaQtd) .. "]");
         enviarChatOuMsg("[" .. nomeChar .. "] Usou consumivel: " .. nome .. " (-1" .. pesoMsg .. ")" .. restoMsg .. det);
+
+        -- Rolagem automatica para consumiveis com efeito numerico (v2.2)
+        local nmLow = nome:lower();
+        local mesa = Firecast.getMesaDe(sheet);
+        if nmLow:find("cataplasma") then
+            local function aplicarCuraCataplasma(r)
+                local cura = math.max(1, math.floor(tonumber(r) or 1));
+                local pvMax = math.max(1, math.floor(num(sheet.pvMax, 1)));
+                local pvAnt = math.floor(num(sheet.pvAtual, pvMax));
+                local pvNovo = math.min(pvMax, pvAnt + cura);
+                sheet.pvAtual = tostring(pvNovo);
+                recalcularFicha();
+                enviarChatOuMsg("[" .. nomeChar .. "] Cataplasma de Ervas curou +" .. tostring(cura) .. " PV! (PV: " .. tostring(pvAnt) .. " -> " .. tostring(pvNovo) .. "/" .. tostring(pvMax) .. ")");
+            end;
+            if mesa ~= nil and mesa.activeChat ~= nil then
+                mesa.activeChat:rolarDados("1d4", "[" .. nomeChar .. "] Cura do Cataplasma de Ervas (+1d4 PV)", function(rolado)
+                    aplicarCuraCataplasma(rolado.resultado);
+                end);
+            else
+                aplicarCuraCataplasma(math.random(1, 4));
+            end;
+        elseif nmLow:find("acido") then
+            local gDist = grauEfetivo(sheet.per_armas_dist_grau, sheet.nivel);
+            local atkMod = getMod("destreza") + gDist + num(sheet.per_armas_dist_outros, 0);
+            local exprAtk = (atkMod >= 0) and ("1d20+" .. tostring(atkMod)) or ("1d20" .. tostring(atkMod));
+            if mesa ~= nil and mesa.activeChat ~= nil then
+                mesa.activeChat:rolarDados(exprAtk, "[" .. nomeChar .. "] Arremesso de Acido Comum (6m — vs Defesa Esquiva SEM armadura comum)", function()
+                    mesa.activeChat:rolarDados("2d6", "[" .. nomeChar .. "] Dano Acido — Frasco de Acido Comum (2d6)");
+                end);
+            else
+                local rAtk = math.random(1, 20) + atkMod;
+                local rDmg = math.random(1, 6) + math.random(1, 6);
+                showMessage("Frasco de Acido Comum (offline):\nAtaque (vs Def Esquiva sem armadura): " .. tostring(rAtk) .. "\nDano Acido (2d6): " .. tostring(rDmg));
+            end;
+        elseif nmLow:find("oleo incendiario") or nmLow:find("alcatrao") then
+            local gDist = grauEfetivo(sheet.per_armas_dist_grau, sheet.nivel);
+            local atkMod = getMod("destreza") + gDist + num(sheet.per_armas_dist_outros, 0);
+            local exprAtk = (atkMod >= 0) and ("1d20+" .. tostring(atkMod)) or ("1d20" .. tostring(atkMod));
+            if mesa ~= nil and mesa.activeChat ~= nil then
+                mesa.activeChat:rolarDados(exprAtk, "[" .. nomeChar .. "] Arremesso de Oleo Incendiario (6m)", function()
+                    mesa.activeChat:rolarDados("1d6", "[" .. nomeChar .. "] Dano de Fogo Imediato — Oleo Incendiario (1d6 + 1d4/rodada por 2 rodadas)");
+                end);
+            else
+                local rAtk = math.random(1, 20) + atkMod;
+                local rDmg = math.random(1, 6);
+                showMessage("Oleo Incendiario (offline):\nAtaque (6m): " .. tostring(rAtk) .. "\nDano Fogo Imediato (1d6): " .. tostring(rDmg) .. " (+1d4/rodada por 2 rodadas)");
+            end;
+        elseif nmLow:find("calafetagem") then
+            if mesa ~= nil and mesa.activeChat ~= nil then
+                mesa.activeChat:rolarDados("2d6", "[" .. nomeChar .. "] Reparo de Casco — Kit de Calafetagem (2d6 integridade em 1h)");
+            else
+                showMessage("Kit de Calafetagem (offline): Reparou " .. tostring(math.random(1, 6) + math.random(1, 6)) .. " pontos de casco.");
+            end;
+        end;
     else
         local tipoLbl = (tipo == "arma" and "arma") or (tipo == "armadura" and "armadura/escudo") or "equipamento";
         enviarChatOuMsg("[" .. nomeChar .. "] Utilizou " .. tipoLbl .. ": " .. nome .. " (x" .. tostring(math.max(1, qtd)) .. ")" .. det);
@@ -1508,6 +1777,215 @@ local function limparSlotInventario(slotIdx)
         );
     else
         executarLimpeza();
+    end;
+end;
+
+-- =========================================================================
+-- CATALOGO DOS 44 TALENTOS & SLOTS DE TALENTOS DO PERSONAGEM (v2.2)
+-- =========================================================================
+local function getTalentoSlotNodeByGlobal(globalIdx)
+    if sheet == nil then return nil; end;
+    if sheet.talentosSlots == nil then sheet.talentosSlots = {}; end;
+    local key = "t" .. tostring(globalIdx);
+    if sheet.talentosSlots[key] == nil then
+        sheet.talentosSlots[key] = {};
+    end;
+    return sheet.talentosSlots[key];
+end;
+
+local function getTalentoSlotNode(slotIdx)
+    if sheet == nil then return nil, 1; end;
+    local pagina = math.max(1, math.floor(num(sheet.talentosPage, 1)));
+    local globalIdx = (pagina - 1) * 6 + slotIdx;
+    return getTalentoSlotNodeByGlobal(globalIdx), globalIdx;
+end;
+
+atualizarPaginaTalentos = function()
+    if sheet == nil or sheet._updatingTal then return; end;
+    sheet._updatingTal = true;
+    local pagina = math.max(1, math.floor(num(sheet.talentosPage, 1)));
+    local inicio = (pagina - 1) * 6 + 1;
+    local fim = pagina * 6;
+    sheet.talentosPageLabel = "Pag. " .. tostring(pagina) .. " (" .. tostring(inicio) .. "-" .. tostring(fim) .. ")";
+    for i = 1, 6 do
+        local node = getTalentoSlotNode(i);
+        sheet["tal" .. i .. "_nome"] = (node ~= nil and node.nome) or "";
+        sheet["tal" .. i .. "_prereq"] = (node ~= nil and node.prereq) or "";
+        sheet["tal" .. i .. "_efeito"] = (node ~= nil and node.efeito) or "";
+    end;
+    sheet._updatingTal = false;
+end;
+
+local function salvarTalentoSlot(slotIdx)
+    if sheet == nil or sheet._updatingTal then return; end;
+    local node = getTalentoSlotNode(slotIdx);
+    if node == nil then return; end;
+    node.nome = tostring(sheet["tal" .. slotIdx .. "_nome"] or "");
+    node.prereq = tostring(sheet["tal" .. slotIdx .. "_prereq"] or "");
+    node.efeito = tostring(sheet["tal" .. slotIdx .. "_efeito"] or "");
+end;
+
+local function mudarPaginaTalentos(delta)
+    if sheet == nil then return; end;
+    local pag = math.max(1, math.floor(num(sheet.talentosPage, 1)) + delta);
+    sheet.talentosPage = tostring(pag);
+    atualizarPaginaTalentos();
+end;
+
+local function getTalentoAtual()
+    if sheet == nil then return nil, nil; end;
+    local catId = tostring(sheet.talentoCat or "marciais");
+    local lista = TALENTOS_ITENS[catId];
+    if lista == nil or #lista == 0 then
+        catId = "marciais";
+        lista = TALENTOS_ITENS[catId];
+    end;
+    if lista == nil or #lista == 0 then return catId, nil; end;
+    local tid = tostring(sheet.talentoItem or "");
+    for i = 1, #lista do
+        if lista[i].id == tid then return catId, lista[i]; end;
+    end;
+    return catId, lista[1];
+end;
+
+local function atualizarPreviewTalento()
+    if sheet == nil then return; end;
+    local _, t = getTalentoAtual();
+    if t == nil then
+        sheet.talentoPreview = "Selecione uma categoria e um dos 44 Talentos oficiais de Alenia.";
+        return;
+    end;
+    local ef = tostring(t.efeito or "");
+    if #ef > 145 then ef = string.sub(ef, 1, 142) .. "..."; end;
+    sheet.talentoPreview = "Pre-req: " .. tostring(t.prereq or "-") .. "  |  Efeito: " .. ef;
+end;
+
+local function atualizarItensTalentos(frm, forcar)
+    if frm ~= nil then _formRef = frm; end;
+    local ref = frm or _formRef or self;
+    if sheet == nil then return; end;
+    local catId = tostring(sheet.talentoCat or "marciais");
+    local lista = TALENTOS_ITENS[catId];
+    if lista == nil or #lista == 0 then
+        catId = "marciais";
+        sheet.talentoCat = catId;
+        lista = TALENTOS_ITENS[catId];
+    end;
+    if lista == nil or #lista == 0 then return; end;
+
+    if (not forcar) and (_ultimaCatTalento == catId) then
+        atualizarPreviewTalento();
+        return;
+    end;
+    _ultimaCatTalento = catId;
+
+    local labels = {};
+    local vals = {};
+    local curId = tostring(sheet.talentoItem or "");
+    local found = false;
+    for i = 1, #lista do
+        table.insert(labels, lista[i].label);
+        table.insert(vals, lista[i].id);
+        if lista[i].id == curId then found = true; end;
+    end;
+    if not found then
+        curId = lista[1].id;
+        sheet.talentoItem = curId;
+    end;
+    if ref ~= nil and ref.cmbTalentoItem ~= nil then
+        pcall(function()
+            ref.cmbTalentoItem.items = labels;
+            ref.cmbTalentoItem.values = vals;
+            ref.cmbTalentoItem.value = curId;
+        end);
+    end;
+    atualizarPreviewTalento();
+end;
+
+local function verDetalhesTalento()
+    if sheet == nil then return; end;
+    local catId, t = getTalentoAtual();
+    if t == nil then
+        showMessage("Selecione um Talento primeiro.");
+        return;
+    end;
+    local catNome = TALENTOS_CATS[catId] or catId;
+    showMessage(
+        "CATALOGO DE TALENTOS — ALENIA RPG\n\n" ..
+        "Categoria: " .. catNome .. "\n" ..
+        "Talento: " .. t.nome .. "\n" ..
+        "Pre-requisitos: " .. tostring(t.prereq or "Nenhum") .. "\n\n" ..
+        "Efeito em Jogo:\n" .. tostring(t.efeito or "")
+    );
+end;
+
+local function adicionarTalentoSelecionado()
+    if sheet == nil then return; end;
+    local _, t = getTalentoAtual();
+    if t == nil then
+        showMessage("Selecione um Talento valido antes de adicionar.");
+        return;
+    end;
+    if sheet.talentosSlots == nil then sheet.talentosSlots = {}; end;
+    local filhos = NDB.getChildNodes(sheet.talentosSlots);
+    local maxScan = math.max(24, #filhos + 12);
+    local alvoLow = t.nome:lower();
+    local primeiroVazio = nil;
+    for idx = 1, maxScan do
+        local nd = sheet.talentosSlots["t" .. tostring(idx)];
+        local nm = (nd ~= nil and tostring(nd.nome or ""):gsub("^%s+", ""):gsub("%s+$", "")) or "";
+        if nm == "" then
+            if primeiroVazio == nil then primeiroVazio = idx; end;
+        elseif nm:lower() == alvoLow then
+            showMessage("Voce ja possui o Talento '" .. t.nome .. "' na ficha (regra anti-acumulo de Talentos).");
+            return;
+        end;
+    end;
+    local destIdx = primeiroVazio or (maxScan + 1);
+    local nd = getTalentoSlotNodeByGlobal(destIdx);
+    nd.nome = t.nome;
+    nd.prereq = t.prereq or "";
+    nd.efeito = t.efeito or "";
+    local pag = math.floor((destIdx - 1) / 6) + 1;
+    sheet.talentosPage = tostring(pag);
+    atualizarPaginaTalentos();
+    local nomeChar = sheet.nome or "Explorador";
+    enviarChatOuMsg("[" .. nomeChar .. "] Adquiriu o Talento: " .. t.nome .. " (" .. tostring(t.prereq or "-") .. ") — " .. tostring(t.efeito or ""));
+end;
+
+local function anunciarTalentoSlot(slotIdx)
+    if sheet == nil then return; end;
+    local node = getTalentoSlotNode(slotIdx);
+    local nome = tostring((node ~= nil and node.nome) or sheet["tal" .. slotIdx .. "_nome"] or ""):gsub("^%s+", ""):gsub("%s+$", "");
+    if nome == "" then
+        showMessage("Este slot de Talento esta vazio. Escolha um dos 44 Talentos acima ou digite manualmente.");
+        return;
+    end;
+    local efeito = tostring((node ~= nil and node.efeito) or sheet["tal" .. slotIdx .. "_efeito"] or "");
+    local nomeChar = sheet.nome or "Explorador";
+    enviarChatOuMsg("[TALENTO — " .. nomeChar .. "] Ativou **" .. nome .. "**: " .. efeito);
+end;
+
+local function limparTalentoSlot(slotIdx)
+    if sheet == nil then return; end;
+    local node = getTalentoSlotNode(slotIdx);
+    local nome = tostring((node ~= nil and node.nome) or sheet["tal" .. slotIdx .. "_nome"] or ""):gsub("^%s+", ""):gsub("%s+$", "");
+    local function limpar()
+        if node ~= nil then
+            node.nome = "";
+            node.prereq = "";
+            node.efeito = "";
+        end;
+        sheet._updatingTal = true;
+        sheet["tal" .. slotIdx .. "_nome"] = "";
+        sheet["tal" .. slotIdx .. "_prereq"] = "";
+        sheet["tal" .. slotIdx .. "_efeito"] = "";
+        sheet._updatingTal = false;
+    end;
+    if nome ~= "" and DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+        DialogsMod.confirmYesNo("Remover o Talento '" .. nome .. "' deste slot?", function(sim) if sim then limpar(); end; end);
+    else
+        limpar();
     end;
 end;
 
@@ -1930,27 +2408,31 @@ end;
     <rectangle align="client" color="#121419">
         <!-- CABECALHO FIXO AMPLIADO + BARRA RAPIDA DE CD & DESCANSO -->
         <rectangle align="top" height="148" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" margins="{left=6, right=6, top=6, bottom=4}" xradius="6" yradius="6">
-            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.0" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.2" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
             <label left="278" top="6" width="170" height="24" field="patamarTexto" fontColor="#E5736E" fontSize="14" fontStyle="bold"/>
-            <label left="452" top="6" width="352" height="24" field="kitNomeAtual" fontColor="#A6AEBF" fontSize="14"/>
-            <label left="810" top="6" width="220" height="24" text="Golpe Devastador (&gt;2/3):" fontColor="#E5736E" fontSize="13" horzTextAlign="trailing"/>
+            <label left="452" top="6" width="320" height="24" field="kitNomeAtual" fontColor="#A6AEBF" fontSize="14"/>
+            <label left="780" top="6" width="250" height="24" text="Golpe Devastador (&gt;2/3 PV):" fontColor="#E5736E" fontSize="13" horzTextAlign="trailing"/>
 
-            <label left="12" top="32" width="240" height="18" text="NOME DO PERSONAGEM" fontColor="#A6AEBF" fontSize="12"/>
-            <edit left="12" top="52" width="246" height="40" field="nome" textPrompt="Nome do explorador..." fontColor="#EAE4D6" fontSize="16" fontStyle="bold"/>
+            <label left="12" top="32" width="224" height="18" text="NOME DO PERSONAGEM" fontColor="#A6AEBF" fontSize="12"/>
+            <edit left="12" top="52" width="224" height="40" field="nome" textPrompt="Nome do explorador..." fontColor="#EAE4D6" fontSize="16" fontStyle="bold"/>
 
-            <label left="268" top="32" width="240" height="18" text="ORIGEM / CIDADE NATAL" fontColor="#A6AEBF" fontSize="12"/>
-            <edit left="268" top="52" width="236" height="40" field="origem" textPrompt="Altavanne, Baldbella, OX..." fontColor="#EAE4D6" fontSize="15"/>
+            <label left="244" top="32" width="196" height="18" text="ORIGEM / CIDADE NATAL" fontColor="#A6AEBF" fontSize="12"/>
+            <edit left="244" top="52" width="196" height="40" field="origem" textPrompt="Altavanne, Baldbella, OX..." fontColor="#EAE4D6" fontSize="15"/>
 
-            <label left="514" top="32" width="76" height="18" text="NIVEL" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-            <edit left="514" top="52" width="76" height="40" field="nivel" type="number" fontColor="#D9B96A" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
+            <label left="448" top="32" width="64" height="18" text="NIVEL" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+            <edit left="448" top="52" width="64" height="40" field="nivel" type="number" fontColor="#D9B96A" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
 
-            <label left="600" top="32" width="164" height="18" text="PV (ATUAL / MAX)" fontColor="#E5736E" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-            <edit left="600" top="52" width="74" height="40" field="pvAtual" type="number" fontColor="#EAE4D6" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
-            <label left="674" top="52" width="16" height="40" text="/" fontColor="#A6AEBF" fontSize="18" horzTextAlign="center" vertTextAlign="center"/>
-            <edit left="690" top="52" width="74" height="40" field="pvMax" type="number" fontColor="#E5736E" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
+            <label left="520" top="32" width="142" height="18" text="PV (ATUAL / MAX)" fontColor="#E5736E" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+            <edit left="520" top="52" width="64" height="40" field="pvAtual" type="number" fontColor="#EAE4D6" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
+            <label left="584" top="52" width="14" height="40" text="/" fontColor="#A6AEBF" fontSize="18" horzTextAlign="center" vertTextAlign="center"/>
+            <edit left="598" top="52" width="64" height="40" field="pvMax" type="number" fontColor="#E5736E" fontSize="18" fontStyle="bold" horzTextAlign="center"/>
 
-            <rectangle left="774" top="52" width="128" height="40" color="#14171E" strokeColor="#8A2B28" strokeSize="1" xradius="4" yradius="4">
-                <label align="client" field="limiarDevastador" fontColor="#E5736E" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+            <button left="670" top="52" width="110" height="40" text="Receber Dano" fontSize="13">
+                <event name="onClick"><![CDATA[receberDano();]]></event>
+            </button>
+
+            <rectangle left="788" top="52" width="116" height="40" color="#14171E" strokeColor="#8A2B28" strokeSize="1" xradius="4" yradius="4">
+                <label align="client" field="limiarDevastador" fontColor="#E5736E" fontSize="14" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
             </rectangle>
 
             <button left="912" top="52" width="118" height="40" text="Iniciativa" fontSize="14">
@@ -2107,39 +2589,49 @@ end;
             </rectangle>
                         </rectangle>
 
+                        <!-- RETRATO DO EXPLORADOR (CLICAVEL / EDITAVEL) -->
+                        <rectangle left="6" top="380" width="214" height="296" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="8" top="8" width="198" height="20" text="RETRATO DO EXPLORADOR" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
+                            <rectangle left="10" top="32" width="194" height="234" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" text="Clique aqui para carregar retrato" fontColor="#A6AEBF" fontSize="12" horzTextAlign="center" vertTextAlign="center" wordWrap="true"/>
+                                <image name="imgRetrato" align="client" field="retratoPersonagem" editable="true" style="proportional" center="true"/>
+                            </rectangle>
+                            <label left="8" top="270" width="198" height="18" text="Clique na moldura para trocar" fontColor="#A6AEBF" fontSize="11" horzTextAlign="center"/>
+                        </rectangle>
+
                         <!-- SELETOR & AUTOMACAO DE KITS UNIVERSAIS -->
-                        <rectangle left="6" top="380" width="1036" height="296" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="800" height="26" text="KIT DE PERSONAGEM (36 OFICIOS UNIVERSAIS — DV 1d6 a 1d12)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
-                            <label left="12" top="44" width="110" height="34" text="Escolher Kit:" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
-                            <comboBox left="124" top="44" width="470" height="36" field="kitSelecionado" items="{'00 - Sem Kit (Livre / Media Padrao)', '01 - Mercenario (1d10)', '02 - Cavaleiro (1d10)', '03 - Soldado / Veterano (1d10)', '04 - Duelista / Esgrimista (1d8)', '05 - Barbaro / Berserker (1d12)', '06 - Guarda-Costas / Sentinela (1d10)', '07 - Arqueiro / Franco-Atirador (1d8)', '08 - Lutador / Pugilista (1d10)', '09 - Ladino (1d6)', '10 - Assassino (1d6)', '11 - Espiao (1d6)', '12 - Contrabandista (1d8)', '13 - Cacador de Recompensas (1d8)', '14 - Charlatao / Vigario (1d6)', '15 - Saqueador de Tumbas (1d8)', '16 - Pirata (1d8)', '17 - Navegador / Marinheiro (1d8)', '18 - Explorador / Cartografo (1d8)', '19 - Patrulheiro / Rastreador (1d8)', '20 - Mercador / Caravaneiro (1d6)', '21 - Domador / Cavaleiro de Estrada (1d8)', '22 - Ferreiro / Armeiro (1d8)', '23 - Alquimista (1d6)', '24 - Medico / Cirurgiao (1d6)', '25 - Erudito / Historiador (1d6)', '26 - Engenheiro / Artifice (1d6)', '27 - Herbalista / Boticario (1d6)', '28 - Astronomo / Sabio (1d6)', '29 - Carpinteiro / Artesao (1d8)', '30 - Nobre (1d6)', '31 - Diplomata / Conselheiro (1d6)', '32 - Bardo / Menestrel (1d6)', '33 - Sacerdote / Clerigo (1d6)', '34 - Inquisidor (1d8)', '35 - Ermitao / Sobrevivente (1d8)', '36 - Tocado pelo Dom Antigo (1d6 | Mestre)'}" values="{'sem_kit', 'mercenario', 'cavaleiro', 'soldado', 'duelista', 'barbaro', 'guarda_costas', 'arqueiro', 'lutador', 'ladino', 'assassino', 'espiao', 'contrabandista', 'cacador_rec', 'charlatao', 'saqueador', 'pirata', 'navegador', 'explorador', 'patrulheiro', 'mercador', 'domador', 'ferreiro', 'alquimista', 'medico', 'erudito', 'engenheiro', 'herbalista', 'astronomo', 'carpinteiro', 'nobre', 'diplomata', 'bardo', 'sacerdote', 'inquisidor', 'ermitao', 'dom_antigo'}" fontSize="14"/>
-                            <button left="604" top="44" width="150" height="36" text="Aplicar Kit" fontSize="15">
+                        <rectangle left="228" top="380" width="814" height="296" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="790" height="26" text="KIT DE PERSONAGEM (36 OFICIOS UNIVERSAIS — DV 1d6 a 1d12)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+                            <label left="12" top="44" width="44" height="34" text="Kit:" fontColor="#EAE4D6" fontSize="14" vertTextAlign="center"/>
+                            <comboBox left="56" top="44" width="360" height="36" field="kitSelecionado" items="{'00 - Sem Kit (Livre / Media Padrao)', '01 - Mercenario (1d10)', '02 - Cavaleiro (1d10)', '03 - Soldado / Veterano (1d10)', '04 - Duelista / Esgrimista (1d8)', '05 - Barbaro / Berserker (1d12)', '06 - Guarda-Costas / Sentinela (1d10)', '07 - Arqueiro / Franco-Atirador (1d8)', '08 - Lutador / Pugilista (1d10)', '09 - Ladino (1d6)', '10 - Assassino (1d6)', '11 - Espiao (1d6)', '12 - Contrabandista (1d8)', '13 - Cacador de Recompensas (1d8)', '14 - Charlatao / Vigario (1d6)', '15 - Saqueador de Tumbas (1d8)', '16 - Pirata (1d8)', '17 - Navegador / Marinheiro (1d8)', '18 - Explorador / Cartografo (1d8)', '19 - Patrulheiro / Rastreador (1d8)', '20 - Mercador / Caravaneiro (1d6)', '21 - Domador / Cavaleiro de Estrada (1d8)', '22 - Ferreiro / Armeiro (1d8)', '23 - Alquimista (1d6)', '24 - Medico / Cirurgiao (1d6)', '25 - Erudito / Historiador (1d6)', '26 - Engenheiro / Artifice (1d6)', '27 - Herbalista / Boticario (1d6)', '28 - Astronomo / Sabio (1d6)', '29 - Carpinteiro / Artesao (1d8)', '30 - Nobre (1d6)', '31 - Diplomata / Conselheiro (1d6)', '32 - Bardo / Menestrel (1d6)', '33 - Sacerdote / Clerigo (1d6)', '34 - Inquisidor (1d8)', '35 - Ermitao / Sobrevivente (1d8)', '36 - Tocado pelo Dom Antigo (1d6 | Mestre)'}" values="{'sem_kit', 'mercenario', 'cavaleiro', 'soldado', 'duelista', 'barbaro', 'guarda_costas', 'arqueiro', 'lutador', 'ladino', 'assassino', 'espiao', 'contrabandista', 'cacador_rec', 'charlatao', 'saqueador', 'pirata', 'navegador', 'explorador', 'patrulheiro', 'mercador', 'domador', 'ferreiro', 'alquimista', 'medico', 'erudito', 'engenheiro', 'herbalista', 'astronomo', 'carpinteiro', 'nobre', 'diplomata', 'bardo', 'sacerdote', 'inquisidor', 'ermitao', 'dom_antigo'}" fontSize="13"/>
+                            <button left="424" top="44" width="136" height="36" text="Aplicar Kit" fontSize="14">
                                 <event name="onClick"><![CDATA[aplicarKitSelecionado();]]></event>
                             </button>
-                            <button left="762" top="44" width="260" height="36" text="Subir Nivel (Rolar 1dX+CON)" fontSize="14">
+                            <button left="568" top="44" width="234" height="36" text="Subir Nivel (Rolar 1dX+CON)" fontSize="13">
                                 <event name="onClick"><![CDATA[rolarSubirNivelPV();]]></event>
                             </button>
 
-                            <label left="12" top="92" width="180" height="20" text="Dado de Vida (DV)" fontColor="#D9B96A" fontSize="13"/>
-                            <comboBox left="12" top="114" width="180" height="34" field="kitDvFaces" items="{'1d6 (Esp/Erud)', '1d8 (Expl/Hib)', '1d10 (Comb)', '1d12 (Brutal)'}" values="{'6', '8', '10', '12'}" fontSize="13"/>
+                            <label left="12" top="92" width="144" height="20" text="Dado de Vida (DV)" fontColor="#D9B96A" fontSize="12"/>
+                            <comboBox left="12" top="114" width="144" height="34" field="kitDvFaces" items="{'1d6 (Esp/Erud)', '1d8 (Expl/Hib)', '1d10 (Comb)', '1d12 (Brutal)'}" values="{'6', '8', '10', '12'}" fontSize="12"/>
 
-                            <label left="204" top="92" width="120" height="20" text="Per. Base/Niv." fontColor="#A6AEBF" fontSize="13"/>
-                            <edit left="204" top="114" width="110" height="34" field="kitPerBase" type="number" horzTextAlign="center" fontSize="15"/>
+                            <label left="164" top="92" width="78" height="20" text="Per. Base" fontColor="#A6AEBF" fontSize="12"/>
+                            <edit left="164" top="114" width="76" height="34" field="kitPerBase" type="number" horzTextAlign="center" fontSize="14"/>
 
-                            <label left="326" top="92" width="120" height="20" text="Mult. INT (Per.)" fontColor="#A6AEBF" fontSize="13"/>
-                            <edit left="326" top="114" width="110" height="34" field="kitMultInt" horzTextAlign="center" fontSize="15"/>
+                            <label left="248" top="92" width="78" height="20" text="Mult. INT" fontColor="#A6AEBF" fontSize="12"/>
+                            <edit left="248" top="114" width="76" height="34" field="kitMultInt" horzTextAlign="center" fontSize="14"/>
 
-                            <button left="448" top="114" width="136" height="34" text="Usar PV Medio" fontSize="13">
+                            <button left="332" top="114" width="114" height="34" text="Usar PV Medio" fontSize="12">
                                 <event name="onClick"><![CDATA[recalcularFicha(); sheet.pvMax = sheet.pvSugerido; sheet.pvAtual = sheet.pvSugerido;]]></event>
                             </button>
 
-                            <label left="596" top="92" width="206" height="20" text="Kit de Lenda (Niv. 11-20)" fontColor="#D9B96A" fontSize="13"/>
-                            <edit left="596" top="114" width="206" height="34" field="kitLenda" textPrompt="(Futuro — Niv. 11+)" fontSize="14"/>
+                            <label left="454" top="92" width="170" height="20" text="Kit de Lenda (Niv. 11-20)" fontColor="#D9B96A" fontSize="12"/>
+                            <edit left="454" top="114" width="170" height="34" field="kitLenda" textPrompt="(Futuro — Niv. 11+)" fontSize="13"/>
 
-                            <label left="814" top="92" width="208" height="20" text="Kit Epico (Niv. 21-30)" fontColor="#E5736E" fontSize="13"/>
-                            <edit left="814" top="114" width="208" height="34" field="kitEpico" textPrompt="(Futuro — Niv. 21+)" fontSize="14"/>
+                            <label left="632" top="92" width="170" height="20" text="Kit Epico (Niv. 21-30)" fontColor="#E5736E" fontSize="12"/>
+                            <edit left="632" top="114" width="170" height="34" field="kitEpico" textPrompt="(Futuro — Niv. 21+)" fontSize="13"/>
 
                             <label left="12" top="158" width="460" height="22" text="HABILIDADE EXCLUSIVA DO KIT" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
-                            <textEditor left="12" top="184" width="1010" height="100" field="kitHabilidade" fontSize="14"/>
+                            <textEditor left="12" top="184" width="790" height="100" field="kitHabilidade" fontSize="14"/>
                         </rectangle>
 
                         <!-- PAINEL AUTOMATICO DE EVOLUCAO & XP -->
@@ -2365,8 +2857,8 @@ end;
             <!-- ABA 3: PERICIAS & TALENTOS -->
             <tab title="Pericias &amp; Talentos">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="1304">
-                        <rectangle left="6" top="6" width="1036" height="808" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                    <layout left="0" top="0" width="1056" height="1730">
+                        <rectangle left="6" top="6" width="1036" height="836" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="8" width="710" height="22" text="34 PERICIAS — GRADUACAO COM TETO (0 Destr | 1-2 Inic | 3-7 Trein | 8-11 Espec | 12-16 Mestre)" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
                             <label left="724" top="8" width="156" height="22" text="Pts Gastos / Sugeridos:" fontColor="#A6AEBF" fontSize="12" horzTextAlign="trailing" vertTextAlign="center"/>
                             <label left="884" top="8" width="56" height="22" field="periciasGastas" fontColor="#EAE4D6" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
@@ -2835,9 +3327,13 @@ end;
                     <event name="onClick"><![CDATA[rolarPericia("per_religiao", "Religiao e Ocultismo", "sabedoria");]]></event>
                 </button>
             </rectangle>
+
+                            <rectangle left="10" top="802" width="1016" height="24" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                                <label left="8" top="1" width="1000" height="22" field="avisoBonusExt" fontColor="#D9B96A" fontSize="11" vertTextAlign="center"/>
+                            </rectangle>
                         </rectangle>
 
-                        <rectangle left="6" top="822" width="1036" height="292" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="850" width="1036" height="292" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="560" height="26" text="PERICIAS LIVRES / PERSONALIZADAS (CRIE QUANTAS QUISER!)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
                             <button left="590" top="8" width="136" height="32" text="&lt; Pag. Ant." fontSize="13">
                                 <event name="onClick"><![CDATA[mudarPaginaCustom(-1);]]></event>
@@ -2981,9 +3477,118 @@ end;
             </rectangle>
                         </rectangle>
 
-                        <rectangle left="6" top="1122" width="1036" height="170" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="1010" height="24" text="TALENTOS, MANOBRAS DE COMBATE &amp; ESPECIALIZACOES (Niveis pares ou treino)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
-                            <textEditor left="12" top="38" width="1012" height="120" field="talentosManobras" fontSize="14"/>
+                        <!-- CATALOGO SELECIONAVEL DOS 44 TALENTOS & SLOTS DO PERSONAGEM -->
+                        <rectangle left="6" top="1150" width="1036" height="444" color="#1B1E26" strokeColor="#9A7E42" strokeSize="2" xradius="6" yradius="6">
+                            <label left="12" top="10" width="570" height="24" text="CATALOGO DOS 44 TALENTOS &amp; SLOTS DO PERSONAGEM (Niveis pares)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+
+                            <button left="614" top="7" width="96" height="30" text="&lt; Anterior" fontSize="12">
+                                <event name="onClick"><![CDATA[mudarPaginaTalentos(-1);]]></event>
+                            </button>
+                            <label left="714" top="8" width="118" height="28" field="talentosPageLabel" fontColor="#D9B96A" fontSize="13" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            <button left="836" top="7" width="188" height="30" text="Proxima / +6 Slots &gt;" fontSize="12">
+                                <event name="onClick"><![CDATA[mudarPaginaTalentos(1);]]></event>
+                            </button>
+
+                            <label left="12" top="40" width="280" height="16" text="CATEGORIA DE TALENTOS" fontColor="#A6AEBF" fontSize="11" fontStyle="bold"/>
+                            <comboBox name="cmbTalentoCat" left="12" top="58" width="286" height="34" field="talentoCat" fontSize="13"
+                                      items="{'1 - Marciais e Taticos (12)', '2 - Sobrevivencia, Vigor e Exploracao (10)', '3 - Sociais, Intriga e Lideranca (11)', '4 - Mentais, Erudicao e Oficio (11)'}" values="{'marciais', 'sobrevivencia', 'sociais', 'mentais'}">
+                                <event name="onChange"><![CDATA[_formRef = self; atualizarItensTalentos(self, true);]]></event>
+                            </comboBox>
+
+                            <label left="308" top="40" width="460" height="16" text="TALENTO OFICIAL (44 TALENTOS — COM PRE-REQUISITOS)" fontColor="#A6AEBF" fontSize="11" fontStyle="bold"/>
+                            <comboBox name="cmbTalentoItem" left="308" top="58" width="466" height="34" field="talentoItem" fontSize="13"
+                                      items="{'Aparar Relampago  [DES 12+, Treinado em Aparar]', 'Riposta Mortal  [DES 14+, Especialista em Aparar, Aparar Relampago]', 'Muralha de Aco  [FOR 13+, Treinado em Escudos ou Aparar]', 'Bastiao Inquebravel  [FOR 15+, CON 14+, Especialista em Escudos, Muralha de Aco]', 'Golpe Preciso  [FOR 13+ ou DES 13+, Treinado em Armas Brancas ou Distancia]', 'Anatomia Letal  [INT 12+ ou SAB 13+, Niv. 6+, Golpe Preciso]', 'Fluxo de Laminas  [DES 14+, Treinado em Armas Brancas ou Luta Desarmada]', 'Tempestade de Aco  [DES 16+, Patamar Lenda (Niv. 11+), Especialista em Armas Brancas, Fluxo de Laminas]', 'Tiro Firme  [DES 13+, Treinado em Armas a Distancia]', 'Olho de Falcao  [DES 15+, SAB 13+, Especialista em Armas a Distancia, Tiro Firme]', 'Quebra-Guarda  [FOR 14+, Treinado em Armas Brancas ou Atletismo]', 'Combate de Cais  [FOR 12+ ou DES 12+]'}" values="{'marciais_1', 'marciais_2', 'marciais_3', 'marciais_4', 'marciais_5', 'marciais_6', 'marciais_7', 'marciais_8', 'marciais_9', 'marciais_10', 'marciais_11', 'marciais_12'}">
+                                <event name="onChange"><![CDATA[atualizarPreviewTalento();]]></event>
+                            </comboBox>
+
+                            <button left="784" top="57" width="154" height="36" text="+ Adicionar Talento" fontSize="13">
+                                <event name="onClick"><![CDATA[adicionarTalentoSelecionado();]]></event>
+                            </button>
+                            <button left="944" top="57" width="80" height="36" text="Detalhes" fontSize="12">
+                                <event name="onClick"><![CDATA[verDetalhesTalento();]]></event>
+                            </button>
+
+                            <rectangle left="12" top="100" width="1012" height="38" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                                <label left="10" top="2" width="992" height="34" field="talentoPreview" fontColor="#D9B96A" fontSize="12" vertTextAlign="center" wordWrap="true"/>
+                            </rectangle>
+
+                            <label left="16" top="146" width="210" height="16" text="TALENTO ADQUIRIDO" fontColor="#D9B96A" fontSize="11" fontStyle="bold"/>
+                            <label left="230" top="146" width="186" height="16" text="PRE-REQUISITOS" fontColor="#A6AEBF" fontSize="11" fontStyle="bold"/>
+                            <label left="420" top="146" width="474" height="16" text="EFEITO EM JOGO (CLIQUE EM [ANUNCIAR] PARA ENVIAR NO CHAT)" fontColor="#A6AEBF" fontSize="11" fontStyle="bold"/>
+                            <label left="898" top="146" width="122" height="16" text="ACOES" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+
+                            
+            <rectangle left="10" top="186" width="1016" height="37" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="6" top="4" width="210" height="29" field="tal1_nome" textPrompt="Talento 1 (adicione acima ou digite)..." fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                <edit left="220" top="4" width="186" height="29" field="tal1_prereq" textPrompt="Pre-requisitos..." fontColor="#A6AEBF" fontSize="11"/>
+                <edit left="410" top="4" width="474" height="29" field="tal1_efeito" textPrompt="Efeito em jogo..." fontColor="#EAE4D6" fontSize="12"/>
+                <button left="888" top="4" width="80" height="29" text="Anunciar" fontSize="12">
+                    <event name="onClick"><![CDATA[anunciarTalentoSlot(1);]]></event>
+                </button>
+                <button left="972" top="4" width="38" height="29" text="X" fontSize="12">
+                    <event name="onClick"><![CDATA[limparTalentoSlot(1);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="227" width="1016" height="37" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="6" top="4" width="210" height="29" field="tal2_nome" textPrompt="Talento 2 (adicione acima ou digite)..." fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                <edit left="220" top="4" width="186" height="29" field="tal2_prereq" textPrompt="Pre-requisitos..." fontColor="#A6AEBF" fontSize="11"/>
+                <edit left="410" top="4" width="474" height="29" field="tal2_efeito" textPrompt="Efeito em jogo..." fontColor="#EAE4D6" fontSize="12"/>
+                <button left="888" top="4" width="80" height="29" text="Anunciar" fontSize="12">
+                    <event name="onClick"><![CDATA[anunciarTalentoSlot(2);]]></event>
+                </button>
+                <button left="972" top="4" width="38" height="29" text="X" fontSize="12">
+                    <event name="onClick"><![CDATA[limparTalentoSlot(2);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="268" width="1016" height="37" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="6" top="4" width="210" height="29" field="tal3_nome" textPrompt="Talento 3 (adicione acima ou digite)..." fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                <edit left="220" top="4" width="186" height="29" field="tal3_prereq" textPrompt="Pre-requisitos..." fontColor="#A6AEBF" fontSize="11"/>
+                <edit left="410" top="4" width="474" height="29" field="tal3_efeito" textPrompt="Efeito em jogo..." fontColor="#EAE4D6" fontSize="12"/>
+                <button left="888" top="4" width="80" height="29" text="Anunciar" fontSize="12">
+                    <event name="onClick"><![CDATA[anunciarTalentoSlot(3);]]></event>
+                </button>
+                <button left="972" top="4" width="38" height="29" text="X" fontSize="12">
+                    <event name="onClick"><![CDATA[limparTalentoSlot(3);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="309" width="1016" height="37" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="6" top="4" width="210" height="29" field="tal4_nome" textPrompt="Talento 4 (adicione acima ou digite)..." fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                <edit left="220" top="4" width="186" height="29" field="tal4_prereq" textPrompt="Pre-requisitos..." fontColor="#A6AEBF" fontSize="11"/>
+                <edit left="410" top="4" width="474" height="29" field="tal4_efeito" textPrompt="Efeito em jogo..." fontColor="#EAE4D6" fontSize="12"/>
+                <button left="888" top="4" width="80" height="29" text="Anunciar" fontSize="12">
+                    <event name="onClick"><![CDATA[anunciarTalentoSlot(4);]]></event>
+                </button>
+                <button left="972" top="4" width="38" height="29" text="X" fontSize="12">
+                    <event name="onClick"><![CDATA[limparTalentoSlot(4);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="350" width="1016" height="37" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="6" top="4" width="210" height="29" field="tal5_nome" textPrompt="Talento 5 (adicione acima ou digite)..." fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                <edit left="220" top="4" width="186" height="29" field="tal5_prereq" textPrompt="Pre-requisitos..." fontColor="#A6AEBF" fontSize="11"/>
+                <edit left="410" top="4" width="474" height="29" field="tal5_efeito" textPrompt="Efeito em jogo..." fontColor="#EAE4D6" fontSize="12"/>
+                <button left="888" top="4" width="80" height="29" text="Anunciar" fontSize="12">
+                    <event name="onClick"><![CDATA[anunciarTalentoSlot(5);]]></event>
+                </button>
+                <button left="972" top="4" width="38" height="29" text="X" fontSize="12">
+                    <event name="onClick"><![CDATA[limparTalentoSlot(5);]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="10" top="391" width="1016" height="37" color="#212530" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                <edit left="6" top="4" width="210" height="29" field="tal6_nome" textPrompt="Talento 6 (adicione acima ou digite)..." fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                <edit left="220" top="4" width="186" height="29" field="tal6_prereq" textPrompt="Pre-requisitos..." fontColor="#A6AEBF" fontSize="11"/>
+                <edit left="410" top="4" width="474" height="29" field="tal6_efeito" textPrompt="Efeito em jogo..." fontColor="#EAE4D6" fontSize="12"/>
+                <button left="888" top="4" width="80" height="29" text="Anunciar" fontSize="12">
+                    <event name="onClick"><![CDATA[anunciarTalentoSlot(6);]]></event>
+                </button>
+                <button left="972" top="4" width="38" height="29" text="X" fontSize="12">
+                    <event name="onClick"><![CDATA[limparTalentoSlot(6);]]></event>
+                </button>
+            </rectangle>
+                        </rectangle>
+
+                        <rectangle left="6" top="1604" width="1036" height="114" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="8" width="1010" height="22" text="NOTAS LIVRES DE MANOBRAS, ESPECIALIZACOES &amp; TALENTOS EXTRAS" fontColor="#A6AEBF" fontSize="13" fontStyle="bold"/>
+                            <textEditor left="12" top="34" width="1012" height="70" field="talentosManobras" fontSize="13"/>
                         </rectangle>
                     </layout>
                 </scrollBox>
@@ -3384,10 +3989,10 @@ end;
                         <!-- CARD DE NOVIDADES -->
                         <rectangle left="6" top="450" width="1036" height="224" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v2.1 — Inventario em Slots Ilimitados com botao [Usar] em todos os consumiveis (desconta uso, atualiza carga e anuncia no chat) + desempacote automatico dos 5 Pacotes." fontColor="#EAE4D6" fontSize="13"/>
-                            <label left="20" top="74" width="996" height="24" text="• v2.0 — Emporio Automatico na aba Inventario (155 itens do Tomo IX + Armas e Armaduras): compra direta com debito de moedas/banco, empilhamento e anuncio no chat." fontColor="#EAE4D6" fontSize="13"/>
-                            <label left="20" top="102" width="996" height="24" text="• v1.9 — Teto Progressivo de Graduacao de Pericias por Nivel (+4 no Niv. 1 ate +16 no Niv. 26-30) com trava rigida e alerta automatico." fontColor="#A6AEBF" fontSize="13"/>
-                            <label left="20" top="130" width="996" height="24" text="• v1.5-v1.8 — Sistema Monetario Padrao Prata, Cartas de Credito, Padrao de Vida Mensal, XP (Niveis 1-30), CD, Defesa do Alvo, dano +FOR e Descansos." fontColor="#A6AEBF" fontSize="13"/>
+                            <label left="20" top="46" width="996" height="24" text="• v2.2 — Botao Receber Dano (RD + alerta Golpe Devastador), rolagem auto em consumiveis, Catalogo 44 Talentos, Aplicar Kit completo, Retrato clicavel e aviso OUT +6." fontColor="#EAE4D6" fontSize="13"/>
+                            <label left="20" top="74" width="996" height="24" text="• v2.1 — Inventario em Slots Ilimitados com botao [Usar] em todos os consumiveis (desconta uso, atualiza carga e anuncia no chat) + desempacote automatico dos 5 Pacotes." fontColor="#EAE4D6" fontSize="13"/>
+                            <label left="20" top="102" width="996" height="24" text="• v2.0 — Emporio Automatico na aba Inventario (155 itens do Tomo IX + Armas e Armaduras): compra direta com debito de moedas/banco, empilhamento e anuncio no chat." fontColor="#A6AEBF" fontSize="13"/>
+                            <label left="20" top="130" width="996" height="24" text="• v1.5-v1.9 — Teto de Graduacao por Nivel (+4..+16), Sistema Monetario Padrao Prata, Cartas de Credito, XP (Niveis 1-30), CD, Defesa do Alvo, dano +FOR e Descansos." fontColor="#A6AEBF" fontSize="13"/>
                             <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="#7FC48C" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
@@ -3397,13 +4002,16 @@ end;
     </rectangle>
 
     <!-- DATALINKS NA RAIZ DO FORM (REGRA 2 DO SDK 3.7b) -->
-    <dataLink fields="{'nivel', 'kitSelecionado', 'kitNomeAtual', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'pvAtual', 'pvMax', 'armaduraDef', 'escudoDef', 'rdEspecial', 'defesaOutros', 'iniciativaOutros', 'multiAcoes', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'customSkillPage', 'invPage', 'invMaxIdx', 'invPageLabel', 'invPesoTotal', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'bancoOrigem', 'padraoVida', 'emporioCat', 'emporioItem', 'emporioQtd', 'emporioPreview', 'cdTeste', 'defesaAlvo', 'xpAtual', 'pluginVersaoAtual', 'statusAtualizacao', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma1_danoExtra', 'arma1_margem', 'arma1_mult', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma2_danoExtra', 'arma2_margem', 'arma2_mult', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma3_danoExtra', 'arma3_margem', 'arma3_mult', 'arma4_attr', 'arma4_per', 'arma4_extra', 'arma4_danoExtra', 'arma4_margem', 'arma4_mult', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros'}" defaultValues="{'1', 'sem_kit', '00 - Sem Kit (Livre / Media Padrao)', '8', '1', '0.75', '18', '18', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '1', '1', '30', 'Pag. 1 (1-10)', '0.0 kg (0 itens)', '0', '25', '0', '0', 'corallis', 'modesto', 'pacotes', 'pacotes_1', '1', 'Selecione uma categoria e um item para comprar direto para os Slots de Inventario.', '0', '0', '0', 'v2.1', 'Clique no botao acima para checar e instalar atualizacoes automaticamente.', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}"/>
+    <dataLink fields="{'nivel', 'kitSelecionado', 'kitNomeAtual', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'pvAtual', 'pvMax', 'armaduraDef', 'escudoDef', 'rdEspecial', 'defesaOutros', 'iniciativaOutros', 'multiAcoes', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'customSkillPage', 'invPage', 'invMaxIdx', 'invPageLabel', 'invPesoTotal', 'talentosPage', 'talentosPageLabel', 'talentoCat', 'talentoItem', 'talentoPreview', 'avisoBonusExt', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'bancoOrigem', 'padraoVida', 'emporioCat', 'emporioItem', 'emporioQtd', 'emporioPreview', 'cdTeste', 'defesaAlvo', 'xpAtual', 'pluginVersaoAtual', 'statusAtualizacao', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma1_danoExtra', 'arma1_margem', 'arma1_mult', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma2_danoExtra', 'arma2_margem', 'arma2_mult', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma3_danoExtra', 'arma3_margem', 'arma3_mult', 'arma4_attr', 'arma4_per', 'arma4_extra', 'arma4_danoExtra', 'arma4_margem', 'arma4_mult', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros'}" defaultValues="{'1', 'sem_kit', '00 - Sem Kit (Livre / Media Padrao)', '8', '1', '0.75', '18', '18', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '1', '1', '30', 'Pag. 1 (1-10)', '0.0 kg (0 itens)', '1', 'Pag. 1 (1-6)', 'marciais', 'marciais_1', 'Selecione uma categoria e um dos 44 Talentos oficiais de Alenia.', 'Bonus externos (OUT) dentro da regra oficial: apenas maior equipamento aplica | teto combinado +6 (excecao: Rituais +8).', '0', '25', '0', '0', 'corallis', 'modesto', 'pacotes', 'pacotes_1', '1', 'Selecione uma categoria e um item para comprar direto para os Slots de Inventario.', '0', '0', '0', 'v2.2', 'Clique no botao acima para checar e instalar atualizacoes automaticamente.', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}"/>
 
     <dataLink fields="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'nivel', 'xpAtual', 'pvMax', 'kitSelecionado', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'armaduraDef', 'escudoDef', 'defesaOutros', 'iniciativaOutros', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'padraoVida', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma4_attr', 'arma4_per', 'arma4_extra'}">
         <event name="onChange"><![CDATA[recalcularFicha();]]></event>
     </dataLink>
     <dataLink fields="{'emporioCat', 'emporioItem', 'emporioQtd'}">
         <event name="onChange"><![CDATA[atualizarItensEmporio(self, false);]]></event>
+    </dataLink>
+    <dataLink fields="{'talentoCat', 'talentoItem'}">
+        <event name="onChange"><![CDATA[atualizarItensTalentos(self, false);]]></event>
     </dataLink>
     
     <dataLink fields="{'csk1_nome', 'csk1_attr', 'csk1_grau', 'csk1_outros'}">
@@ -3466,5 +4074,24 @@ end;
     </dataLink>
     <dataLink fields="{'inv10_nome', 'inv10_tipo', 'inv10_qtd', 'inv10_peso', 'inv10_nota'}">
         <event name="onChange"><![CDATA[salvarInvSlot(10);]]></event>
+    </dataLink>
+    
+    <dataLink fields="{'tal1_nome', 'tal1_prereq', 'tal1_efeito'}">
+        <event name="onChange"><![CDATA[salvarTalentoSlot(1);]]></event>
+    </dataLink>
+    <dataLink fields="{'tal2_nome', 'tal2_prereq', 'tal2_efeito'}">
+        <event name="onChange"><![CDATA[salvarTalentoSlot(2);]]></event>
+    </dataLink>
+    <dataLink fields="{'tal3_nome', 'tal3_prereq', 'tal3_efeito'}">
+        <event name="onChange"><![CDATA[salvarTalentoSlot(3);]]></event>
+    </dataLink>
+    <dataLink fields="{'tal4_nome', 'tal4_prereq', 'tal4_efeito'}">
+        <event name="onChange"><![CDATA[salvarTalentoSlot(4);]]></event>
+    </dataLink>
+    <dataLink fields="{'tal5_nome', 'tal5_prereq', 'tal5_efeito'}">
+        <event name="onChange"><![CDATA[salvarTalentoSlot(5);]]></event>
+    </dataLink>
+    <dataLink fields="{'tal6_nome', 'tal6_prereq', 'tal6_efeito'}">
+        <event name="onChange"><![CDATA[salvarTalentoSlot(6);]]></event>
     </dataLink>
 </form>
