@@ -119,7 +119,7 @@ BOOKS = [
         "title": "O Acervo Oculto de Sellene",
         "subtitle": "Domínio Absoluto do Alto Rei • Segredos Proibidos & Névoa Ácida",
         "epigraph": "“Há verdades que não iluminam um reino — apenas o incendeiam.”",
-        "desc": "🔒 Área Restrita ao Mestre: câmara subterrânea sob a Academia de Sellene protegida por névoa ácida — 8 dossiês proibidos sobre A Sombra, Ferraur, Incognito, Thanatos e os segredos da Coroa (AES-256).",
+        "desc": "🔒 Área Restrita ao Mestre: câmara subterrânea sob a Academia de Sellene protegida por névoa ácida — 9 dossiês proibidos sobre A Sombra, Ferraur, Incognito, Thanatos, rumores proibidos e os segredos da Coroa (AES-256).",
         "cover_map": "assets/capa_08_acervo_sellene.jpg",
         "gm_only": True,
     },

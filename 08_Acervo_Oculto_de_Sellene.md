@@ -119,3 +119,40 @@ Para garantir que nenhum espião de Kalis, nobre rebelde, inquisidor fanático o
 | **1. A Audiência Autorizada** | A Regente *Valora Valerion* *(com a Chave do Sol)* ou o *Arquimestre Matteo* convoca o grupo em desespero para ler um único dossiê *(ex.: Dossiê IV sobre os Despertos)* sob escolta armada. | O grupo descobre que um dos **quatro Copistas Juramentados** desapareceu — levando consigo a cópia da página que explica como desarmar uma das válvulas! |
 | **2. O Assalto Impossível** | Agentes de *Kalis*, a *Ordem da Chama Branca* ou um Lorde rebelde oferecem fortunas *(em Talhas Cifradas)* para roubar o *Dossiê VII* ou o *Dossiê II* antes do Grande Concílio. | Infiltrar a Academia de Sellene, passar pelas três fechaduras e **impedir que a Névoa Ácida seja disparada** — se o alarme tocar, os PJs têm exatamente **3 rodadas** para escapar ou calçar as comportas! |
 | **3. A Evacuação Sob Fogo** | Um ataque surpresa *(de corsários, infiltrados de Kalis ou agentes do Regente das Cinzas)* força o *Arquimestre Matteo* a ameaçar puxar a **Alavanca da Névoa Ácida**. | Dilema dramático sob contagem regressiva: deixar o maior tesouro de saber proibido de Alenia derreter para sempre, ou arriscar a vida para salvar **apenas 1 ou 2 dossiês** da escolha dos jogadores! |
+
+---
+
+### Dossiê IX — Vampiros *(Os Senhores dos Calabouços — O Rumor Proibido)*
+- **Classificação**: *Lacre Carmesim-Negro — Confiscado após a extinção da Casa Bellaroc (Ano 274); atualizado com notas interceptadas de Kalgard (Ano 411)*
+- **Autores**: *Preboste-Mor Cassian de Pontáuria (avô do atual Preboste)* e *Irmão Severin da Brasa Velada*, sob juramento de silêncio à Coroa.
+- **Resumo do Documento**:
+  > *"Ao povo comum, vampiros não passam de fábulas de estalagem para assustar viajantes na Floresta Negra ou nos becos de Merlinport. Os concílios de Altavanne proibiram que seus nomes figurem em sermões — pois admitir que existem mortais que venceram a velhice bebendo sangue quente fere a um só tempo o Vigia, a Guardiã e o Barqueiro. Mas este Acervo não guarda consolo: guarda provas."*
+
+#### Natureza Real, Noite e Poder do Sangue
+- **Imortais pelo Tempo, Jamais Invencíveis**: vampiros não envelhecem, não adoecem de pragas comuns e podem atravessar séculos guardando memórias, dívidas e segredos de gerações inteiras de reis. Contudo, **não são deuses**: aço afiado *(especialmente adamante)*, fogo vivo, decapitação e **luz solar direta** os matam definitivamente.
+- **Restritos à Noite**: o sol pleno do *Dia* é seu carrasco absoluto — queima sua pele em bolhas e cinzas em poucos instantes e os obriga a repousar em câmaras de pedra sem janelas, criptas seladas ou **calabouços profundos** enquanto o sol atravessa o céu.
+- **Poderes Fortalecidos pelo Sangue**: o vigor sobrenatural de um vampiro cresce diretamente conforme a quantidade e a frescura do sangue humano consumido:
+  - **Faminto *(semanas sem sangue fresco)***: parece um fidalgo esquálido e febril; sua força pouco supera a de um homem comum, e a compulsão pela caça ameaça trair sua discrição.
+  - **Saciado *(alimentado recentemente)***: pele morna e aparência enganosamente viva; força capaz de dobrar grades de ferro, reflexos desumanos, cicatrização acelerada de cortes comuns e uma presença hipnótica capaz de vergar vontades fracas sem erguer a voz.
+  - **Raridade Extrema**: vampiros quase nunca criam novos iguais — cada novo predador divide o território, multiplica o risco de descoberta pela *Ordem da Chama Branca* e cria um rival eterno.
+
+#### Puxando as Cordas dos Calabouços *(A Política Oculta)*
+Ao contrário dos contos populares, **vampiros não costumam ocupar cargos públicos nem sentar nos tronos das Grandes Casas**: um lorde que jamais aparece sob o sol, nunca envelhece em trinta anos e recusa entrar sob a cúpula de vidro da Catedral de Altavanne seria desmascarado e queimado em menos de uma década.
+
+Seu verdadeiro poder nasce **de baixo das pedras**:
+- **O Ancestral Que Nunca Morreu**: quando a antiga *Casa Bellaroc* foi extinta em segredo no Ano 274, o Preboste descobriu que o último lorde vivo **não governava de fato** — todas as noites descia a uma ala murada do próprio calabouço para receber ordens, ouro enterrado de eras passadas e nomes de rivais de um tataravô que supostamente morrera cento e vinte anos antes.
+- **A Teia de Dívidas e Sangue**: em solares decadentes de Aurora, mansões portuárias de Corallis e cidadelas sombrias de Kalis, um punhado dessas criaturas manipula herdeiros fracos, banqueiros e conselheiros por meio de segredos de família, empréstimos ocultos e **vassalos humanos viciados em gotas de sangue vampírico** *(que lhes aliviam dores ou prolongam a juventude à custa da obediência silenciosa)*.
+- **Sinais Discretos para Investigadores em Mesa**: audiências marcadas exclusivamente após o crepúsculo; alas ou porões "interditados por umidade"; retratos de antepassados com traços inquietantemente idênticos; criados pálidos usando golas altas até no verão; e cães de caça que ganem e se recusam a descer as escadas do calabouço.
+- **O Medo Secreto dos Vampiros *(Nota do Ano 411)***: os poucos vampiros que sobrevivem nas sombras de Alenia têm um terror profundo da expansão dos *Despertos* e da *Comunhão* — pois uma mente coletiva anula tanto o controle sobre seus fantoches nobres quanto o sigilo secular que os mantém vivos.
+
+#### Referência Rápida para o Mestre *(Vampiro Ancião das Sombras — Patamar Lenda)*
+- **PV**: `84` *(Imune a doenças, venenos, sangramento e Exaustão; vulnerável a fogo e luz solar)* | **Iniciativa**: `+6` | **Deslocamento**: `12m` *(escala pedra verticalmente)*
+- **Atributos *(Saciado)***: `FOR 18 (+4)`, `DES 18 (+4)`, `CON 16 (+3)`, `INT 16 (+3)`, `SAB 15 (+2)`, `CAR 18 (+4)` *(se **Faminto**, reduza FOR/DES em `-2` e desligue a regeneração)*
+- **Defesa**: Aparar `26` / Esquiva `26` / Desprevenido `14` *(Manto Reforçado/Pele Fria `+4`, Especialista `+8` Aparar e Esquiva)* | **RD Especial**: `2` *(ignorada por fogo, luz solar e armas de **adamante**)*
+- **Ataques**:
+  - *Garras / Lâmina Antiga*: `+13` (`2d8 + 4`, `19–20 / ×2`; **Múltiplas Ações**: até **3 golpes com `+1` cada**, ou **2 golpes com `+4` cada**)
+  - *Mordida (alvo Agarrado ou Surpreso)*: `+13` (`1d8 + 4` perfurante + drena sangue causando `2d6` extras e curando o vampiro pelo mesmo valor; fortalece seu próximo turno com **`+2` em ataques e dano**)
+- **Habilidades de Sangue**:
+  - *Regeneração Sombria*: recupera `8 PV` no início de cada turno enquanto estiver **Saciado** *(interrompida por 1 rodada sempre que sofrer dano de fogo ou luz solar)*.
+  - *Voz do Calabouço*: `1×/cena` como Ação Principal, fixa o olhar em um alvo a até `9m` (**SAB CD 18**, soma **`Fé Verdadeira`**) — falha impõe obediência a um comando simples ou hesitação por `2 rodadas` *(não funciona contra quem possui `Fé Verdadeira 3+` exibindo símbolo sagrado com convicção)*.
+  - *Maldição do Dia*: sob **luz solar direta**, sofre **`3d6` de dano queimante por rodada** *(sem RD)*, perde regeneração e sofre `-4` em todas as ações; reduzido a `0 PV` sob o sol ou decapitado/atravessado no coração por madeira ou adamante, vira cinza definitivamente.
