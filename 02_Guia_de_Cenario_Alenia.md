@@ -498,7 +498,118 @@ Em Aurora, a **Cavalaria não se herda pelo sangue**: o filho de um Grande Lorde
 
 ---
 
-## 13. Atlas Regional Detalhado (5 Mapas Aproximados)
+## 13. Males, Pragas e Medicina em Alenia
+
+> *"Um governador sábio chama o médico antes do capitão: quem fecha uma mina por praga imaginária destrói a cidade de fome; quem esconde um poço podre para salvar a honra enterra metade do bairro antes do inverno."* — **Tratado das Águas e dos Ares, Academia de Sellene**
+
+As doenças de **Alenia** nascem diretamente das condições reais de trabalho, abastecimento, viagem e convivência do continente. Em mesa, utilizam o **sistema enxuto de 7 campos** descrito no *[Tomo I — Livro de Regras, Seção 7](01_Livro_de_Regras.md)* (`1` teste de `CON` por dia em males agudos ou por semana em males crônicos; debilidade via **Exaustão** + `1` efeito característico; colaboração entre **Médico**, **Herbalista** e **Alquimista**).
+
+| Doença | Natureza | Onde Aparece | Sinais Característicos | Principal Conflito |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Febre das Cisternas** *(Sede Suja)* | Transmissível *(água)* | Cidades, fortalezas e caravançarais | Febre, cólicas, sede intensa e fraqueza | Água contaminada e autoridades ocultando o surto |
+| **2. Tosse de Ferraur** | Ocupacional *(não contagiosa)* | Minas, forjas e oficinas | Tosse persistente, falta de ar e escarro escuro | Condições de trabalho e responsabilidade das Casas |
+| **3. Tremor das Brumas** | Vetorial *(insetos de áreas alagadas)* | Pântanos e margens alagadas | Crises alternadas de calafrio, febre e tremores | Viagens sazonais, abandono de vilas e acesso a tratamento |
+| **4. Mal do Porão** *(Mancha do Cais)* | Transmissível *(superlotação/parasitas)* | Navios, prisões e cortiços superlotados | Febre alta, manchas escuras e dores intensas | Quarentenas, comércio marítimo e tratamento desigual |
+| **5. Cinza da Pele** | Crônica *(não contagiosa)* | Casos dispersos pelo continente | Placas claras, fissuras e perda gradual de sensibilidade | Estigma religioso e falsos diagnósticos |
+| **6. "Febre do Coro"** *(Rumor nos Hospícios)* | Anômala *(debatida)* | Relatos isolados em hospícios e vilas costeiras | Sono alterado, frases idênticas e memórias estranhas | Confusão entre doença, delírio coletivo e heresia |
+
+---
+
+### 13.1 Febre das Cisternas *(Conhecida em Aurora como "Sede Suja")*
+Costuma surgir após enchentes, cercos prolongados ou negligência na conservação de reservatórios urbanos. Os primeiros adoecidos continuam trabalhando normalmente — quando finalmente procuram ajuda, bairros inteiros já dependem da mesma fonte comprometida. Tratar os enfermos individualmente salva vidas, mas o surto não cede enquanto a origem permanecer aberta.
+
+- **Exposição**: ingerir água de cisterna, poço ou reservatório contaminado sem fervura *(testar `CON CD 13` após exposição contínua)*.
+- **Incubação**: `1 a 2 dias`.
+- **Sinais**: sede insaciável, cólicas abdominais severas, febre úmida e fraqueza repentina.
+- **Evolução *(Teste de CON CD 14 — 1×/dia)***:
+  - *Leve*: `Exaustão 1`; o enfermo ainda trabalha, mas precisa dobrar o consumo de água limpa.
+  - *Incapacitante*: `Exaustão 2`; incapaz de marchar ou lutar por mais de `1` cena sem colapso; **efeito característico**: não recupera PV em *Descanso Curto*.
+  - *Crítica*: `Exaustão 4`; desidratação severa — falha adicional leva ao coma e morte em `24 horas` sem hidratação assistida.
+- **Cuidados**: água fervida com sais e infusões de *Herbalismo* (`+2`), acompanhamento de *Medicina* (`+2`) e repouso. *Alquimia* pode preparar carvão tratado e sais concentrados para reidratação rápida em surtos coletivos.
+- **Sequelas**: em casos críticos recuperados sem cuidado médico, fraqueza digestiva e fadiga prolongada por `2` semanas *(Exaustão demora o dobro de descansos para sair)*.
+- **Controle do Surto**: isolar e limpar o reservatório comprometido, distribuir água fervida ou de fonte alternativa *(caravanas de pipas/odres)* e expor quem bloqueou a manutenção.
+- **Gancho em Naasar *(Gaddra)***: um surto ameaça a legitimidade de um *Senhor da Água*. Para preservar o monopólio de sua fonte principal, ele manda fechar um poço secundário e acusa caravaneiros estrangeiros — embora os primeiros casos tenham surgido entre seus próprios criados.
+
+---
+
+### 13.2 Tosse de Ferraur *(Mal das Minas e Forjas — Não Contagioso)*
+Um mal ocupacional causado pela inalação prolongada de poeira mineral fina, fuligem e escória metálica nas galerias de **Aeraneas**, nas fundições de **Stoneforge** e nas oficinas fechadas. **Não é contagioso.** Começa como uma tosse seca ao fim do turno; nos casos avançados, subir um único lance de escada obriga o trabalhador a parar encostado na parede para buscar ar.
+
+> **Detalhe Cultural *(As Tiras de Pano de Aeraneas)***: mineiros de Ferraur costumam pendurar tiras de pano branco junto à cabeceira da cama. Pela manhã, as manchas cinzentas e escuras mostram o quanto tossiram durante a noite — e muitas famílias guardam essas tiras enroladas em cofres de madeira como prova material ao exigir indenização dos capatazes ou da Casa Ferraris.
+
+- **Exposição**: trabalhar meses ou anos em galerias mal ventiladas, britagem de rocha ou forjas fechadas sem proteção respiratória *(teste semanal/mensal de `CON CD 12`, subindo a `15` em veios profundos sem ventilação)*.
+- **Incubação**: gradual *(meses de exposição; acelera em `2 a 4 semanas` em túneis fechados após desabamentos)*.
+- **Sinais**: tosse seca ao fim do turno, chiado no peito, escarro cinzento-escuro e falta de fôlego em esforços curtos.
+- **Evolução *(Teste de CON CD 13 — 1×/semana enquanto exposto)***:
+  - *Leve*: tosse noturna; **efeito característico**: `-2` em testes prolongados de *Atletismo*, corrida ou marcha forçada.
+  - *Incapacitante*: `Exaustão 1` permanente enquanto não descansar; precisa parar após qualquer esforço intenso (`1` rodada de fôlego após correr ou combater `3` rodadas seguidas).
+  - *Crítica*: `Exaustão 3`; dor torácica constante, lábios arroxeados e risco de insuficiência respiratória fatal se voltar ao subsolo.
+- **Cuidados**: **afastar o trabalhador da poeira interrompe imediatamente o agravamento**. *Herbalismo* (vapores de folhas aromáticas e mel de montanha) e *Medicina* aliviam as crises (`+2`); *Alquimia* produz máscaras filtrantes tratadas e unguentos peitorais.
+- **Sequelas**: lesões pulmonares avançadas **não regridem por completo** — um veterano que atingiu o estágio Crítico conserva `-1` permanente em testes de fôlego/resistência física prolongada, mesmo longe das minas.
+- **Controle do Surto**: exigir chaminés de ventilação, umedecimento de rocha antes da picareta, turnos reduzidos e uso obrigatório de máscaras de pano úmido.
+- **Gancho em Aeraneas**: a doença é um dos pilares morais da greve em Ferraur. Médicos honestos da própria *Casa Ferraris* reconhecem o problema nos laudos, mas administradores intermediários falsificam os livros de baixa para manter as cotas exigidas por Altavanne.
+
+---
+
+### 13.3 Tremor das Brumas *(Febre Sazonal dos Pântanos)*
+Endêmica nos **Pântanos Nebulosos**, nas margens de **Voernock** e nos braços alagados próximos a **Altrax**. A crença popular culpa a névoa fria da madrugada — mas observadores atentos, *Herbalistas* e silvanos sabem que a transmissão vem de **pequenos insetos de águas paradas**, mais ativos ao entardecer e após chuvas quentes. Sua armadilha mais cruel são as **falsas melhoras**: um viajante passa dois dias sem febre, levanta acampamento julgando-se curado e desaba de novo a léguas de qualquer abrigo.
+
+- **Exposição**: dormir sem rede elevada/proteção ou cruzar águas paradas infestadas ao amanhecer/anoitecer durante a estação úmida *(teste `CON CD 13` por noite desprotegida)*.
+- **Incubação**: `4 a 7 dias`.
+- **Sinais**: calafrios violentos seguidos de suor febril intenso, alternados com `24 a 48 horas` de aparente recuperação.
+- **Evolução *(Teste de CON CD 14 — 1×/dia durante crise)***:
+  - *Leve*: `Exaustão 1` nos dias de crise; **efeito característico**: mãos trêmulas impõem `-2` em testes de precisão (*Armas à Distância, Ladinagem, Medicina*).
+  - *Incapacitante*: `Exaustão 2`; crises duram `2` dias seguidos com confusão leve e incapacidade de marchar sob chuva ou sol forte.
+  - *Crítica*: `Exaustão 4`; febre delirante contínua — sem resfriamento e infusão amarga, risco de morte em `2` dias.
+- **Cuidados**: *Herbalismo* é protagonista — decocções de casca amarga da mata e folhas de salgueiro concedem **`+3`** contra as crises e encurtam os ciclos; *Medicina* controla a febre e hidratação; *Alquimia* prepara óleos repelentes e extratos concentrados de casca para expedições longas.
+- **Sequelas**: em casos graves não tratados com extrato amargo, recaídas espaçadas podem retornar em épocas de Exaustão severa durante `1d4` meses.
+- **Controle do Surto**: escolher terrenos elevados e ventilados para acampar, usar redes de acampamento, fogueiras com ervas aromáticas, drenar poças estagnadas e ouvir guias locais sobre os ciclos de chuva.
+- **Gancho perto de Altrax**: moradores apavorados de uma vila ribeirinha querem **incendiar a borda da mata** para "expulsar as brumas". Os silvanos da *Cidade Suspensa* alertam que o fogo será inútil — os surtos só dispararam depois que uma obra real de drenagem represou um afluente, criando lagoas paradas de insetos.
+
+---
+
+### 13.4 Mal do Porão *(Chamado pelos Marinheiros de "Mancha do Cais")*
+Praga aguda de confinamento: explode em porões lotados de navios mercantes, masmorras úmidas, quartéis sitiados e cortiços onde dezenas de pessoas dividem mantas, palha e roupas infestadas por parasitas. Atinge primeiro estivadores, remadores e prisioneiros — enquanto passageiros ricos costumam desembarcar antes da inspeção sanitária, espalhando o foco pela cidade junto com suas malas e criados.
+
+- **Exposição**: contato prolongado com alojamentos, roupas ou leitos infestados de enfermos sem lavagem nem troca *(teste `CON CD 14` por dia em ambiente confinado; `CD 11` se houver higiene/troca de vestes)*.
+- **Incubação**: `3 a 5 dias`.
+- **Sinais**: febre súbita e alta, dores musculares intensas nas costas e pernas, e manchas arroxeadas no tronco e antebraços.
+- **Evolução *(Teste de CON CD 15 — 1×/dia)***:
+  - *Leve*: `Exaustão 1`; febre e dores no corpo que tornam vigílias e marchas penosas.
+  - *Incapacitante*: `Exaustão 3`; **efeito característico**: manchas e rigidez articular reduzem a Defesa em `-2` e impedem correr ou vestir armadura pesada.
+  - *Crítica*: `Exaustão 4`; prostração com hemorragias leves e delírio — falha adicional reduz a `0 PV` *(estado Moribundo)*.
+- **Cuidados**: isolamento limpo, banho quente, troca/fervura imediata de roupas e cobertores *(sem isso, a CD sobe `+2`)*. *Medicina* (`+2`) mantém o paciente hidratado e vigiado; *Alquimia* fornece pós de enxofre/vinagre e soluções antissépticas para desinfetar porões e celas; *Herbalismo* alivia dores e febre.
+- **Sequelas**: fraqueza muscular por `1 a 2` semanas após alta; cicatrizes pálidas ou manchas discretas em casos críticos.
+- **Controle do Surto**: quarentena justa *(com entrega garantida de água, comida e pagamento de diárias para impedir fugas desesperadas)*, fervura ou queima de palha/mantas infestadas e inspeção rigorosa sem exceção para passageiros nobres.
+- **Gancho em Corallis**: uma casa mercantil honesta mantém seu navio interditado na baía de *Baldbella* e continua pagando os marinheiros durante os quinze dias de isolamento — sangrando prata enquanto sua rival ostenta lucros recordes simplesmente **desembarcando seus doentes de madrugada em enseadas afastadas**.
+
+---
+
+### 13.5 Cinza da Pele *(Mal Crônico — Não Contagioso)*
+Doença crônica lenta, **não contagiosa**, cujas causas exatas ainda dividem os estudiosos de *Baldbella* e *Sellene*. A pele desenvolve placas secas, esbranquiçadas ou acinzentadas que se fissuram com facilidade e perdem gradualmente a sensibilidade ao toque e à dor — fazendo pequenos cortes, queimaduras ou infecções passarem despercebidos até se agravarem.
+
+**O Estigma como Perigo Principal**: mais do que o corpo, a *Cinza da Pele* fere a vida social. Por causa da cor pálida das lesões, supersticiosos associam-na a cinzas fúnebres, impureza ritual ou até aos boatos de mortos retornando. A **doutrina oficial da Igreja da Chama Solar rejeita firmemente a ideia de que marcas físicas provem pecado** *(os Vigilantes da Brasa Velada mantêm casas de acolhimento e defendem esses doentes)* — mas pregadores radicais e certos inquisidores da *Chama Branca* insistem nessa leitura, criando uma tensão viva onde a mesma Igreja pode oferecer proteção ou perseguição conforme o agente presente.
+
+- **Exposição**: **não transmissível por contato comum** *(surge de forma esporádica; fatores hereditários, carência prolongada ou exposição a águas salobras são debatidos em Sellene)*.
+- **Incubação**: lenta *(semanas ou meses até as primeiras placas claras chamarem atenção)*.
+- **Sinais**: placas pálidas/acinzentadas secas em mãos, antebraços ou rosto, pequenas rachaduras e dormência localizada.
+- **Evolução *(Teste de CON CD 12 — 1×/semana apenas se negligenciada ou ferida)***:
+  - *Leve*: placas discretas; sem penalidade mecânica, mas exige cuidados com luvas/óleos e provoca estigma social (`-2` em testes sociais com supersticiosos se visível).
+  - *Incapacitante*: **efeito característico**: perda de tato fino impõe `-2` em testes de destreza manual delicada (*Ladinagem, Prestidigitação, Cirurgia*) e ferimentos leves infeccionam mais facilmente sem inspeção diária.
+  - *Crítica*: `Exaustão 2` e infecções secundárias profundas por feridas não sentidas; exige cuidado médico contínuo para evitar perda permanente de mobilidade nos dedos ou membros.
+- **Cuidados**: óleos emolientes e ervas cicatrizantes (*Herbalismo*), inspeção diária de cortes e curativos limpos (*Medicina*), além de sabões suaves e bálsamos protetores (*Alquimia*). Com rotina correta, o portador pode viver décadas de forma digna e estável.
+- **Sequelas**: cicatrizes esbranquiçadas permanentes e redução parcial de tato nas áreas afetadas.
+- **Controle do Surto**: **não exige quarentena** — exige educação médica, combate a falsos diagnósticos e proteção jurídica/clerical contra linchamentos ou expulsões injustas.
+- **Gancho de Corte**: uma jovem herdeira de Aurora esconde os primeiros sinais nas mãos com luvas finas por temer o rompimento de seu casamento político. Quando manchas são notadas, a família acusa a criada que prepara suas luvas de tê-la "contaminado" — preferindo arruinar uma inocente a admitir a doença perante os rivais.
+
+---
+
+### 13.6 Rumor nos Hospícios: A Chamada *"Febre do Coro"*
+Nos últimos meses do **Ano 418**, cartas trocadas entre monges da *Brasa Velada* e cirurgiões portuários mencionam casos desconcertantes apelidados de **"Febre do Coro"**: pacientes com sono alterado, sonhos extraordinariamente vívidos e — o detalhe mais perturbador — relatos de desconhecidos descrevendo em uníssono o mesmo aposento ou repetindo lembranças de pessoas falecidas. Parte dos enfermos apresenta até **melhora emocional e física aparente**, dividindo os médicos sobre se o quadro é de fato uma doença, uma histeria de porto ou algo completamente fora da medicina conhecida. *(Para o Mestre: a ficha completa e a verdade oculta por trás da **Febre do Coro** encontram-se seladas no **Tomo VIII — O Acervo Oculto da Academia de Sellene, Dossiê IV**.)*
+
+---
+
+## 14. Atlas Regional Detalhado (5 Mapas Aproximados)
 
 Todos os 5 mapas regionais em alta resolução estão prontos para o **RRPG Firecast** em `mapas/regionais/`:
 1. **[Mapa Regional de Aurora](file:///c:/Users/Cliente/OneDrive/Documentos/alenia/mapas/regionais/mapa_regional_aurora.png)** — *Estrada do Adamante, Via do Estuário, Estrada da Bruma, Trilha das Copas, Minas de Ferraur, Pontáuria, Vila de Silvaria, Torre de Specula, Ruínas de Vetarx, Santuário de Derwlyn e Passo de Rubecina*.

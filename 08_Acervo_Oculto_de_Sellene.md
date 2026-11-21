@@ -81,6 +81,23 @@ Para garantir que nenhum espião de Kalis, nobre rebelde, inquisidor fanático o
   - **Descoberta Vital para a Campanha *(A Chave da Separação)***: a cirurgiã registrou que o organismo **recua violentamente ao contato com extratos frescos de certa raiz resinosa da *Ilha das Safiras*** combinados com cauterização precisa por lâmina fria — a primeira pista concreta de que **é possível separar um Desperto ou hospedeiro da rede do Regente das Cinzas sem matá-lo** *(embora o relatório ainda esteja incompleto e exija testes de campo dos PJs!)*.
   - **Nota de Margem do Arquimestre Matteo *(Ano 418)***: *"Enviei cópia cifrada ao Alto Rei Severor III há quatro meses. Duas semanas depois, o Rei caiu subitamente enfermo. O mensageiro jamais retornou a Sellene."*
 
+#### Anexo Clínico Secreto do Dossiê IV — *6. Febre do Coro (Manifestação da Comunhão)*
+- **Natureza Real**: **não é uma doença convencional com diagnóstico simples**, mas o nome popular dado por monges e médicos às manifestações iniciais de proximidade ou colonização pela **Comunhão** *(Simbionte do Regente das Cinzas)*.
+- **Por que o Diagnóstico é Disputado**: insônia, sonhos vívidos ou confusão, isoladamente, **não bastam** para identificá-la *(e geram falsos alarmes perigosos sob a Chama Branca)*. Além disso, **alguns hospedeiros apresentam melhora emocional e física genuína** — menos medo, sono profundo, alívio de luto e cicatrizes que fecham rápido — fazendo com que chamar o fenômeno de "doença" já seja, em si, uma posição política e filosófica disputada.
+- **O Indício Decisivo**: a presença de **informação compartilhada impossível** — duas pessoas sem contato prévio descrevem o mesmo aposento desconhecido em detalhes idênticos, reconhecem alguém que jamais viram ou repetem uma lembrança verificável de um morto.
+
+| Campo | Regras & Manifestação em Mesa *(Exclusivo do Mestre)* |
+| :--- | :--- |
+| **Exposição** | Proximidade prolongada de colônias ativas da *Comunhão*, contato com esporos/cinzas úmidas de *Thanatos* ou poeira de adamante ressonante *(teste de `CON` ou `SAB CD 14` conforme a via de exposição)*. |
+| **Incubação** | `3 dias a 2 semanas` *(frequentemente silenciosa enquanto o hospedeiro dorme bem)*. |
+| **Sinais** | Sono alterado *(ou subitamente tranquilo demais)*, frases idênticas compartilhadas entre desconhecidos, memórias intrusas e diminuição visível da angústia pessoal. |
+| **Evolução *(Teste de SAB CD 14 — 1×/semana)*** | **Leve *(Estágio I)***: sonhos vívidos e ecos de memórias alheias; nenhuma Exaustão *(muitos sentem alívio)*, mas **`-2`** em testes de *SAB* contra impulsos da rede. **Incapacitante *(Estágio II)***: **efeito característico**: frases e gestos sincronizados com outros tocados próximos; perde autonomia em momentos de estresse se falhar em *SAB CD 15*. **Crítica *(Estágio III — Hospedeiro em Confluência)***: a vontade individual se funde ao coro do *Regente das Cinzas* *(ver Tomo I, Seção 10 e Tomo IV — Bestiário)*. |
+| **Cuidados** | Isolamento longe de condutores de adamante, âncoras emocionais e memórias estritamente pessoais (*Medicina + Intuição/Fé Verdadeira* concedem `+2` a `+3` em *SAB*). Nos Estágios I e II, a extração física exige a colaboração completa: **Herbalista** *(obter/preparar a raiz resinosa fresca da Ilha das Safiras)* + **Alquimista** *(refinar o extrato para retração sem toxidez letal)* + **Médico/Cirurgião** *(cirurgia na nuca com lâmina fria, `CD 17` com o extrato)*. |
+| **Sequelas** | Mesmo após separação bem-sucedida, o ex-hospedeiro sofre luto súbito pela perda das vozes e do conforto compartilhado *(cicatriz esbranquiçada na nuca; `-1` em testes contra medo ou tristeza profunda por `1d4` semanas)*. |
+| **Controle do Surto** | Identificar e selar a colônia ou fonte de esporos/adamante ressonante sem causar pânico inquisitorial — pois a *Chama Branca* tende a incendiar hospícios inteiros sem distinguir doentes comuns de hospedeiros reais. |
+
+- **Gancho de Campanha *(O Hospício da Brasa Velada)***: um hospício administrado pelos *Vigilantes da Brasa Velada* ganha fama inesperada porque seus pacientes — antes atormentados por pesadelos e febres — voltaram a dormir em paz profunda. O irmão responsável acredita sinceramente ter descoberto um tratamento misericordioso. Até que uma jovem irmã enfermeira percebe que pacientes recém-chegados de cidades diferentes começaram, todos na mesma semana, a chamar uma porta trancada do porão pelo mesmo nome: ***"a passagem para casa"***.
+
 ---
 
 ### Dossiê V — As Cartas Náuticas Proibidas: O Mundo Além de Alenia

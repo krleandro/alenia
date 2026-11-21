@@ -295,6 +295,35 @@ Um dia sem água (ou 3 dias sem comida, ou uma noite sem abrigo em frio/calor ex
 4. **Nível 4**: PV Máximo reduzido à metade.
 5. **Nível 5**: colapso e morte (se não socorrido imediatamente).
 
+### Doenças, Surtos e Colaboração Médica *(Sistema Enxuto)*
+Em **Alenia**, doenças não são apenas penalidades matemáticas — afetam rotas, minas, portos, quarentenas e disputas políticas. O sistema distingue sempre **três naturezas** *(pois fechar um porto, interditar uma galeria de mina ou investigar um fenômeno anômalo exigem medidas totalmente diferentes)*: **Doenças Transmissíveis** *(água, superlotação ou vetores)*, **Males Ocupacionais / Crônicos** *(não contagiosos)* e **Manifestações Anômalas**.
+
+#### Ficha Padrão de Doença *(7 Campos)*
+Toda doença no cenário utiliza uma ficha curta e padronizada:
+| Campo | Função em Mesa |
+| :--- | :--- |
+| **Exposição** | O acontecimento concreto que cria risco real *(sem contágio arbitrário)* |
+| **Incubação** | Tempo até os primeiros sinais observáveis surgirem |
+| **Sinais** | O que pacientes, familiares, guardas e médicos conseguem perceber |
+| **Evolução** | Progressão enxuta em **3 estágios**: *Leve → Incapacitante → Crítica* |
+| **Cuidados** | O que impede agravamento, alivia sintomas ou favorece recuperação |
+| **Sequelas** | Consequências duradouras possíveis nos casos graves sem tratamento |
+| **Controle do Surto** | Ação concreta para interromper novas exposições na comunidade |
+
+#### Ritmo de Testes, Exaustão e Investigação
+- **Frequência Limpa *(Zero Rolagem de Hora em Hora)***: realiza-se apenas **1 teste de Constituição (`CON`) por dia** em males agudos, ou **1 teste por semana** em males crônicos. Em **Sucesso**, o doente estabiliza ou recua `1` estágio *(após `2` sucessos seguidos sob cuidados, recupera-se do quadro agudo)*; em **Falha**, avança `1` estágio.
+- **Sem Acúmulo Infinito de Penalidades**: a debilidade geral da doença é representada pelos **níveis de Exaustão** já existentes nas regras, acompanhados de **apenas `1` efeito característico próprio da doença** *(evitando somar dezenas de redutores sobrepostos)*.
+- **Papel de *Medicina & Cirurgia***: permite reconhecer sinais, orientar cuidados, reduzir a CD ou conceder bônus no teste de resistência do paciente *(respeitando o teto externo `+6`)* e evitar sequelas. **Uma única rolagem nunca cura magicamente toda a doença**, mas **uma falha também jamais apaga pistas indispensáveis** para investigar a origem do surto *(revela menos detalhes, exige mais tempo ou leva a uma hipótese parcial)*.
+
+#### Colaboração dos Três Ofícios *(Médico, Herbalista e Alquimista)*
+| Ofício & Perícia | Papel no Tratamento | Contribuição Mecânica *(Não Empilha Além de `+6`)* |
+| :--- | :--- | :--- |
+| **Médico / Cirurgião** *(Medicina & Cirurgia)* | Acompanha o enfermo, avalia estágio, estabiliza crises, evita sequelas e orienta isolamento/higiene. | Cuidado contínuo *(CD 14)*: concede **`+2`** *(ou `+3` com Estojo Médico/Especialista)* no teste de `CON` do paciente e impede agravamento por `1` ciclo em caso de falha simples. |
+| **Herbalista / Boticário** *(Herbalismo & Natureza)* | Encontra e prepara recursos locais *(infusões, cascas amargas, sais de reidratação, cataplasmas)* sem depender de laboratório. | Preparo de campo *(CD 13)*: reduz pela metade o custo de sustento médico e soma **`+2`** contra febres, cólicas, tremores ou crises sazonais. |
+| **Alquimista** *(Alquimia & Venenos)* | Produz compostos concentrados que exigem equipamento e reagentes *(antissépticos fortes, purificadores de cisterna, fumaças repelentes, extratos refinados)*. | Composto técnico *(CD 15 + reagentes)*: concede **`+3`** em testes de controle de surto/contágio ou em casos críticos, tratando grupos inteiros ou reservatórios. |
+
+*(Os três ofícios podem colaborar no mesmo paciente ou surto — por exemplo, o Alquimista purifica a cisterna, o Herbalista prepara sais e infusões para as famílias e o Médico acompanha os casos críticos — sempre respeitando o limite de ajuda e o teto externo `+6`. Para o catálogo completo das doenças do continente, consulte o **[Tomo II — Guia de Cenário, Seção 13](02_Guia_de_Cenario_Alenia.md)**.)*
+
 ### Perseguições e Acidentes Marítimos
 - **Perseguições**: resolvidas em **3 a 5 rodadas** de testes opostos (Atletismo, Acrobacia, Cavalgar ou Navegação, somando obstáculos narrativos); quem acumular 3 vitórias alcança ou despista o oponente.
 - **Navegação Perigosa (Mar dos Corais / Mar Intransponível)**: cada dia de travessia em área de recife ou tempestade exige teste de **Navegação & Náutica** do piloto (CD `15` calmo, `20` recifes/neblina, `25` tempestade). Falha reduz velocidade pela metade ou causa impacto no casco (`2d6` a `4d6` de avaria; barcos pequenos afundam com `30–50` de dano sem reparo de Carpinteiro).
