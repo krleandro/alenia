@@ -9,7 +9,7 @@
 ## Como Funcionam os Kits na Edição v2.0
 
 - **Dado de Vida (`DV`)**: define o crescimento de PV por nível (`1d6`, `1d8`, `1d10` ou `1d12` + `Mod. CON`, mín. 1). No **Nível 1**, o personagem começa com **`Máximo do DV + CON Bruto`**.
-- **Perícias por Nível**: `máx(1, ⌊(Base + máx(0, Mod. INT) × Mult. INT) × Fator de Patamar⌋)` *(Recruta `1×`, Lenda `1,5×`, Épico `2×`)*. Custos: `Treinado (+3)` = `2 pts`, `Especialista (+8)` = `+5 pts` (Nív. 5+), `Mestre (+12)` = `+10 pts` (Nív. 11+).
+- **Perícias por Nível**: `máx(1, ⌊(Base + máx(0, Mod. INT) × Mult. INT) × Fator de Patamar⌋)` *(Recruta `1×`, Lenda `1,5×`, Épico `2×`)*. As perícias usam **graduação numérica contínua** (`+0` a `+16`) com **Teto Progressivo por Nível** *(Nív. 1–4: `Nív.+3` até `+7`; Nív. 5–10: `+8` a `+11`; Lenda 11–20: `+12` a `+14`; Épico 21–30: `+15` a `+16`)*. Custos por graduação: **`+1` a `+7`** = `1 pt/grad.` *(as perícias iniciais do Kit já começam em `+3` pagas)*; **`+8` a `+11`** *(Especialista, Nív. 5+)* = `2 pts/grad.`; **`+12` a `+16`** *(Mestre, Nív. 11+)* = `3 pts/grad.` *(ver tabela completa no [Livro de Regras](01_Livro_de_Regras.md))*.
 - **Troca de Kit em Campanha**: o Kit não é uma prisão permanente — ao treinar outro ofício em jogo, você mantém as perícias e a habilidade já adquiridas e passa a evoluir usando o DV e os multiplicadores do novo Kit.
 
 ---

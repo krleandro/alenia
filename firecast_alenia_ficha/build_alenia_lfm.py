@@ -3,7 +3,7 @@
 Gera a ficha oficial AleniaFicha.lfm (RRPG Firecast SDK 3.7b) — v1.2 (Alinhada à Edição Revisada v2.0)
 - Fontes ampliadas (v1.1+)
 - Dado de Vida (1d6 / 1d8 / 1d10 / 1d12) por Kit + botão "Subir Nivel (1dX + CON)" no chat
-- Perícias recalibradas (Base 1-2, Mult. INT 0.50-1.25, custo 2/7/17, travas Nív. 5/11)
+- Perícias com graduação contínua (+0 a +16), Teto Progressivo por Nível (+4 no Nív. 1 até +16 no Nív. 26–30) e custo progressivo (1/2/3 pts por grad.)
 - Trava anti-abuso em Múltiplas Ações Storyteller (limite por grau de treino + bônus >= 0)
 - 36 Kits Universais + Sem Kit, 34 Perícias Fixas + Perícias Livres Ilimitadas
 """
