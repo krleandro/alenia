@@ -1104,13 +1104,150 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "2.2";
+local PLUGIN_VERSION = "2.3";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
 
 local _formRef = nil;
 local _ultimaCatEmporio = nil;
 local _ultimaCatTalento = nil;
+
+-- Catalogo Oficial de Doencas de Alenia (7 campos + automacao de estagios e Exaustao)
+local DOENCAS_CATALOGO = {
+    febre_cisternas = {
+        nome = "Febre das Cisternas (Sede Suja)",
+        natureza = "Transmissivel (agua contaminada)",
+        ritmo = "Aguda (1x/dia)",
+        attr = "constituicao",
+        cd = 14,
+        exaustao = { 1, 2, 4 },
+        efeitos = {
+            "Leve: Exaustao 1; precisa dobrar consumo de agua limpa.",
+            "Incapacitante: Exaustao 2; NAO recupera PV em Descanso Curto.",
+            "Critica: Exaustao 4; desidratacao grave (falha adicional = coma/risco de morte em 24h)."
+        },
+        exposicao = "Ingerir agua de cisterna, poco ou reservatorio contaminado sem fervura (CON CD 13).",
+        incubacao = "1 a 2 dias.",
+        sinais = "Sede insaciavel, colicas abdominais severas, febre umida e fraqueza repentina.",
+        cuidados = "Agua fervida com sais e infusoes (Herbalismo +2), Medicina (+2), repouso; Alquimia prepara sais/carvao tratado.",
+        sequelas = "Casos criticos sem medico: fadiga por 2 semanas (Exaustao exige o dobro de descansos).",
+        controle = "Isolar/limpar reservatorio, distribuir agua fervida ou de fonte alternativa."
+    },
+    tosse_ferraur = {
+        nome = "Tosse de Ferraur",
+        natureza = "Ocupacional (nao contagiosa)",
+        ritmo = "Cronica (1x/semana exposto)",
+        attr = "constituicao",
+        cd = 13,
+        exaustao = { 0, 1, 3 },
+        efeitos = {
+            "Leve: Tosse noturna; -2 em Atletismo prolongado, corrida e marcha forcada.",
+            "Incapacitante: Exaustao 1; exige 1 rodada de folego apos correr ou 3 rodadas de combate.",
+            "Critica: Exaustao 3; dor toracica e risco de insuficiencia fatal se voltar a mina."
+        },
+        exposicao = "Meses em galerias de mina, britagem ou forjas fechadas sem mascara/ventilacao.",
+        incubacao = "Gradual (meses; acelera em 2-4 semanas em tuneis fechados).",
+        sinais = "Tosse seca ao fim do turno, chiado no peito, escarro escuro (tiras de pano manchadas).",
+        cuidados = "Afastar da poeira interrompe o agravamento! Herbalismo/Medicina aliviam crises (+2); Alquimia faz mascaras filtrantes.",
+        sequelas = "Estagio Critico deixa -1 permanente em testes de folego/resistencia fisica prolongada.",
+        controle = "Chamines de ventilacao, umedecer rocha, turnos reduzidos e mascaras umidas."
+    },
+    tremor_brumas = {
+        nome = "Tremor das Brumas",
+        natureza = "Vetorial (insetos de areas alagadas)",
+        ritmo = "Aguda/Sazonal (1x/dia em crise)",
+        attr = "constituicao",
+        cd = 14,
+        exaustao = { 1, 2, 4 },
+        efeitos = {
+            "Leve: Exaustao 1 nos dias de crise; maos tremulas impoem -2 em precisao (Dist./Ladin./Med.).",
+            "Incapacitante: Exaustao 2; crises de 2 dias com confusao leve (falsas melhoras).",
+            "Critica: Exaustao 4; febre delirante continua (risco de morte em 2 dias sem infusao amarga)."
+        },
+        exposicao = "Dormir sem rede/protecao em pantanos ou aguas paradas na estacao umida (CON CD 13).",
+        incubacao = "4 a 7 dias.",
+        sinais = "Calafrios violentos e suor febril alternados com 24-48h de falsa melhora.",
+        cuidados = "Herbalismo (casca amarga da mata: +3), Medicina (febre/hidratacao), Alquimia (oleos repelentes e extratos).",
+        sequelas = "Sem extrato amargo, recaidas espacadas podem retornar sob Exaustao por 1d4 meses.",
+        controle = "Acampar em terreno alto, usar redes, drenar pocas paradas e ouvir guias locais."
+    },
+    mal_porao = {
+        nome = "Mal do Porao (Mancha do Cais)",
+        natureza = "Transmissivel (superlotacao/parasitas)",
+        ritmo = "Aguda (1x/dia)",
+        attr = "constituicao",
+        cd = 15,
+        exaustao = { 1, 3, 4 },
+        efeitos = {
+            "Leve: Exaustao 1; febre subita e dores musculares intensas.",
+            "Incapacitante: Exaustao 3; manchas/rigidez impoem -2 na Defesa (auto!) e impedem armadura pesada.",
+            "Critica: Exaustao 4; -2 na Defesa, delirio e falha adicional reduz a 0 PV (Moribundo!)."
+        },
+        exposicao = "Contato prolongado com poroes, celas, roupas ou mantas infestadas (CON CD 14).",
+        incubacao = "3 a 5 dias.",
+        sinais = "Febre alta subita, dores nas costas/pernas e manchas arroxeadas no tronco e bracos.",
+        cuidados = "Isolamento limpo + fervura de roupas (sem isso CD +2); Medicina (+2), Alquimia (enxofre/antisseptico), Herbalismo.",
+        sequelas = "Fraqueza muscular por 1-2 semanas apos alta; manchas palidas em casos criticos.",
+        controle = "Quarentena justa com alimento/diaria, ferver/queimar palha e inspecionar todos os passageiros."
+    },
+    cinza_pele = {
+        nome = "Cinza da Pele",
+        natureza = "Cronica (nao contagiosa)",
+        ritmo = "Cronica (1x/semana se negligenciada)",
+        attr = "constituicao",
+        cd = 12,
+        exaustao = { 0, 0, 2 },
+        efeitos = {
+            "Leve: Placas claras/dormencia; estigma social (-2 social com supersticiosos se visivel).",
+            "Incapacitante: Perda de tato fino impoe -2 em destreza manual delicada (Ladin./Prestid./Cirurgia).",
+            "Critica: Exaustao 2 + infeccoes profundas por feridas nao sentidas (risco de perda de mobilidade)."
+        },
+        exposicao = "Nao transmissivel por contato comum; surgimento esporadico debatido em Sellene.",
+        incubacao = "Lenta (semanas ou meses).",
+        sinais = "Placas secas claras/acinzentadas que fissuram e perdem sensibilidade ao toque e a dor.",
+        cuidados = "Oleos emolientes (Herbalismo), inspecao diaria de cortes/curativos (Medicina), saboes suaves (Alquimia).",
+        sequelas = "Cicatrizes claras permanentes e reducao parcial de tato nas areas afetadas.",
+        controle = "NAO exige quarentena — combate a falsos diagnosticos e protecao contra estigma/perseguicao."
+    },
+    febre_coro = {
+        nome = "Febre do Coro (Quadro Anomalo)",
+        natureza = "Anomala (debatida — consultar Mestre)",
+        ritmo = "Semanal (1x/semana)",
+        attr = "sabedoria",
+        cd = 14,
+        exaustao = { 0, 0, 0 },
+        efeitos = {
+            "Leve: Sonhos vividos e ecos estranhos; -2 em testes de SAB contra sugestao/influencia.",
+            "Incapacitante: Frases/gestos sincronizados com outros afetados; risco de perda de foco (SAB CD 15).",
+            "Critica: Estagio Critico — consultar o Mestre imediatamente."
+        },
+        exposicao = "Determinada pelo Mestre conforme o local ou incidente investigado.",
+        incubacao = "3 dias a 2 semanas (frequentemente silenciosa).",
+        sinais = "Sono alterado ou tranquilo demais, frases identicas compartilhadas entre desconhecidos e memorias intrusas.",
+        cuidados = "Isolamento, ancoras emocionais e acompanhamento conjunto (Medicina + Herbalismo + Alquimia conforme pistas da campanha).",
+        sequelas = "Definidas pelo Mestre apos recuperacao.",
+        controle = "Investigar a origem real do quadro sem precipitar panico ou perseguicao cega."
+    },
+    personalizada = {
+        nome = "Doenca Personalizada (Mestre)",
+        natureza = "Definida pelo Mestre",
+        ritmo = "Conforme o Mestre",
+        attr = "constituicao",
+        cd = 14,
+        exaustao = { 1, 2, 4 },
+        efeitos = {
+            "Leve: Exaustao 1 + sintoma inicial definido pelo Mestre.",
+            "Incapacitante: Exaustao 2 + limitacao fisica/mental definida pelo Mestre.",
+            "Critica: Exaustao 4 + risco severo sem tratamento."
+        },
+        exposicao = "Definida pelo Mestre.",
+        incubacao = "Definida pelo Mestre.",
+        sinais = "Definidos pelo Mestre.",
+        cuidados = "Colaboracao de Medico (+2), Herbalista (+2) e Alquimista (+2) ate teto +6.",
+        sequelas = "Definidas pelo Mestre.",
+        controle = "Definido pelo Mestre."
+    }
+};
 
 -- Tabela Oficial de XP Acumulada (Niveis 1 a 30)
 local XP_TABELA = {
@@ -1302,8 +1439,26 @@ local function rolarD20(titulo, modTotal, detalheExtra, cdFixa)
     end;
 end;
 
+local function temFebreCisternasGrave()
+    if sheet == nil then return false; end;
+    for idx = 1, 3 do
+        local did = tostring(sheet["doenca" .. idx .. "_id"] or "");
+        local est = math.floor(num(sheet["doenca" .. idx .. "_est"], 0));
+        if did == "febre_cisternas" and est >= 2 then
+            return true;
+        end;
+    end;
+    return false;
+end;
+
 local function descansoCurto()
     if sheet == nil then return; end;
+    if temFebreCisternasGrave() then
+        local nomeChar = sheet.nome or "Explorador";
+        showMessage("Descanso Curto bloqueado por doenca!\n\nFebre das Cisternas em estagio Incapacitante ou Critico impede recuperar PV em Descanso Curto (regra oficial). Hidrate-se e busque cuidados medicos/Descanso Longo!");
+        enviarChatOuMsg("[" .. nomeChar .. "] Tentou Descanso Curto, mas Febre das Cisternas (Incapacitante/Critica) impede a recuperacao de PV!");
+        return;
+    end;
     local dv = math.max(4, math.floor(num(sheet.kitDvFaces, 8)));
     local mCon = getMod("constituicao");
     local modStr = (mCon >= 0) and (" + " .. tostring(mCon)) or (" - " .. tostring(math.abs(mCon)));
@@ -1344,8 +1499,16 @@ local function descansoLongo()
     local pvA = num(sheet.pvAtual, 0);
     local novo = math.min(pvM, pvA + cura);
     sheet.pvAtual = tostring(novo);
+    local exAnt = math.max(0, math.min(5, math.floor(num(sheet.exaustaoNivel, 0))));
+    local exMsg = " (sem Exaustao ativa)";
+    if exAnt > 0 then
+        local exNovo = exAnt - 1;
+        sheet.exaustaoNivel = tostring(exNovo);
+        exMsg = " e reduziu Exaustao (" .. tostring(exAnt) .. " -> " .. tostring(exNovo) .. ")";
+    end;
+    recalcularFicha();
     local nomeChar = sheet.nome or "Explorador";
-    enviarChatOuMsg("[" .. nomeChar .. "] Descanso Longo (8h em abrigo seguro): recuperou +" .. tostring(cura) .. " PV (50% do PV Max — Atual: " .. tostring(novo) .. "/" .. tostring(pvM) .. ") e reduziu 1 nivel de Exaustao.");
+    enviarChatOuMsg("[" .. nomeChar .. "] Descanso Longo (8h em abrigo seguro): recuperou +" .. tostring(cura) .. " PV (50% do PV Max — Atual: " .. tostring(novo) .. "/" .. tostring(pvM) .. ")" .. exMsg .. ".");
 end;
 
 local function rolarAtributosIniciais()
@@ -1574,6 +1737,54 @@ recalcularFicha = function()
     local pvObj = PADROES_VIDA[pvKey] or PADROES_VIDA["modesto"];
     sheet.padraoVidaInfo = "Sustento: " .. pvObj.info .. " | Peso: 100 moedas = 1 kg (Cartas de Credito = 0 kg).";
 
+    -- Exaustao Oficial (Niveis 0-5) & Doencas Ativas (v2.3)
+    local exNiv = math.max(0, math.min(5, math.floor(num(sheet.exaustaoNivel, 0))));
+    local penExPer = (exNiv >= 1) and -2 or 0;
+    local penExComb = (exNiv >= 3) and -3 or 0;
+    local penDoencaDef = 0;
+    local doencasAtivasNomes = {};
+    for dIdx = 1, 3 do
+        local did = tostring(sheet["doenca" .. dIdx .. "_id"] or "");
+        local dNome = tostring(sheet["doenca" .. dIdx .. "_nome"] or ""):gsub("^%s+", ""):gsub("%s+$", "");
+        local dEst = math.max(0, math.min(3, math.floor(num(sheet["doenca" .. dIdx .. "_est"], 0))));
+        local dObj = DOENCAS_CATALOGO[did];
+        if dEst > 0 and (dNome ~= "" or dObj ~= nil) then
+            local nmShow = (dNome ~= "" and dNome) or (dObj and dObj.nome) or ("Doenca " .. tostring(dIdx));
+            local estTxt = (dEst == 1 and "Leve") or (dEst == 2 and "Incapacitante") or "Critica";
+            table.insert(doencasAtivasNomes, nmShow .. " (" .. estTxt .. ")");
+            if dObj ~= nil and dObj.efeitos ~= nil and dObj.efeitos[dEst] ~= nil then
+                sheet["doenca" .. dIdx .. "_efeito"] = dObj.efeitos[dEst];
+            end;
+            if did == "mal_porao" and dEst >= 2 then
+                penDoencaDef = penDoencaDef - 2;
+            end;
+        elseif dEst == 0 then
+            if dNome == "" then
+                sheet["doenca" .. dIdx .. "_efeito"] = "Slot livre (selecione uma doenca acima e clique em + Contrair).";
+            else
+                sheet["doenca" .. dIdx .. "_efeito"] = "Curado / Inativo.";
+            end;
+        end;
+    end;
+
+    local bonusCuidados = 0;
+    if sheet.cuidadoMedico == true then bonusCuidados = bonusCuidados + 2; end;
+    if sheet.cuidadoHerbalista == true then bonusCuidados = bonusCuidados + 2; end;
+    if sheet.cuidadoAlquimista == true then bonusCuidados = bonusCuidados + 2; end;
+    bonusCuidados = math.min(6, bonusCuidados);
+    sheet.cuidadosResumo = "Bonus Cuidados (3 Oficios): +" .. tostring(bonusCuidados) .. " (teto +6)";
+
+    local exDesc = "Sem Exaustao (0)";
+    if exNiv == 1 then exDesc = "EXAUSTAO NIV. 1: -2 em todas as pericias (aplicado automaticamente).";
+    elseif exNiv == 2 then exDesc = "EXAUSTAO NIV. 2: -2 em pericias + Deslocamento reduzido a metade (4,5m).";
+    elseif exNiv == 3 then exDesc = "EXAUSTAO NIV. 3: -2 pericias | -3 Ataques, Defesas e Resistencias (aplicado!).";
+    elseif exNiv == 4 then exDesc = "EXAUSTAO NIV. 4: -2 pericias | -3 Combate | PV MAX A METADE (" .. tostring(math.ceil(pvMax * 0.5)) .. " PV)!";
+    elseif exNiv >= 5 then exDesc = "EXAUSTAO NIV. 5: COLAPSO E RISCO DE MORTE IMEDIATA! (Socorro urgente!)"; end;
+    if #doencasAtivasNomes > 0 then
+        exDesc = exDesc .. "  |  Doencas: " .. table.concat(doencasAtivasNomes, "; ");
+    end;
+    sheet.exaustaoResumo = exDesc;
+
     -- Desconta 3 pts gratuitos das pericias iniciais (+3) do Kit atual
     local kitGratis = {};
     for i = 1, #kit.pericias do kitGratis[kit.pericias[i]] = true; end;
@@ -1600,7 +1811,7 @@ recalcularFicha = function()
         if outros > 6 then
             table.insert(acimaBonusExt, sk.nome .. " (+" .. tostring(outros) .. ")");
         end;
-        local tot = getMod(sk.attr) + gEf + outros;
+        local tot = getMod(sk.attr) + gEf + outros + penExPer;
         sheet[sk.field .. "_total"] = fmtMod(tot);
         sheet[sk.field .. "_rank"] = nomeGrau(gRaw, nivel);
         local c = custoGrau(gEf);
@@ -1654,7 +1865,7 @@ recalcularFicha = function()
 
     local armDef = num(sheet.armaduraDef, 0);
     local escDef = num(sheet.escudoDef, 0);
-    local defOutros = num(sheet.defesaOutros, 0);
+    local defOutros = num(sheet.defesaOutros, 0) + penExComb + penDoencaDef;
     local trAparar = grauEfetivo(sheet.per_aparar_grau, nivel) + num(sheet.per_aparar_outros, 0);
     local trEsquiva = grauEfetivo(sheet.per_esquiva_grau, nivel) + num(sheet.per_esquiva_outros, 0);
 
@@ -1670,7 +1881,7 @@ recalcularFicha = function()
         local aPer = sheet["arma" .. idx .. "_per"] or "per_armas_brancas";
         local aExtra = num(sheet["arma" .. idx .. "_extra"], 0);
         local gArma = grauEfetivo(sheet[aPer .. "_grau"], nivel);
-        local atkTot = getMod(aAttr) + gArma + num(sheet[aPer .. "_outros"], 0) + aExtra;
+        local atkTot = getMod(aAttr) + gArma + num(sheet[aPer .. "_outros"], 0) + aExtra + penExComb;
         sheet["arma" .. idx .. "_atk"] = fmtMod(atkTot);
     end;
 
@@ -1858,9 +2069,12 @@ end;
 local function rolarPericia(fieldId, nomePer, attrField)
     if sheet == nil then return; end;
     local g = grauEfetivo(sheet[fieldId .. "_grau"], sheet.nivel);
-    local tot = getMod(attrField) + g + num(sheet[fieldId .. "_outros"], 0);
+    local exNiv = math.max(0, math.min(5, math.floor(num(sheet.exaustaoNivel, 0))));
+    local penEx = (exNiv >= 1) and -2 or 0;
+    local tot = getMod(attrField) + g + num(sheet[fieldId .. "_outros"], 0) + penEx;
     local rk = nomeGrau(g, sheet.nivel);
-    rolarD20("Pericia: " .. nomePer .. " (+" .. tostring(g) .. " — " .. rk .. ")", tot, "");
+    local notaEx = (penEx < 0) and (" [Exaustao Niv." .. tostring(exNiv) .. ": -2]") or "";
+    rolarD20("Pericia: " .. nomePer .. " (+" .. tostring(g) .. " — " .. rk .. ")" .. notaEx, tot, "");
 end;
 
 local function maxAcoesPorGrau(grau)
@@ -1889,7 +2103,9 @@ local function rolarArma(idx)
         return;
     end;
 
-    local bonusBase = getMod(aAttr) + grauPer + num(sheet[aPer .. "_outros"], 0) + aExtra;
+    local exNiv = math.max(0, math.min(5, math.floor(num(sheet.exaustaoNivel, 0))));
+    local penExComb = (exNiv >= 3) and -3 or 0;
+    local bonusBase = getMod(aAttr) + grauPer + num(sheet[aPer .. "_outros"], 0) + aExtra + penExComb;
     local bonusFinal = bonusBase;
     if nAcoes > 1 then
         bonusFinal = math.floor(bonusBase / nAcoes) - nAcoes;
@@ -2089,8 +2305,190 @@ local function rolarCustomSkill(slotIdx)
     local attr = sheet["csk" .. slotIdx .. "_attr"] or "inteligencia";
     local grau = grauEfetivo(sheet["csk" .. slotIdx .. "_grau"], sheet.nivel);
     local outros = num(sheet["csk" .. slotIdx .. "_outros"], 0);
+    local exNiv = math.max(0, math.min(5, math.floor(num(sheet.exaustaoNivel, 0))));
+    local penEx = (exNiv >= 1) and -2 or 0;
     local rk = nomeGrau(grau, sheet.nivel);
-    rolarD20("Pericia Livre: " .. nome .. " (+" .. tostring(grau) .. " — " .. rk .. ")", getMod(attr) + grau + outros, "");
+    local notaEx = (penEx < 0) and (" [Exaustao Niv." .. tostring(exNiv) .. ": -2]") or "";
+    rolarD20("Pericia Livre: " .. nome .. " (+" .. tostring(grau) .. " — " .. rk .. ")" .. notaEx, getMod(attr) + grau + outros + penEx, "");
+end;
+
+-- =========================================================================
+-- AUTOMACAO DE DOENCAS, SURTOS & COLABORACAO DOS 3 OFICIOS (v2.3)
+-- =========================================================================
+local function verFichaDoenca()
+    if sheet == nil then return; end;
+    local did = tostring(sheet.doencaSelecionada or "febre_cisternas");
+    local d = DOENCAS_CATALOGO[did] or DOENCAS_CATALOGO["febre_cisternas"];
+    local attrSig = (d.attr == "sabedoria") and "SAB" or "CON";
+    showMessage(
+        "FICHA OFICIAL DE DOENCA — ALENIA RPG\n\n" ..
+        d.nome .. " (" .. d.natureza .. ")\n" ..
+        "Teste de Resistencia: " .. attrSig .. " CD " .. tostring(d.cd) .. "  |  Ritmo: " .. d.ritmo .. "\n\n" ..
+        "1. Exposicao: " .. d.exposicao .. "\n" ..
+        "2. Incubacao: " .. d.incubacao .. "\n" ..
+        "3. Sinais: " .. d.sinais .. "\n" ..
+        "4. Evolucao:\n   - " .. d.efeitos[1] .. "\n   - " .. d.efeitos[2] .. "\n   - " .. d.efeitos[3] .. "\n" ..
+        "5. Cuidados: " .. d.cuidados .. "\n" ..
+        "6. Sequelas: " .. d.sequelas .. "\n" ..
+        "7. Controle do Surto: " .. d.controle
+    );
+end;
+
+local function contrairDoencaSelecionada()
+    if sheet == nil then return; end;
+    local did = tostring(sheet.doencaSelecionada or "febre_cisternas");
+    local d = DOENCAS_CATALOGO[did] or DOENCAS_CATALOGO["febre_cisternas"];
+    local slotLivre = nil;
+    for i = 1, 3 do
+        local est = math.floor(num(sheet["doenca" .. i .. "_est"], 0));
+        local curId = tostring(sheet["doenca" .. i .. "_id"] or "");
+        if est > 0 and curId == did and did ~= "personalizada" then
+            showMessage("Este personagem ja esta com '" .. d.nome .. "' ativa no Slot " .. tostring(i) .. "!");
+            return;
+        end;
+        if est == 0 and slotLivre == nil then
+            slotLivre = i;
+        end;
+    end;
+    if slotLivre == nil then
+        showMessage("Todos os 3 slots de doencas ativas estao ocupados! Cure ou limpe um slot antes de adicionar outra.");
+        return;
+    end;
+
+    sheet["doenca" .. slotLivre .. "_id"] = did;
+    sheet["doenca" .. slotLivre .. "_nome"] = d.nome;
+    sheet["doenca" .. slotLivre .. "_est"] = "1";
+    sheet["doenca" .. slotLivre .. "_attr"] = d.attr;
+    sheet["doenca" .. slotLivre .. "_cd"] = tostring(d.cd);
+    sheet["doenca" .. slotLivre .. "_suc"] = "0";
+    sheet["doenca" .. slotLivre .. "_efeito"] = d.efeitos[1];
+
+    local exSug = (d.exaustao and d.exaustao[1]) or 0;
+    local exAtual = math.max(0, math.min(5, math.floor(num(sheet.exaustaoNivel, 0))));
+    if exSug > exAtual then
+        sheet.exaustaoNivel = tostring(exSug);
+    end;
+
+    recalcularFicha();
+    local nomeChar = sheet.nome or "Explorador";
+    enviarChatOuMsg(
+        "[" .. nomeChar .. "] Contraiu doenca: " .. d.nome .. " (Estagio 1: Leve | " ..
+        ((d.attr == "sabedoria") and "SAB" or "CON") .. " CD " .. tostring(d.cd) .. " — " .. d.ritmo .. ") — " .. d.efeitos[1]
+    );
+end;
+
+local function testarDoencaSlot(slotIdx)
+    if sheet == nil then return; end;
+    local est = math.max(0, math.min(3, math.floor(num(sheet["doenca" .. slotIdx .. "_est"], 0))));
+    local nomeD = tostring(sheet["doenca" .. slotIdx .. "_nome"] or ""):gsub("^%s+", ""):gsub("%s+$", "");
+    if est == 0 or nomeD == "" then
+        showMessage("Este slot de doenca esta vazio ou curado.");
+        return;
+    end;
+    local did = tostring(sheet["doenca" .. slotIdx .. "_id"] or "personalizada");
+    local dObj = DOENCAS_CATALOGO[did] or DOENCAS_CATALOGO["personalizada"];
+    local attr = tostring(sheet["doenca" .. slotIdx .. "_attr"] or dObj.attr or "constituicao");
+    local attrSig = (attr == "sabedoria") and "SAB" or "CON";
+    local cd = math.max(5, math.floor(num(sheet["doenca" .. slotIdx .. "_cd"], dObj.cd or 14)));
+    local sucAtual = math.max(0, math.floor(num(sheet["doenca" .. slotIdx .. "_suc"], 0)));
+
+    local bonusCuidados = 0;
+    local oficios = {};
+    if sheet.cuidadoMedico == true then bonusCuidados = bonusCuidados + 2; table.insert(oficios, "Medico"); end;
+    if sheet.cuidadoHerbalista == true then bonusCuidados = bonusCuidados + 2; table.insert(oficios, "Herbalista"); end;
+    if sheet.cuidadoAlquimista == true then bonusCuidados = bonusCuidados + 2; table.insert(oficios, "Alquimista"); end;
+    bonusCuidados = math.min(6, bonusCuidados);
+
+    local exNiv = math.max(0, math.min(5, math.floor(num(sheet.exaustaoNivel, 0))));
+    local penEx = (exNiv >= 3) and -3 or 0;
+    local modTot = getMod(attr) + bonusCuidados + penEx;
+
+    local expr = (modTot >= 0) and ("1d20 + " .. tostring(modTot)) or ("1d20 - " .. tostring(math.abs(modTot)));
+    local rolagem = Firecast.interpretarRolagem(expr);
+    local nomeChar = sheet.nome or "Explorador";
+    local cuidTxt = (#oficios > 0) and (" [Cuidados +" .. tostring(bonusCuidados) .. ": " .. table.concat(oficios, "+") .. "]") or "";
+    local titulo = "[" .. nomeChar .. "] Resistencia a Doenca: " .. nomeD .. " (" .. attrSig .. " vs CD " .. tostring(cd) .. ")" .. cuidTxt;
+
+    local function processarResultado(res)
+        local estNomes = { "Leve", "Incapacitante", "Critica" };
+        if res >= cd then
+            if est > 1 then
+                local novoEst = est - 1;
+                sheet["doenca" .. slotIdx .. "_est"] = tostring(novoEst);
+                sheet["doenca" .. slotIdx .. "_suc"] = "1";
+                recalcularFicha();
+                enviarChatOuMsg("[" .. nomeChar .. "] SUCESSO (" .. tostring(res) .. " vs CD " .. tostring(cd) .. ") contra " .. nomeD .. "! Recuou para Estagio " .. tostring(novoEst) .. " (" .. estNomes[novoEst] .. ") — " .. tostring(sheet["doenca" .. slotIdx .. "_efeito"] or ""));
+            else
+                local novoSuc = sucAtual + 1;
+                if novoSuc >= 2 then
+                    sheet["doenca" .. slotIdx .. "_est"] = "0";
+                    sheet["doenca" .. slotIdx .. "_suc"] = "0";
+                    sheet["doenca" .. slotIdx .. "_id"] = "";
+                    sheet["doenca" .. slotIdx .. "_nome"] = "";
+                    recalcularFicha();
+                    enviarChatOuMsg("[" .. nomeChar .. "] SUCESSO (" .. tostring(res) .. " vs CD " .. tostring(cd) .. " — 2/2 sucessos)! RECUPERADO de " .. nomeD .. "! (Lembre de verificar eventuais sequelas de casos graves com o Mestre.)");
+                else
+                    sheet["doenca" .. slotIdx .. "_suc"] = tostring(novoSuc);
+                    recalcularFicha();
+                    enviarChatOuMsg("[" .. nomeChar .. "] SUCESSO (" .. tostring(res) .. " vs CD " .. tostring(cd) .. ") contra " .. nomeD .. "! Estavel em Leve (" .. tostring(novoSuc) .. "/2 sucessos para cura).");
+                end;
+            end;
+        else
+            sheet["doenca" .. slotIdx .. "_suc"] = "0";
+            if est < 3 then
+                local novoEst = est + 1;
+                sheet["doenca" .. slotIdx .. "_est"] = tostring(novoEst);
+                local exSug = (dObj.exaustao and dObj.exaustao[novoEst]) or 0;
+                local exNow = math.max(0, math.min(5, math.floor(num(sheet.exaustaoNivel, 0))));
+                if exSug > exNow then
+                    sheet.exaustaoNivel = tostring(exSug);
+                end;
+                recalcularFicha();
+                enviarChatOuMsg("[" .. nomeChar .. "] FALHA (" .. tostring(res) .. " vs CD " .. tostring(cd) .. ") contra " .. nomeD .. "! AGRAVOU para Estagio " .. tostring(novoEst) .. " (" .. estNomes[novoEst] .. ") — " .. tostring(sheet["doenca" .. slotIdx .. "_efeito"] or ""));
+            else
+                local extraCrit = " Risco grave/morte iminente sem tratamento imediato!";
+                if did == "mal_porao" then
+                    sheet.pvAtual = "0";
+                    extraCrit = " CAIU A 0 PV (MORIBUNDO — teste CON CD 12 por turno)!";
+                elseif did == "febre_cisternas" then
+                    extraCrit = " DESIDRATACAO SEVERA: risco de coma e morte em 24h sem hidratacao assistida!";
+                end;
+                recalcularFicha();
+                enviarChatOuMsg("[" .. nomeChar .. "] FALHA CRITICA (" .. tostring(res) .. " vs CD " .. tostring(cd) .. ") em Estagio Critico de " .. nomeD .. "!" .. extraCrit);
+                showMessage("CRISE CRITICA DE DOENCA!\n\nFalha em Estagio Critico de " .. nomeD .. " (" .. tostring(res) .. " vs CD " .. tostring(cd) .. ").\n" .. extraCrit);
+            end;
+        end;
+    end;
+
+    local mesa = Firecast.getMesaDe(sheet);
+    if mesa ~= nil and mesa.activeChat ~= nil then
+        mesa.activeChat:rolarDados(rolagem, titulo, function(rolado)
+            if rolado ~= nil then processarResultado(rolado.resultado); end;
+        end);
+    else
+        rolagem:rolarLocalmente();
+        processarResultado(rolagem.resultado);
+    end;
+end;
+
+local function limparDoencaSlot(slotIdx)
+    if sheet == nil then return; end;
+    local nomeD = tostring(sheet["doenca" .. slotIdx .. "_nome"] or ""):gsub("^%s+", ""):gsub("%s+$", "");
+    local function limpar()
+        sheet["doenca" .. slotIdx .. "_id"] = "";
+        sheet["doenca" .. slotIdx .. "_nome"] = "";
+        sheet["doenca" .. slotIdx .. "_est"] = "0";
+        sheet["doenca" .. slotIdx .. "_attr"] = "constituicao";
+        sheet["doenca" .. slotIdx .. "_cd"] = "14";
+        sheet["doenca" .. slotIdx .. "_suc"] = "0";
+        sheet["doenca" .. slotIdx .. "_efeito"] = "Slot livre (selecione uma doenca acima e clique em + Contrair).";
+        recalcularFicha();
+    end;
+    if nomeD ~= "" and DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+        DialogsMod.confirmYesNo("Marcar '" .. nomeD .. "' como curada e limpar este slot?", function(sim) if sim then limpar(); end; end);
+    else
+        limpar();
+    end;
 end;
 
 local function aplicarDeltaCobres(deltaPc, motivo)
@@ -3364,12 +3762,50 @@ def build_lfm() -> str:
                 </button>
             </rectangle>''')
 
+    doenca_cat_items = (
+        "{'1. Febre das Cisternas (Sede Suja | CON CD 14/dia)', "
+        "'2. Tosse de Ferraur (Ocupacional | CON CD 13/sem)', "
+        "'3. Tremor das Brumas (Pantanos | CON CD 14/dia)', "
+        "'4. Mal do Porao (Mancha do Cais | CON CD 15/dia)', "
+        "'5. Cinza da Pele (Cronica | CON CD 12/sem)', "
+        "'6. Febre do Coro (Quadro Anomalo | SAB CD 14/sem)', "
+        "'7. Outra Doenca / Mal Personalizado (Mestre)'}"
+    )
+    doenca_cat_values = "{'febre_cisternas', 'tosse_ferraur', 'tremor_brumas', 'mal_porao', 'cinza_pele', 'febre_coro', 'personalizada'}"
+    doenca_est_items = "{'0 - Inativo / Curado', '1 - Leve', '2 - Incapacitante', '3 - Critica'}"
+    doenca_est_values = "{'0', '1', '2', '3'}"
+    doenca_attr_items = "{'CON', 'SAB'}"
+    doenca_attr_values = "{'constituicao', 'sabedoria'}"
+
+    doenca_rows = []
+    for i in range(1, 4):
+        ty = 172 + (i - 1) * 72
+        doenca_rows.append(f'''
+            <rectangle left="10" top="{ty}" width="1016" height="66" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                <edit left="6" top="5" width="290" height="28" field="doenca{i}_nome" textPrompt="Slot Doenca {i} (vazio)..." fontColor="{TEXT_CRIMSON}" fontSize="13" fontStyle="bold"/>
+                <comboBox left="300" top="5" width="152" height="28" field="doenca{i}_est" items="{xml_attr(doenca_est_items)}" values="{xml_attr(doenca_est_values)}" fontSize="12"/>
+                <comboBox left="456" top="5" width="60" height="28" field="doenca{i}_attr" items="{xml_attr(doenca_attr_items)}" values="{xml_attr(doenca_attr_values)}" fontSize="12"/>
+                <label left="520" top="5" width="26" height="28" text="CD" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                <edit left="546" top="5" width="44" height="28" field="doenca{i}_cd" type="number" horzTextAlign="center" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
+                <label left="594" top="5" width="54" height="28" text="Suc(0-2):" fontColor="{TEXT_MUTED}" fontSize="11" horzTextAlign="trailing" vertTextAlign="center"/>
+                <edit left="650" top="5" width="38" height="28" field="doenca{i}_suc" type="number" horzTextAlign="center" fontColor="{TEXT_GREEN}" fontSize="13" fontStyle="bold"/>
+                <button left="696" top="4" width="180" height="30" text="Testar Resistencia (d20)" fontSize="12">
+                    <event name="onClick"><![CDATA[testarDoencaSlot({i});]]></event>
+                </button>
+                <button left="882" top="4" width="126" height="30" text="Curar / Limpar" fontSize="12">
+                    <event name="onClick"><![CDATA[limparDoencaSlot({i});]]></event>
+                </button>
+                <label left="8" top="37" width="1000" height="24" field="doenca{i}_efeito" fontColor="{TEXT_MUTED}" fontSize="12" vertTextAlign="center"/>
+            </rectangle>''')
+
     recalc_fields = [
         "forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma",
         "nivel", "xpAtual", "pvMax", "kitSelecionado", "kitDvFaces", "kitPerBase", "kitMultInt",
         "armaduraDef", "escudoDef", "defesaOutros", "iniciativaOutros",
         "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre",
-        "moedasOuro", "moedasPrata", "moedasCobre", "cartasCredito", "padraoVida"
+        "moedasOuro", "moedasPrata", "moedasCobre", "cartasCredito", "padraoVida",
+        "exaustaoNivel", "cuidadoMedico", "cuidadoHerbalista", "cuidadoAlquimista",
+        "doenca1_id", "doenca1_nome", "doenca1_est", "doenca2_id", "doenca2_nome", "doenca2_est", "doenca3_id", "doenca3_nome", "doenca3_est"
     ]
     for fid, _, _, _ in SKILLS:
         recalc_fields.append(fid + "_grau")
@@ -3386,6 +3822,10 @@ def build_lfm() -> str:
         "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre",
         "customSkillPage", "invPage", "invMaxIdx", "invPageLabel", "invPesoTotal",
         "talentosPage", "talentosPageLabel", "talentoCat", "talentoItem", "talentoPreview", "avisoBonusExt",
+        "exaustaoNivel", "exaustaoResumo", "doencaSelecionada", "cuidadosResumo",
+        "doenca1_est", "doenca1_attr", "doenca1_cd", "doenca1_suc", "doenca1_efeito",
+        "doenca2_est", "doenca2_attr", "doenca2_cd", "doenca2_suc", "doenca2_efeito",
+        "doenca3_est", "doenca3_attr", "doenca3_cd", "doenca3_suc", "doenca3_efeito",
         "moedasOuro", "moedasPrata", "moedasCobre",
         "cartasCredito", "bancoOrigem", "padraoVida",
         "emporioCat", "emporioItem", "emporioQtd", "emporioPreview",
@@ -3400,11 +3840,15 @@ def build_lfm() -> str:
         "1", "1", "30", "Pag. 1 (1-10)", "0.0 kg (0 itens)",
         "1", "Pag. 1 (1-6)", "marciais", init_talento_id, "Selecione uma categoria e um dos 44 Talentos oficiais de Alenia.",
         "Bonus externos (OUT) dentro da regra oficial: apenas maior equipamento aplica | teto combinado +6 (excecao: Rituais +8).",
+        "0", "Sem Exaustao (0)", "febre_cisternas", "Bonus Cuidados (3 Oficios): +0 (teto +6)",
+        "0", "constituicao", "14", "0", "Slot livre (selecione uma doenca acima e clique em + Contrair).",
+        "0", "constituicao", "14", "0", "Slot livre (selecione uma doenca acima e clique em + Contrair).",
+        "0", "constituicao", "14", "0", "Slot livre (selecione uma doenca acima e clique em + Contrair).",
         "0", "25", "0",
         "0", "corallis", "modesto",
         "pacotes", init_item_id, "1", "Selecione uma categoria e um item para comprar direto para os Slots de Inventario.",
         "0", "0", "0",
-        "v2.2", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "v2.3", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -3446,7 +3890,7 @@ def build_lfm() -> str:
     <rectangle align="client" color="{BG_MAIN}">
         <!-- CABECALHO FIXO AMPLIADO + BARRA RAPIDA DE CD & DESCANSO -->
         <rectangle align="top" height="148" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" margins="{{left=6, right=6, top=6, bottom=4}}" xradius="6" yradius="6">
-            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.2" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
+            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.3" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
             <label left="278" top="6" width="170" height="24" field="patamarTexto" fontColor="{TEXT_CRIMSON}" fontSize="14" fontStyle="bold"/>
             <label left="452" top="6" width="320" height="24" field="kitNomeAtual" fontColor="{TEXT_MUTED}" fontSize="14"/>
             <label left="780" top="6" width="250" height="24" text="Golpe Devastador (&gt;2/3 PV):" fontColor="{TEXT_CRIMSON}" fontSize="13" horzTextAlign="trailing"/>
@@ -3631,7 +4075,7 @@ def build_lfm() -> str:
             <!-- ABA 2: COMBATE & FERIMENTOS -->
             <tab title="Combate &amp; Ferimentos">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="840">
+                    <layout left="0" top="0" width="1056" height="1210">
                         <rectangle left="6" top="6" width="1036" height="204" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="1012" height="24" text="DEFESA SITUACIONAL (10 + DES + Armadura + Escudo + Pericia | Armaduras comuns JAMAIS dao RD)" fontColor="{TEXT_GOLD}" fontSize="14" fontStyle="bold"/>
 
@@ -3700,14 +4144,50 @@ def build_lfm() -> str:
                             {"".join(weapon_rows)}
                         </rectangle>
 
-                        <rectangle left="6" top="546" width="1036" height="280" color="{BG_CARD}" strokeColor="{BORDER_CRIMSON}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="1010" height="24" text="FERIMENTOS GRAVES, EXAUSTAO &amp; CICATRIZES PERMANENTES (Arbitragem Livre do Mestre)" fontColor="{TEXT_CRIMSON}" fontSize="15" fontStyle="bold"/>
+                        <!-- PAINEL AUTOMATIZADO DE EXAUSTAO & DOENCAS DE ALENIA (v2.3) -->
+                        <rectangle left="6" top="546" width="1036" height="398" color="{BG_CARD}" strokeColor="{BORDER_CRIMSON}" strokeSize="2" xradius="6" yradius="6">
+                            <label left="12" top="10" width="520" height="24" text="EXAUSTAO (0-5) &amp; DOENCAS DE ALENIA (SISTEMA ENXUTO)" fontColor="{TEXT_CRIMSON}" fontSize="15" fontStyle="bold"/>
+                            <label left="540" top="12" width="122" height="22" text="Nivel de Exaustao:" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold" horzTextAlign="trailing" vertTextAlign="center"/>
+                            <comboBox left="668" top="8" width="356" height="30" field="exaustaoNivel" fontSize="12"
+                                      items="{{'0 - Sem Exaustao (Normal)', '1 - Nivel 1 (-2 em todas as pericias)', '2 - Nivel 2 (-2 pericias | Deslocamento metade)', '3 - Nivel 3 (-2 pericias | -3 Ataques, Defesas e Resist.)', '4 - Nivel 4 (Tudo acima | PV Max a metade!)', '5 - Nivel 5 (COLAPSO E MORTE IMEDIATA!)'}}"
+                                      values="{{'0', '1', '2', '3', '4', '5'}}"/>
 
-                            <label left="12" top="40" width="500" height="20" text="FERIMENTOS ATIVOS / CONDICOES / EXAUSTAO (1-5)" fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <textEditor left="12" top="64" width="500" height="202" field="ferimentosAtivos" fontSize="14"/>
+                            <rectangle left="12" top="44" width="1012" height="30" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label left="10" top="2" width="992" height="26" field="exaustaoResumo" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold" vertTextAlign="center"/>
+                            </rectangle>
 
-                            <label left="524" top="40" width="500" height="20" text="CICATRIZES &amp; SEQUELAS PERMANENTES (Decisao do Mestre)" fontColor="{TEXT_GOLD}" fontSize="13"/>
-                            <textEditor left="524" top="64" width="500" height="202" field="cicatrizesPermanentes" fontSize="14"/>
+                            <!-- Seletor de Doencas + Colaboracao dos 3 Oficios -->
+                            <label left="12" top="82" width="460" height="16" text="CATALOGO DE DOENCAS (6 MALES DE ALENIA + PERSONALIZADA)" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold"/>
+                            <comboBox left="12" top="100" width="530" height="34" field="doencaSelecionada" items="{xml_attr(doenca_cat_items)}" values="{xml_attr(doenca_cat_values)}" fontSize="13"/>
+
+                            <button left="552" top="99" width="174" height="36" text="+ Contrair / Adicionar" fontSize="13">
+                                <event name="onClick"><![CDATA[contrairDoencaSelecionada();]]></event>
+                            </button>
+                            <button left="734" top="99" width="144" height="36" text="Ficha (7 Campos)" fontSize="12">
+                                <event name="onClick"><![CDATA[verFichaDoenca();]]></event>
+                            </button>
+                            <rectangle left="886" top="99" width="138" height="36" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" text="1x/dia ou 1x/sem" fontColor="{TEXT_MUTED}" fontSize="11" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+
+                            <!-- Colaboracao Medico + Herbalista + Alquimista (Teto +6) -->
+                            <label left="12" top="142" width="186" height="24" text="CUIDADOS ATIVOS (3 OFICIOS):" fontColor="{TEXT_GREEN}" fontSize="11" fontStyle="bold" vertTextAlign="center"/>
+                            <checkBox left="204" top="142" width="134" height="24" field="cuidadoMedico" text="Medico (+2)" fontColor="{TEXT_MAIN}" fontSize="12"/>
+                            <checkBox left="344" top="142" width="148" height="24" field="cuidadoHerbalista" text="Herbalista (+2)" fontColor="{TEXT_MAIN}" fontSize="12"/>
+                            <checkBox left="498" top="142" width="150" height="24" field="cuidadoAlquimista" text="Alquimista (+2)" fontColor="{TEXT_MAIN}" fontSize="12"/>
+                            <label left="660" top="142" width="364" height="24" field="cuidadosResumo" fontColor="{TEXT_GREEN}" fontSize="12" fontStyle="bold" horzTextAlign="trailing" vertTextAlign="center"/>
+
+                            {"".join(doenca_rows)}
+                        </rectangle>
+
+                        <rectangle left="6" top="954" width="1036" height="242" color="{BG_CARD}" strokeColor="{BORDER_CRIMSON}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="1010" height="24" text="FERIMENTOS GRAVES &amp; CICATRIZES PERMANENTES (Arbitragem Livre do Mestre)" fontColor="{TEXT_CRIMSON}" fontSize="15" fontStyle="bold"/>
+
+                            <label left="12" top="38" width="500" height="20" text="FERIMENTOS ATIVOS / CONDICOES" fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <textEditor left="12" top="62" width="500" height="168" field="ferimentosAtivos" fontSize="14"/>
+
+                            <label left="524" top="38" width="500" height="20" text="CICATRIZES &amp; SEQUELAS PERMANENTES (Decisao do Mestre)" fontColor="{TEXT_GOLD}" fontSize="13"/>
+                            <textEditor left="524" top="62" width="500" height="168" field="cicatrizesPermanentes" fontSize="14"/>
                         </rectangle>
                     </layout>
                 </scrollBox>
@@ -4050,10 +4530,10 @@ def build_lfm() -> str:
                         <!-- CARD DE NOVIDADES -->
                         <rectangle left="6" top="450" width="1036" height="224" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v2.2 — Botao Receber Dano (RD + alerta Golpe Devastador), rolagem auto em consumiveis, Catalogo 44 Talentos, Aplicar Kit completo, Retrato clicavel e aviso OUT +6." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="74" width="996" height="24" text="• v2.1 — Inventario em Slots Ilimitados com botao [Usar] em todos os consumiveis (desconta uso, atualiza carga e anuncia no chat) + desempacote automatico dos 5 Pacotes." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="102" width="996" height="24" text="• v2.0 — Emporio Automatico na aba Inventario (155 itens do Tomo IX + Armas e Armaduras): compra direta com debito de moedas/banco, empilhamento e anuncio no chat." fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <label left="20" top="130" width="996" height="24" text="• v1.5-v1.9 — Teto de Graduacao por Nivel (+4..+16), Sistema Monetario Padrao Prata, Cartas de Credito, XP (Niveis 1-30), CD, Defesa do Alvo, dano +FOR e Descansos." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="46" width="996" height="24" text="• v2.3 — Automacao de Exaustao (0-5) e das 6 Doencas de Alenia (3 slots, colaboracao Medico+Herbalista+Alquimista ate +6, rolagem de resistencia e evolucao automatica)." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="74" width="996" height="24" text="• v2.2 — Botao Receber Dano (RD + alerta Golpe Devastador), rolagem auto em consumiveis, Catalogo 44 Talentos, Aplicar Kit completo, Retrato clicavel e aviso OUT +6." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="102" width="996" height="24" text="• v2.1 — Inventario em Slots Ilimitados com botao [Usar] em todos os consumiveis (desconta uso, atualiza carga e anuncia no chat) + desempacote automatico dos 5 Pacotes." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="130" width="996" height="24" text="• v1.5-v2.0 — Emporio Automatico (155 itens), Teto de Graduacao (+4..+16), Sistema Monetario Padrao Prata, Cartas de Credito, XP (Niv. 1-30), CD e dano +FOR." fontColor="{TEXT_MUTED}" fontSize="13"/>
                             <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
@@ -4084,7 +4564,7 @@ def build_lfm() -> str:
     total_emp = sum(len(v) for v in emporio_items.values())
     total_cons = sum(1 for v in emporio_items.values() for it in v if it["tipo"] == "cons")
     total_tal = sum(len(v) for v in talentos_items.values())
-    print(f"[OK] AleniaFicha.lfm v2.2 gerado ({len(lfm)} bytes, {total_emp} itens Emporio / {total_cons} consumiveis / {total_tal} talentos).")
+    print(f"[OK] AleniaFicha.lfm v2.3 gerado ({len(lfm)} bytes, {total_emp} itens Emporio / {total_cons} consumiveis / {total_tal} talentos / 6 doencas + Exaustao).")
 
 
 if __name__ == "__main__":
