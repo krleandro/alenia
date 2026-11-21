@@ -101,7 +101,7 @@
 ### 9. Serpente-do-Pântano *(Pântano de Voernock)*
 - **PV**: `28` *(Golpe Devastador: `19+`)* | **Iniciativa**: `+3` | **Deslocamento**: `9m` *(Natação `12m`)*
 - **Atributos**: `FOR 15 (+2)`, `DES 16 (+3)`, `CON 14 (+2)`, `INT 2 (-4)`, `SAB 12 (+1)`, `CAR 4 (-3)`
-- **Defesa**: Aparar `13` / Esquiva `18` / Desprevenido `12` *(Couro Escamoso `+2`, Treinado `+3` Esquiva)* | **RD Especial**: `0`
+- **Defesa**: Aparar `15` / Esquiva `18` / Desprevenido `12` *(Couro Escamoso `+2`, Treinado `+3` Esquiva)* | **RD Especial**: `0`
 - **Ataque**: *Bote Venenoso*: `+6` (`1d8 + 3`, `19–20 / ×2`). **Veneno Paralisante**: CON CD 16 ou fica **Paralisado por `2 rodadas`** (novo teste de CON CD 16 ao final de cada turno para encerrar).
 - **Em Cena**: *Sinais*: água parada formando círculos lentos, sapos repentinamente mudos. *Motivação*: emboscar presas quentes na água rasa. *Fuga*: mergulha na lama profunda se sofrer mais de `12` de dano em um turno. *Interação*: contornável passando por terreno seco com Sobrevivência CD 15.
 

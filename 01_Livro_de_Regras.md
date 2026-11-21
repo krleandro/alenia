@@ -186,7 +186,7 @@ Em **Alenia**, a evolução **não** é engessada em matar inimigos. Personagens
   - **Explorador / Híbrido / Suporte Marcial (`1d8`)**: *Sem Kit, Duelista, Arqueiro, Contrabandista, Caçador de Recompensas, Saqueador, Pirata, Navegador, Explorador, Patrulheiro, Domador, Ferreiro, Carpinteiro, Inquisidor, Ermitão*.
   - **Especialista / Erudito / Intriga / Corte (`1d6`)**: *Ladino, Assassino, Espião, Charlatão, Mercador, Alquimista, Médico, Erudito, Engenheiro, Herbalista, Astrônomo, Nobre, Diplomata, Bardo, Sacerdote, Tocado pelo Dom Antigo*.
 - **PV no Nível 1**: `Valor Máximo do DV do Kit + Valor Bruto de Constituição` *(ex.: Mercenário `1d10` com CON 14 começa com `24 PV`; Erudito `1d6` com CON 10 começa com `16 PV`)*.
-- **PV ao Subir de Nível**: role **`1dX + Mod. CON`** (mínimo `1 PV` por nível; opção fixa para quem não quiser rolar: metade arredondada para cima do DV + `Mod. CON`, ex.: `1d10` = `6 + Mod. CON`, `1d8` = `5 + Mod. CON`, `1d6` = `4 + Mod. CON`).
+- **PV ao Subir de Nível**: role **`1dX + Mod. CON`** (mínimo `1 PV` por nível; opção fixa para quem não quiser rolar: **média do dado arredondada para cima + `Mod. CON`** — equivalente a `DV/2 + 1`, ou seja: `1d12` = `7`, `1d10` = `6`, `1d8` = `5`, `1d6` = `4`, sempre `+ Mod. CON`).
 
 ### 5.4 Os 3 Patamares Dinâmicos, Tetos e Troca de Kit
 | Patamar | Níveis | Teto Atributo | Teto Grad. | Pontos de Perícia | Maestria de Combate *(Dano Base)* | Papel no Mundo |

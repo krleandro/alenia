@@ -35,11 +35,11 @@ Saindo de Merlinport rumo ao norte pela *Estrada da Bruma* (ou de barco a remo p
 
 ### Cena 2A — Os Destroços no Juncais *(Dia 1)*
 - A barca *Estrela de Aurélio* jaz meio afundada entre raízes retorcidas. Duas caixas de adamante estão vazias; a terceira foi escondida num fundo falso pelo capitão moribundo (**Investigação CD 15** encontra `4` lingotes de liga de adamante, valendo `160 PP` no mercado negro ou gratidão real — *Status*!).
-- **Ameaça Natural**: uma matilha de **3 Lobos-das-Brumas** *(Bestiário #7)* ronda os corpos na neblina. O grupo pode afugentá-los com fogo/Intimidação CD 14 ou enfrentá-los em terreno lamacento.
+- **Ameaça Natural**: uma matilha de **3 [Lobos-das-Brumas](04_Bestiario_Alenia.md)** *(Bestiário — Parte II: Lobo-das-Brumas)* ronda os corpos na neblina. O grupo pode afugentá-los com fogo/Intimidação CD 14 ou enfrentá-los em terreno lamacento.
 - **Pista no Convés**: uma flecha de penas verdes *(Povo das Florestas)* cravada no mastro e rastros de botas pesadas levando para o norte, rumo à **Torre de Specula**.
 
 ### Cena 2B — Emboscada ou Barganha na Estrada *(Dia 2)*
-- Próximo a um cruzamento enevoado, um pequeno bando de **3 Salteadores** *(Bestiário #1)* liderados por **Tordan Sombra** *(um batedor bastardo de Kalis, use ficha de Corsário #3 sem bônus naval)* vigia a estrada.
+- Próximo a um cruzamento enevoado, um pequeno bando de **3 [Salteadores de Estrada](04_Bestiario_Alenia.md)** *(Bestiário — Parte I: Salteador de Estrada)* liderados por **Tordan Sombra** *(um batedor bastardo de Kalis; use a ficha de [Corsário do Mar dos Corais](04_Bestiario_Alenia.md) sem bônus naval)* vigia a estrada.
 - **Interação**: eles não trabalham para Leonastis — são agentes de **Dobalbek (Kalis)** tentando rastrear tanto as cartas de Valerion quanto o destino de *Beren do Cais*. O grupo pode lutar, contorná-los pelos pântanos (**Furtividade/Sobrevivência CD 15**) ou negociar informações.
 
 ---
@@ -47,7 +47,7 @@ Saindo de Merlinport rumo ao norte pela *Estrada da Bruma* (ou de barco a remo p
 ## 4. Ato III — A Torre de Specula (Clímax)
 
 Erguida sobre um rochedo coberto de musgo a 1 dia ao sul de **Altrax**, a **Torre de Specula** abriga a pequena força que desviou o adamante:
-- **Guarnição**: **Capitão Cassian de Lavroga** *(use ficha de Soldado #2 com `28 PV` e Espada Longa de aço superior)* + **3 Salteadores/Mercenários** *(Bestiário #1)* + **1 Besta Pesada** montada na janela superior.
+- **Guarnição**: **Capitão Cassian de Lavroga** *(use a ficha de [Guarda de Cidade / Soldado de Aurora](04_Bestiario_Alenia.md) com `28 PV` e Espada Longa de aço superior)* + **3 [Salteadores de Estrada](04_Bestiario_Alenia.md)** *(Bestiário — Parte I)* + **1 Besta Pesada** montada na janela superior.
 - **Prisioneiro no Porão**: **Cadwyn ap Merion** *(emissário da Cidade Suspensa)*, ferido mas vivo, carregando o **tubo selado de Valerion** e o **mapa das minas clandestinas perto de Altrax**!
 
 ### Resoluções Possíveis *(Escolhas Morais Cinzentas)*
