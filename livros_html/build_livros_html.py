@@ -111,6 +111,18 @@ BOOKS = [
         "cover_map": "assets/capa_07_aventura.jpg",
         "gm_only": True,
     },
+    {
+        "src": "08_Acervo_Oculto_de_Sellene.md",
+        "out": "08_Acervo_Oculto_de_Sellene.html",
+        "num": "TOMO VIII • MESTRE",
+        "short": "🔒 Acervo Sellene",
+        "title": "O Acervo Oculto de Sellene",
+        "subtitle": "Domínio Absoluto do Alto Rei • Segredos Proibidos & Névoa Ácida",
+        "epigraph": "“Há verdades que não iluminam um reino — apenas o incendeiam.”",
+        "desc": "🔒 Área Restrita ao Mestre: câmara subterrânea sob a Academia de Sellene protegida por névoa ácida — 8 dossiês proibidos sobre A Sombra, Ferraur, Incognito, Thanatos e os segredos da Coroa (AES-256).",
+        "cover_map": "assets/capa_08_acervo_sellene.jpg",
+        "gm_only": True,
+    },
 ]
 
 CHAPTER_MAPS = {
@@ -2087,6 +2099,7 @@ def rewrite_link(url: str) -> str:
         "05_Onomastica_e_Toponimia_Alenia.md": "05_Onomastica_e_Toponimia.html",
         "06_Guia_do_Jogador_e_Referencia_Rapida.md": "06_Guia_do_Jogador.html",
         "07_Aventura_Inicial_Cinzas_no_Estuario.md": "07_Aventura_Inicial.html",
+        "08_Acervo_Oculto_de_Sellene.md": "08_Acervo_Oculto_de_Sellene.html",
     }
     for k, v in mapping.items():
         if k in url:
@@ -2633,7 +2646,7 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">7 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Ficha Firecast v1.9</div>
+        <div class="cover-subtitle">8 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Ficha Firecast v1.9</div>
         <div class="cover-rule"></div>
         <div style="margin: 8px 0 4px;">
             <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 18px; border-radius:3px; font-weight:700;">⬇ Baixar Plugin da Ficha Firecast (v1.9)</a>
