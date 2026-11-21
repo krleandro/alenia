@@ -7,7 +7,7 @@
 ## Parte I — Guia Rápido do Jogador
 
 ### 1. O Mundo em 30 Segundos
-Você é um **humano explorador** em **Alenia**, um mundo medieval sombrio sem pólvora e com magia raríssima estilo *Game of Thrones*. O ano é **418 da Era da Forja**: o rei de **Aurora** está doente, uma greve ameaça as minas de **adamante**, cidades de **Corallis** brigam pelos naufrágios do **Mar dos Corais**, clãs de **Gaddra** ameaçam fechar a Rota do Sal, espiões de **Kalis** movimentam-se nas sombras — e marinheiros dados como mortos teriam sido vistos vivos na sombria **Ilha de Thanatos**, às portas do continente inabitado de **Incognito**.
+Você é um **humano explorador** em **Alenia**, um mundo medieval sombrio sem pólvora e com magia raríssima estilo *Game of Thrones*. O **Alto Rei de Aurora** *(em Altavanne)* é o soberano de todos os reinos civilizados dos homens, escolhendo os **Regentes** que governam os domínios vassalos de **Corallis**, **Gaddra** e **Kalis** — mas fora das cidades muradas e estradas reais, **tribos inteiras, clãs livres, corsários e povos das florestas não reconhecem a Coroa nem seus Regentes**. O ano é **418 da Era da Forja**: o Alto Rei está gravemente doente, uma greve ameaça as minas de **adamante**, cidades de **Corallis** disputam os naufrágios do **Mar dos Corais**, tribos livres de **Gaddra** ameaçam fechar a Rota do Sal, espiões de **Kalis** movimentam-se nas sombras — e marinheiros dados como mortos teriam sido vistos vivos na sombria **Ilha de Thanatos**, às portas do continente inabitado de **Incognito**.
 
 ### 2. Escolha sua Origem *(Livre — Separada do Kit)*
 Sua cidade natal define sua cultura, sotaque e sobrenome de bastardo (se aplicável), mas **nunca limita seu ofício**:
