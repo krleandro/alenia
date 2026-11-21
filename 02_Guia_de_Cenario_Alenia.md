@@ -174,14 +174,26 @@ Para evitar tanto o politeísmo *(seis deuses competindo entre si)* quanto a abs
 > *Seis rostos vivos, um só Senhor,*
 > *Um único fogo, um só Criador.*
 
-#### Filosofia Moral: A Ética da Desarmonia *(Separar uma Persona do seu Par)*
-Na filosofia da Chama Solar, o mal raramente nasce de cultos demoníacos — nasce da **Desarmonia**: escolher uma única Persona, adorar seu temperamento isolado e esquecer o rosto do seu Par:
-- **O Vigia sem A Guardiã *(O Dia sem a Noite)***: a clareza sem misericórdia cega e queima, degenerando em **fanatismo e crueldade legalista** *(a crítica recorrente contra a Chama Branca)*.
-- **A Guardiã sem O Vigia *(A Noite sem o Dia)***: o silêncio sem verdade apodrece em **conspiração, covardia e tirania velada** *(razão pela qual Aurora olha com desconfiança para os segredos de Kalis)*.
-- **A Semeadora sem O Barqueiro *(A Colheita sem a Passagem)***: a fartura sem finitude vira **avareza ("grão morto" trancado em celeiros) e horror doentio à morte** — terreno fértil para heresias que prometem recusar o fim.
-- **O Barqueiro sem A Semeadora *(A Passagem sem a Colheita)***: a morte sem gratidão pela vida degenera em **niilismo, desespero e desprezo pelos vivos**.
-- **O Artífice sem A Anfitriã *(A Forja sem o Lar)***: o trabalho e o ferro sem cuidado humano viram **ambição cega e guerra**, tratando mineiros e soldados como metal descartável *(o nervo moral da greve em Aeraneas)*.
-- **A Anfitriã sem O Artífice *(O Lar sem a Forja)***: o conforto doméstico sem coragem de construir e defender vira **omissão e fraqueza diante da injustiça**.
+#### Filosofia Moral: As Sete Desarmonias *(Os Pecados Capitais da Chama Solar)*
+Na teologia de Altavanne, o mal raramente nasce de cultos demoníacos — nasce da **Desarmonia**. Enquanto a fé se sustenta em **Seis Personas organizadas em Três Pares**, os teólogos da Chama Solar classificam o corrompimento moral em **As Sete Desarmonias**: **os seis primeiros pecados** brotam do isolamento de uma Persona arrancada de seu Par, enquanto **o sétimo — a Soberba — é o pecado central**, nascido quando o mortal coloca a própria vontade no lugar do Criador.
+
+| Desarmonia *(Pecado)* | Ruptura na Chama Solar | Manifestação em Alenia |
+| :--- | :--- | :--- |
+| **1. Ira** | **O Vigia sem A Guardiã**: punir sem misericórdia | Vinganças familiares, tortura em masmorras e purificações impiedosas da *Chama Branca*. |
+| **2. Inveja** | **A Guardiã sem O Vigia**: alimentar no segredo o ressentimento contra o bem alheio | Espionagem íntima, difamação em salões de corte e sabotagem silenciosa de herdeiros. |
+| **3. Gula** | **A Semeadora sem O Barqueiro**: consumir sem aceitar limites nem finitude | Banquetes ostentosos durante a fome, desperdício e exploração de terras até seu esgotamento. |
+| **4. Preguiça** | **O Barqueiro sem A Semeadora**: entregar-se à resignação e abandonar o dever de cuidar da vida | Um senhor que tranca o castelo e deixa suas vilas morrerem enquanto espera que a crise passe *(como o odiado Aemilius IV nos Anos do Eclipse)*. |
+| **5. Avareza** | **O Artífice sem A Anfitriã**: acumular riqueza e obra sem servir às pessoas | Cofres cheios, salários retidos e minas mantidas abertas apesar do risco de desabamento em Ferraur. |
+| **6. Luxúria** | **A Anfitriã sem O Artífice**: buscar satisfação sem responsabilidade pelos vínculos criados | Coação de dependentes, abuso de poder sob o próprio teto e promessas afetivas usadas como arma política. |
+| **7. Soberba** *(Pecado Central)* | **O mortal que se julga a própria Chama**: considera sua vontade superior à verdade, à misericórdia e à finitude | Reis acima da lei, sacerdotes que se declaram infalíveis e falsos profetas que prometem governar consciências ou abolir a morte. |
+
+- **Por que Sete Pecados para Seis Personas? *(A Doutrina da Soberba)***: a ortodoxia de Altavanne ensina que a **Soberba** é a raiz de todas as outras Desarmonias — os seis primeiros pecados deformam uma relação com o Criador, mas o sétimo coloca o próprio indivíduo no trono d'Ele. A Igreja insiste oficialmente que **a sétima Desarmonia nasce exclusivamente dos mortais e não corresponde a nenhuma sétima Persona oculta** *(controvérsia numérica que, nos bastidores de Sellene e entre dissidentes, volta e meia acende debates incômodos sobre por que o número sete retorna tanto nos antigos tratados)*.
+- **Distinções Morais Claras *(Contra o Fanatismo)***: a doutrina clássica da Chama Solar preserva limites lúcidos para não confundir condição humana com pecado: **descanso legítimo não é Preguiça**, **prazer e afeto não são automaticamente Luxúria**, e **indignação justa diante da crueldade não é Ira pecaminosa**. A Desarmonia surge no instante em que o desejo ou a omissão **rompe deveres concretos para com outras pessoas**.
+- **Como as Quatro Ordens Pregam as Sete Desarmonias**:
+  - **Ordem da Chama Branca**: enfatiza **Luxúria**, **Soberba** e desobediência religiosa — tratando desvios doutrinários com severidade exemplar.
+  - **Irmãos da Lareira e do Pão**: denunciam acima de tudo **Avareza**, **Gula** e a **Preguiça** dos senhores que abandonam seus famintos.
+  - **Vigilantes da Brasa Velada**: combatem a **Ira** cega e ensinam a distinguir cuidadosamente culpa moral de doença, luto ou sofrimento.
+  - **Mestres do Malho Sagrado**: debatem nas guildas e minas exatamente onde termina o fruto honrado do ofício e onde começa a **Avareza** que explora o trabalhador.
 
 #### As Três Escolas Filosóficas de Altavanne & *O Livro das Seis Brasas*
 O texto sagrado oficial da Igreja é **O Livro das Seis Brasas** *(composto de seis cânticos curtos, recitados nas paróquias e jurados em tribunais)*. A questão de como **seis Personas com personalidades distintas são o mesmo único Criador** divide o clero erudito em **três escolas vivas**:
@@ -190,6 +202,7 @@ O texto sagrado oficial da Igreja é **O Livro das Seis Brasas** *(composto de s
 3. **Os Puristas do Primeiro Raio *(Ala Rígida — Berço Intelectual da Chama Branca)***: embora jurem igualdade formal das Seis Personas, sustentam que *O Vigia* e *O Artífice* são as faces "ativas" que governam a história humana, enquanto *A Guardiã* e *O Barqueiro* exigem vigilância severa para que a fraqueza mortal não abra portas à heresia.
 
 > **Excertos Canônicos d'O Livro das Seis Brasas *(Prontos para Uso em Mesa)***:
+> - *"Seis são os rostos da Chama. Seis são as formas de esquecê-los. A sétima é olhar o fogo e enxergar apenas a si mesmo."* *(Cântico VI — Da Anfitriã e do Encerramento)*
 > - *"Não peças ao Vigia o colo da Guardiã, nem maldigas o Barqueiro quando o pão esfriar; pois a mesma mão que acendeu a lareira da Anfitriã há de recolher tua brasa em paz."* *(Cântico IV — Do Barqueiro)*
 > - *"O ferro do Artífice que não passa pelo fogo quebra na primeira geada; mas a forja que não aquece a mesa da Anfitriã não passa de incêndio."* *(Cântico V — Do Artífice)*
 > - *"Quando dois homens juram sob o Sol de Seis Raios, o Criador não os ouve por partes: o Vigia pesa a palavra, a Anfitriã guarda o pacto e o Barqueiro recorda o fim."* *(Cântico I — Do Vigia)*
