@@ -19,7 +19,7 @@
     --gold: #9a7b3b;
     --gold-light: #cdb06e;
     --border: #cfc2a5;
-    --sidebar-w: 256px;
+    --sidebar-w: 274px;
     --topbar-h: 52px;
     --footbar-h: 56px;
 }
@@ -35,23 +35,32 @@ body {
     min-height: 100vh;
 }
 
-/* TOP BAR */
+/* TOP BAR — ULTRA-CLEAN SINGLE ROW ON ALL MONITORS */
 .topbar {
     position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h);
     background: rgba(18, 15, 12, 0.97);
     border-bottom: 1px solid rgba(154, 123, 59, 0.45);
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
     padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-left {
+    display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;
 }
 .topbar-brand {
     font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
     letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+    margin-left: 4px;
 }
-.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-current {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 14.5px;
+    color: #bfb5a2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding-left: 8px; border-left: 1px solid rgba(154, 123, 59, 0.35);
+}
+.topbar-nav { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; flex-shrink: 0; }
 .topbar-nav a, .btn-print, .btn-lock, .btn-toc-toggle {
     font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
-    text-transform: uppercase; color: #ded5c3; text-decoration: none;
-    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none; white-space: nowrap;
+    padding: 6px 10px; border-radius: 3px; border: 1px solid transparent;
     transition: all 0.16s ease; cursor: pointer; background: transparent;
 }
 .topbar-nav a:hover, .topbar-nav a.active {
@@ -62,23 +71,73 @@ body {
 .btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
 .btn-lock.visible { display: inline-block; }
 .btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
-.btn-toc-toggle { border-color: rgba(154, 123, 59, 0.35); color: #d4cab6; }
-.btn-toc-toggle:hover { color: var(--gold-light); border-color: var(--gold); }
+.btn-toc-toggle { border-color: rgba(154, 123, 59, 0.42); color: #e8decb; background: rgba(154, 123, 59, 0.09); }
+.btn-toc-toggle:hover, .btn-toc-toggle.active { color: var(--gold-light); border-color: var(--gold); background: rgba(154, 123, 59, 0.22); }
 
-/* SIDEBAR TOC */
+/* UNIFIED SIDEBAR (LIBRARY NAVIGATION + VOLUME TOC) */
 .sidebar {
-    position: fixed; top: var(--topbar-h); left: 0; bottom: var(--footbar-h); width: var(--sidebar-w);
-    background: rgba(20, 18, 16, 0.98); border-right: 1px solid rgba(154, 123, 59, 0.38);
-    padding: 16px 12px 24px; overflow-y: auto; z-index: 950;
+    position: fixed; top: var(--topbar-h); left: 0; bottom: 0; width: var(--sidebar-w);
+    background: rgba(19, 16, 14, 0.985); border-right: 1px solid rgba(154, 123, 59, 0.42);
+    padding: 12px 12px 24px; overflow-y: auto; z-index: 960;
     transition: transform 0.22s ease;
-    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.58);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(154, 123, 59, 0.35) transparent;
 }
+body.book-mode .sidebar { bottom: var(--footbar-h); }
 body.sidebar-hidden .sidebar { transform: translateX(-100%); box-shadow: none; }
 body.sidebar-hidden .book-shell { margin-left: 0; }
+
+.sidebar-backdrop {
+    display: none; position: fixed; top: var(--topbar-h); left: 0; right: 0; bottom: 0;
+    background: rgba(8, 6, 5, 0.52); z-index: 940; backdrop-filter: blur(1px);
+}
+body.book-mode:not(.sidebar-hidden) .sidebar-backdrop { display: block; }
+
+.sidebar-tabs {
+    display: flex; gap: 4px; margin-bottom: 12px; padding-bottom: 10px;
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35);
+}
+.sidebar-tab {
+    flex: 1 1 0; font-family: 'Cinzel', Georgia, serif; font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 6px 6px; border-radius: 3px; cursor: pointer;
+    border: 1px solid rgba(154, 123, 59, 0.32); background: rgba(255, 255, 255, 0.03);
+    color: #bfb5a2; transition: all 0.15s ease; text-align: center;
+}
+.sidebar-tab:hover { color: var(--gold-light); border-color: rgba(154, 123, 59, 0.6); }
+.sidebar-tab.active {
+    background: rgba(122, 31, 29, 0.72); border-color: var(--gold); color: #f7f1e3; font-weight: 700;
+}
+.sidebar-pane { display: none; }
+.sidebar-pane.active { display: block; }
+
 .sidebar-title {
-    font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.14em;
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--gold-light);
-    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 10px 0;
+    border-bottom: 1px solid rgba(154, 123, 59, 0.32); padding-bottom: 7px; margin: 0 0 10px 0;
+}
+.lib-group-label {
+    font-family: 'Cinzel', Georgia, serif; font-size: 9.5px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold); margin: 12px 0 5px 6px; opacity: 0.9;
+}
+.lib-group-label:first-child { margin-top: 2px; }
+.lib-list { list-style: none; padding: 0; margin: 0; }
+.lib-list li { margin: 2px 0; }
+.lib-link {
+    display: flex; align-items: center; gap: 8px; text-decoration: none;
+    color: #dfd6c4; font-size: 14.5px; line-height: 1.3; padding: 6px 9px;
+    border-radius: 3px; border-left: 2px solid transparent; transition: all 0.14s ease;
+}
+.lib-link:hover {
+    color: var(--gold-light); background: rgba(154, 123, 59, 0.14); border-left-color: rgba(205, 176, 110, 0.6);
+}
+.lib-link.active {
+    color: #fff6e0; background: rgba(122, 31, 29, 0.55); border-left-color: var(--gold-light); font-weight: 600;
+}
+.lib-link.gm-link { color: #e2cfa8; }
+.lib-num {
+    font-family: 'Cinzel', Georgia, serif; font-size: 9.5px; letter-spacing: 0.06em;
+    color: var(--gold-light); min-width: 24px; opacity: 0.85;
 }
 .toc-list { list-style: none; padding: 0; margin: 0; }
 .toc-list li { margin: 2px 0; }
@@ -786,9 +845,16 @@ tr { break-inside: avoid; }
 @media (max-width: 1020px) {
     .sidebar { transform: translateX(-100%); }
     body.sidebar-open-mobile .sidebar { transform: translateX(0); box-shadow: 6px 0 30px rgba(0,0,0,0.7); }
+    body.sidebar-open-mobile .sidebar-backdrop { display: block; }
     .book-shell, .reader-stage { margin-left: 0; }
     .book-page { padding: 28px 22px 42px; }
     .side-turn-btn { display: none; }
+}
+@media (max-width: 640px) {
+    .topbar-current { display: none; }
+    .topbar { padding: 0 10px; }
+    .topbar-brand { font-size: 12.5px; letter-spacing: 0.1em; }
+    .btn-toc-toggle, .btn-print, .btn-lock { padding: 5px 7px; font-size: 9.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -810,8 +876,8 @@ tr { break-inside: avoid; }
 </style>
 </head>
 <body class="book-mode sidebar-hidden" data-book-title="Livro do Cenário &amp; Atlas">
-    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Mostrar/Ocultar Sumário">☰ Sumário</button><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html" class="active">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">🔒 Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">🔒 Aventura</a><a href="08_Acervo_Oculto_de_Sellene.html">🔒 Acervo Sellene</a><a href="09_Catalogo_de_Equipamentos.html">Equipamentos</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
-    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-de-alenia-0">1. Visão Geral de Alenia</a></li><li class="toc-h3"><a href="#presente-histórico-as-6-crises-ativas-agora-1">Presente Histórico — As 6 Crises Ativas Agora</a></li><li class="toc-h2"><a href="#2-reino-capital-de-aurora-a-potência-do-adamante-2">2. Reino Capital de Aurora (A Potência do Adamante)</a></li><li class="toc-h2"><a href="#3-liga-talassocrática-de-corallis-o-mar-dos-corais-3">3. Liga Talassocrática de Corallis &amp; O Mar dos Corais</a></li><li class="toc-h2"><a href="#4-confederação-tribal-de-gaddra-4">4. Confederação Tribal de Gaddra</a></li><li class="toc-h2"><a href="#5-despotado-velado-de-kalis-o-mar-intransponível-5">5. Despotado Velado de Kalis &amp; O Mar Intransponível</a></li><li class="toc-h2"><a href="#6-incognito-o-mistério-da-ilha-de-thanatos-6">6. Incognito &amp; O Mistério da Ilha de Thanatos</a></li><li class="toc-h2"><a href="#8-as-6-facções-ativas-do-mundo-17">8. As 6 Facções Ativas do Mundo</a></li><li class="toc-h2"><a href="#9-moedas-casas-bancárias-e-economia-dos-domínios-18">9. Moedas, Casas Bancárias e Economia dos Domínios</a></li><li class="toc-h2"><a href="#10-religiões-ordens-e-cronologia-curta-19">10. Religiões, Ordens e Cronologia Curta</a></li><li class="toc-h3"><a href="#101-religião-oficial-de-aurora-a-igreja-da-chama-solar-o-criador-e-os-seis-aspectos-20">10.1 Religião Oficial de Aurora: A Igreja da Chama Solar (O Criador e os Seis Aspectos)</a></li><li class="toc-h3"><a href="#102-outras-tradições-religiosas-e-fé-verdadeira-convicção-plural-21">10.2 Outras Tradições Religiosas e Fé Verdadeira (Convicção Plural)</a></li><li class="toc-h3"><a href="#103-linha-do-tempo-curta-de-alenia-22">10.3 Linha do Tempo Curta de Alenia</a></li><li class="toc-h2"><a href="#11-manual-da-coroa-da-nobreza-e-da-cavalaria-de-aurora-23">11. Manual da Coroa, da Nobreza e da Cavalaria de Aurora</a></li><li class="toc-h3"><a href="#111-a-coroa-de-aurora-e-o-trono-do-alto-rei-rei-de-todos-os-reinos-dos-homens-24">11.1 A Coroa de Aurora e o Trono do Alto Rei (Rei de Todos os Reinos dos Homens)</a></li><li class="toc-h3"><a href="#112-o-conselho-da-coroa-os-seis-ofícios-de-altavanne-25">11.2 O Conselho da Coroa (Os Seis Ofícios de Altavanne)</a></li><li class="toc-h3"><a href="#113-hierarquia-feudal-títulos-oficiais-e-tratamento-em-corte-26">11.3 Hierarquia Feudal, Títulos Oficiais e Tratamento em Corte</a></li><li class="toc-h3"><a href="#114-as-grandes-casas-e-praças-fortes-de-aurora-tabuleiro-do-ano-418-27">11.4 As Grandes Casas e Praças-Fortes de Aurora (Tabuleiro do Ano 418)</a></li><li class="toc-h3"><a href="#115-crônica-da-casa-valerion-severor-i-o-rei-da-última-sombra-e-as-dívidas-da-caçada-28">11.5 Crônica da Casa Valerion: Severor I, o Rei da Última Sombra, e as Dívidas da Caçada</a></li><li class="toc-h3"><a href="#116-direitos-deveres-e-privilégios-legais-da-nobreza-o-código-de-altavanne-29">11.6 Direitos, Deveres e Privilégios Legais da Nobreza (O Código de Altavanne)</a></li><li class="toc-h3"><a href="#117-a-cavalaria-de-aurora-e-o-rito-solene-de-consagração-30">11.7 A Cavalaria de Aurora e o Rito Solene de Consagração</a></li><li class="toc-h3"><a href="#118-etiqueta-de-corte-documentos-reais-e-ascensão-de-pjs-31">11.8 Etiqueta de Corte, Documentos Reais e Ascensão de PJs</a></li><li class="toc-h2"><a href="#12-guia-operacional-de-viagens-distâncias-e-estações-32">12. Guia Operacional de Viagens, Distâncias e Estações</a></li><li class="toc-h3"><a href="#tabela-de-viagens-principais-marcha-normal-30-kmdia-navio-mercante-120-kmdia-33">Tabela de Viagens Principais (Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)</a></li><li class="toc-h2"><a href="#13-atlas-regional-detalhado-5-mapas-aproximados-34">13. Atlas Regional Detalhado (5 Mapas Aproximados)</a></li></ul></aside>
+    <header class="topbar"><div class="topbar-left"><button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Sumário do Volume">📑 Sumário</button><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><span class="topbar-current">Livro do Cenário &amp; Atlas</span></div><nav class="topbar-nav"><a href="index.html">Estante</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar" aria-label="Navegação da Biblioteca e Sumário"><div class="sidebar-tabs"><button class="sidebar-tab active" data-tab="lib" type="button">📚 Livros</button><button class="sidebar-tab" data-tab="toc" type="button">📑 Sumário</button></div><div id="sidebar-pane-lib" class="sidebar-pane active"><div class="lib-group-label">Início</div><ul class="lib-list"><li><a class="lib-link" href="index.html"><span class="lib-num">✦</span><span>Estante Oficial</span></a></li></ul><div class="lib-group-label">Tomos do Jogador</div><ul class="lib-list"><li><a class="lib-link" href="01_Livro_de_Regras.html"><span class="lib-num">I</span><span>Livro de Regras</span></a></li><li><a class="lib-link active" href="02_Livro_do_Cenario.html"><span class="lib-num">II</span><span>Livro do Cenário &amp; Atlas</span></a></li><li><a class="lib-link" href="03_Catalogo_de_Kits.html"><span class="lib-num">III</span><span>Catálogo de Kits Universais</span></a></li><li><a class="lib-link" href="05_Onomastica_e_Toponimia.html"><span class="lib-num">V</span><span>Onomástica &amp; Toponímia</span></a></li><li><a class="lib-link" href="06_Guia_do_Jogador.html"><span class="lib-num">VI</span><span>Guia do Jogador &amp; Escudo</span></a></li><li><a class="lib-link" href="09_Catalogo_de_Equipamentos.html"><span class="lib-num">IX</span><span>Empório &amp; Ofícios</span></a></li></ul><div class="lib-group-label">Área Restrita do Mestre</div><ul class="lib-list"><li><a class="lib-link gm-link" href="04_Bestiario_de_Alenia.html"><span class="lib-num">IV</span><span>🔒 Bestiário &amp; Ameaças</span></a></li><li><a class="lib-link gm-link" href="07_Aventura_Inicial.html"><span class="lib-num">VII</span><span>🔒 Aventura Inicial</span></a></li><li><a class="lib-link gm-link" href="08_Acervo_Oculto_de_Sellene.html"><span class="lib-num">VIII</span><span>🔒 O Acervo Oculto de Sellene</span></a></li></ul><div class="lib-group-label">Volume Único</div><ul class="lib-list"><li><a class="lib-link" href="Alenia_Compendio_Completo.html"><span class="lib-num">★</span><span>Compêndio Completo</span></a></li></ul></div><div id="sidebar-pane-toc" class="sidebar-pane"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-de-alenia-0">1. Visão Geral de Alenia</a></li><li class="toc-h3"><a href="#presente-histórico-as-6-crises-ativas-agora-1">Presente Histórico — As 6 Crises Ativas Agora</a></li><li class="toc-h2"><a href="#2-reino-capital-de-aurora-a-potência-do-adamante-2">2. Reino Capital de Aurora (A Potência do Adamante)</a></li><li class="toc-h2"><a href="#3-liga-talassocrática-de-corallis-o-mar-dos-corais-3">3. Liga Talassocrática de Corallis &amp; O Mar dos Corais</a></li><li class="toc-h2"><a href="#4-confederação-tribal-de-gaddra-4">4. Confederação Tribal de Gaddra</a></li><li class="toc-h2"><a href="#5-despotado-velado-de-kalis-o-mar-intransponível-5">5. Despotado Velado de Kalis &amp; O Mar Intransponível</a></li><li class="toc-h2"><a href="#6-incognito-o-mistério-da-ilha-de-thanatos-6">6. Incognito &amp; O Mistério da Ilha de Thanatos</a></li><li class="toc-h2"><a href="#8-as-6-facções-ativas-do-mundo-17">8. As 6 Facções Ativas do Mundo</a></li><li class="toc-h2"><a href="#9-moedas-casas-bancárias-e-economia-dos-domínios-18">9. Moedas, Casas Bancárias e Economia dos Domínios</a></li><li class="toc-h2"><a href="#10-religiões-ordens-e-cronologia-curta-19">10. Religiões, Ordens e Cronologia Curta</a></li><li class="toc-h3"><a href="#101-religião-oficial-de-aurora-a-igreja-da-chama-solar-o-criador-e-os-seis-aspectos-20">10.1 Religião Oficial de Aurora: A Igreja da Chama Solar (O Criador e os Seis Aspectos)</a></li><li class="toc-h3"><a href="#102-outras-tradições-religiosas-e-fé-verdadeira-convicção-plural-21">10.2 Outras Tradições Religiosas e Fé Verdadeira (Convicção Plural)</a></li><li class="toc-h3"><a href="#103-linha-do-tempo-curta-de-alenia-22">10.3 Linha do Tempo Curta de Alenia</a></li><li class="toc-h2"><a href="#11-manual-da-coroa-da-nobreza-e-da-cavalaria-de-aurora-23">11. Manual da Coroa, da Nobreza e da Cavalaria de Aurora</a></li><li class="toc-h3"><a href="#111-a-coroa-de-aurora-e-o-trono-do-alto-rei-rei-de-todos-os-reinos-dos-homens-24">11.1 A Coroa de Aurora e o Trono do Alto Rei (Rei de Todos os Reinos dos Homens)</a></li><li class="toc-h3"><a href="#112-o-conselho-da-coroa-os-seis-ofícios-de-altavanne-25">11.2 O Conselho da Coroa (Os Seis Ofícios de Altavanne)</a></li><li class="toc-h3"><a href="#113-hierarquia-feudal-títulos-oficiais-e-tratamento-em-corte-26">11.3 Hierarquia Feudal, Títulos Oficiais e Tratamento em Corte</a></li><li class="toc-h3"><a href="#114-as-grandes-casas-e-praças-fortes-de-aurora-tabuleiro-do-ano-418-27">11.4 As Grandes Casas e Praças-Fortes de Aurora (Tabuleiro do Ano 418)</a></li><li class="toc-h3"><a href="#115-crônica-da-casa-valerion-severor-i-o-rei-da-última-sombra-e-as-dívidas-da-caçada-28">11.5 Crônica da Casa Valerion: Severor I, o Rei da Última Sombra, e as Dívidas da Caçada</a></li><li class="toc-h3"><a href="#116-direitos-deveres-e-privilégios-legais-da-nobreza-o-código-de-altavanne-29">11.6 Direitos, Deveres e Privilégios Legais da Nobreza (O Código de Altavanne)</a></li><li class="toc-h3"><a href="#117-a-cavalaria-de-aurora-e-o-rito-solene-de-consagração-30">11.7 A Cavalaria de Aurora e o Rito Solene de Consagração</a></li><li class="toc-h3"><a href="#118-etiqueta-de-corte-documentos-reais-e-ascensão-de-pjs-31">11.8 Etiqueta de Corte, Documentos Reais e Ascensão de PJs</a></li><li class="toc-h2"><a href="#12-guia-operacional-de-viagens-distâncias-e-estações-32">12. Guia Operacional de Viagens, Distâncias e Estações</a></li><li class="toc-h3"><a href="#tabela-de-viagens-principais-marcha-normal-30-kmdia-navio-mercante-120-kmdia-33">Tabela de Viagens Principais (Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)</a></li><li class="toc-h2"><a href="#13-atlas-regional-detalhado-5-mapas-aproximados-34">13. Atlas Regional Detalhado (5 Mapas Aproximados)</a></li></ul></div></aside><div id="sidebar-backdrop" class="sidebar-backdrop"></div>
     
     <section id="reader-stage" class="reader-stage" aria-label="Leitor em Formato de Livro">
         <button class="side-turn-btn side-turn-prev btn-prev-page" type="button" title="Página Anterior (←)">‹</button>
@@ -915,7 +981,7 @@ tr { break-inside: avoid; }
 <hr/>
 
     <div class="gm-vault" data-locked="true">
-        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"45d7r7uM5MJKx16tuX8nJw==","i":"KgnicDtyVh05kySq","c":"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"}</script>
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"jr8b50+P60iVGLU9IxIEuQ==","i":"8XjcgWIYYd/7l7Vw","c":"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"}</script>
         <div class="gm-gate-box">
             <div class="gm-seal-icon">🔒</div>
             <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
@@ -2027,28 +2093,6 @@ tr { break-inside: avoid; }
             if (btnFontDown) btnFontDown.addEventListener('click', () => this.applyFontScale(this.fontScale - 0.1, true));
             if (btnFontUp) btnFontUp.addEventListener('click', () => this.applyFontScale(this.fontScale + 0.1, true));
 
-            const tocBtn = document.getElementById('btn-toc-toggle');
-            if (tocBtn) {
-                tocBtn.addEventListener('click', () => {
-                    if (window.innerWidth <= 1020) {
-                        document.body.classList.toggle('sidebar-open-mobile');
-                    } else {
-                        document.body.classList.toggle('sidebar-hidden');
-                    }
-                });
-            }
-
-            // Close overlay TOC drawer if clicking on the book stage outside sidebar
-            const stage = document.getElementById('reader-stage');
-            if (stage) {
-                stage.addEventListener('click', () => {
-                    if (this.mode !== 'scroll') {
-                        document.body.classList.add('sidebar-hidden');
-                        document.body.classList.remove('sidebar-open-mobile');
-                    }
-                });
-            }
-
             // Keyboard arrow / PageUp / PageDown turning
             document.addEventListener('keydown', (e) => {
                 if (this.mode === 'scroll') return;
@@ -2074,6 +2118,59 @@ tr { break-inside: avoid; }
             }
         }
     };
+
+    /* =====================================================
+       GLOBAL SIDEBAR NAVIGATION CONTROLLER (ALL PAGES)
+       ===================================================== */
+    (function initSidebarNav() {
+        const isMobile = () => window.innerWidth <= 1020;
+        const isOpen = () => isMobile()
+            ? document.body.classList.contains('sidebar-open-mobile')
+            : !document.body.classList.contains('sidebar-hidden');
+        const closeSidebar = () => {
+            document.body.classList.add('sidebar-hidden');
+            document.body.classList.remove('sidebar-open-mobile');
+        };
+        const openSidebar = () => {
+            if (isMobile()) document.body.classList.add('sidebar-open-mobile');
+            else document.body.classList.remove('sidebar-hidden');
+        };
+        let activeTab = 'lib';
+        const setTab = (tab) => {
+            const pane = document.getElementById('sidebar-pane-' + tab);
+            if (!pane) return;
+            activeTab = tab;
+            document.querySelectorAll('.sidebar-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+            document.querySelectorAll('.sidebar-pane').forEach(p => p.classList.toggle('active', p.id === 'sidebar-pane-' + tab));
+        };
+
+        const toggleForTab = (tab) => {
+            if (isOpen() && (activeTab === tab || !document.getElementById('sidebar-pane-toc'))) {
+                closeSidebar();
+            } else {
+                setTab(tab);
+                openSidebar();
+            }
+        };
+
+        const btnLib = document.getElementById('btn-lib-toggle');
+        const btnToc = document.getElementById('btn-toc-toggle');
+        if (btnLib) btnLib.addEventListener('click', () => toggleForTab('lib'));
+        if (btnToc) btnToc.addEventListener('click', () => toggleForTab('toc'));
+
+        document.querySelectorAll('.sidebar-tab').forEach(b => {
+            b.addEventListener('click', () => setTab(b.dataset.tab));
+        });
+
+        const backdrop = document.getElementById('sidebar-backdrop');
+        if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isOpen() && (document.body.classList.contains('book-mode') || isMobile())) {
+                closeSidebar();
+            }
+        });
+    })();
 
     /* =====================================================
        GM AES-256-GCM VAULT UNLOCKER (SYNCS WITH BOOK MODE)

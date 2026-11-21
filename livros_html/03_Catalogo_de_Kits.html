@@ -19,7 +19,7 @@
     --gold: #9a7b3b;
     --gold-light: #cdb06e;
     --border: #cfc2a5;
-    --sidebar-w: 256px;
+    --sidebar-w: 274px;
     --topbar-h: 52px;
     --footbar-h: 56px;
 }
@@ -35,23 +35,32 @@ body {
     min-height: 100vh;
 }
 
-/* TOP BAR */
+/* TOP BAR — ULTRA-CLEAN SINGLE ROW ON ALL MONITORS */
 .topbar {
     position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h);
     background: rgba(18, 15, 12, 0.97);
     border-bottom: 1px solid rgba(154, 123, 59, 0.45);
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
     padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-left {
+    display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;
 }
 .topbar-brand {
     font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
     letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+    margin-left: 4px;
 }
-.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-current {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 14.5px;
+    color: #bfb5a2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding-left: 8px; border-left: 1px solid rgba(154, 123, 59, 0.35);
+}
+.topbar-nav { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; flex-shrink: 0; }
 .topbar-nav a, .btn-print, .btn-lock, .btn-toc-toggle {
     font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
-    text-transform: uppercase; color: #ded5c3; text-decoration: none;
-    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none; white-space: nowrap;
+    padding: 6px 10px; border-radius: 3px; border: 1px solid transparent;
     transition: all 0.16s ease; cursor: pointer; background: transparent;
 }
 .topbar-nav a:hover, .topbar-nav a.active {
@@ -62,23 +71,73 @@ body {
 .btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
 .btn-lock.visible { display: inline-block; }
 .btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
-.btn-toc-toggle { border-color: rgba(154, 123, 59, 0.35); color: #d4cab6; }
-.btn-toc-toggle:hover { color: var(--gold-light); border-color: var(--gold); }
+.btn-toc-toggle { border-color: rgba(154, 123, 59, 0.42); color: #e8decb; background: rgba(154, 123, 59, 0.09); }
+.btn-toc-toggle:hover, .btn-toc-toggle.active { color: var(--gold-light); border-color: var(--gold); background: rgba(154, 123, 59, 0.22); }
 
-/* SIDEBAR TOC */
+/* UNIFIED SIDEBAR (LIBRARY NAVIGATION + VOLUME TOC) */
 .sidebar {
-    position: fixed; top: var(--topbar-h); left: 0; bottom: var(--footbar-h); width: var(--sidebar-w);
-    background: rgba(20, 18, 16, 0.98); border-right: 1px solid rgba(154, 123, 59, 0.38);
-    padding: 16px 12px 24px; overflow-y: auto; z-index: 950;
+    position: fixed; top: var(--topbar-h); left: 0; bottom: 0; width: var(--sidebar-w);
+    background: rgba(19, 16, 14, 0.985); border-right: 1px solid rgba(154, 123, 59, 0.42);
+    padding: 12px 12px 24px; overflow-y: auto; z-index: 960;
     transition: transform 0.22s ease;
-    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.58);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(154, 123, 59, 0.35) transparent;
 }
+body.book-mode .sidebar { bottom: var(--footbar-h); }
 body.sidebar-hidden .sidebar { transform: translateX(-100%); box-shadow: none; }
 body.sidebar-hidden .book-shell { margin-left: 0; }
+
+.sidebar-backdrop {
+    display: none; position: fixed; top: var(--topbar-h); left: 0; right: 0; bottom: 0;
+    background: rgba(8, 6, 5, 0.52); z-index: 940; backdrop-filter: blur(1px);
+}
+body.book-mode:not(.sidebar-hidden) .sidebar-backdrop { display: block; }
+
+.sidebar-tabs {
+    display: flex; gap: 4px; margin-bottom: 12px; padding-bottom: 10px;
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35);
+}
+.sidebar-tab {
+    flex: 1 1 0; font-family: 'Cinzel', Georgia, serif; font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 6px 6px; border-radius: 3px; cursor: pointer;
+    border: 1px solid rgba(154, 123, 59, 0.32); background: rgba(255, 255, 255, 0.03);
+    color: #bfb5a2; transition: all 0.15s ease; text-align: center;
+}
+.sidebar-tab:hover { color: var(--gold-light); border-color: rgba(154, 123, 59, 0.6); }
+.sidebar-tab.active {
+    background: rgba(122, 31, 29, 0.72); border-color: var(--gold); color: #f7f1e3; font-weight: 700;
+}
+.sidebar-pane { display: none; }
+.sidebar-pane.active { display: block; }
+
 .sidebar-title {
-    font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.14em;
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--gold-light);
-    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 10px 0;
+    border-bottom: 1px solid rgba(154, 123, 59, 0.32); padding-bottom: 7px; margin: 0 0 10px 0;
+}
+.lib-group-label {
+    font-family: 'Cinzel', Georgia, serif; font-size: 9.5px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold); margin: 12px 0 5px 6px; opacity: 0.9;
+}
+.lib-group-label:first-child { margin-top: 2px; }
+.lib-list { list-style: none; padding: 0; margin: 0; }
+.lib-list li { margin: 2px 0; }
+.lib-link {
+    display: flex; align-items: center; gap: 8px; text-decoration: none;
+    color: #dfd6c4; font-size: 14.5px; line-height: 1.3; padding: 6px 9px;
+    border-radius: 3px; border-left: 2px solid transparent; transition: all 0.14s ease;
+}
+.lib-link:hover {
+    color: var(--gold-light); background: rgba(154, 123, 59, 0.14); border-left-color: rgba(205, 176, 110, 0.6);
+}
+.lib-link.active {
+    color: #fff6e0; background: rgba(122, 31, 29, 0.55); border-left-color: var(--gold-light); font-weight: 600;
+}
+.lib-link.gm-link { color: #e2cfa8; }
+.lib-num {
+    font-family: 'Cinzel', Georgia, serif; font-size: 9.5px; letter-spacing: 0.06em;
+    color: var(--gold-light); min-width: 24px; opacity: 0.85;
 }
 .toc-list { list-style: none; padding: 0; margin: 0; }
 .toc-list li { margin: 2px 0; }
@@ -786,9 +845,16 @@ tr { break-inside: avoid; }
 @media (max-width: 1020px) {
     .sidebar { transform: translateX(-100%); }
     body.sidebar-open-mobile .sidebar { transform: translateX(0); box-shadow: 6px 0 30px rgba(0,0,0,0.7); }
+    body.sidebar-open-mobile .sidebar-backdrop { display: block; }
     .book-shell, .reader-stage { margin-left: 0; }
     .book-page { padding: 28px 22px 42px; }
     .side-turn-btn { display: none; }
+}
+@media (max-width: 640px) {
+    .topbar-current { display: none; }
+    .topbar { padding: 0 10px; }
+    .topbar-brand { font-size: 12.5px; letter-spacing: 0.1em; }
+    .btn-toc-toggle, .btn-print, .btn-lock { padding: 5px 7px; font-size: 9.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -810,8 +876,8 @@ tr { break-inside: avoid; }
 </style>
 </head>
 <body class="book-mode sidebar-hidden" data-book-title="Catálogo de Kits Universais">
-    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Mostrar/Ocultar Sumário">☰ Sumário</button><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html" class="active">36 Kits</a><a href="04_Bestiario_de_Alenia.html">🔒 Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">🔒 Aventura</a><a href="08_Acervo_Oculto_de_Sellene.html">🔒 Acervo Sellene</a><a href="09_Catalogo_de_Equipamentos.html">Equipamentos</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
-    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#como-funcionam-os-kits-na-edição-v20-0">Como Funcionam os Kits na Edição v2.0</a></li><li class="toc-h2"><a href="#00-sem-kit-livre-média-padrão-1">00. Sem Kit (Livre / Média Padrão)</a></li><li class="toc-h2"><a href="#grupo-i-aço-guerra-proteção-8-kits-2">Grupo I — Aço, Guerra &amp; Proteção (8 Kits)</a></li><li class="toc-h3"><a href="#01-mercenário-3">01. Mercenário</a></li><li class="toc-h3"><a href="#02-cavaleiro-4">02. Cavaleiro</a></li><li class="toc-h3"><a href="#03-soldado-veterano-5">03. Soldado / Veterano</a></li><li class="toc-h3"><a href="#04-duelista-esgrimista-6">04. Duelista / Esgrimista</a></li><li class="toc-h3"><a href="#05-bárbaro-berserker-7">05. Bárbaro / Berserker</a></li><li class="toc-h3"><a href="#06-guarda-costas-sentinela-8">06. Guarda-Costas / Sentinela</a></li><li class="toc-h3"><a href="#07-arqueiro-franco-atirador-9">07. Arqueiro / Franco-Atirador</a></li><li class="toc-h3"><a href="#08-lutador-pugilista-10">08. Lutador / Pugilista</a></li><li class="toc-h2"><a href="#grupo-ii-sombras-crime-intriga-7-kits-11">Grupo II — Sombras, Crime &amp; Intriga (7 Kits)</a></li><li class="toc-h3"><a href="#09-ladino-12">09. Ladino</a></li><li class="toc-h3"><a href="#10-assassino-13">10. Assassino</a></li><li class="toc-h3"><a href="#11-espião-14">11. Espião</a></li><li class="toc-h3"><a href="#12-contrabandista-15">12. Contrabandista</a></li><li class="toc-h3"><a href="#13-caçador-de-recompensas-16">13. Caçador de Recompensas</a></li><li class="toc-h3"><a href="#14-charlatão-vigário-17">14. Charlatão / Vigário</a></li><li class="toc-h3"><a href="#15-saqueador-de-tumbas-18">15. Saqueador de Tumbas</a></li><li class="toc-h2"><a href="#grupo-iii-mares-estradas-exploração-6-kits-19">Grupo III — Mares, Estradas &amp; Exploração (6 Kits)</a></li><li class="toc-h3"><a href="#16-pirata-20">16. Pirata</a></li><li class="toc-h3"><a href="#17-navegador-marinheiro-21">17. Navegador / Marinheiro</a></li><li class="toc-h3"><a href="#18-explorador-cartógrafo-22">18. Explorador / Cartógrafo</a></li><li class="toc-h3"><a href="#19-patrulheiro-rastreador-23">19. Patrulheiro / Rastreador</a></li><li class="toc-h3"><a href="#20-mercador-caravaneiro-24">20. Mercador / Caravaneiro</a></li><li class="toc-h3"><a href="#21-domador-cavaleiro-de-estrada-25">21. Domador / Cavaleiro de Estrada</a></li><li class="toc-h2"><a href="#grupo-iv-ofícios-ciência-saber-8-kits-26">Grupo IV — Ofícios, Ciência &amp; Saber (8 Kits)</a></li><li class="toc-h3"><a href="#22-ferreiro-armeiro-27">22. Ferreiro / Armeiro</a></li><li class="toc-h3"><a href="#23-alquimista-28">23. Alquimista</a></li><li class="toc-h3"><a href="#24-médico-cirurgião-29">24. Médico / Cirurgião</a></li><li class="toc-h3"><a href="#25-erudito-historiador-30">25. Erudito / Historiador</a></li><li class="toc-h3"><a href="#26-engenheiro-artífice-31">26. Engenheiro / Artífice</a></li><li class="toc-h3"><a href="#27-herbalista-boticário-32">27. Herbalista / Boticário</a></li><li class="toc-h3"><a href="#28-astrônomo-sábio-33">28. Astrônomo / Sábio</a></li><li class="toc-h3"><a href="#29-carpinteiro-artesão-34">29. Carpinteiro / Artesão</a></li><li class="toc-h2"><a href="#grupo-v-corte-arte-fé-mistério-7-kits-35">Grupo V — Corte, Arte, Fé &amp; Mistério (7 Kits)</a></li><li class="toc-h3"><a href="#30-nobre-36">30. Nobre</a></li><li class="toc-h3"><a href="#31-diplomata-conselheiro-37">31. Diplomata / Conselheiro</a></li><li class="toc-h3"><a href="#32-bardo-menestrel-38">32. Bardo / Menestrel</a></li><li class="toc-h3"><a href="#33-sacerdote-clérigo-39">33. Sacerdote / Clérigo</a></li><li class="toc-h3"><a href="#34-inquisidor-40">34. Inquisidor</a></li><li class="toc-h3"><a href="#35-ermitão-sobrevivente-41">35. Ermitão / Sobrevivente</a></li><li class="toc-h3"><a href="#36-tocado-pelo-dom-antigo-raríssimo-requer-aval-do-mestre-42">36. Tocado pelo Dom Antigo (Raríssimo — Requer Aval do Mestre)</a></li></ul></aside>
+    <header class="topbar"><div class="topbar-left"><button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Sumário do Volume">📑 Sumário</button><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><span class="topbar-current">Catálogo de Kits Universais</span></div><nav class="topbar-nav"><a href="index.html">Estante</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar" aria-label="Navegação da Biblioteca e Sumário"><div class="sidebar-tabs"><button class="sidebar-tab active" data-tab="lib" type="button">📚 Livros</button><button class="sidebar-tab" data-tab="toc" type="button">📑 Sumário</button></div><div id="sidebar-pane-lib" class="sidebar-pane active"><div class="lib-group-label">Início</div><ul class="lib-list"><li><a class="lib-link" href="index.html"><span class="lib-num">✦</span><span>Estante Oficial</span></a></li></ul><div class="lib-group-label">Tomos do Jogador</div><ul class="lib-list"><li><a class="lib-link" href="01_Livro_de_Regras.html"><span class="lib-num">I</span><span>Livro de Regras</span></a></li><li><a class="lib-link" href="02_Livro_do_Cenario.html"><span class="lib-num">II</span><span>Livro do Cenário &amp; Atlas</span></a></li><li><a class="lib-link active" href="03_Catalogo_de_Kits.html"><span class="lib-num">III</span><span>Catálogo de Kits Universais</span></a></li><li><a class="lib-link" href="05_Onomastica_e_Toponimia.html"><span class="lib-num">V</span><span>Onomástica &amp; Toponímia</span></a></li><li><a class="lib-link" href="06_Guia_do_Jogador.html"><span class="lib-num">VI</span><span>Guia do Jogador &amp; Escudo</span></a></li><li><a class="lib-link" href="09_Catalogo_de_Equipamentos.html"><span class="lib-num">IX</span><span>Empório &amp; Ofícios</span></a></li></ul><div class="lib-group-label">Área Restrita do Mestre</div><ul class="lib-list"><li><a class="lib-link gm-link" href="04_Bestiario_de_Alenia.html"><span class="lib-num">IV</span><span>🔒 Bestiário &amp; Ameaças</span></a></li><li><a class="lib-link gm-link" href="07_Aventura_Inicial.html"><span class="lib-num">VII</span><span>🔒 Aventura Inicial</span></a></li><li><a class="lib-link gm-link" href="08_Acervo_Oculto_de_Sellene.html"><span class="lib-num">VIII</span><span>🔒 O Acervo Oculto de Sellene</span></a></li></ul><div class="lib-group-label">Volume Único</div><ul class="lib-list"><li><a class="lib-link" href="Alenia_Compendio_Completo.html"><span class="lib-num">★</span><span>Compêndio Completo</span></a></li></ul></div><div id="sidebar-pane-toc" class="sidebar-pane"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#como-funcionam-os-kits-na-edição-v20-0">Como Funcionam os Kits na Edição v2.0</a></li><li class="toc-h2"><a href="#00-sem-kit-livre-média-padrão-1">00. Sem Kit (Livre / Média Padrão)</a></li><li class="toc-h2"><a href="#grupo-i-aço-guerra-proteção-8-kits-2">Grupo I — Aço, Guerra &amp; Proteção (8 Kits)</a></li><li class="toc-h3"><a href="#01-mercenário-3">01. Mercenário</a></li><li class="toc-h3"><a href="#02-cavaleiro-4">02. Cavaleiro</a></li><li class="toc-h3"><a href="#03-soldado-veterano-5">03. Soldado / Veterano</a></li><li class="toc-h3"><a href="#04-duelista-esgrimista-6">04. Duelista / Esgrimista</a></li><li class="toc-h3"><a href="#05-bárbaro-berserker-7">05. Bárbaro / Berserker</a></li><li class="toc-h3"><a href="#06-guarda-costas-sentinela-8">06. Guarda-Costas / Sentinela</a></li><li class="toc-h3"><a href="#07-arqueiro-franco-atirador-9">07. Arqueiro / Franco-Atirador</a></li><li class="toc-h3"><a href="#08-lutador-pugilista-10">08. Lutador / Pugilista</a></li><li class="toc-h2"><a href="#grupo-ii-sombras-crime-intriga-7-kits-11">Grupo II — Sombras, Crime &amp; Intriga (7 Kits)</a></li><li class="toc-h3"><a href="#09-ladino-12">09. Ladino</a></li><li class="toc-h3"><a href="#10-assassino-13">10. Assassino</a></li><li class="toc-h3"><a href="#11-espião-14">11. Espião</a></li><li class="toc-h3"><a href="#12-contrabandista-15">12. Contrabandista</a></li><li class="toc-h3"><a href="#13-caçador-de-recompensas-16">13. Caçador de Recompensas</a></li><li class="toc-h3"><a href="#14-charlatão-vigário-17">14. Charlatão / Vigário</a></li><li class="toc-h3"><a href="#15-saqueador-de-tumbas-18">15. Saqueador de Tumbas</a></li><li class="toc-h2"><a href="#grupo-iii-mares-estradas-exploração-6-kits-19">Grupo III — Mares, Estradas &amp; Exploração (6 Kits)</a></li><li class="toc-h3"><a href="#16-pirata-20">16. Pirata</a></li><li class="toc-h3"><a href="#17-navegador-marinheiro-21">17. Navegador / Marinheiro</a></li><li class="toc-h3"><a href="#18-explorador-cartógrafo-22">18. Explorador / Cartógrafo</a></li><li class="toc-h3"><a href="#19-patrulheiro-rastreador-23">19. Patrulheiro / Rastreador</a></li><li class="toc-h3"><a href="#20-mercador-caravaneiro-24">20. Mercador / Caravaneiro</a></li><li class="toc-h3"><a href="#21-domador-cavaleiro-de-estrada-25">21. Domador / Cavaleiro de Estrada</a></li><li class="toc-h2"><a href="#grupo-iv-ofícios-ciência-saber-8-kits-26">Grupo IV — Ofícios, Ciência &amp; Saber (8 Kits)</a></li><li class="toc-h3"><a href="#22-ferreiro-armeiro-27">22. Ferreiro / Armeiro</a></li><li class="toc-h3"><a href="#23-alquimista-28">23. Alquimista</a></li><li class="toc-h3"><a href="#24-médico-cirurgião-29">24. Médico / Cirurgião</a></li><li class="toc-h3"><a href="#25-erudito-historiador-30">25. Erudito / Historiador</a></li><li class="toc-h3"><a href="#26-engenheiro-artífice-31">26. Engenheiro / Artífice</a></li><li class="toc-h3"><a href="#27-herbalista-boticário-32">27. Herbalista / Boticário</a></li><li class="toc-h3"><a href="#28-astrônomo-sábio-33">28. Astrônomo / Sábio</a></li><li class="toc-h3"><a href="#29-carpinteiro-artesão-34">29. Carpinteiro / Artesão</a></li><li class="toc-h2"><a href="#grupo-v-corte-arte-fé-mistério-7-kits-35">Grupo V — Corte, Arte, Fé &amp; Mistério (7 Kits)</a></li><li class="toc-h3"><a href="#30-nobre-36">30. Nobre</a></li><li class="toc-h3"><a href="#31-diplomata-conselheiro-37">31. Diplomata / Conselheiro</a></li><li class="toc-h3"><a href="#32-bardo-menestrel-38">32. Bardo / Menestrel</a></li><li class="toc-h3"><a href="#33-sacerdote-clérigo-39">33. Sacerdote / Clérigo</a></li><li class="toc-h3"><a href="#34-inquisidor-40">34. Inquisidor</a></li><li class="toc-h3"><a href="#35-ermitão-sobrevivente-41">35. Ermitão / Sobrevivente</a></li><li class="toc-h3"><a href="#36-tocado-pelo-dom-antigo-raríssimo-requer-aval-do-mestre-42">36. Tocado pelo Dom Antigo (Raríssimo — Requer Aval do Mestre)</a></li></ul></div></aside><div id="sidebar-backdrop" class="sidebar-backdrop"></div>
     
     <section id="reader-stage" class="reader-stage" aria-label="Leitor em Formato de Livro">
         <button class="side-turn-btn side-turn-prev btn-prev-page" type="button" title="Página Anterior (←)">‹</button>
@@ -2063,28 +2129,6 @@ tr { break-inside: avoid; }
             if (btnFontDown) btnFontDown.addEventListener('click', () => this.applyFontScale(this.fontScale - 0.1, true));
             if (btnFontUp) btnFontUp.addEventListener('click', () => this.applyFontScale(this.fontScale + 0.1, true));
 
-            const tocBtn = document.getElementById('btn-toc-toggle');
-            if (tocBtn) {
-                tocBtn.addEventListener('click', () => {
-                    if (window.innerWidth <= 1020) {
-                        document.body.classList.toggle('sidebar-open-mobile');
-                    } else {
-                        document.body.classList.toggle('sidebar-hidden');
-                    }
-                });
-            }
-
-            // Close overlay TOC drawer if clicking on the book stage outside sidebar
-            const stage = document.getElementById('reader-stage');
-            if (stage) {
-                stage.addEventListener('click', () => {
-                    if (this.mode !== 'scroll') {
-                        document.body.classList.add('sidebar-hidden');
-                        document.body.classList.remove('sidebar-open-mobile');
-                    }
-                });
-            }
-
             // Keyboard arrow / PageUp / PageDown turning
             document.addEventListener('keydown', (e) => {
                 if (this.mode === 'scroll') return;
@@ -2110,6 +2154,59 @@ tr { break-inside: avoid; }
             }
         }
     };
+
+    /* =====================================================
+       GLOBAL SIDEBAR NAVIGATION CONTROLLER (ALL PAGES)
+       ===================================================== */
+    (function initSidebarNav() {
+        const isMobile = () => window.innerWidth <= 1020;
+        const isOpen = () => isMobile()
+            ? document.body.classList.contains('sidebar-open-mobile')
+            : !document.body.classList.contains('sidebar-hidden');
+        const closeSidebar = () => {
+            document.body.classList.add('sidebar-hidden');
+            document.body.classList.remove('sidebar-open-mobile');
+        };
+        const openSidebar = () => {
+            if (isMobile()) document.body.classList.add('sidebar-open-mobile');
+            else document.body.classList.remove('sidebar-hidden');
+        };
+        let activeTab = 'lib';
+        const setTab = (tab) => {
+            const pane = document.getElementById('sidebar-pane-' + tab);
+            if (!pane) return;
+            activeTab = tab;
+            document.querySelectorAll('.sidebar-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+            document.querySelectorAll('.sidebar-pane').forEach(p => p.classList.toggle('active', p.id === 'sidebar-pane-' + tab));
+        };
+
+        const toggleForTab = (tab) => {
+            if (isOpen() && (activeTab === tab || !document.getElementById('sidebar-pane-toc'))) {
+                closeSidebar();
+            } else {
+                setTab(tab);
+                openSidebar();
+            }
+        };
+
+        const btnLib = document.getElementById('btn-lib-toggle');
+        const btnToc = document.getElementById('btn-toc-toggle');
+        if (btnLib) btnLib.addEventListener('click', () => toggleForTab('lib'));
+        if (btnToc) btnToc.addEventListener('click', () => toggleForTab('toc'));
+
+        document.querySelectorAll('.sidebar-tab').forEach(b => {
+            b.addEventListener('click', () => setTab(b.dataset.tab));
+        });
+
+        const backdrop = document.getElementById('sidebar-backdrop');
+        if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isOpen() && (document.body.classList.contains('book-mode') || isMobile())) {
+                closeSidebar();
+            }
+        });
+    })();
 
     /* =====================================================
        GM AES-256-GCM VAULT UNLOCKER (SYNCS WITH BOOK MODE)

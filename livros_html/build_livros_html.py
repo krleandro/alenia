@@ -256,7 +256,7 @@ SHARED_CSS = r"""
     --gold: #9a7b3b;
     --gold-light: #cdb06e;
     --border: #cfc2a5;
-    --sidebar-w: 256px;
+    --sidebar-w: 274px;
     --topbar-h: 52px;
     --footbar-h: 56px;
 }
@@ -272,23 +272,32 @@ body {
     min-height: 100vh;
 }
 
-/* TOP BAR */
+/* TOP BAR — ULTRA-CLEAN SINGLE ROW ON ALL MONITORS */
 .topbar {
     position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h);
     background: rgba(18, 15, 12, 0.97);
     border-bottom: 1px solid rgba(154, 123, 59, 0.45);
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
     padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-left {
+    display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;
 }
 .topbar-brand {
     font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
     letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+    margin-left: 4px;
 }
-.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-current {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 14.5px;
+    color: #bfb5a2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding-left: 8px; border-left: 1px solid rgba(154, 123, 59, 0.35);
+}
+.topbar-nav { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; flex-shrink: 0; }
 .topbar-nav a, .btn-print, .btn-lock, .btn-toc-toggle {
     font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
-    text-transform: uppercase; color: #ded5c3; text-decoration: none;
-    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none; white-space: nowrap;
+    padding: 6px 10px; border-radius: 3px; border: 1px solid transparent;
     transition: all 0.16s ease; cursor: pointer; background: transparent;
 }
 .topbar-nav a:hover, .topbar-nav a.active {
@@ -299,23 +308,73 @@ body {
 .btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
 .btn-lock.visible { display: inline-block; }
 .btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
-.btn-toc-toggle { border-color: rgba(154, 123, 59, 0.35); color: #d4cab6; }
-.btn-toc-toggle:hover { color: var(--gold-light); border-color: var(--gold); }
+.btn-toc-toggle { border-color: rgba(154, 123, 59, 0.42); color: #e8decb; background: rgba(154, 123, 59, 0.09); }
+.btn-toc-toggle:hover, .btn-toc-toggle.active { color: var(--gold-light); border-color: var(--gold); background: rgba(154, 123, 59, 0.22); }
 
-/* SIDEBAR TOC */
+/* UNIFIED SIDEBAR (LIBRARY NAVIGATION + VOLUME TOC) */
 .sidebar {
-    position: fixed; top: var(--topbar-h); left: 0; bottom: var(--footbar-h); width: var(--sidebar-w);
-    background: rgba(20, 18, 16, 0.98); border-right: 1px solid rgba(154, 123, 59, 0.38);
-    padding: 16px 12px 24px; overflow-y: auto; z-index: 950;
+    position: fixed; top: var(--topbar-h); left: 0; bottom: 0; width: var(--sidebar-w);
+    background: rgba(19, 16, 14, 0.985); border-right: 1px solid rgba(154, 123, 59, 0.42);
+    padding: 12px 12px 24px; overflow-y: auto; z-index: 960;
     transition: transform 0.22s ease;
-    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.58);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(154, 123, 59, 0.35) transparent;
 }
+body.book-mode .sidebar { bottom: var(--footbar-h); }
 body.sidebar-hidden .sidebar { transform: translateX(-100%); box-shadow: none; }
 body.sidebar-hidden .book-shell { margin-left: 0; }
+
+.sidebar-backdrop {
+    display: none; position: fixed; top: var(--topbar-h); left: 0; right: 0; bottom: 0;
+    background: rgba(8, 6, 5, 0.52); z-index: 940; backdrop-filter: blur(1px);
+}
+body.book-mode:not(.sidebar-hidden) .sidebar-backdrop { display: block; }
+
+.sidebar-tabs {
+    display: flex; gap: 4px; margin-bottom: 12px; padding-bottom: 10px;
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35);
+}
+.sidebar-tab {
+    flex: 1 1 0; font-family: 'Cinzel', Georgia, serif; font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 6px 6px; border-radius: 3px; cursor: pointer;
+    border: 1px solid rgba(154, 123, 59, 0.32); background: rgba(255, 255, 255, 0.03);
+    color: #bfb5a2; transition: all 0.15s ease; text-align: center;
+}
+.sidebar-tab:hover { color: var(--gold-light); border-color: rgba(154, 123, 59, 0.6); }
+.sidebar-tab.active {
+    background: rgba(122, 31, 29, 0.72); border-color: var(--gold); color: #f7f1e3; font-weight: 700;
+}
+.sidebar-pane { display: none; }
+.sidebar-pane.active { display: block; }
+
 .sidebar-title {
-    font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.14em;
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--gold-light);
-    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 10px 0;
+    border-bottom: 1px solid rgba(154, 123, 59, 0.32); padding-bottom: 7px; margin: 0 0 10px 0;
+}
+.lib-group-label {
+    font-family: 'Cinzel', Georgia, serif; font-size: 9.5px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold); margin: 12px 0 5px 6px; opacity: 0.9;
+}
+.lib-group-label:first-child { margin-top: 2px; }
+.lib-list { list-style: none; padding: 0; margin: 0; }
+.lib-list li { margin: 2px 0; }
+.lib-link {
+    display: flex; align-items: center; gap: 8px; text-decoration: none;
+    color: #dfd6c4; font-size: 14.5px; line-height: 1.3; padding: 6px 9px;
+    border-radius: 3px; border-left: 2px solid transparent; transition: all 0.14s ease;
+}
+.lib-link:hover {
+    color: var(--gold-light); background: rgba(154, 123, 59, 0.14); border-left-color: rgba(205, 176, 110, 0.6);
+}
+.lib-link.active {
+    color: #fff6e0; background: rgba(122, 31, 29, 0.55); border-left-color: var(--gold-light); font-weight: 600;
+}
+.lib-link.gm-link { color: #e2cfa8; }
+.lib-num {
+    font-family: 'Cinzel', Georgia, serif; font-size: 9.5px; letter-spacing: 0.06em;
+    color: var(--gold-light); min-width: 24px; opacity: 0.85;
 }
 .toc-list { list-style: none; padding: 0; margin: 0; }
 .toc-list li { margin: 2px 0; }
@@ -1023,9 +1082,16 @@ tr { break-inside: avoid; }
 @media (max-width: 1020px) {
     .sidebar { transform: translateX(-100%); }
     body.sidebar-open-mobile .sidebar { transform: translateX(0); box-shadow: 6px 0 30px rgba(0,0,0,0.7); }
+    body.sidebar-open-mobile .sidebar-backdrop { display: block; }
     .book-shell, .reader-stage { margin-left: 0; }
     .book-page { padding: 28px 22px 42px; }
     .side-turn-btn { display: none; }
+}
+@media (max-width: 640px) {
+    .topbar-current { display: none; }
+    .topbar { padding: 0 10px; }
+    .topbar-brand { font-size: 12.5px; letter-spacing: 0.1em; }
+    .btn-toc-toggle, .btn-print, .btn-lock { padding: 5px 7px; font-size: 9.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1889,28 +1955,6 @@ SHARED_JS = r"""
             if (btnFontDown) btnFontDown.addEventListener('click', () => this.applyFontScale(this.fontScale - 0.1, true));
             if (btnFontUp) btnFontUp.addEventListener('click', () => this.applyFontScale(this.fontScale + 0.1, true));
 
-            const tocBtn = document.getElementById('btn-toc-toggle');
-            if (tocBtn) {
-                tocBtn.addEventListener('click', () => {
-                    if (window.innerWidth <= 1020) {
-                        document.body.classList.toggle('sidebar-open-mobile');
-                    } else {
-                        document.body.classList.toggle('sidebar-hidden');
-                    }
-                });
-            }
-
-            // Close overlay TOC drawer if clicking on the book stage outside sidebar
-            const stage = document.getElementById('reader-stage');
-            if (stage) {
-                stage.addEventListener('click', () => {
-                    if (this.mode !== 'scroll') {
-                        document.body.classList.add('sidebar-hidden');
-                        document.body.classList.remove('sidebar-open-mobile');
-                    }
-                });
-            }
-
             // Keyboard arrow / PageUp / PageDown turning
             document.addEventListener('keydown', (e) => {
                 if (this.mode === 'scroll') return;
@@ -1936,6 +1980,59 @@ SHARED_JS = r"""
             }
         }
     };
+
+    /* =====================================================
+       GLOBAL SIDEBAR NAVIGATION CONTROLLER (ALL PAGES)
+       ===================================================== */
+    (function initSidebarNav() {
+        const isMobile = () => window.innerWidth <= 1020;
+        const isOpen = () => isMobile()
+            ? document.body.classList.contains('sidebar-open-mobile')
+            : !document.body.classList.contains('sidebar-hidden');
+        const closeSidebar = () => {
+            document.body.classList.add('sidebar-hidden');
+            document.body.classList.remove('sidebar-open-mobile');
+        };
+        const openSidebar = () => {
+            if (isMobile()) document.body.classList.add('sidebar-open-mobile');
+            else document.body.classList.remove('sidebar-hidden');
+        };
+        let activeTab = 'lib';
+        const setTab = (tab) => {
+            const pane = document.getElementById('sidebar-pane-' + tab);
+            if (!pane) return;
+            activeTab = tab;
+            document.querySelectorAll('.sidebar-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+            document.querySelectorAll('.sidebar-pane').forEach(p => p.classList.toggle('active', p.id === 'sidebar-pane-' + tab));
+        };
+
+        const toggleForTab = (tab) => {
+            if (isOpen() && (activeTab === tab || !document.getElementById('sidebar-pane-toc'))) {
+                closeSidebar();
+            } else {
+                setTab(tab);
+                openSidebar();
+            }
+        };
+
+        const btnLib = document.getElementById('btn-lib-toggle');
+        const btnToc = document.getElementById('btn-toc-toggle');
+        if (btnLib) btnLib.addEventListener('click', () => toggleForTab('lib'));
+        if (btnToc) btnToc.addEventListener('click', () => toggleForTab('toc'));
+
+        document.querySelectorAll('.sidebar-tab').forEach(b => {
+            b.addEventListener('click', () => setTab(b.dataset.tab));
+        });
+
+        const backdrop = document.getElementById('sidebar-backdrop');
+        if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isOpen() && (document.body.classList.contains('book-mode') || isMobile())) {
+                closeSidebar();
+            }
+        });
+    })();
 
     /* =====================================================
        GM AES-256-GCM VAULT UNLOCKER (SYNCS WITH BOOK MODE)
@@ -2437,21 +2534,92 @@ def render_public_doc_with_sealed_sections(md_content: str, id_prefix: str, card
     return "\n".join(html_parts), public_toc
 
 
-def build_topbar(active_file: str, has_toc: bool) -> str:
-    links = [("index.html", "Biblioteca")] + [(b["out"], b["short"]) for b in BOOKS] + [("Alenia_Compendio_Completo.html", "Compêndio")]
-    nav_html = []
+def build_topbar(active_file: str, page_title: str, has_toc: bool) -> str:
+    left_btns = [
+        '<button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button>'
+    ]
     if has_toc:
-        nav_html.append('<button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Mostrar/Ocultar Sumário">☰ Sumário</button>')
-    for href, lbl in links:
-        cls = ' class="active"' if href == active_file else ""
-        nav_html.append(f'<a href="{href}"{cls}>{lbl}</a>')
-    nav_html.append('<button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button>')
-    nav_html.append('<button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button>')
+        left_btns.append(
+            '<button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Sumário do Volume">📑 Sumário</button>'
+        )
+    cur_badge = (
+        f'<span class="topbar-current">{html.escape(page_title)}</span>'
+        if active_file != "index.html"
+        else ""
+    )
+    right_btns = []
+    if active_file != "index.html":
+        right_btns.append('<a href="index.html">Estante</a>')
+    right_btns.append('<button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button>')
+    right_btns.append('<button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button>')
     return (
         '<header class="topbar">'
+        f'<div class="topbar-left">{"".join(left_btns)}'
         '<a class="topbar-brand" href="index.html">✦ ALENIA RPG</a>'
-        f'<nav class="topbar-nav">{"".join(nav_html)}</nav>'
+        f'{cur_badge}</div>'
+        f'<nav class="topbar-nav">{"".join(right_btns)}</nav>'
         '</header>'
+    )
+
+
+def build_sidebar(active_file: str, toc_items, has_toc: bool) -> str:
+    romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"]
+    public_items = []
+    gm_items = []
+    for idx, b in enumerate(BOOKS):
+        num = romans[idx] if idx < len(romans) else str(idx + 1)
+        is_act = " active" if b["out"] == active_file else ""
+        if b["gm_only"]:
+            gm_items.append(
+                f'<li><a class="lib-link gm-link{is_act}" href="{b["out"]}">'
+                f'<span class="lib-num">{num}</span><span>🔒 {html.escape(b["title"])}</span></a></li>'
+            )
+        else:
+            public_items.append(
+                f'<li><a class="lib-link{is_act}" href="{b["out"]}">'
+                f'<span class="lib-num">{num}</span><span>{html.escape(b["title"])}</span></a></li>'
+            )
+
+    home_act = " active" if active_file == "index.html" else ""
+    comp_act = " active" if active_file == "Alenia_Compendio_Completo.html" else ""
+    lib_html = (
+        '<div class="lib-group-label">Início</div>'
+        '<ul class="lib-list">'
+        f'<li><a class="lib-link{home_act}" href="index.html"><span class="lib-num">✦</span><span>Estante Oficial</span></a></li>'
+        '</ul>'
+        '<div class="lib-group-label">Tomos do Jogador</div>'
+        f'<ul class="lib-list">{"".join(public_items)}</ul>'
+        '<div class="lib-group-label">Área Restrita do Mestre</div>'
+        f'<ul class="lib-list">{"".join(gm_items)}</ul>'
+        '<div class="lib-group-label">Volume Único</div>'
+        '<ul class="lib-list">'
+        f'<li><a class="lib-link{comp_act}" href="Alenia_Compendio_Completo.html"><span class="lib-num">★</span><span>Compêndio Completo</span></a></li>'
+        '</ul>'
+    )
+
+    if has_toc:
+        li_html = render_toc_items(toc_items or [])
+        return (
+            '<aside class="sidebar" aria-label="Navegação da Biblioteca e Sumário">'
+            '<div class="sidebar-tabs">'
+            '<button class="sidebar-tab active" data-tab="lib" type="button">📚 Livros</button>'
+            '<button class="sidebar-tab" data-tab="toc" type="button">📑 Sumário</button>'
+            '</div>'
+            f'<div id="sidebar-pane-lib" class="sidebar-pane active">{lib_html}</div>'
+            f'<div id="sidebar-pane-toc" class="sidebar-pane">'
+            '<div class="sidebar-title">Sumário do Volume</div>'
+            f'<ul class="toc-list">{li_html}</ul>'
+            '</div>'
+            '</aside>'
+            '<div id="sidebar-backdrop" class="sidebar-backdrop"></div>'
+        )
+
+    return (
+        '<aside class="sidebar" aria-label="Navegação da Biblioteca">'
+        '<div class="sidebar-title">Biblioteca Oficial</div>'
+        f'<div id="sidebar-pane-lib" class="sidebar-pane active">{lib_html}</div>'
+        '</aside>'
+        '<div id="sidebar-backdrop" class="sidebar-backdrop"></div>'
     )
 
 
@@ -2473,16 +2641,8 @@ def build_cover(num: str, title: str, subtitle: str, epigraph: str, cover_map: s
 
 def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=None, force_sidebar: bool = False, enable_book_reader: bool = True) -> str:
     has_toc = force_sidebar or (toc_items is not None and len(toc_items) > 0)
-    sidebar_html = ""
-    shell_cls = "book-shell" if has_toc else "book-shell no-sidebar"
-    if has_toc:
-        li_html = render_toc_items(toc_items or [])
-        sidebar_html = (
-            '<aside class="sidebar">'
-            '<div class="sidebar-title">Sumário do Volume</div>'
-            f'<ul class="toc-list">{li_html}</ul>'
-            '</aside>'
-        )
+    sidebar_html = build_sidebar(active_file, toc_items, has_toc)
+    shell_cls = "book-shell"
 
     reader_ui = ""
     body_cls = ""
@@ -2525,7 +2685,7 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
     <style>{SHARED_CSS}</style>
 </head>
 <body{body_cls} data-book-title="{html.escape(page_title)}">
-    {build_topbar(active_file, has_toc)}
+    {build_topbar(active_file, page_title, has_toc)}
     {sidebar_html}
     {reader_ui}
     <main class="{shell_cls}">
