@@ -242,12 +242,13 @@ Em Alenia, **Fé Verdadeira não pertence a uma única igreja**: ela floresce em
 
 ### 10.3 Linha do Tempo Curta de Alenia
 - **Era Antiga (há mais de 1.200 anos)**: civilizações esquecidas erguem monumentos em Incognito e nas *Ruínas de Kelgore*; seu colapso deixa apenas cinzas, lendas e o fenômeno de *Thanatos*.
-- **Ano 1 da Era da Forja**: descoberta das grandes veias de **adamante** nos Montes Ferraur; fundação de *Altavanne* e ascensão da *Casa Valerion*.
+- **Ano 1 da Era da Forja**: descoberta das grandes veias de **adamante** nos Montes Ferraur; fundação de *Altavanne*, *Pacto das Bigornas* e ascensão do ramo antigo da *Casa Valerion*.
 - **Ano 112**: *Tratado de Vergod* encerra as guerras florestais, reconhecendo a autonomia da *Cidade Suspensa*.
 - **Ano 204**: fundação formal da *Liga Talassocrática de Corallis* e da *Academia de Sellene*; expansão do comércio marítimo com *Merlinport*.
 - **Ano 295**: consolidação do *Despotado Velado de Kalis* após guerras internas; criação das rotas cifradas de Kalgard.
+- **Anos 348 – 356 *(A Era da Sombra)***: o colossal dragão **A Sombra** assola campos, rebanhos e fortalezas de Aurora enquanto o Alto Rei *Aemilius IV* se tranca em Altavanne cobrando o *Imposto das Cinzas*. No verão de **356**, **Severor I Valerion** lidera a *Companhia da Faixa Negra*, mata a criatura e conquista a Coroa para o seu ramo da Casa.
 - **Ano 380**: descoberta do aquífero artesiano sob *Naasar* consolida a *Confederação Tribal de Gaddra* e a *Rota do Sal*.
-- **Ano 418 *(Presente)***: doença do Alto Rei Severor III, greve em Ferraur e o chocante reaparecimento de mortos na *Ilha de Thanatos*.
+- **Ano 418 *(Presente)***: doença grave do Alto Rei *Severor III* *(neto do Matador da Sombra)*, greve em Ferraur e o chocante reaparecimento de mortos na *Ilha de Thanatos*.
 
 ---
 
@@ -330,7 +331,55 @@ Toda a sociedade de Aurora organiza-se em **sete degraus jurídicos claros**, di
 
 ---
 
-### 11.5 Direitos, Deveres e Privilégios Legais da Nobreza *(O Código de Altavanne)*
+### 11.5 Crônica da Casa Valerion: Severor I, *o Rei da Última Sombra*, e as Dívidas da Caçada
+
+> *"Bastava alguém gritar 'a sombra!' para uma praça inteira se esvaziar — até que um senhor sem trono ficou de pé debaixo das asas dela."* — **Crônica da Faixa Negra, Arquivo de Altavanne**
+
+A legitimidade atual da linha reinante da **Casa Valerion** não repousa apenas na antiguidade do *Pacto das Bigornas*: ela foi refundada a sangue e cinza há sessenta e dois anos, no verão do **Ano 356**, pelo avô do atual rei enfermo — **Severor I Valerion, *o Rei da Última Sombra***.
+
+#### O Abandono Antes da Sombra: O Reinado de *Aemilius IV* *(O Rei das Muralhas Fechadas)*
+Antes de Severor I, Aurora era governada pelo **Ramo Antigo dos Valerion**, cuja coroa já apodrecia em luxo e indolência sob o **Alto Rei Aemilius IV Valerion**. Quando um único e colossal dragão ancestral — provavelmente o último vestígio de sua espécie vindo das serras mais remotas — surgiu sobre o reino no **Ano 348**, o povo das vilas não lhe deu nome de lenda: chamou-o simplesmente de **A Sombra**.
+
+Sua envergadura era tão vasta que trabalhadores erguiam os olhos das lavouras ao perceberem a luz do sol desaparecer de repente sobre os campos. As pessoas corriam para dentro de casa antes mesmo de ouvir o bater das asas. A criatura não incendiava cidades sem critério: **retornava às mesmas regiões em intervalos imprevisíveis**, arruinando colheitas, devorando rebanhos inteiros e esmagando qualquer torre ou guarnição que tentasse expulsá-la. A impossibilidade de prever quando o céu escureceria tornou-se o terror cotidiano de toda uma geração.
+
+Diante do flagelo, **Aemilius IV falhou de forma infame**:
+- Trancou-se atrás das muralhas internas de **Altavanne**, suspendeu audiências públicas e proibiu que o nome *"A Sombra"* fosse pronunciado no Salão do Trono.
+- Instituiu o odiado **Imposto das Cinzas** — um tributo extraordinário arrancado de Dahrma, Merlinport e até dos Regentes de Corallis e Gaddra sob a promessa de uma *"Grande Campanha Real"* que jamais marchou. Parte dos senhores enviou expedições fracassadas que morreram sem apoio; outros embolsaram o imposto para reforçar apenas seus próprios castelos.
+- Os Regentes vassalos já ameaçavam romper seus tributos, e sacerdotes da *Chama Solar* sussurravam abertamente que o Ramo Antigo havia traído tanto *O Vigia* quanto *A Anfitriã*.
+
+#### A Caçada da Faixa Negra *(Ano 356)* e o Papel das Grandes Casas
+**Severor Valerion** pertencia a um ramo secundário empobrecido da Casa — tinha nome antigo, mas nenhuma precedência para sonhar com o trono. **A Sombra tornou essa distância irrelevante.**
+
+Recusando-se a esperar ordens de Altavanne, Severor reuniu sobreviventes das expedições massacradas e dissidentes de Casas rivais, formando a lendária **Companhia da Faixa Negra** *(nome nascido das tiras de pano preto que seus soldados amarravam no braço pelos mortos da caçada)*. Ele não marchou às cegas: durante meses estudou onde a criatura pousava, seus intervalos de fome e os ferimentos antigos que carregava — e **cada Grande Casa de Aurora carrega até hoje o orgulho ou a ferida daquela caçada**:
+
+| Participante Histórico | Casa / Origem | Papel Real na Caçada de 356 | A Dívida ou Ferida Viva no Ano 418 |
+| :--- | :--- | :--- | :--- |
+| **Darian d'Altrax** *(O Caçador)* | **Casa d'Altrax** *(Noroeste)* | Rastreou por nove meses os pousos da criatura nos contrafortes de Rubecina e descobriu uma **fenda antiga sob a asa esquerda**, aberta anos antes por um virote de balista. | Os d'Altrax guardam ressentimento silencioso: Severor prometeu expandir suas fronteiras até a mata profunda, mas depois recuou para preservar o *Tratado de Vergod*. |
+| **Capitã Vespera Scutauria** *(A Capitã)* | **Casa Scutauria** *(Merlinport)* | Trouxe arpões navais pesados e correntes usadas contra leviatãs nos recifes, além de financiar suprimentos pelo rio quando Altavanne bloqueou as estradas. | Perdeu uma perna e metade da tripulação no desfiladeiro. Em troca, garantiu os *Forais de Merlinport* e o cargo de *Mestre da Balança* — mas a família ressente-se de seu nome ser menos cantado que o do Rei. |
+| **Mestre Orlan Ferraris** *(O Mestre de Forja)* | **Casa Ferraris** *(Aeraneas)* | Violou o decreto real de Aemilius IV para forjar clandestinamente a ponta de adamante temperado da lança-arpão ***Fende-Bruma*** — a única lâmina capaz de rasgar a couraça da Sombra. | Foi elevado por Severor I ao título hereditário de **Grão-Lorde do Adamante**. Hoje, na greve de Ferraur, os mineiros lembram que *foram mãos de Aeraneas que forjaram a coroa dos Valerion*. |
+| **Sor Octavian Leonastis** *(Os Soldados de Casas Rivais)* | **Casa Leonastis** *(Vaarsa)* | Avô do atual Marechal *Lucian Leonastis*. Desobedeceu ao próprio pai e levou 60 infantes pesados para segurar a boca do desfiladeiro; **morreu coberto de cinzas garantindo a retirada dos feridos**. | A morte heroica de Octavian alimenta o orgulho amargo e a ambição política do neto: os Leonastis julgam que pagaram em sangue por um trono que outro ramo colheu. |
+| **Lorde Corvus Montavalle** *(Abastecimento & Retaguarda)* | **Casa Montavalle** *(Dahrma)* | Alimentou toda a campanha com grãos e cavalos de Dahrma — a província mais castigada pela Sombra. | Na hora crítica do combate, um contingente de retaguarda de Dahrma recuou cedo demais sob fumaça e fogo: rivais acusam os Montavalle de covardia; eles afirmam que foram abandonados sem sinal no flanco. |
+
+#### O Golpe Mortal e a Coroa Conquistada
+A vitória exigiu preparo, perdas brutais e um instante irrepetível de coragem pessoal — **e o golpe mortal foi genuinamente de Severor**. Quando as correntes navais arrebentaram e os últimos sobreviventes recuaram sufocados pelo calor, Severor permaneceu sozinho **embaixo do ventre da Sombra** e cravou *Fende-Bruma* na fenda antiga sob a asa esquerda até atingir o coração.
+
+Quando finalmente caminhou para fora da asa caída, carregava apenas a **haste partida da lança** e trazia **todo o lado esquerdo do rosto queimado para sempre** — cicatriz que jamais cobriu com máscara, em respeito ao *Vigia*.
+
+Após a vitória, vilas inteiras de Dahrma, Pontáuria e Merlinport passaram a jurar fidelidade diretamente a ele; soldados de Casas diversas passaram a usar a **faixa negra** no braço em memória dos caídos *(costume mantido até hoje pela Guarda Real em funerais)*. Diante de uma marcha silenciosa de sobreviventes, camponeses e veteranos às portas de Altavanne, os Grandes Lordes precisaram escolher entre reconhecê-lo ou enfrentar o homem que o povo já chamava de rei. Sem derramar sangue nas ruas da capital, o desacreditado **Aemilius IV foi forçado a abdicar** *(recolhido a um mosteiro da Passagem até morrer)*, e no **Solstício do Dia Claro de 356** Severor I foi coroado na Grande Catedral — com os **Regentes de Corallis, Gaddra e Kalis** renovando pessoalmente seus juramentos de vassalagem. O colossal crânio enegrecido da Sombra e a haste partida de *Fende-Bruma* permanecem preservados em Altavanne como prova viva do feito.
+
+#### A Linhagem da Sombra e a Ferida Política do Presente *(Ano 418)*
+- **Severor I *(reinou 356–384)***: o refundador. Devolveu dignidade à Coroa, mas morreu deixando promessas políticas difíceis e versões conflitantes sobre quem realmente salvou quem no desfiladeiro.
+- **Severor II *(reinou 384–405, filho)***: administrador pacífico que reconstruiu pontes e estradas, mas jamais liderou uma guerra — dando margem aos primeiros murmúrios marciais de que *"o aço da Casa amolecera"*.
+- **Severor III *(reinou 405–presente, neto)***: cresceu literalmente **à sombra do avô que matou A Sombra**. Passou todo o reinado tentando provar que merecia o nome, assumindo riscos excessivos nas fronteiras e escondendo os primeiros sinais da própria enfermidade até o colapso no Ano 418. Para o reino, sua agonia sem herdeiro direto não é apenas a morte de um monarca — **é o enfraquecimento visível da linhagem do Matador da Sombra**.
+
+Essa memória viva é hoje a arma mais perigosa nos salões de Altavanne:
+- **O argumento do Marechal Lucian Leonastis**: *"O avô conquistou a coroa quando o reino precisou de coragem — e o meu avô morreu no desfiladeiro para lhe segurar a retaguarda. O sangue, sozinho, nunca bastou."*
+- **A resposta da Regente Valora Valerion**: *"Meu avô não tomou Altavanne pelo terror: conquistou a confiança das Casas, escutou o ferreiro, o caçador e a capitã, e salvou o povo do abandono. Esmagar mineiros em Aeraneas não é honrar Severor I — é reviver o Rei das Muralhas Fechadas."*
+- **Em Mesa *(Verdade e Disputa)***: a grandeza de Severor I é real, mas **cada Casa narra os bastidores da caçada conforme seus interesses atuais** — quem abriu a ferida, quem foi deixado para trás na fumaça e quais promessas feitas antes da coroação continuam cobrando juros em segredo.
+
+---
+
+### 11.6 Direitos, Deveres e Privilégios Legais da Nobreza *(O Código de Altavanne)*
 
 #### Os 5 Direitos e Privilégios da Nobreza
 1. **Direito de Fosso e Forca *(Alta e Baixa Justiça)***: Grandes Lordes e Castelões julgam crimes comuns dentro de seus feudos. Apenas nobres e cavaleiros têm o direito garantido de apelar contra uma sentença local diretamente ao **Preboste da Coroa** ou ao **Alto Rei**.
@@ -347,7 +396,7 @@ Toda a sociedade de Aurora organiza-se em **sete degraus jurídicos claros**, di
 
 ---
 
-### 11.6 A Cavalaria de Aurora e o Rito Solene de Consagração
+### 11.7 A Cavalaria de Aurora e o Rito Solene de Consagração
 
 Em Aurora, a **Cavalaria não se herda pelo sangue**: o filho de um Grande Lorde nasce nobre, mas **não nasce Cavaleiro** — precisa merecer as esporas como Pagem (`7–12 anos`), servir como Escudeiro (`13–18 anos`) e passar pela consagração. Da mesma forma, **qualquer homem ou mulher livre — inclusive plebeus ou bastardos `Cinza`** — pode ser consagrado Cavaleiro por um feito extraordinário de coragem, justiça ou proteção de inocentes.
 
@@ -388,7 +437,7 @@ Em Aurora, a **Cavalaria não se herda pelo sangue**: o filho de um Grande Lorde
 
 ---
 
-### 11.7 Etiqueta de Corte, Documentos Reais e Ascensão de PJs
+### 11.8 Etiqueta de Corte, Documentos Reais e Ascensão de PJs
 - **Audiências & Protocolo**: entrar armado na presença de um Grande Lorde ou da Regente sem licença explícita exige teste de **Etiqueta & Corte CD 18** apenas para evitar prisão imediata; vestir-se abaixo do seu **`Status`** impõe `-2` em testes sociais na corte *(enquanto manter Padrão de Vida **Abastado** ou **Aristocrático** abre portas sem suborno)*.
 - **Documentos que Movem Campanhas**:
   - *Salvo-Conduto Real*: pergaminho lacrado em cera vermelha garantindo passagem livre em pontes, pedágios e portões *(como o prometido por Sabina de Pontáuria em Merlinport)*.
