@@ -135,6 +135,18 @@ BOOKS = [
         "cover_map": "assets/capa_09_equipamentos.jpg",
         "gm_only": False,
     },
+    {
+        "src": "10_Herbario_de_Seleni.md",
+        "out": "10_Herbario_de_Seleni.html",
+        "num": "TOMO X",
+        "short": "Herbário",
+        "title": "Herbário de Seleni",
+        "subtitle": "Das Raízes e dos Remédios • 64 Espécies, Pranchas Científicas & Preparações",
+        "epigraph": "“Minha mãe conhecia ervas que não tinham nome nos livros. Em Sellene encontrei livros cujos autores jamais haviam tocado as ervas que descreviam.”",
+        "desc": "Compêndio ilustrado com pranchas renascentistas científicas por Loreo Seleni: 64 espécies de Alenia (H01–H64) em 8 regiões, graus de evidência, coleta, cultivo, preparações, aplicação às 6 doenças e caderno reservado ao Mestre selado por AES-256.",
+        "cover_map": "assets/capa_10_herbario_seleni.jpg",
+        "gm_only": False,
+    },
 ]
 
 CHAPTER_MAPS = {
@@ -198,7 +210,7 @@ BESTIARY_PLATES = {
     "31. O Regente das Cinzas": "assets/b_plate_31.jpg",
 }
 
-GM_SECTION_H2_PREFIXES = ("7. A Grande Ameaça:",)
+GM_SECTION_H2_PREFIXES = ("7. A Grande Ameaça:", "Caderno reservado ao mestre")
 GM_SECTION_H3_PREFIXES = ("O Simbionte da Comunhão",)
 
 
@@ -2150,7 +2162,11 @@ def sync_assets():
         (os.path.join(ROOT_DIR, "mapas", "regionais", "mapa_regional_gaddra.jpg"), "mapa_regional_gaddra.jpg"),
         (os.path.join(ROOT_DIR, "mapas", "regionais", "mapa_regional_kalis.jpg"), "mapa_regional_kalis.jpg"),
         (os.path.join(ROOT_DIR, "mapas", "regionais", "mapa_regional_incognito.jpg"), "mapa_regional_incognito.jpg"),
+        (os.path.join(ROOT_DIR, "capas", "capa_10_herbario_seleni.jpg"), "capa_10_herbario_seleni.jpg"),
     ]
+    for fn in sorted(os.listdir(os.path.join(ROOT_DIR, "ilustracoes"))) if os.path.isdir(os.path.join(ROOT_DIR, "ilustracoes")) else []:
+        if fn.lower().endswith((".jpg", ".jpeg", ".png")):
+            copies.append((os.path.join(ROOT_DIR, "ilustracoes", fn), fn))
     for src, dst_name in copies:
         if os.path.exists(src):
             shutil.copy2(src, os.path.join(ASSETS_DIR, dst_name))
@@ -2210,6 +2226,7 @@ def rewrite_link(url: str) -> str:
         "07_Aventura_Inicial_Cinzas_no_Estuario.md": "07_Aventura_Inicial.html",
         "08_Acervo_Oculto_de_Sellene.md": "08_Acervo_Oculto_de_Sellene.html",
         "09_Catalogo_de_Equipamentos_e_Oficios.md": "09_Catalogo_de_Equipamentos.html",
+        "10_Herbario_de_Seleni.md": "10_Herbario_de_Seleni.html",
     }
     for k, v in mapping.items():
         if k in url:
@@ -2282,7 +2299,10 @@ def split_md_with_gm_sections(md_text: str):
                 cur_lines = [line]
                 cur_gm = True
                 cur_gm_level = lvl
-                cur_label = "Segredos do Mestre — " + ("A Grande Ameaça" if lvl == 2 else "Regras Ocultas de Campanha")
+                if plain.startswith("Caderno reservado ao mestre"):
+                    cur_label = "Caderno Reservado ao Mestre — Herbário de Seleni"
+                else:
+                    cur_label = "Segredos do Mestre — " + ("A Grande Ameaça" if lvl == 2 else "Regras Ocultas de Campanha")
                 continue
             elif cur_gm and lvl <= cur_gm_level:
                 flush()
@@ -2713,7 +2733,7 @@ def main():
         build_cover(
             "COMPÊNDIO INTEGRAL",
             "ALENIA RPG",
-            "Regras, Cenário & Atlas, 36 Kits, Onomástica, Guia do Jogador & Volumes Selados do Mestre",
+            "Regras, Cenário & Atlas, 36 Kits, Empório, Herbário de Seleni & Volumes Selados do Mestre",
             "“Cinco terras, um único aço. O volume definitivo para mestres e exploradores de Alenia.”",
             "assets/alenia_mapa_mundi_atualizado.jpg",
         )
@@ -2819,7 +2839,7 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">9 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Empório de Ofícios • Ficha Firecast v2.3</div>
+        <div class="cover-subtitle">10 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Empório • Herbário de Seleni • Firecast v2.3</div>
         <div class="cover-rule"></div>
         <div style="margin: 8px 0 4px;">
             <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 18px; border-radius:3px; font-weight:700;">⬇ Baixar Plugin da Ficha Firecast (v2.3)</a>
