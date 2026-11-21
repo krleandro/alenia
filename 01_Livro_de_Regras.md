@@ -107,6 +107,8 @@ Nenhuma perícia *(fixa ou livre)* pode ultrapassar o **Teto de Graduação** co
 
 *(Nota: Perícias recebidas como **Treinado (`+3`)** pelo Kit inicial já contam com os `3 pts` iniciais pagos — subir uma delas para `+4` no Nív. 1 custa `1 pt`; chegar a `+7` no Nív. 4 custa `+4 pts`; subir para `+8` no Nív. 5 custa `+2 pts` adicionais; alcançar `+12` no Nív. 11 custa `15 pts` além do `+3` inicial — ou `18 pts` partindo do zero — e o teto absoluto `+16` no Nív. 26–30 custa `30 pts` partindo do zero.)*
 
+- **Acúmulo de Bônus Externos *(Ferramentas, Kits, Talentos e Ajudar)***: para que instrumentos e habilidades não quebrem o equilíbrio do Teto de Graduação, **bônus de equipamentos/ferramentas não acumulam entre si** *(aplica-se apenas o maior, ex.: `Instrumentos de Baldbella +2` não soma com `Obra-Prima +1`)*. Além disso, a soma total de modificadores fixos externos *(Equipamento + Habilidade de Kit + Talentos + Ajudar + Circunstâncias)* num mesmo teste **não pode exceder `+6`** *(única exceção: Preparação Ritualística na Seção 10, com teto próprio de `+8`)*.
+
 ### Pontos de Perícia (Uniforme e Equilibrado)
 Em todas as fórmulas de perícia, aplica-se sempre a proteção **`máx(0, Mod. INT)`**, garantindo que Inteligência baixa nunca reduza o ganho abaixo da base do Kit:
 - **No Nível 1**: recebe as perícias treinadas iniciais do Kit (`+3`) **mais** `máx(2, ⌊Base do Kit + máx(0, Mod. INT) × Mult. INT⌋)` pontos livres.

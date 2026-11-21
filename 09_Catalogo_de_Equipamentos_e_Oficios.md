@@ -17,6 +17,9 @@ Este tomo reúne o catálogo completo de **equipamentos de aventura, acampamento
   - **Sem Ferramentas Adequadas**: tentar um ofício especializado *(forja, cirurgia, fechaduras, alquimia, cartografia)* impõe **`-3`** no teste ou torna a tarefa impossível.
   - **Ferramenta Comum *(preço de tabela)***: permite realizar o ofício normalmente.
   - **Obra-Prima *(+`150 PP` sobre o valor base)***: acabamento excepcional de *Aeraneas*, *Stoneforge* ou *Baldbella* — concede **`+1`** permanente nos testes usando aquele conjunto.
+- **Regra de Acúmulo de Bônus Externos *(Ferramentas, Kits e Talentos)***:
+  - **Equipamento / Instrumentos *(Não Acumulam Entre Si)***: aplica-se sempre **apenas o maior bônus de equipamento** pertinente ao teste *(ex.: uma ferramenta `Obra-Prima +1` **não** soma por cima de `Instrumentos Cirúrgicos de Baldbella +2` — prevalece `+2`)*.
+  - **Teto Combinado de Modificadores Externos (`+6`)**: somando Equipamento + Habilidade de Kit + Talentos + Ajudar + bônus circunstanciais no mesmo teste, o acréscimo fixo total **nunca pode ultrapassar `+6`** *(exceto Preparação Ritualística na Seção 10 do Tomo I, que possui teto próprio de `+8`)*. Isso garante que o *Teto de Graduação por Nível* continue protegendo o equilíbrio das CDs (`10` a `30`).
 - **Armas e Armaduras de Combate**: tabelas completas de armas (`Adaga 4 PP` até `Besta Pesada 75 PP`), armaduras (`Gibão 12 PP` até `Placas Completas 450 PP` — zero RD passiva) e *Adamante* estão no **[Livro de Regras — Seção 9.6](01_Livro_de_Regras.md)**.
 
 ---
@@ -131,7 +134,7 @@ Este tomo reúne o catálogo completo de **equipamentos de aventura, acampamento
 | **Aguardente Antisséptica *(Frasco)*** | `5 PC` | `0,6 kg` | Limpa feridas antes da sutura (`+1` em *Medicina* contra infecção) e também serve como combustível de emergência. |
 | **Bolsa Alquímica Completa** | `40 PP` | `4,0 kg` | Alambiques portáteis, balança de precisão, funis, frascos e reagentes básicos; habilita **Alquimia & Venenos** em campo. |
 | **Prensa de Ervas, Pilão & Almofariz** | `6 PP` | `2,0 kg` | Ferramenta base de **Herbalismo & Natureza** para extrair seivas, secar raízes *(como as da Ilha das Safiras)* e preparar unguentos sem gastar moedas em reagentes. |
-| **Frasco de Ácido Comum *(Alquímico)*** | `15 PP` | `0,5 kg` | Arremesso até `6m` (*Armas à Distância*): causa **`2d4`** de dano ácido direto *(ignora armadura comum; corrói fechaduras simples em `1 min`)*. |
+| **Frasco de Ácido Comum *(Alquímico)*** | `15 PP` | `0,5 kg` | Arremesso até `6m` (*Armas à Distância*) contra a **Defesa Esquiva sem o bônus de armadura comum** (`10 + Mod(DES) + Esquiva + Escudo`, pois o líquido escorre pelas frestas): causa **`2d4`** de dano ácido direto *(também corrói fechaduras simples em `1 min`)*. |
 | **Bomba de Fumaça Seca** | `10 PP` | `0,4 kg` | Estoura ao impacto (`6m`), criando nuvem densa de `4,5m` de raio por `3 rodadas` *(concede cobertura total contra ataques à distância e permite fuga)*. |
 | **Frasco de Óleo Incendiário *(Alcatrão)*** | `12 PP` | `0,6 kg` | Pávio aceso + arremesso (`6m`): causa **`1d6`** fogo imediato + **`1d6`** na rodada seguinte se o alvo não apagar com Ação Principal *(temido por criaturas vulneráveis ao fogo)*. |
 | **Antídoto Comum *(1 dose)*** | `15 PP` | `0,2 kg` | Concede **`+4`** em testes de *CON* contra venenos naturais *(serpentes, escorpiões, toxinas de rua)* por `1 hora`, ou permite refazer 1 teste falho. |
@@ -209,13 +212,13 @@ Este tomo reúne o catálogo completo de **equipamentos de aventura, acampamento
 | **Barda de Couro Batido *(Montaria)*** | `40 PP` | `12,0 kg` | Concede **`+2` na Defesa** da montaria *(zero RD passiva, seguindo a regra de Alenia)*. |
 | **Carroça Reforçada *(sem animais)*** | `40 PP` | Carrega `400 kg` | Exige `2` mulas ou `2` cavalos (`130 PP` completa com 2 mulas); ideal para expedições comerciais ou transporte de forja móvel. |
 
-### 5 Pacotes Prontos de Compra Rápida *(Para Agilizar a Criação de Personagens)*
-Em vez de somar item por item na primeira sessão, qualquer explorador pode comprar um pacote fechado pronto:
+### 5 Pacotes Prontos de Compra Rápida *(~10% de Desconto de Pacote)*
+Em vez de somar item por item na primeira sessão, qualquer explorador pode comprar um pacote fechado pronto *(todos com soma exata de peso auditada)*:
 
-| Pacote Pronto | Preço Fechado | Peso Total | Itens Incluídos no Pacote |
+| Pacote Pronto | Preço Fechado | Peso Exato *(Vazio / Cheio)* | Itens Incluídos no Pacote |
 | :--- | :---: | :---: | :--- |
-| **1. Pacote do Viajante das Estradas** | **`14 PP`** | `12,5 kg` | Mochila de couro, saco de dormir de lã, tenda simples, odre (2L), pederneira + 10 pavios, 5 tochas, panela de ferro, pedra de amolar, rações (7 dias). |
-| **2. Pacote do Explorador de Pântanos & Ruínas** | **`38 PP`** | `15,0 kg` | Mochila de couro, saco encerado, rede de acampamento, lanterna blindada + 2 óleos, corda 15m + arpéu, pé-de-cabra, facão de mato, botas impermeáveis, bolsa de giz, ataduras (5 usos), rações (7 dias). |
-| **3. Pacote do Sobrevivente do Deserto *(Gaddra)*** | **`26 PP`** | `13,0 kg` | Mochila de couro, turbante e véu de Gaddra, lona encerada (3×3m), 3 odres (6L), pederneira, sal de Bayd (1 kg), laços de caça (6), faca de esfolar, antídoto comum (1), rações (7 dias). |
-| **4. Pacote do Marinheiro & Pescador Costeiro** | **`32 PP`** | `14,0 kg` | Saco encerado, capa impermeável oleada, vara e anzóis, tarrafa de pesca, arpão manual, covo dobrável, corda 15m, lanterna comum + 2 óleos, sal de Bayd (1 kg), faca de esfolar, biscoito naval (14 dias). |
-| **5. Pacote do Artesão Itinerante *(Forja & Reparos)*** | **`48 PP`** | `17,5 kg` | Mochila de couro, ferramentas portáteis de ferreiro, fole de campanha, luvas grossas de couro, pedra de amolar, cola e breu, 50 pregos, pederneira, lanterna comum + 2 óleos, odre (2L), rações (7 dias). |
+| **1. Pacote do Viajante das Estradas** | **`15 PP`** *(avulso `16,5 PP`)* | `17,6 kg` *(odre cheio: `19,6 kg`)* | Mochila de couro, saco de dormir de lã, tenda simples, odre (2L), pederneira + 10 pavios, 5 tochas, panela de ferro, pedra de amolar, rações (7 dias). |
+| **2. Pacote do Explorador de Pântanos & Ruínas** | **`25 PP`** *(avulso `27,9 PP`)* | `20,7 kg` | Mochila de couro, saco encerado, rede de acampamento, lanterna blindada + 2 óleos, corda 15m + arpéu, pé-de-cabra, facão de mato, botas impermeáveis, bolsa de giz, ataduras (5 usos), rações (7 dias). |
+| **3. Pacote do Sobrevivente do Deserto *(Gaddra)*** | **`27 PP`** *(avulso `30,3 PP`)* | `11,2 kg` *(3 odres cheios: `17,2 kg`)* | Mochila de couro, turbante e véu de Gaddra, lona encerada (3×3m), 3 odres (6L), pederneira, sal de Bayd (1 kg), laços de caça (6), faca de esfolar, antídoto comum (1), rações (7 dias). |
+| **4. Pacote do Marinheiro & Pescador Costeiro** | **`21 PP`** *(avulso `22,9 PP`)* | `22,6 kg` | Saco encerado, capa impermeável oleada, vara e anzóis, tarrafa de pesca, arpão manual, covo dobrável, corda 15m, lanterna comum + 2 óleos, sal de Bayd (1 kg), faca de esfolar, biscoito naval (14 dias). |
+| **5. Pacote do Artesão Itinerante *(Forja & Reparos)*** | **`37 PP`** *(avulso `41,3 PP`)* | `19,7 kg` *(odre cheio: `21,7 kg`)* | Mochila de couro, ferramentas portáteis de ferreiro, fole de campanha, luvas grossas de couro, pedra de amolar, cola e breu, 50 pregos, pederneira, lanterna comum + 2 óleos, odre (2L), rações (7 dias). |

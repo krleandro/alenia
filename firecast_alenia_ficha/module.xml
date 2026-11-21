@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module sdkVersion="3.7b">
     <id>br.com.alenia.rpg_oficial</id>
-    <version>1.9</version>
+    <version>2.0</version>
     <info lang="pt-BR">
         <name>Alenia RPG — Ficha Oficial (d20 v2.0)</name>
-        <description>Ficha oficial automatizada do sistema Alenia RPG (Edição Revisada v2.0), desenvolvida por Mestre Carlos: Teto Progressivo de Graduação de Perícias por Nível (+4 no Nív. 1 até +16 no Nív. 26–30) com trava rígida e alerta, Sistema Monetário Padrão Prata (Áureos/Pratas/Cobres, Cartas de Crédito Corallis/Kalis, peso 100=1kg, Padrão de Vida Mensal), rastreador de XP (Níveis 1–30) com teto de atributos (18/20/22), 36 Kits Universais com DV, Subir Nível e Descansos automatizados, definição de CD, Defesa do Alvo e dano corpo a corpo com +FOR.</description>
+        <description>Ficha oficial automatizada do sistema Alenia RPG (Edição Revisada v2.0), desenvolvida por Mestre Carlos: Empório Automático integrado (155 itens do Tomo IX, Armas e Armaduras com débito automático de moedas/banco, inserção no inventário, soma automática de peso e anúncio no chat), Teto Progressivo de Graduação de Perícias por Nível (+4 no Nív. 1 até +16 no Nív. 26–30), Sistema Monetário Padrão Prata (Áureos/Pratas/Cobres, Cartas de Crédito Corallis/Kalis, peso 100=1kg, Padrão de Vida Mensal), rastreador de XP (Níveis 1–30), 36 Kits Universais com DV, Subir Nível, Descansos, CD, Defesa do Alvo e dano corpo a corpo com +FOR.</description>
         <author>Mestre Carlos</author>
         <site>https://alenia-rpg.onrender.com</site>
         <contact>Mestre Carlos</contact>

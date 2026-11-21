@@ -8,10 +8,14 @@ Gera a ficha oficial AleniaFicha.lfm (RRPG Firecast SDK 3.7b) — v1.2 (Alinhada
 - 36 Kits Universais + Sem Kit, 34 Perícias Fixas + Perícias Livres Ilimitadas
 """
 import os
+import re
+import unicodedata
 import xml.sax.saxutils as sax
 
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(OUT_DIR)
 LFM_PATH = os.path.join(OUT_DIR, "AleniaFicha.lfm")
+TOMO_IX_PATH = os.path.join(ROOT_DIR, "09_Catalogo_de_Equipamentos_e_Oficios.md")
 
 BG_MAIN = "#121419"
 BG_CARD = "#1B1E26"
@@ -256,7 +260,215 @@ def lua_str(s: str) -> str:
     return '"' + s.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n") + '"'
 
 
-def build_lua_script() -> str:
+def ascii_clean(s: str) -> str:
+    s = s.replace("*", "").replace("`", "")
+    s = s.replace("—", "-").replace("–", "-").replace("×", "x").replace("…", "...").replace("↔", "<->")
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode("ascii")
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def _parse_price_pc(s: str) -> int:
+    m = re.search(r"(\d+(?:[.,]\d+)?)\s*(PO|PP|PC)", s, re.I)
+    if not m:
+        return 0
+    val = float(m.group(1).replace(",", "."))
+    unit = m.group(2).upper()
+    mult = 100 if unit == "PO" else (10 if unit == "PP" else 1)
+    return int(round(val * mult))
+
+
+def _parse_weight_kg(s: str) -> float:
+    if "Carrega" in s or s.strip() in ("-", "0", ""):
+        return 0.0
+    m = re.search(r"(\d+(?:[.,]\d+)?)\s*kg", s, re.I)
+    if not m:
+        return 0.0
+    return round(float(m.group(1).replace(",", ".")), 2)
+
+
+def _fmt_price_label(pc: int) -> str:
+    if pc >= 100 and pc % 100 == 0:
+        return f"{pc // 10} PP ({pc // 100} PO)"
+    if pc >= 10 and pc % 10 == 0:
+        return f"{pc // 10} PP"
+    if pc >= 10:
+        return f"{pc} PC ({pc / 10.0:.1f} PP)"
+    return f"{pc} PC"
+
+
+def load_emporio_catalog():
+    """Carrega todos os itens compraveis do Tomo IX + Armas e Armaduras do Livro de Regras."""
+    cats = [
+        ("pacotes", "01 - Pacotes Prontos de Expedicao (~10% desc.)"),
+        ("mochilas", "02 - Mochilas, Recipientes & Transporte"),
+        ("acampamento", "03 - Acampamento, Fogo & Iluminacao"),
+        ("sobrevivencia", "04 - Sobrevivencia, Exploracao & Escalada"),
+        ("pesca_caca", "05 - Pesca, Caca & Armadilhas"),
+        ("forja_oficios", "06 - Forja, Ferraria, Carpintaria & Oficios"),
+        ("alquimia_med", "07 - Medicina, Herbalismo & Alquimia"),
+        ("nautica", "08 - Nautica, Navegacao & Cartografia"),
+        ("subterfugio", "09 - Subterfugio, Investigacao & Corte"),
+        ("vestuario", "10 - Vestuario, Clima & Provisoes"),
+        ("montarias", "11 - Montarias, Animais de Carga & Arreios"),
+        ("armas", "12 - Armas Comuns (Livro de Regras)"),
+        ("armaduras", "13 - Armaduras & Escudos (Defesa | Zero RD)"),
+    ]
+    items_by_cat = {cid: [] for cid, _ in cats}
+
+    sec_to_cat = {
+        "1.": ("mochilas", "mochila"),
+        "2.": ("acampamento", "mochila"),
+        "3.": ("sobrevivencia", "mochila"),
+        "4.": ("pesca_caca", "mochila"),
+        "5.": ("forja_oficios", "alquimia"),
+        "6.": ("alquimia_med", "alquimia"),
+        "7.": ("nautica", "mochila"),
+        "8.": ("subterfugio", "mochila"),
+        "9.": ("vestuario", "mochila"),
+        "10.": ("montarias", "mochila"),
+    }
+
+    dual_splits = {
+        "Saco de Dormir (La / Pele Forrada)": [
+            ("Saco de Dormir (La)", 15, 2.0),
+            ("Saco de Dormir (Pele Forrada)", 50, 3.5),
+        ],
+        "Velas de Sebo (10 un.) / Cera (10 un.)": [
+            ("Velas de Sebo (10 un.)", 2, 0.5),
+            ("Velas de Cera de Abelha (10 un.)", 8, 0.5),
+        ],
+        "Luneta Simples / de Precisao (Helmer)": [
+            ("Luneta Simples", 350, 0.5),
+            ("Luneta de Precisao (Helmer)", 900, 0.5),
+        ],
+        "Cadeado Comum / de Precisao (Kalis)": [
+            ("Cadeado Comum", 40, 0.5),
+            ("Cadeado de Precisao (Kalis)", 180, 0.5),
+        ],
+        "Jogo de Gazuas Comum / de Precisao": [
+            ("Jogo de Gazuas Comum", 200, 0.4),
+            ("Jogo de Gazuas de Precisao", 750, 0.4),
+        ],
+        "Dados Comuns / Dados Viciados": [
+            ("Dados Comuns", 2, 0.1),
+            ("Dados Viciados", 50, 0.1),
+        ],
+        "Cantil de Vinho Bom / Cerveja Escura": [
+            ("Cantil de Vinho Bom", 5, 1.0),
+            ("Cantil de Cerveja Escura", 2, 1.0),
+        ],
+    }
+
+    with open(TOMO_IX_PATH, encoding="utf-8") as f:
+        txt = f.read()
+
+    cur_sec = ""
+    cur_sub = ""
+    for line in txt.splitlines():
+        if line.startswith("## "):
+            cur_sec = ascii_clean(line[3:])
+            cur_sub = ""
+        elif line.startswith("### "):
+            cur_sub = ascii_clean(line[4:])
+        elif line.startswith("| ") and not line.startswith("| :---"):
+            cols = [ascii_clean(c) for c in line.strip("|").split("|")]
+            if len(cols) < 4:
+                continue
+            header0 = cols[0]
+            if header0 in ("Item", "Animal / Equipamento", "Pacote Pronto", "Recurso / Bonus", "Tipo de Teste"):
+                continue
+            if not cur_sec or not cur_sec[0].isdigit():
+                continue
+
+            prefix = cur_sec.split()[0]
+            if prefix not in sec_to_cat:
+                continue
+            cat_id, dest = sec_to_cat[prefix]
+            if "Pacotes Prontos" in cur_sub:
+                cat_id = "pacotes"
+                dest = "mochila"
+
+            raw_name, raw_price, raw_weight, raw_spec = cols[0], cols[1], cols[2], cols[3]
+            if raw_name in dual_splits:
+                for sub_name, sub_pc, sub_kg in dual_splits[raw_name]:
+                    idx = len(items_by_cat[cat_id]) + 1
+                    items_by_cat[cat_id].append({
+                        "id": f"{cat_id}_{idx}",
+                        "nome": sub_name,
+                        "precoPc": sub_pc,
+                        "pesoKg": sub_kg,
+                        "dest": dest,
+                        "spec": raw_spec,
+                    })
+            else:
+                preco_pc = _parse_price_pc(raw_price)
+                peso_kg = _parse_weight_kg(raw_weight)
+                if preco_pc <= 0:
+                    continue
+                idx = len(items_by_cat[cat_id]) + 1
+                items_by_cat[cat_id].append({
+                    "id": f"{cat_id}_{idx}",
+                    "nome": raw_name,
+                    "precoPc": preco_pc,
+                    "pesoKg": peso_kg,
+                    "dest": dest,
+                    "spec": raw_spec,
+                })
+
+    # Armas Comuns (Livro de Regras Secao 9.6)
+    armas_comuns = [
+        ("Adaga / Punhal", 40, 0.5, "Dano 1d4+FOR | Crit 19-20/x2 | Leve, Agil (FOR/DES), Arremesso 6m"),
+        ("Espada Curta", 150, 1.0, "Dano 1d6+FOR | Crit 19-20/x2 | Leve, Agil (FOR/DES)"),
+        ("Florete / Estoque", 300, 1.0, "Dano 1d6+FOR | Crit 18-20/x2 | Agil (DES), Perfurante"),
+        ("Espada Longa", 250, 1.5, "Dano 1d8+FOR | Crit 19-20/x2 | Versatil (1d10+FOR em 2 maos)"),
+        ("Lamina Oriental (Yoketsu)", 550, 1.4, "Dano 1d8+FOR | Crit 18-20/x2 | Agil em 2 maos, corte preciso"),
+        ("Cimitarra / Sabre", 250, 1.3, "Dano 1d6+FOR | Crit 18-20/x2 | Agil (DES), ideal em conves/sela"),
+        ("Machado de Batalha", 200, 2.0, "Dano 1d8+FOR | Crit 20/x3 | Versatil (1d10+FOR em 2 maos)"),
+        ("Machado Grande", 350, 3.5, "Dano 1d12+FOR | Crit 20/x3 | Duas maos, Pesada"),
+        ("Montante / Espada Grande", 500, 3.0, "Dano 2d6+FOR | Crit 19-20/x2 | Duas maos, Pesada"),
+        ("Lanca / Pique", 100, 2.0, "Dano 1d8+FOR | Crit 20/x3 | Alcance (3m se pique), Versatil"),
+        ("Martelo de Guerra", 220, 2.2, "Dano 1d8+FOR | Crit 20/x3 | Contundente"),
+        ("Picareta de Guerra", 180, 1.8, "Dano 1d6+FOR | Crit 20/x4 | Perfurante letal"),
+        ("Arco Curto", 200, 1.0, "Dano 1d6 | Crit 20/x3 | 2 maos, Alcance 24m (sem +FOR)"),
+        ("Arco Longo", 450, 1.5, "Dano 1d8 | Crit 20/x3 | 2 maos, Alcance 45m (sem +FOR)"),
+        ("Besta Leve", 350, 2.5, "Dano 1d8 | Crit 19-20/x2 | Recarga (Movimento)"),
+        ("Besta Pesada", 750, 4.5, "Dano 1d10 | Crit 19-20/x2 | Recarga (Acao Principal)"),
+    ]
+    for idx, (nome, pc, kg, spec) in enumerate(armas_comuns, 1):
+        items_by_cat["armas"].append({
+            "id": f"armas_{idx}",
+            "nome": nome,
+            "precoPc": pc,
+            "pesoKg": kg,
+            "dest": "mochila",
+            "spec": spec,
+        })
+
+    # Armaduras e Escudos (Livro de Regras Secao 9.6 — Defesa, Zero RD)
+    armaduras_escudos = [
+        ("Gibao Reforcado", 120, 4.0, "Defesa +1 | Penalidade Furt./Acrob. 0 | Zero RD | Discreta para viagem"),
+        ("Couro Batido", 250, 6.0, "Defesa +2 | Penalidade Furt./Acrob. 0 | Zero RD | Padrao de exploradores"),
+        ("Cota de Malha", 750, 12.0, "Defesa +3 | Penalidade Furt./Acrob. -2 | Zero RD | Boa protecao contra cortes"),
+        ("Brigantina / Meia-Placa", 1800, 16.0, "Defesa +4 | Penalidade Furt./Acrob. -3 | Zero RD | Favorita de mercenarios veteranos"),
+        ("Placas Completas", 4500, 24.0, "Defesa +5 | Penalidade Furt./Acrob. -5 | Zero RD | Exige FOR 13+"),
+        ("Broquel (Escudo Pequeno)", 100, 1.5, "Escudo Defesa +1 | Penalidade 0 | Leve e agil para duelo"),
+        ("Escudo Medio", 200, 3.5, "Escudo Defesa +2 | Penalidade -1 | Padrao de infantaria"),
+        ("Escudo Torre", 450, 8.0, "Escudo Defesa +3 | Penalidade -3 | +2 extra em Proteger Aliado"),
+    ]
+    for idx, (nome, pc, kg, spec) in enumerate(armaduras_escudos, 1):
+        items_by_cat["armaduras"].append({
+            "id": f"armaduras_{idx}",
+            "nome": nome,
+            "precoPc": pc,
+            "pesoKg": kg,
+            "dest": "armadura",
+            "spec": spec,
+        })
+
+    return cats, items_by_cat
+
+
+def build_lua_script(emporio_cats, emporio_items) -> str:
     kits_lua = ["local KITS = {"]
     for k in KITS:
         kid, kname, dv_faces, per_b, m_int, esp_f, esp_v, per_list, equip, hab = k
@@ -273,7 +485,32 @@ def build_lua_script() -> str:
         skills_lua.append(f"    {{ field={lua_str(fid)}, nome={lua_str(sname)}, attr={lua_str(sattr)} }},")
     skills_lua.append("};")
 
-    lua = "\n".join(kits_lua) + "\n\n" + "\n".join(skills_lua) + r"""
+    emp_cats_lua = ["local EMPORIO_CATS = {"]
+    for cid, cname in emporio_cats:
+        emp_cats_lua.append(f"    [{lua_str(cid)}] = {lua_str(cname)},")
+    emp_cats_lua.append("};")
+
+    emp_items_lua = ["local EMPORIO_ITENS = {"]
+    for cid, _ in emporio_cats:
+        emp_items_lua.append(f"    [{lua_str(cid)}] = {{")
+        for it in emporio_items[cid]:
+            lbl = f"{it['nome']}  [{_fmt_price_label(it['precoPc'])} | {it['pesoKg']:.1f} kg]" if it["pesoKg"] > 0 else f"{it['nome']}  [{_fmt_price_label(it['precoPc'])}]"
+            emp_items_lua.append(
+                f"        {{ id={lua_str(it['id'])}, nome={lua_str(it['nome'])}, label={lua_str(lbl)}, "
+                f"precoPc={it['precoPc']}, pesoKg={it['pesoKg']}, dest={lua_str(it['dest'])}, spec={lua_str(it['spec'])} }},"
+            )
+        emp_items_lua.append("    },")
+    emp_items_lua.append("};")
+
+    lua = (
+        "\n".join(kits_lua)
+        + "\n\n"
+        + "\n".join(skills_lua)
+        + "\n\n"
+        + "\n".join(emp_cats_lua)
+        + "\n\n"
+        + "\n".join(emp_items_lua)
+        + r"""
 
 local okInt, InternetMod = pcall(require, "internet.lua");
 if not okInt or InternetMod == nil then InternetMod = Internet or internet; end;
@@ -283,9 +520,12 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "1.9";
+local PLUGIN_VERSION = "2.0";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
+
+local _formRef = nil;
+local _ultimaCatEmporio = nil;
 
 -- Tabela Oficial de XP Acumulada (Niveis 1 a 30)
 local XP_TABELA = {
@@ -1236,6 +1476,273 @@ local function pagarPadraoVida()
     end;
 end;
 
+local function formatarPrecoPc(pc)
+    local v = math.max(0, math.floor(num(pc, 0)));
+    if v >= 100 and (v % 100 == 0) then
+        return tostring(math.floor(v / 10)) .. " PP (" .. tostring(math.floor(v / 100)) .. " PO)";
+    elseif v >= 10 and (v % 10 == 0) then
+        return tostring(math.floor(v / 10)) .. " PP";
+    elseif v >= 10 then
+        return tostring(v) .. " PC (" .. string.format("%.1f PP", v / 10.0) .. ")";
+    else
+        return tostring(v) .. " PC";
+    end;
+end;
+
+local function nomeDestinoEmporio(dest)
+    if dest == "alquimia" then return "Alquimia, Ervas & Ferramentas"; end;
+    if dest == "armadura" then return "Armaduras, Adamante & Reliquias"; end;
+    return "Mochila & Provisoes";
+end;
+
+local function campoDestinoEmporio(dest)
+    if dest == "alquimia" then return "alquimiaSuprimentos"; end;
+    if dest == "armadura" then return "reliquiasAdamante"; end;
+    return "equipamentoMochila";
+end;
+
+local function getItemEmporioAtual()
+    if sheet == nil then return nil, nil; end;
+    local catId = tostring(sheet.emporioCat or "pacotes");
+    local lista = EMPORIO_ITENS[catId];
+    if lista == nil or #lista == 0 then
+        catId = "pacotes";
+        lista = EMPORIO_ITENS[catId];
+    end;
+    if lista == nil or #lista == 0 then return catId, nil; end;
+    local itemId = tostring(sheet.emporioItem or "");
+    for i = 1, #lista do
+        if lista[i].id == itemId then
+            return catId, lista[i];
+        end;
+    end;
+    return catId, lista[1];
+end;
+
+local function atualizarPreviewEmporio()
+    if sheet == nil then return; end;
+    local _, it = getItemEmporioAtual();
+    if it == nil then
+        sheet.emporioPreview = "Selecione uma categoria e um item do Emporio.";
+        return;
+    end;
+    local qtd = math.max(1, math.min(99, math.floor(num(sheet.emporioQtd, 1))));
+    local totalPc = it.precoPc * qtd;
+    local pesoTotal = it.pesoKg * qtd;
+    local pesoTxt = (pesoTotal > 0) and (string.format("%.1f kg", pesoTotal)) or "0 kg (carrega proprio peso)";
+    local destTxt = nomeDestinoEmporio(it.dest);
+    local resumoSpec = tostring(it.spec or "");
+    if #resumoSpec > 115 then
+        resumoSpec = string.sub(resumoSpec, 1, 112) .. "...";
+    end;
+    sheet.emporioPreview = "Total (" .. tostring(qtd) .. "x): " .. formatarPrecoPc(totalPc) .. "  |  Peso: " .. pesoTxt .. "  |  Destino: " .. destTxt .. "  |  " .. resumoSpec;
+end;
+
+local function atualizarItensEmporio(frm, forcar)
+    if frm ~= nil then _formRef = frm; end;
+    local ref = frm or _formRef or self;
+    if sheet == nil then return; end;
+    local catId = tostring(sheet.emporioCat or "pacotes");
+    local lista = EMPORIO_ITENS[catId];
+    if lista == nil or #lista == 0 then
+        catId = "pacotes";
+        sheet.emporioCat = catId;
+        lista = EMPORIO_ITENS[catId];
+    end;
+    if lista == nil or #lista == 0 then return; end;
+
+    if (not forcar) and (_ultimaCatEmporio == catId) then
+        atualizarPreviewEmporio();
+        return;
+    end;
+    _ultimaCatEmporio = catId;
+
+    local labels = {};
+    local vals = {};
+    local curId = tostring(sheet.emporioItem or "");
+    local found = false;
+    for i = 1, #lista do
+        table.insert(labels, lista[i].label);
+        table.insert(vals, lista[i].id);
+        if lista[i].id == curId then found = true; end;
+    end;
+    if not found then
+        curId = lista[1].id;
+        sheet.emporioItem = curId;
+    end;
+
+    if ref ~= nil and ref.cmbEmporioItem ~= nil then
+        pcall(function()
+            ref.cmbEmporioItem.items = labels;
+            ref.cmbEmporioItem.values = vals;
+            ref.cmbEmporioItem.value = curId;
+        end);
+    end;
+    atualizarPreviewEmporio();
+end;
+
+local function verDetalhesEmporio()
+    if sheet == nil then return; end;
+    local catId, it = getItemEmporioAtual();
+    if it == nil then
+        showMessage("Selecione um item do Emporio primeiro.");
+        return;
+    end;
+    local qtd = math.max(1, math.min(99, math.floor(num(sheet.emporioQtd, 1))));
+    local totalPc = it.precoPc * qtd;
+    local pesoUnit = (it.pesoKg > 0) and string.format("%.1f kg", it.pesoKg) or "0 kg (carrega proprio peso)";
+    local pesoTot = (it.pesoKg > 0) and string.format("%.1f kg", it.pesoKg * qtd) or "0 kg";
+    local catNome = EMPORIO_CATS[catId] or catId;
+    showMessage(
+        "EMPORIO DE ALENIA — DETALHES DO ITEM\n\n" ..
+        "Categoria: " .. catNome .. "\n" ..
+        "Item: " .. it.nome .. "\n" ..
+        "Preco Unitario: " .. formatarPrecoPc(it.precoPc) .. "  |  Total (" .. tostring(qtd) .. "x): " .. formatarPrecoPc(totalPc) .. "\n" ..
+        "Peso Unitario: " .. pesoUnit .. "  |  Peso Total: " .. pesoTot .. "\n" ..
+        "Destino no Inventario: " .. nomeDestinoEmporio(it.dest) .. "\n\n" ..
+        "Especificacoes:\n" .. tostring(it.spec or "")
+    );
+end;
+
+local function adicionarPesoCargaAtual(addKg)
+    if sheet == nil or addKg == nil or addKg <= 0 then return; end;
+    local raw = tostring(sheet.cargaAtual or ""):gsub(",", ".");
+    local atual = tonumber(raw:match("%-?%d+%.?%d*")) or 0;
+    local novo = atual + addKg;
+    local fmt = string.format("%.1f", novo):gsub("%.0$", "");
+    sheet.cargaAtual = fmt;
+end;
+
+local function comprarItemEmporio()
+    if sheet == nil then return; end;
+    local _, it = getItemEmporioAtual();
+    if it == nil then
+        showMessage("Selecione um item valido do Emporio antes de comprar.");
+        return;
+    end;
+
+    local qtd = math.max(1, math.min(99, math.floor(num(sheet.emporioQtd, 1))));
+    sheet.emporioQtd = tostring(qtd);
+
+    local totalPc = it.precoPc * qtd;
+    local pesoAdd = it.pesoKg * qtd;
+
+    local po = math.max(0, math.floor(num(sheet.moedasOuro, 0)));
+    local pp = math.max(0, math.floor(num(sheet.moedasPrata, 0)));
+    local pc = math.max(0, math.floor(num(sheet.moedasCobre, 0)));
+    local bolsaPc = (po * 100) + (pp * 10) + pc;
+    local cartasPp = math.max(0, math.floor(num(sheet.cartasCredito, 0)));
+    local usarBanco = (sheet.emporioUsarBanco == true);
+    local bancoPc = usarBanco and (cartasPp * 10) or 0;
+
+    if (bolsaPc + bancoPc) < totalPc then
+        local dicaBanco = "";
+        if (not usarBanco) and (cartasPp * 10 + bolsaPc >= totalPc) then
+            dicaBanco = "\n\nDica: Voce possui " .. tostring(cartasPp) .. " PP em Cartas de Credito. Marque 'Usar Cartas de Credito' se quiser pagar com saldo bancario.";
+        end;
+        showMessage(
+            "Dinheiro insuficiente para comprar " .. tostring(qtd) .. "x " .. it.nome .. "!\n\n" ..
+            "Custo Total: " .. formatarPrecoPc(totalPc) .. "\n" ..
+            "Disponivel na Bolsa: " .. formatarPrecoPc(bolsaPc) ..
+            (usarBanco and ("\nDisponivel no Banco: " .. tostring(cartasPp) .. " PP") or "") ..
+            dicaBanco
+        );
+        return;
+    end;
+
+    local fonteTxt = "Bolsa Fisica";
+    local sacarBancoPp = 0;
+    if bolsaPc < totalPc then
+        local faltaPc = totalPc - bolsaPc;
+        sacarBancoPp = math.ceil(faltaPc / 10.0);
+        fonteTxt = "Bolsa + " .. tostring(sacarBancoPp) .. " PP em Cartas de Credito";
+    end;
+
+    local destNome = nomeDestinoEmporio(it.dest);
+    local destField = campoDestinoEmporio(it.dest);
+
+    local function executarCompra()
+        local poNow = math.max(0, math.floor(num(sheet.moedasOuro, 0)));
+        local ppNow = math.max(0, math.floor(num(sheet.moedasPrata, 0)));
+        local pcNow = math.max(0, math.floor(num(sheet.moedasCobre, 0)));
+        local bolsaNow = (poNow * 100) + (ppNow * 10) + pcNow;
+        local bancoNowPp = math.max(0, math.floor(num(sheet.cartasCredito, 0)));
+        local usarB = (sheet.emporioUsarBanco == true);
+        local extraBancoPp = 0;
+
+        if bolsaNow >= totalPc then
+            local novoTotal = bolsaNow - totalPc;
+            local ouroMantido = math.min(poNow, math.floor(novoTotal / 100));
+            local resto = novoTotal - (ouroMantido * 100);
+            poNow = ouroMantido;
+            ppNow = math.floor(resto / 10);
+            pcNow = resto % 10;
+        elseif usarB and (bolsaNow + bancoNowPp * 10 >= totalPc) then
+            local faltaPc = totalPc - bolsaNow;
+            extraBancoPp = math.ceil(faltaPc / 10.0);
+            local trocoPc = (extraBancoPp * 10) - faltaPc;
+            bancoNowPp = bancoNowPp - extraBancoPp;
+            poNow = 0;
+            ppNow = math.floor(trocoPc / 10);
+            pcNow = trocoPc % 10;
+        else
+            showMessage("Saldo alterado: dinheiro insuficiente para concluir a compra.");
+            return;
+        end;
+
+        sheet.moedasOuro = tostring(poNow);
+        sheet.moedasPrata = tostring(ppNow);
+        sheet.moedasCobre = tostring(pcNow);
+        if extraBancoPp > 0 then
+            sheet.cartasCredito = tostring(bancoNowPp);
+        end;
+
+        local pesoTag = (pesoAdd > 0) and (string.format("%.1f kg", pesoAdd)) or "0 kg";
+        local specCurta = tostring(it.spec or "");
+        if #specCurta > 140 then
+            specCurta = string.sub(specCurta, 1, 137) .. "...";
+        end;
+        local linhaItem = "- " .. tostring(qtd) .. "x " .. it.nome .. " [" .. pesoTag .. " | " .. formatarPrecoPc(totalPc) .. "] - " .. specCurta;
+        local atualTxt = tostring(sheet[destField] or "");
+        if atualTxt == "" then
+            sheet[destField] = linhaItem;
+        else
+            sheet[destField] = atualTxt .. "\n" .. linhaItem;
+        end;
+
+        if pesoAdd > 0 then
+            adicionarPesoCargaAtual(pesoAdd);
+        end;
+
+        recalcularFicha();
+        atualizarPreviewEmporio();
+
+        local nomeChar = sheet.nome or "Explorador";
+        local bancoMsg = (extraBancoPp > 0) and (" | Banco: -" .. tostring(extraBancoPp) .. " PP") or "";
+        local pesoMsg = (pesoAdd > 0) and (" | +" .. string.format("%.1f kg", pesoAdd) .. " (Carga: " .. tostring(sheet.cargaAtual) .. " kg)") or "";
+        enviarChatOuMsg(
+            "[" .. nomeChar .. "] Comprou no Emporio: " .. tostring(qtd) .. "x " .. it.nome ..
+            " (-" .. formatarPrecoPc(totalPc) .. bancoMsg .. ")" .. pesoMsg ..
+            " -> " .. destNome .. " | Bolsa: " .. tostring(poNow) .. " PO, " .. tostring(ppNow) .. " PP, " .. tostring(pcNow) .. " PC."
+        );
+    end;
+
+    if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+        DialogsMod.confirmYesNo(
+            "Confirmar compra no Emporio de Alenia?\n\n" ..
+            "Item: " .. tostring(qtd) .. "x " .. it.nome .. "\n" ..
+            "Custo Total: " .. formatarPrecoPc(totalPc) .. " (" .. fonteTxt .. ")\n" ..
+            "Peso Adicionado: " .. ((pesoAdd > 0) and string.format("+%.1f kg", pesoAdd) or "0 kg") .. "\n" ..
+            "Guardar em: " .. destNome,
+            function(sim)
+                if sim then executarCompra(); end;
+            end
+        );
+    else
+        executarCompra();
+    end;
+end;
+
 local function compararVersoes(vA, vB)
     local function splitNums(s)
         local t = {};
@@ -1395,6 +1902,7 @@ local function verificarEAtualizarPlugin(forcarReinstalacao)
     );
 end;
 """
+    )
     return lua
 
 
@@ -1407,6 +1915,18 @@ def xml_attr(val: str) -> str:
 
 
 def build_lfm() -> str:
+    emporio_cats, emporio_items = load_emporio_catalog()
+    emporio_cat_items = lua_items_str([c[1] for c in emporio_cats])
+    emporio_cat_values = lua_items_str([c[0] for c in emporio_cats])
+    init_pack_list = emporio_items["pacotes"]
+    emporio_init_items = lua_items_str([
+        f"{it['nome']}  [{_fmt_price_label(it['precoPc'])} | {it['pesoKg']:.1f} kg]" if it["pesoKg"] > 0
+        else f"{it['nome']}  [{_fmt_price_label(it['precoPc'])}]"
+        for it in init_pack_list
+    ])
+    emporio_init_values = lua_items_str([it["id"] for it in init_pack_list])
+    init_item_id = init_pack_list[0]["id"] if init_pack_list else ""
+
     kit_items = lua_items_str([k[1] for k in KITS])
     kit_values = lua_items_str([k[0] for k in KITS])
 
@@ -1569,6 +2089,7 @@ def build_lfm() -> str:
         "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre",
         "customSkillPage", "moedasOuro", "moedasPrata", "moedasCobre",
         "cartasCredito", "bancoOrigem", "padraoVida",
+        "emporioCat", "emporioItem", "emporioQtd", "emporioPreview",
         "cdTeste", "defesaAlvo", "xpAtual",
         "pluginVersaoAtual", "statusAtualizacao"
     ]
@@ -1579,8 +2100,9 @@ def build_lfm() -> str:
         "0", "0", "0", "0", "0",
         "1", "0", "25", "0",
         "0", "corallis", "modesto",
+        "pacotes", init_item_id, "1", "Selecione uma categoria e um item para comprar direto para o inventario.",
         "0", "0", "0",
-        "v1.9", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "v2.0", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -1600,7 +2122,7 @@ def build_lfm() -> str:
     lfm = f'''<?xml version="1.0" encoding="UTF-8"?>
 <form name="frmAleniaFicha" formType="sheetTemplate" dataType="br.com.alenia.rpg_oficial.ficha" title="Alenia RPG - Ficha Oficial" align="client" theme="dark">
     <script><![CDATA[
-{build_lua_script()}
+{build_lua_script(emporio_cats, emporio_items)}
     ]]></script>
 
     <rectangle align="client" color="{BG_MAIN}">
@@ -1917,7 +2439,7 @@ def build_lfm() -> str:
             <!-- ABA 4: INVENTARIO & SISTEMA MONETARIO -->
             <tab title="Inventario &amp; Moedas">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="890">
+                    <layout left="0" top="0" width="1056" height="1042">
                         <rectangle left="6" top="6" width="1036" height="196" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <!-- Linha 1: Moedas (Padrao Prata) + Cartas de Credito -->
                             <label left="14" top="8" width="160" height="18" text="AUREOS (PO = 10 PP)" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold"/>
@@ -1977,17 +2499,51 @@ def build_lfm() -> str:
                             <label left="14" top="168" width="1008" height="20" field="padraoVidaInfo" fontColor="{TEXT_MUTED}" fontSize="12"/>
                         </rectangle>
 
-                        <rectangle left="6" top="210" width="512" height="666" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                        <!-- CARD EMPORIO AUTOMATICO (COMPRA DIRETA -> DESCONTA MOEDAS + GUARDA NO INVENTARIO + SOMA PESO) -->
+                        <rectangle left="6" top="210" width="1036" height="142" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="2" xradius="6" yradius="6">
+                            <label left="14" top="8" width="540" height="22" text="EMPORIO AUTOMATICO DE ALENIA (TOMO IX + ARMAS &amp; ARMADURAS)" fontColor="{TEXT_GOLD}" fontSize="14" fontStyle="bold"/>
+                            <checkBox left="568" top="7" width="260" height="24" field="emporioUsarBanco" text="Usar Cartas de Credito se faltar bolsa" fontColor="{TEXT_GREEN}" fontSize="12"/>
+                            <label left="834" top="8" width="188" height="22" text="155 itens • Debito automatico" fontColor="{TEXT_MUTED}" fontSize="11" horzTextAlign="trailing" vertTextAlign="center"/>
+
+                            <label left="14" top="34" width="320" height="16" text="CATEGORIA DO CATALOGO" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold"/>
+                            <comboBox name="cmbEmporioCat" left="14" top="52" width="322" height="34" field="emporioCat" fontSize="13"
+                                      items="{xml_attr(emporio_cat_items)}" values="{xml_attr(emporio_cat_values)}">
+                                <event name="onChange"><![CDATA[_formRef = self; atualizarItensEmporio(self, true);]]></event>
+                            </comboBox>
+
+                            <label left="346" top="34" width="380" height="16" text="ITEM / PACOTE (PRECO E PESO)" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold"/>
+                            <comboBox name="cmbEmporioItem" left="346" top="52" width="382" height="34" field="emporioItem" fontSize="13"
+                                      items="{xml_attr(emporio_init_items)}" values="{xml_attr(emporio_init_values)}">
+                                <event name="onChange"><![CDATA[atualizarPreviewEmporio();]]></event>
+                            </comboBox>
+
+                            <label left="738" top="34" width="56" height="16" text="QTD" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <edit left="738" top="52" width="56" height="34" field="emporioQtd" type="number" horzTextAlign="center" fontColor="{TEXT_MAIN}" fontSize="15" fontStyle="bold"/>
+
+                            <button left="804" top="51" width="138" height="36" text="Comprar &amp; Guardar" fontSize="13">
+                                <event name="onClick"><![CDATA[comprarItemEmporio();]]></event>
+                            </button>
+
+                            <button left="948" top="51" width="74" height="36" text="Detalhes" fontSize="12">
+                                <event name="onClick"><![CDATA[verDetalhesEmporio();]]></event>
+                            </button>
+
+                            <rectangle left="14" top="94" width="1008" height="38" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label left="10" top="2" width="988" height="34" field="emporioPreview" fontColor="{TEXT_GOLD}" fontSize="12" vertTextAlign="center" wordWrap="true"/>
+                            </rectangle>
+                        </rectangle>
+
+                        <rectangle left="6" top="362" width="512" height="666" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="488" height="24" text="MOCHILA, EQUIPAMENTO DE KIT &amp; PROVISOES" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="488" height="614" field="equipamentoMochila" fontSize="14"/>
                         </rectangle>
 
-                        <rectangle left="528" top="210" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="528" top="362" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="490" height="24" text="ARMADURAS, ADAMANTE &amp; RELIQUIAS RARAS (RD)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="490" height="276" field="reliquiasAdamante" fontSize="14"/>
                         </rectangle>
 
-                        <rectangle left="528" top="548" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="528" top="700" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="490" height="24" text="ALQUIMIA, VENENOS, ERVAS &amp; FERRAMENTAS" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="490" height="276" field="alquimiaSuprimentos" fontSize="14"/>
                         </rectangle>
@@ -2086,11 +2642,11 @@ def build_lfm() -> str:
                         <!-- CARD DE NOVIDADES -->
                         <rectangle left="6" top="450" width="1036" height="224" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v1.7 — Rastreador oficial de XP (Niveis 1-30), botao + Adicionar XP no chat e teto progressivo de atributos (18 Recruta / 20 Lenda / 22 Epico)." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="74" width="996" height="24" text="• v1.6 — Correcao do atualizador automatico integrado (instalacao direta dentro do Firecast sem erro de cache)." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="102" width="996" height="24" text="• v1.5 — Definicao de CD nos testes (campo rapido ou pergunta ao rolar), Defesa do Alvo em ataques, dano corpo a corpo com +FOR e Descansos." fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <label left="20" top="130" width="996" height="24" text="• v1.3/1.4 — Graduacao numerica livre em todas as pericias com grau automatico e aba Autoria &amp; Atualizacao (por Mestre Carlos)." fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao automatica bem-sucedida, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
+                            <label left="20" top="46" width="996" height="24" text="• v2.0 — Emporio Automatico na aba Inventario (155 itens do Tomo IX + Armas e Armaduras): compra direta com debito de moedas/banco, peso na carga e anuncio no chat." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="74" width="996" height="24" text="• v1.9 — Teto Progressivo de Graduacao de Pericias por Nivel (+4 no Niv. 1 ate +16 no Niv. 26-30) com trava rigida e alerta automatico." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="102" width="996" height="24" text="• v1.8 — Sistema Monetario Padrao Prata (Aureos/Pratas/Cobres, Cartas de Credito Corallis/Kalis, peso 100=1kg, Padrao de Vida Mensal e +/- Transacao)." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="130" width="996" height="24" text="• v1.5-v1.7 — Rastreador oficial de XP (Niveis 1-30), teto de atributos (18/20/22), definicao de CD, Defesa do Alvo, dano corpo a corpo +FOR e Descansos." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
                 </scrollBox>
@@ -2104,12 +2660,16 @@ def build_lfm() -> str:
     <dataLink fields="{xml_attr(recalc_fields_lua)}">
         <event name="onChange"><![CDATA[recalcularFicha();]]></event>
     </dataLink>
+    <dataLink fields="{{'emporioCat', 'emporioItem', 'emporioQtd'}}">
+        <event name="onChange"><![CDATA[atualizarItensEmporio(self, false);]]></event>
+    </dataLink>
     {"".join(custom_datalinks)}
 </form>
 '''
     with open(LFM_PATH, "w", encoding="utf-8") as f:
         f.write(lfm)
-    print(f"[OK] AleniaFicha.lfm v1.2 gerado ({len(lfm)} bytes, DV 1d6-1d12 + travas v2.0).")
+    total_emp = sum(len(v) for v in emporio_items.values())
+    print(f"[OK] AleniaFicha.lfm v2.0 gerado ({len(lfm)} bytes, {len(emporio_cats)} categorias / {total_emp} itens no Emporio).")
 
 
 if __name__ == "__main__":

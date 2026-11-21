@@ -78,6 +78,206 @@ local SKILLS = {
     { field="per_religiao", nome="Religiao e Ocultismo", attr="sabedoria" },
 };
 
+local EMPORIO_CATS = {
+    ["pacotes"] = "01 - Pacotes Prontos de Expedicao (~10% desc.)",
+    ["mochilas"] = "02 - Mochilas, Recipientes & Transporte",
+    ["acampamento"] = "03 - Acampamento, Fogo & Iluminacao",
+    ["sobrevivencia"] = "04 - Sobrevivencia, Exploracao & Escalada",
+    ["pesca_caca"] = "05 - Pesca, Caca & Armadilhas",
+    ["forja_oficios"] = "06 - Forja, Ferraria, Carpintaria & Oficios",
+    ["alquimia_med"] = "07 - Medicina, Herbalismo & Alquimia",
+    ["nautica"] = "08 - Nautica, Navegacao & Cartografia",
+    ["subterfugio"] = "09 - Subterfugio, Investigacao & Corte",
+    ["vestuario"] = "10 - Vestuario, Clima & Provisoes",
+    ["montarias"] = "11 - Montarias, Animais de Carga & Arreios",
+    ["armas"] = "12 - Armas Comuns (Livro de Regras)",
+    ["armaduras"] = "13 - Armaduras & Escudos (Defesa | Zero RD)",
+};
+
+local EMPORIO_ITENS = {
+    ["pacotes"] = {
+        { id="pacotes_1", nome="1. Pacote do Viajante das Estradas", label="1. Pacote do Viajante das Estradas  [15 PP | 17.6 kg]", precoPc=150, pesoKg=17.6, dest="mochila", spec="Mochila de couro, saco de dormir de la, tenda simples, odre (2L), pederneira + 10 pavios, 5 tochas, panela de ferro, pedra de amolar, racoes (7 dias)." },
+        { id="pacotes_2", nome="2. Pacote do Explorador de Pantanos & Ruinas", label="2. Pacote do Explorador de Pantanos & Ruinas  [25 PP | 20.7 kg]", precoPc=250, pesoKg=20.7, dest="mochila", spec="Mochila de couro, saco encerado, rede de acampamento, lanterna blindada + 2 oleos, corda 15m + arpeu, pe-de-cabra, facao de mato, botas impermeaveis, bolsa de giz, ataduras (5 usos), racoes (7 dias)." },
+        { id="pacotes_3", nome="3. Pacote do Sobrevivente do Deserto (Gaddra)", label="3. Pacote do Sobrevivente do Deserto (Gaddra)  [27 PP | 11.2 kg]", precoPc=270, pesoKg=11.2, dest="mochila", spec="Mochila de couro, turbante e veu de Gaddra, lona encerada (3x3m), 3 odres (6L), pederneira, sal de Bayd (1 kg), lacos de caca (6), faca de esfolar, antidoto comum (1), racoes (7 dias)." },
+        { id="pacotes_4", nome="4. Pacote do Marinheiro & Pescador Costeiro", label="4. Pacote do Marinheiro & Pescador Costeiro  [21 PP | 22.6 kg]", precoPc=210, pesoKg=22.6, dest="mochila", spec="Saco encerado, capa impermeavel oleada, vara e anzois, tarrafa de pesca, arpao manual, covo dobravel, corda 15m, lanterna comum + 2 oleos, sal de Bayd (1 kg), faca de esfolar, biscoito naval (14 dias)." },
+        { id="pacotes_5", nome="5. Pacote do Artesao Itinerante (Forja & Reparos)", label="5. Pacote do Artesao Itinerante (Forja & Reparos)  [37 PP | 19.7 kg]", precoPc=370, pesoKg=19.7, dest="mochila", spec="Mochila de couro, ferramentas portateis de ferreiro, fole de campanha, luvas grossas de couro, pedra de amolar, cola e breu, 50 pregos, pederneira, lanterna comum + 2 oleos, odre (2L), racoes (7 dias)." },
+    },
+    ["mochilas"] = {
+        { id="mochilas_1", nome="Mochila de Couro Reforcado", label="Mochila de Couro Reforcado  [2 PP | 1.5 kg]", precoPc=20, pesoKg=1.5, dest="mochila", spec="Comporta ate 18 kg de carga (~35 L); correias largas para marcha longa e ganchos laterais para corda ou rolo de dormir." },
+        { id="mochilas_2", nome="Alforje de Sela (Par)", label="Alforje de Sela (Par)  [4 PP | 2.5 kg]", precoPc=40, pesoKg=2.5, dest="mochila", spec="Comporta ate 30 kg distribuidos sobre cavalo ou mula; abas duplas protegem provisoes contra poeira e chuva leve." },
+        { id="mochilas_3", nome="Saco de Lona Comum", label="Saco de Lona Comum  [2 PC | 0.3 kg]", precoPc=2, pesoKg=0.3, dest="mochila", spec="Comporta ate 12 kg; util para pilhagem rapida ou transporte de graos, mas rasga facil contra objetos cortantes." },
+        { id="mochilas_4", nome="Saco Impermeavel Encerado", label="Saco Impermeavel Encerado  [8 PC | 0.5 kg]", precoPc=8, pesoKg=0.5, dest="mochila", spec="Lona tratada com cera de abelha e oleo; protege pergaminhos, pederneira, sal ou ervas contra chuva e travessias de rio (6 kg max.)." },
+        { id="mochilas_5", nome="Odre de Couro (2 Litros)", label="Odre de Couro (2 Litros)  [4 PC | 0.3 kg]", precoPc=4, pesoKg=0.3, dest="mochila", spec="Pesa 2,3 kg cheio; garante agua para 1 dia inteiro em clima temperado (ou 12 dia em calor extremo de Gaddra)." },
+        { id="mochilas_6", nome="Cantil de Latao ou Barro Cozido (1 L)", label="Cantil de Latao ou Barro Cozido (1 L)  [1 PP | 0.4 kg]", precoPc=10, pesoKg=0.4, dest="mochila", spec="Pesa 1,4 kg cheio; conserva agua mais fresca que couro e nao transmite gosto de pele curtida." },
+        { id="mochilas_7", nome="Tubo Selado para Mapas & Cartas", label="Tubo Selado para Mapas & Cartas  [15 PC (1.5 PP) | 0.4 kg]", precoPc=15, pesoKg=0.4, dest="mochila", spec="Cilindro de couro rigido ou latao com tampa rosqueada e cera; protege ate 10 folhas contra agua e fogo rapido." },
+        { id="mochilas_8", nome="Cinto de Bolsos / Bandoleira", label="Cinto de Bolsos / Bandoleira  [15 PC (1.5 PP) | 0.5 kg]", precoPc=15, pesoKg=0.5, dest="mochila", spec="Mantem ate 6 itens pequenos (frascos, pederneira, gazuas, adaga, ataduras) acessiveis como Acao Livre em vez de revirar a mochila." },
+        { id="mochilas_9", nome="Bolsa Oculta de Moedas", label="Bolsa Oculta de Moedas  [6 PC | 0.1 kg]", precoPc=6, pesoKg=0.1, dest="mochila", spec="Costurada sob a tunica ou bota; comporta ate 50 moedas (0,5 kg) e impoe -4 em testes de Prestidigitacao de batedores de carteira." },
+        { id="mochilas_10", nome="Bau de Viagem com Fechadura", label="Bau de Viagem com Fechadura  [8 PP | 10.0 kg]", precoPc=80, pesoKg=10.0, dest="mochila", spec="Madeira grossa com cantoneiras de ferro (60 kg de capacidade); exige Ladinagem CD 15 ou FOR CD 18 para arrombar." },
+    },
+    ["acampamento"] = {
+        { id="acampamento_1", nome="Tenda Simples (1-2 pessoas)", label="Tenda Simples (1-2 pessoas)  [5 PP | 4.5 kg]", precoPc=50, pesoKg=4.5, dest="mochila", spec="Lona grossa com estacas de madeira; protege contra vento e chuva moderada, concedendo +2 em Sobrevivencia contra Exaustao noturna." },
+        { id="acampamento_2", nome="Tenda de Expedicao (4 pessoas)", label="Tenda de Expedicao (4 pessoas)  [14 PP | 11.0 kg]", precoPc=140, pesoKg=11.0, dest="mochila", spec="Lona dupla impermeabilizada com estrutura reforcada; resiste a tempestades de outono e areia de Gaddra (+3 contra Exaustao climatica; exige mula ou carroca)." },
+        { id="acampamento_3", nome="Saco de Dormir (La)", label="Saco de Dormir (La)  [15 PC (1.5 PP) | 2.0 kg]", precoPc=15, pesoKg=2.0, dest="mochila", spec="Modelo de la cobre noites frescas; modelo forrado de pele de inverno anula penalidades de frio moderado nos Montes Ferraur e Rubecina." },
+        { id="acampamento_4", nome="Saco de Dormir (Pele Forrada)", label="Saco de Dormir (Pele Forrada)  [5 PP | 3.5 kg]", precoPc=50, pesoKg=3.5, dest="mochila", spec="Modelo de la cobre noites frescas; modelo forrado de pele de inverno anula penalidades de frio moderado nos Montes Ferraur e Rubecina." },
+        { id="acampamento_5", nome="Rede de Acampamento (Lona)", label="Rede de Acampamento (Lona)  [12 PC (1.2 PP) | 1.0 kg]", precoPc=12, pesoKg=1.0, dest="mochila", spec="Essencial nos Pantanos Nebulosos e Voernock: mantem o explorador acima da lama, insetos e serpentes durante o descanso." },
+        { id="acampamento_6", nome="Lona Encerada (3m x 3m)", label="Lona Encerada (3m x 3m)  [15 PC (1.5 PP) | 2.0 kg]", precoPc=15, pesoKg=2.0, dest="mochila", spec="Abrigo improvisado, cobertura de carroca, coletor de agua da chuva ou maca de emergencia para feridos." },
+        { id="acampamento_7", nome="Pederneira, Aco e Caixa de Isca", label="Pederneira, Aco e Caixa de Isca  [6 PC | 0.3 kg]", precoPc=6, pesoKg=0.3, dest="mochila", spec="Acende fogueira seca em 1 minuto (ou Sobrevivencia CD 14 sob umidade). Indispensavel fora das cidades." },
+        { id="acampamento_8", nome="Pavios Encerados (Maco com 10)", label="Pavios Encerados (Maco com 10)  [4 PC | 0.2 kg]", precoPc=4, pesoKg=0.2, dest="mochila", spec="Queimam por 2 minutos mesmo sob garoa; concedem +3 em testes para acender fogo em terreno umido." },
+        { id="acampamento_9", nome="Tocha Comum (Feixe de 5)", label="Tocha Comum (Feixe de 5)  [2 PC | 2.5 kg]", precoPc=2, pesoKg=2.5, dest="mochila", spec="Cada tocha ilumina 6m claramente (+6m penumbra) por 1 hora; espanta feras comuns e pode causar 1d4 fogo improvisado." },
+        { id="acampamento_10", nome="Lanterna Comum de Ferro", label="Lanterna Comum de Ferro  [2 PP | 1.0 kg]", precoPc=20, pesoKg=1.0, dest="mochila", spec="Ilumina 9m em circulo (+6m penumbra); consome 1 frasco de oleo a cada 6 horas e resiste melhor ao vento que tochas." },
+        { id="acampamento_11", nome="Lanterna Blindada (Furta-Fogo)", label="Lanterna Blindada (Furta-Fogo)  [6 PP | 1.2 kg]", precoPc=60, pesoKg=1.2, dest="mochila", spec="Possui venezianas de cobre que fecham totalmente a luz em Acao Livre ou direcionam feixe frontal de 15m; favorita de vigias, batedores e ladroes." },
+        { id="acampamento_12", nome="Oleo de Lamparina (Frasco 0,5 L)", label="Oleo de Lamparina (Frasco 0,5 L)  [3 PC | 0.5 kg]", precoPc=3, pesoKg=0.5, dest="mochila", spec="Alimenta lanterna por 6 horas. Se arremessado e aceso (6m), queima 1,5m por 2 rodadas causando 1d6 fogo/rodada." },
+        { id="acampamento_13", nome="Velas de Sebo (10 un.)", label="Velas de Sebo (10 un.)  [2 PC | 0.5 kg]", precoPc=2, pesoKg=0.5, dest="mochila", spec="Queimam por 1 hora (2m de luz); cera de abelha nao solta fumaca forte nem cheiro de gordura dentro de ruinas fechadas." },
+        { id="acampamento_14", nome="Velas de Cera de Abelha (10 un.)", label="Velas de Cera de Abelha (10 un.)  [8 PC | 0.5 kg]", precoPc=8, pesoKg=0.5, dest="mochila", spec="Queimam por 1 hora (2m de luz); cera de abelha nao solta fumaca forte nem cheiro de gordura dentro de ruinas fechadas." },
+        { id="acampamento_15", nome="Panela / Cacarola de Ferro", label="Panela / Cacarola de Ferro  [12 PC (1.2 PP) | 2.5 kg]", precoPc=12, pesoKg=2.5, dest="mochila", spec="Permite ferver agua suspeita (anula risco de doenca hidrica), cozinhar caca e derreter neve em altitudes frias." },
+        { id="acampamento_16", nome="Grelha Dobravel & Talheres de Ferro", label="Grelha Dobravel & Talheres de Ferro  [8 PC | 1.0 kg]", precoPc=8, pesoKg=1.0, dest="mochila", spec="Facilita preparo de peixe e carne sem desperdicio em acampamentos rapidos." },
+    },
+    ["sobrevivencia"] = {
+        { id="sobrevivencia_1", nome="Corda de Canhamo (15 metros)", label="Corda de Canhamo (15 metros)  [1 PP | 4.5 kg]", precoPc=10, pesoKg=4.5, dest="mochila", spec="Suporta ate 350 kg; exige FOR CD 18 para arrebentar. Fundamental para pocos, encostas e amarracoes." },
+        { id="sobrevivencia_2", nome="Corda de Seda Trancada (15 metros)", label="Corda de Seda Trancada (15 metros)  [10 PP (1 PO) | 2.0 kg]", precoPc=100, pesoKg=2.0, dest="mochila", spec="Metade do peso e volume da corda de canhamo, suporta 450 kg e concede +1 em testes de Escalada e nos firmes." },
+        { id="sobrevivencia_3", nome="Arpeu de Ferro Forjado", label="Arpeu de Ferro Forjado  [2 PP | 1.8 kg]", precoPc=20, pesoKg=1.8, dest="mochila", spec="Gancho de tres pontas para fixar cordas em muralhas, galhos ou amuradas de navio (arremesso ate 9m, Atletismo/Armas a Distancia CD 13)." },
+        { id="sobrevivencia_4", nome="Pitons / Cravos de Escalada (10 un.)", label="Pitons / Cravos de Escalada (10 un.)  [15 PC (1.5 PP) | 1.5 kg]", precoPc=15, pesoKg=1.5, dest="mochila", spec="Cravados em fendas de pedra ou gelo com martelo; concedem +2 em Escalada e evitam quedas fatais em grupo amarrado." },
+        { id="sobrevivencia_5", nome="Polia com Roldana de Ferro", label="Polia com Roldana de Ferro  [2 PP | 1.5 kg]", precoPc=20, pesoKg=1.5, dest="mochila", spec="Permite erguer ate 4x o peso normal com corda (excelente para icar baus, resgatar feridos em galerias ou erguer barcos)." },
+        { id="sobrevivencia_6", nome="Pe-de-Cabra de Aco", label="Pe-de-Cabra de Aco  [2 PP | 2.2 kg]", precoPc=20, pesoKg=2.2, dest="mochila", spec="Concede +2 em testes de FOR / Atletismo para arrombar portas travadas, tampas de sarcofagos ou grades enferrujadas (1d6 improvisada)." },
+        { id="sobrevivencia_7", nome="Pa de Campanha", label="Pa de Campanha  [15 PC (1.5 PP) | 2.0 kg]", precoPc=15, pesoKg=2.0, dest="mochila", spec="Cava trincheiras, enterra mortos (Rito da Passagem), limpa neve ou escava areia e lama em ruinas." },
+        { id="sobrevivencia_8", nome="Picareta de Escavacao", label="Picareta de Escavacao  [2 PP | 3.5 kg]", precoPc=20, pesoKg=3.5, dest="mochila", spec="Ferramenta padrao dos mineiros de Aeraneas para abrir pedra solta, gelo duro ou entulho de desabamentos." },
+        { id="sobrevivencia_9", nome="Machadinha de Lenhador", label="Machadinha de Lenhador  [15 PC (1.5 PP) | 1.2 kg]", precoPc=15, pesoKg=1.2, dest="mochila", spec="Corta lenha, abre trilhas em galhos densos e prepara estacas de acampamento (tambem serve como arma leve 1d6, 20/x3)." },
+        { id="sobrevivencia_10", nome="Facao de Mato (Tercado)", label="Facao de Mato (Tercado)  [2 PP | 1.0 kg]", precoPc=20, pesoKg=1.0, dest="mochila", spec="Abre passagem em vegetacao fechada (Cidade Suspensa, Pantanos, Ilha das Safiras) reduzindo penalidade de terreno dificil em viagem." },
+        { id="sobrevivencia_11", nome="Pedra de Amolar", label="Pedra de Amolar  [2 PC | 0.3 kg]", precoPc=2, pesoKg=0.3, dest="mochila", spec="Mantem o fio de laminas comuns apos combates prolongados ou exposicao a maresia (evita penalidade de lamina cega -1 dano)." },
+        { id="sobrevivencia_12", nome="Apito de Osso ou Latao", label="Apito de Osso ou Latao  [5 PC | 0.1 kg]", precoPc=5, pesoKg=0.1, dest="mochila", spec="Audivel a ate 400m em campo aberto (ou 150m em neblina densa) para coordenar batedores e sentinelas." },
+        { id="sobrevivencia_13", nome="Espelho de Aco Polido", label="Espelho de Aco Polido  [5 PP | 0.2 kg]", precoPc=50, pesoKg=0.2, dest="mochila", spec="Permite espiar esquinas, enviar sinais de luz sob o sol a ate 3 km ou conferir respiracao de feridos inconscientes." },
+        { id="sobrevivencia_14", nome="Bussola Magnetica (Corallis)", label="Bussola Magnetica (Corallis)  [15 PP | 0.2 kg]", precoPc=150, pesoKg=0.2, dest="mochila", spec="Concede +2 em Sobrevivencia e Navegacao para nao se perder sob neblina ou ceu nublado (nota: enlouquece perto de grandes veios de adamante!)." },
+        { id="sobrevivencia_15", nome="Luneta Simples", label="Luneta Simples  [35 PP | 0.5 kg]", precoPc=350, pesoKg=0.5, dest="mochila", spec="Amplia visao em 2x (simples) ou 4x (Observatorio Helmer); concede +2 ou +4 em Percepcao a longa distancia." },
+        { id="sobrevivencia_16", nome="Luneta de Precisao (Helmer)", label="Luneta de Precisao (Helmer)  [90 PP (9 PO) | 0.5 kg]", precoPc=900, pesoKg=0.5, dest="mochila", spec="Amplia visao em 2x (simples) ou 4x (Observatorio Helmer); concede +2 ou +4 em Percepcao a longa distancia." },
+    },
+    ["pesca_caca"] = {
+        { id="pesca_caca_1", nome="Vara, Linha e Estojo de Anzois", label="Vara, Linha e Estojo de Anzois  [1 PP | 1.0 kg]", precoPc=10, pesoKg=1.0, dest="mochila", spec="Permite pescar em rios, lagos ou costa (Sobrevivencia CD 12 garante 1d4 racoes frescas em 2 horas de pesca)." },
+        { id="pesca_caca_2", nome="Tarrafa / Rede de Pesca (Arremesso)", label="Tarrafa / Rede de Pesca (Arremesso)  [3 PP | 2.5 kg]", precoPc=30, pesoKg=2.5, dest="mochila", spec="Cobre raio de 3m em aguas rasas (Sobrevivencia CD 13 rende 2d4 racoes de peixe; em emergencia, pode imobilizar presa pequena)." },
+        { id="pesca_caca_3", nome="Arpao de Pesca Manual", label="Arpao de Pesca Manual  [2 PP | 1.8 kg]", precoPc=20, pesoKg=1.8, dest="mochila", spec="Ponta farpada com corda de 9m; ideal para peixes grandes de estuario ou recife (1d6, arremesso 6m)." },
+        { id="pesca_caca_4", nome="Covo Dobravel (Armadilha de Peixe)", label="Covo Dobravel (Armadilha de Peixe)  [15 PC (1.5 PP) | 1.5 kg]", precoPc=15, pesoKg=1.5, dest="mochila", spec="Cesto conico de vime e corda deixado submerso durante a noite (Sobrevivencia CD 12 captura 1d4+1 racoes sem gastar tempo ativo)." },
+        { id="pesca_caca_5", nome="Lacos de Arame (Jogo de 6)", label="Lacos de Arame (Jogo de 6)  [1 PP | 0.5 kg]", precoPc=10, pesoKg=0.5, dest="mochila", spec="Armadilhas discretas para coelhos, aves e caca miuda (Sobrevivencia CD 13 garante 1d4 racoes por noite em matas ou estepes)." },
+        { id="pesca_caca_6", nome="Armadilha de Mandibula de Aco", label="Armadilha de Mandibula de Aco  [6 PP | 6.0 kg]", precoPc=60, pesoKg=6.0, dest="mochila", spec="Fixada por corrente e pino no chao (Percepcao CD 15 para notar oculta); ao disparar causa 1d8+2 perfurante e prende o alvo (FOR CD 16 para abrir)." },
+        { id="pesca_caca_7", nome="Isca Aromatica Seca (5 doses)", label="Isca Aromatica Seca (5 doses)  [5 PC | 0.3 kg]", precoPc=5, pesoKg=0.3, dest="mochila", spec="Pasta de peixe salgado, sangue seco ou ervas; concede +2 em testes de caca, pesca ou para atrair feras para uma emboscada." },
+        { id="pesca_caca_8", nome="Chamariz de Osso (Aves / Cervos)", label="Chamariz de Osso (Aves / Cervos)  [8 PC | 0.1 kg]", precoPc=8, pesoKg=0.1, dest="mochila", spec="Imita chamados naturais de fauna local (+2 em Sobrevivencia para rastrear ou aproximar-se de caca)." },
+        { id="pesca_caca_9", nome="Faca de Esfolar & Desossar", label="Faca de Esfolar & Desossar  [1 PP | 0.3 kg]", precoPc=10, pesoKg=0.3, dest="mochila", spec="Lamina curta e curva; concede +2 para extrair couros intactos, glandulas de veneno ou carne aproveitavel sem estragar a carcaca." },
+        { id="pesca_caca_10", nome="Sal Grosso de Bayd (Bloco 1 kg)", label="Sal Grosso de Bayd (Bloco 1 kg)  [1 PP | 1.0 kg]", precoPc=10, pesoKg=1.0, dest="mochila", spec="Conserva ate 10 kg de carne ou peixe cacado por 3 semanas (e em oasis remotos de Gaddra circula diretamente como moeda!)." },
+        { id="pesca_caca_11", nome="Gancho e Corda de Acougueiro", label="Gancho e Corda de Acougueiro  [6 PC | 0.8 kg]", precoPc=6, pesoKg=0.8, dest="mochila", spec="Permite suspender caca longe de predadores terrestres durante a noite ou pendurar provisoes em galhos altos." },
+        { id="pesca_caca_12", nome="Aljava Impermeavel (20 Flechas)", label="Aljava Impermeavel (20 Flechas)  [2 PP | 0.6 kg]", precoPc=20, pesoKg=0.6, dest="mochila", spec="Couro oleado com tampa; impede que a chuva ou umidade dos pantanos encharque as penas das flechas (mantendo precisao intacta)." },
+    },
+    ["forja_oficios"] = {
+        { id="forja_oficios_1", nome="Ferramentas Portateis de Ferreiro", label="Ferramentas Portateis de Ferreiro  [20 PP (2 PO) | 6.0 kg]", precoPc=200, pesoKg=6.0, dest="alquimia", spec="Martelo de pena, tenazes, puncoes, limas e cinzeis; habilita testes de Forja & Metalurgia para reparos de campo em armas, armaduras e ferraduras." },
+        { id="forja_oficios_2", nome="Fole de Campanha (Dobravel)", label="Fole de Campanha (Dobravel)  [8 PP | 3.5 kg]", precoPc=80, pesoKg=3.5, dest="alquimia", spec="Couro reforcado e bico de ferro; permite improvisar forja de campo quente o bastante para reforjar ferro comum (nao atinge temperatura de adamante)." },
+        { id="forja_oficios_3", nome="Bigorna Leve de Carroca", label="Bigorna Leve de Carroca  [25 PP | 18.0 kg]", precoPc=250, pesoKg=18.0, dest="alquimia", spec="Ferro fundido compacto para acampamentos militares ou oficinas moveis; dispensa forja fixa para reparos completos de armaduras." },
+        { id="forja_oficios_4", nome="Saco de Carvao Mineral (10 kg)", label="Saco de Carvao Mineral (10 kg)  [1 PP | 10.0 kg]", precoPc=10, pesoKg=10.0, dest="alquimia", spec="Sustenta uma forja por 1 dia inteiro de trabalho pesado (exige carvao de alta queima de Ferraur para ligas especiais)." },
+        { id="forja_oficios_5", nome="Caixa de Ferramentas de Carpinteiro", label="Caixa de Ferramentas de Carpinteiro  [12 PP | 5.0 kg]", precoPc=120, pesoKg=5.0, dest="alquimia", spec="Enxo, formoes, plaina, esquadro, martelo e broca manual; essencial para reparos de carrocas, pontes, barricadas e cascos de barco." },
+        { id="forja_oficios_6", nome="Serrote de Aco", label="Serrote de Aco  [3 PP | 1.2 kg]", precoPc=30, pesoKg=1.2, dest="alquimia", spec="Corta vigas de madeira, grades de madeira ou galhos grossos silenciosamente comparado ao machado." },
+        { id="forja_oficios_7", nome="Kit de Engenharia & Mecanica (Stoneforge)", label="Kit de Engenharia & Mecanica (Stoneforge)  [35 PP | 4.5 kg]", precoPc=350, pesoKg=4.5, dest="alquimia", spec="Chaves de ajuste, compassos de latao, molas, engrenagens de reposicao, nivel de agua e alicates; habilita Engenharia & Mecanica para construir/desarmar mecanismos complexos." },
+        { id="forja_oficios_8", nome="Furadeira Manual de Arco", label="Furadeira Manual de Arco  [4 PP | 1.0 kg]", precoPc=40, pesoKg=1.0, dest="alquimia", spec="Perfura madeira, osso e chapas finas de metal sem fazer barulho alto; util tanto para carpinteiros quanto para invasores." },
+        { id="forja_oficios_9", nome="Cola de Osso & Pote de Breu Vegetal", label="Cola de Osso & Pote de Breu Vegetal  [1 PP | 1.0 kg]", precoPc=10, pesoKg=1.0, dest="alquimia", spec="Veda rachaduras em cascos, fixa cabos de ferramentas e impermeabiliza juntas de couro ou madeira." },
+        { id="forja_oficios_10", nome="Pregos, Cravos e Parafusos (50 un.)", label="Pregos, Cravos e Parafusos (50 un.)  [5 PC | 1.0 kg]", precoPc=5, pesoKg=1.0, dest="alquimia", spec="Necessarios para erguer barricadas (+2 na resistencia de portas travadas) ou reparos estruturais." },
+        { id="forja_oficios_11", nome="Corrente de Ferro (3 metros)", label="Corrente de Ferro (3 metros)  [5 PP | 5.0 kg]", precoPc=50, pesoKg=5.0, dest="alquimia", spec="Suporta 1.000 kg (FOR CD 22 para romper); usada para prender prisioneiros perigosos, cargas pesadas ou travar portoes." },
+        { id="forja_oficios_12", nome="Cadeado Comum", label="Cadeado Comum  [4 PP | 0.5 kg]", precoPc=40, pesoKg=0.5, dest="alquimia", spec="Comum exige Ladinagem CD 15; modelo de precisao com travas duplas exige Ladinagem CD 21." },
+        { id="forja_oficios_13", nome="Cadeado de Precisao (Kalis)", label="Cadeado de Precisao (Kalis)  [18 PP | 0.5 kg]", precoPc=180, pesoKg=0.5, dest="alquimia", spec="Comum exige Ladinagem CD 15; modelo de precisao com travas duplas exige Ladinagem CD 21." },
+        { id="forja_oficios_14", nome="Cunha de Ferro para Portas (Par)", label="Cunha de Ferro para Portas (Par)  [4 PC | 0.6 kg]", precoPc=4, pesoKg=0.6, dest="alquimia", spec="Impoe +4 na CD de FOR para arrombar uma porta fechada por dentro - salva vidas em estalagens perigosas!" },
+    },
+    ["alquimia_med"] = {
+        { id="alquimia_med_1", nome="Estojo Medico & Cirurgico", label="Estojo Medico & Cirurgico  [25 PP | 2.0 kg]", precoPc=250, pesoKg=2.0, dest="alquimia", spec="Bisturis, pincas, agulhas curvas, fios de sutura, talas e tinturas (10 usos); habilita Medicina & Cirurgia para tratar Ferimentos Graves e estabilizar moribundos." },
+        { id="alquimia_med_2", nome="Instrumentos Cirurgicos de Precisao (Baldbella)", label="Instrumentos Cirurgicos de Precisao (Baldbella)  [85 PP | 1.5 kg]", precoPc=850, pesoKg=1.5, dest="alquimia", spec="Laminas finissimas de liga temperada; concedem +2 em cirurgias complexas e extracoes delicadas." },
+        { id="alquimia_med_3", nome="Ataduras Limpas & Fio (5 usos)", label="Ataduras Limpas & Fio (5 usos)  [1 PP | 0.4 kg]", precoPc=10, pesoKg=0.4, dest="alquimia", spec="Reduz de CD 15 para CD 12 o teste de Medicina para estabilizar aliados moribundos ou estancar Sangramento." },
+        { id="alquimia_med_4", nome="Cataplasma de Ervas (1 dose)", label="Cataplasma de Ervas (1 dose)  [3 PP | 0.2 kg]", precoPc=30, pesoKg=0.2, dest="alquimia", spec="Aplicado durante Descanso Curto ou Longo, soma +1d4 PV extras a recuperacao natural (max. 1x por descanso) e ajuda contra febres." },
+        { id="alquimia_med_5", nome="Aguardente Antisseptica (Frasco)", label="Aguardente Antisseptica (Frasco)  [5 PC | 0.6 kg]", precoPc=5, pesoKg=0.6, dest="alquimia", spec="Limpa feridas antes da sutura (+1 em Medicina contra infeccao) e tambem serve como combustivel de emergencia." },
+        { id="alquimia_med_6", nome="Bolsa Alquimica Completa", label="Bolsa Alquimica Completa  [40 PP (4 PO) | 4.0 kg]", precoPc=400, pesoKg=4.0, dest="alquimia", spec="Alambiques portateis, balanca de precisao, funis, frascos e reagentes basicos; habilita Alquimia & Venenos em campo." },
+        { id="alquimia_med_7", nome="Prensa de Ervas, Pilao & Almofariz", label="Prensa de Ervas, Pilao & Almofariz  [6 PP | 2.0 kg]", precoPc=60, pesoKg=2.0, dest="alquimia", spec="Ferramenta base de Herbalismo & Natureza para extrair seivas, secar raizes (como as da Ilha das Safiras) e preparar unguentos sem gastar moedas em reagentes." },
+        { id="alquimia_med_8", nome="Frasco de Acido Comum (Alquimico)", label="Frasco de Acido Comum (Alquimico)  [15 PP | 0.5 kg]", precoPc=150, pesoKg=0.5, dest="alquimia", spec="Arremesso ate 6m (Armas a Distancia) contra a Defesa Esquiva sem o bonus de armadura comum (10 + Mod(DES) + Esquiva + Escudo, pois o liquido escorre pelas frestas): causa 2d4 de dano acido direto (tambem corroi fechaduras simples em 1 min)." },
+        { id="alquimia_med_9", nome="Bomba de Fumaca Seca", label="Bomba de Fumaca Seca  [10 PP (1 PO) | 0.4 kg]", precoPc=100, pesoKg=0.4, dest="alquimia", spec="Estoura ao impacto (6m), criando nuvem densa de 4,5m de raio por 3 rodadas (concede cobertura total contra ataques a distancia e permite fuga)." },
+        { id="alquimia_med_10", nome="Frasco de Oleo Incendiario (Alcatrao)", label="Frasco de Oleo Incendiario (Alcatrao)  [12 PP | 0.6 kg]", precoPc=120, pesoKg=0.6, dest="alquimia", spec="Pavio aceso + arremesso (6m): causa 1d6 fogo imediato + 1d6 na rodada seguinte se o alvo nao apagar com Acao Principal (temido por criaturas vulneraveis ao fogo)." },
+        { id="alquimia_med_11", nome="Antidoto Comum (1 dose)", label="Antidoto Comum (1 dose)  [15 PP | 0.2 kg]", precoPc=150, pesoKg=0.2, dest="alquimia", spec="Concede +4 em testes de CON contra venenos naturais (serpentes, escorpioes, toxinas de rua) por 1 hora, ou permite refazer 1 teste falho." },
+        { id="alquimia_med_12", nome="Calmante / Sonifero Herbal (1 dose)", label="Calmante / Sonifero Herbal (1 dose)  [8 PP | 0.2 kg]", precoPc=80, pesoKg=0.2, dest="alquimia", spec="Misturado em bebida: alvo testa CON CD 14 ou sofre sonolencia (-2 Percepcao/Iniciativa por 2 horas; dose tripla induz sono profundo)." },
+        { id="alquimia_med_13", nome="Mascara de Pano com Vinagre & Ervas", label="Mascara de Pano com Vinagre & Ervas  [2 PP | 0.2 kg]", precoPc=20, pesoKg=0.2, dest="alquimia", spec="Concede +3 em testes de CON contra fumaca, miasmas de pantano e nuvens de esporos (ex.: Lanterna-de-Turfa)." },
+        { id="alquimia_med_14", nome="Frascos de Vidro com Rolha (5 un.)", label="Frascos de Vidro com Rolha (5 un.)  [1 PP | 0.5 kg]", precoPc=10, pesoKg=0.5, dest="alquimia", spec="Para coletar amostras de agua, sangue, veneno, cinzas ou seivas raras em expedicoes." },
+    },
+    ["nautica"] = {
+        { id="nautica_1", nome="Astrolabio de Latao (Corallis)", label="Astrolabio de Latao (Corallis)  [45 PP | 0.8 kg]", precoPc=450, pesoKg=0.8, dest="mochila", spec="Mede altura solar/estelar em alto-mar; concede +2 em Navegacao & Nautica fora da vista da costa (indispensavel rumo a Kalis ou Thanatos)." },
+        { id="nautica_2", nome="Ampulheta Maritima (1 hora)", label="Ampulheta Maritima (1 hora)  [6 PP | 0.6 kg]", precoPc=60, pesoKg=0.6, dest="mochila", spec="Controla turnos de vigia, velocidade do barco e duracao de rituais ou mares." },
+        { id="nautica_3", nome="Prumo com Linha de Sondagem (30m)", label="Prumo com Linha de Sondagem (30m)  [2 PP | 1.5 kg]", precoPc=20, pesoKg=1.5, dest="mochila", spec="Peso de chumbo com sebo na base para medir profundidade e detectar recifes ocultos (+2 em Navegacao no Mar dos Corais)." },
+        { id="nautica_4", nome="Cartas Nauticas Seladas (por Regiao)", label="Cartas Nauticas Seladas (por Regiao)  [15 PP | 0.3 kg]", precoPc=150, pesoKg=0.3, dest="mochila", spec="Mapeiam correntes, farois e escolhos de uma regiao (ex.: Mar dos Corais, Estuario de Merlinport); concedem +2 em Navegacao naquela area." },
+        { id="nautica_5", nome="Gancho de Abordagem com Corda (10m)", label="Gancho de Abordagem com Corda (10m)  [4 PP | 3.0 kg]", precoPc=40, pesoKg=3.0, dest="mochila", spec="Projetado para prender velames e amuradas inimigas sem deslizar; suporta 400 kg." },
+        { id="nautica_6", nome="Kit de Calafetagem (Estopa, Breu & Tabuas)", label="Kit de Calafetagem (Estopa, Breu & Tabuas)  [10 PP (1 PO) | 8.0 kg]", precoPc=100, pesoKg=8.0, dest="mochila", spec="Permite a um marinheiro ou carpinteiro reparar 2d6 pontos de avaria no casco de um barco em 1 hora (Navegacao ou Engenharia CD 14)." },
+        { id="nautica_7", nome="Boia de Cortica (Salva-Vidas)", label="Boia de Cortica (Salva-Vidas)  [3 PP | 1.5 kg]", precoPc=30, pesoKg=1.5, dest="mochila", spec="Anula penalidade de fadiga em Natacao e permite manter um naufrago inconsciente a tona." },
+        { id="nautica_8", nome="Capa Impermeavel Oleada", label="Capa Impermeavel Oleada  [3 PP | 1.5 kg]", precoPc=30, pesoKg=1.5, dest="mochila", spec="Lona pesada tratada com oleo de linhaca; protege contra borrifos gelados do Mar das Cinzas e chuvas torrenciais (+2 contra frio umido)." },
+        { id="nautica_9", nome="Ancora Leve de Bote (com 15m corda)", label="Ancora Leve de Bote (com 15m corda)  [8 PP | 9.0 kg]", precoPc=80, pesoKg=9.0, dest="mochila", spec="Mantem barcos pequenos e esquifes fundeados perto de enseadas e naufragios." },
+        { id="nautica_10", nome="Sineta de Bronze & Bandeiras de Sinal", label="Sineta de Bronze & Bandeiras de Sinal  [6 PP | 2.0 kg]", precoPc=60, pesoKg=2.0, dest="mochila", spec="Comunicacao entre navios a vista ou aviso de posicao na neblina cerrada." },
+    },
+    ["subterfugio"] = {
+        { id="subterfugio_1", nome="Jogo de Gazuas Comum", label="Jogo de Gazuas Comum  [20 PP (2 PO) | 0.4 kg]", precoPc=200, pesoKg=0.4, dest="mochila", spec="Habilita Ladinagem & Fechaduras; versao de precisao (contrabando de Kalis) concede +2 para abrir fechaduras complexas e cofres." },
+        { id="subterfugio_2", nome="Jogo de Gazuas de Precisao", label="Jogo de Gazuas de Precisao  [75 PP | 0.4 kg]", precoPc=750, pesoKg=0.4, dest="mochila", spec="Habilita Ladinagem & Fechaduras; versao de precisao (contrabando de Kalis) concede +2 para abrir fechaduras complexas e cofres." },
+        { id="subterfugio_3", nome="Estojo de Disfarce & Maquiagem", label="Estojo de Disfarce & Maquiagem  [20 PP (2 PO) | 1.5 kg]", precoPc=200, pesoKg=1.5, dest="mochila", spec="Pigmentos, ceras, barbas posticas, tintura de cabelo e lentes escuras (10 usos); habilita Disfarce convincente." },
+        { id="subterfugio_4", nome="Kit de Caligrafia & Falsificacao", label="Kit de Caligrafia & Falsificacao  [25 PP | 1.0 kg]", precoPc=250, pesoKg=1.0, dest="mochila", spec="Penas finas, tintas variadas, raspadores de pergaminho, lacres e pos secantes; habilita falsificar documentos e salvo-condutos (Enganacao / Idiomas)." },
+        { id="subterfugio_5", nome="Selo de Cera & Bastoes de Lacre (5 un.)", label="Selo de Cera & Bastoes de Lacre (5 un.)  [2 PP | 0.3 kg]", precoPc=20, pesoKg=0.3, dest="mochila", spec="Lacre oficial ou anel de sinete personalizado para autenticar cartas e impedir violacao discreta." },
+        { id="subterfugio_6", nome="Tinta Invisivel (Frasco)", label="Tinta Invisivel (Frasco)  [5 PP | 0.2 kg]", precoPc=50, pesoKg=0.2, dest="mochila", spec="Revela-se apenas quando aquecida suavemente sobre chama de vela (muito usada por agentes de Kalis e Sabina de Pontauria)." },
+        { id="subterfugio_7", nome="Algemas de Ferro com Chave", label="Algemas de Ferro com Chave  [8 PP | 1.2 kg]", precoPc=80, pesoKg=1.2, dest="mochila", spec="Prendem pulsos com seguranca (Ladinagem CD 16 ou FOR CD 20 para escapar; modelo reforcado custa 20 PP e sobe CD em +3)." },
+        { id="subterfugio_8", nome="Estrepes (Bolsa com 20 pontas)", label="Estrepes (Bolsa com 20 pontas)  [3 PP | 1.0 kg]", precoPc=30, pesoKg=1.0, dest="mochila", spec="Cobre um quadrado de 1,5m x 1,5m; quem pisar sem ver (Percepcao CD 14) sofre 1d4 dano e reduz deslocamento pela metade ate tratar o pe." },
+        { id="subterfugio_9", nome="Bolsa de Giz & Po Fino", label="Bolsa de Giz & Po Fino  [3 PC | 0.3 kg]", precoPc=3, pesoKg=0.3, dest="mochila", spec="Marca caminhos em minas/ruinas, detecta correntes de ar atras de paredes falsas e revela fios de armadilha." },
+        { id="subterfugio_10", nome="Lupa de Relojoeiro (Sellene)", label="Lupa de Relojoeiro (Sellene)  [18 PP | 0.1 kg]", precoPc=180, pesoKg=0.1, dest="mochila", spec="Concede +2 em Investigacao e Barganha para examinar moedas raspadas, selos adulterados, cicatrizes finas ou mecanismos diminutos." },
+        { id="subterfugio_11", nome="Caderno de Pergaminho, Penas & Tinta", label="Caderno de Pergaminho, Penas & Tinta  [3 PP | 0.5 kg]", precoPc=30, pesoKg=0.5, dest="mochila", spec="60 folhas costuradas em couro; essencial para mapeamento, registros de expedicao e traducao de cifras." },
+        { id="subterfugio_12", nome="Dados Comuns", label="Dados Comuns  [2 PC | 0.1 kg]", precoPc=2, pesoKg=0.1, dest="mochila", spec="Dados viciados concedem +3 em apostas de taverna (Percepcao ou Intuicao CD 16 revela a fraude - risco imediato de briga!)." },
+        { id="subterfugio_13", nome="Dados Viciados", label="Dados Viciados  [5 PP | 0.1 kg]", precoPc=50, pesoKg=0.1, dest="mochila", spec="Dados viciados concedem +3 em apostas de taverna (Percepcao ou Intuicao CD 16 revela a fraude - risco imediato de briga!)." },
+    },
+    ["vestuario"] = {
+        { id="vestuario_1", nome="Roupas Comuns de Viagem", label="Roupas Comuns de Viagem  [1 PP | 1.5 kg]", precoPc=10, pesoKg=1.5, dest="mochila", spec="Tunica grossa, calcas reforcadas, cinto e capa simples; padrao de estradas sem chamar atencao." },
+        { id="vestuario_2", nome="Traje Fino de Corte (Altavanne / Baldbella)", label="Traje Fino de Corte (Altavanne / Baldbella)  [25 PP | 2.0 kg]", precoPc=250, pesoKg=2.0, dest="mochila", spec="La tingida, bordados discretos e botas limpas; exigido para audiencias nobres sem penalidade de -2 em Etiqueta & Corte." },
+        { id="vestuario_3", nome="Vestes Aristocraticas com Brasao", label="Vestes Aristocraticas com Brasao  [120 PP (12 PO) | 3.0 kg]", precoPc=1200, pesoKg=3.0, dest="mochila", spec="Sedas importadas, broches de prata e peles finas; reforca Status 3-5 e concede +1 em primeiras impressoes na alta nobreza." },
+        { id="vestuario_4", nome="Manto de Inverno Forrado de Pele", label="Manto de Inverno Forrado de Pele  [6 PP | 3.0 kg]", precoPc=60, pesoKg=3.0, dest="mochila", spec="Concede +3 em Sobrevivencia contra frio extremo nos Montes Ferraur, Passo de Rubecina e Mar das Cinzas." },
+        { id="vestuario_5", nome="Botas Reforcadas de Marcha", label="Botas Reforcadas de Marcha  [2 PP | 1.2 kg]", precoPc=20, pesoKg=1.2, dest="mochila", spec="Solado espesso pregado; evita bolhas e penalidades em marchas forcadas de varios dias." },
+        { id="vestuario_6", nome="Botas Altas Impermeaveis (Pantano)", label="Botas Altas Impermeaveis (Pantano)  [4 PP | 1.8 kg]", precoPc=40, pesoKg=1.8, dest="mochila", spec="Couro engraxado ate o joelho; protege contra sanguessugas, lama acida e reduz risco de picadas baixas em Voernock." },
+        { id="vestuario_7", nome="Turbante, Manto Leve & Veu (Gaddra)", label="Turbante, Manto Leve & Veu (Gaddra)  [2 PP | 1.0 kg]", precoPc=20, pesoKg=1.0, dest="mochila", spec="Tecido claro respiravel; concede +3 em testes contra insolacao, tempestades de areia e sede nas dunas de Gaddra." },
+        { id="vestuario_8", nome="Luvas Grossas de Couro (Forja / Escalada)", label="Luvas Grossas de Couro (Forja / Escalada)  [1 PP | 0.3 kg]", precoPc=10, pesoKg=0.3, dest="mochila", spec="Protegem maos contra queimaduras leves, espinhos e atrito de corda em descidas rapidas." },
+        { id="vestuario_9", nome="Racoes Secas de Viagem (7 dias)", label="Racoes Secas de Viagem (7 dias)  [5 PP | 3.5 kg]", precoPc=50, pesoKg=3.5, dest="mochila", spec="Carne seca, queijo duro, pao escuro e frutas secas; duram 1 mes secas (indispensavel fora das estradas principais)." },
+        { id="vestuario_10", nome="Biscoito Naval & Carne Salgada (14 dias)", label="Biscoito Naval & Carne Salgada (14 dias)  [6 PP | 6.0 kg]", precoPc=60, pesoKg=6.0, dest="mochila", spec="Sabor duro e salgado, mas dura ate 4 meses no porao de um navio sem estragar." },
+        { id="vestuario_11", nome="Cantil de Vinho Bom", label="Cantil de Vinho Bom  [5 PC | 1.0 kg]", precoPc=5, pesoKg=1.0, dest="mochila", spec="Eleva moral no acampamento ou serve para quebrar o gelo em negociacoes de estrada." },
+        { id="vestuario_12", nome="Cantil de Cerveja Escura", label="Cantil de Cerveja Escura  [2 PC | 1.0 kg]", precoPc=2, pesoKg=1.0, dest="mochila", spec="Eleva moral no acampamento ou serve para quebrar o gelo em negociacoes de estrada." },
+        { id="vestuario_13", nome="Forragem para Montaria (7 dias)", label="Forragem para Montaria (7 dias)  [15 PC (1.5 PP) | 7.0 kg]", precoPc=15, pesoKg=7.0, dest="mochila", spec="Aveia e feno prensado para travessias sem pasto (obrigatorio no Passo de Rubecina no inverno e nas dunas de Gaddra)." },
+    },
+    ["montarias"] = {
+        { id="montarias_1", nome="Mula de Carga", label="Mula de Carga  [45 PP]", precoPc=450, pesoKg=0.0, dest="mochila", spec="Deslocamento 12m; pe firme em montanhas (Ferraur / Rubecina) e quase imune a panico trivial." },
+        { id="montarias_2", nome="Cavalo de Estrada", label="Cavalo de Estrada  [120 PP (12 PO)]", precoPc=1200, pesoKg=0.0, dest="mochila", spec="Deslocamento 18m; viaja ate 48 km/dia em estradas boas; assusta-se em combate sem treino." },
+        { id="montarias_3", nome="Montaria do Deserto (OX - Gaddra)", label="Montaria do Deserto (OX - Gaddra)  [150 PP (15 PO)]", precoPc=1500, pesoKg=0.0, dest="mochila", spec="Deslocamento 16,5m; suporta 3 dias sem agua sob calor escaldante sem sofrer Exaustao." },
+        { id="montarias_4", nome="Cavalo de Guerra Treinado", label="Cavalo de Guerra Treinado  [320 PP (32 PO)]", precoPc=3200, pesoKg=0.0, dest="mochila", spec="Deslocamento 16,5m, 36 PV; treinado para nao fugir sob aco, fogo ou gritos (+2 em Cavalgar em combate)." },
+        { id="montarias_5", nome="Cao de Caca / Guarda Treinado", label="Cao de Caca / Guarda Treinado  [30 PP (3 PO)]", precoPc=300, pesoKg=0.0, dest="mochila", spec="14 PV, Percepcao +6 (faro agucado); alerta o acampamento contra emboscadas noturnas e ajuda a rastrear (+2 Sobrevivencia)." },
+        { id="montarias_6", nome="Sela, Freio & Estribos", label="Sela, Freio & Estribos  [10 PP (1 PO) | 7.0 kg]", precoPc=100, pesoKg=7.0, dest="mochila", spec="Necessario para cavalgar longas distancias ou combater montado sem penalidade de -3 em Cavalgar." },
+        { id="montarias_7", nome="Barda de Couro Batido (Montaria)", label="Barda de Couro Batido (Montaria)  [40 PP (4 PO) | 12.0 kg]", precoPc=400, pesoKg=12.0, dest="mochila", spec="Concede +2 na Defesa da montaria (zero RD passiva, seguindo a regra de Alenia)." },
+        { id="montarias_8", nome="Carroca Reforcada (sem animais)", label="Carroca Reforcada (sem animais)  [40 PP (4 PO)]", precoPc=400, pesoKg=0.0, dest="mochila", spec="Exige 2 mulas ou 2 cavalos (130 PP completa com 2 mulas); ideal para expedicoes comerciais ou transporte de forja movel." },
+    },
+    ["armas"] = {
+        { id="armas_1", nome="Adaga / Punhal", label="Adaga / Punhal  [4 PP | 0.5 kg]", precoPc=40, pesoKg=0.5, dest="mochila", spec="Dano 1d4+FOR | Crit 19-20/x2 | Leve, Agil (FOR/DES), Arremesso 6m" },
+        { id="armas_2", nome="Espada Curta", label="Espada Curta  [15 PP | 1.0 kg]", precoPc=150, pesoKg=1.0, dest="mochila", spec="Dano 1d6+FOR | Crit 19-20/x2 | Leve, Agil (FOR/DES)" },
+        { id="armas_3", nome="Florete / Estoque", label="Florete / Estoque  [30 PP (3 PO) | 1.0 kg]", precoPc=300, pesoKg=1.0, dest="mochila", spec="Dano 1d6+FOR | Crit 18-20/x2 | Agil (DES), Perfurante" },
+        { id="armas_4", nome="Espada Longa", label="Espada Longa  [25 PP | 1.5 kg]", precoPc=250, pesoKg=1.5, dest="mochila", spec="Dano 1d8+FOR | Crit 19-20/x2 | Versatil (1d10+FOR em 2 maos)" },
+        { id="armas_5", nome="Lamina Oriental (Yoketsu)", label="Lamina Oriental (Yoketsu)  [55 PP | 1.4 kg]", precoPc=550, pesoKg=1.4, dest="mochila", spec="Dano 1d8+FOR | Crit 18-20/x2 | Agil em 2 maos, corte preciso" },
+        { id="armas_6", nome="Cimitarra / Sabre", label="Cimitarra / Sabre  [25 PP | 1.3 kg]", precoPc=250, pesoKg=1.3, dest="mochila", spec="Dano 1d6+FOR | Crit 18-20/x2 | Agil (DES), ideal em conves/sela" },
+        { id="armas_7", nome="Machado de Batalha", label="Machado de Batalha  [20 PP (2 PO) | 2.0 kg]", precoPc=200, pesoKg=2.0, dest="mochila", spec="Dano 1d8+FOR | Crit 20/x3 | Versatil (1d10+FOR em 2 maos)" },
+        { id="armas_8", nome="Machado Grande", label="Machado Grande  [35 PP | 3.5 kg]", precoPc=350, pesoKg=3.5, dest="mochila", spec="Dano 1d12+FOR | Crit 20/x3 | Duas maos, Pesada" },
+        { id="armas_9", nome="Montante / Espada Grande", label="Montante / Espada Grande  [50 PP (5 PO) | 3.0 kg]", precoPc=500, pesoKg=3.0, dest="mochila", spec="Dano 2d6+FOR | Crit 19-20/x2 | Duas maos, Pesada" },
+        { id="armas_10", nome="Lanca / Pique", label="Lanca / Pique  [10 PP (1 PO) | 2.0 kg]", precoPc=100, pesoKg=2.0, dest="mochila", spec="Dano 1d8+FOR | Crit 20/x3 | Alcance (3m se pique), Versatil" },
+        { id="armas_11", nome="Martelo de Guerra", label="Martelo de Guerra  [22 PP | 2.2 kg]", precoPc=220, pesoKg=2.2, dest="mochila", spec="Dano 1d8+FOR | Crit 20/x3 | Contundente" },
+        { id="armas_12", nome="Picareta de Guerra", label="Picareta de Guerra  [18 PP | 1.8 kg]", precoPc=180, pesoKg=1.8, dest="mochila", spec="Dano 1d6+FOR | Crit 20/x4 | Perfurante letal" },
+        { id="armas_13", nome="Arco Curto", label="Arco Curto  [20 PP (2 PO) | 1.0 kg]", precoPc=200, pesoKg=1.0, dest="mochila", spec="Dano 1d6 | Crit 20/x3 | 2 maos, Alcance 24m (sem +FOR)" },
+        { id="armas_14", nome="Arco Longo", label="Arco Longo  [45 PP | 1.5 kg]", precoPc=450, pesoKg=1.5, dest="mochila", spec="Dano 1d8 | Crit 20/x3 | 2 maos, Alcance 45m (sem +FOR)" },
+        { id="armas_15", nome="Besta Leve", label="Besta Leve  [35 PP | 2.5 kg]", precoPc=350, pesoKg=2.5, dest="mochila", spec="Dano 1d8 | Crit 19-20/x2 | Recarga (Movimento)" },
+        { id="armas_16", nome="Besta Pesada", label="Besta Pesada  [75 PP | 4.5 kg]", precoPc=750, pesoKg=4.5, dest="mochila", spec="Dano 1d10 | Crit 19-20/x2 | Recarga (Acao Principal)" },
+    },
+    ["armaduras"] = {
+        { id="armaduras_1", nome="Gibao Reforcado", label="Gibao Reforcado  [12 PP | 4.0 kg]", precoPc=120, pesoKg=4.0, dest="armadura", spec="Defesa +1 | Penalidade Furt./Acrob. 0 | Zero RD | Discreta para viagem" },
+        { id="armaduras_2", nome="Couro Batido", label="Couro Batido  [25 PP | 6.0 kg]", precoPc=250, pesoKg=6.0, dest="armadura", spec="Defesa +2 | Penalidade Furt./Acrob. 0 | Zero RD | Padrao de exploradores" },
+        { id="armaduras_3", nome="Cota de Malha", label="Cota de Malha  [75 PP | 12.0 kg]", precoPc=750, pesoKg=12.0, dest="armadura", spec="Defesa +3 | Penalidade Furt./Acrob. -2 | Zero RD | Boa protecao contra cortes" },
+        { id="armaduras_4", nome="Brigantina / Meia-Placa", label="Brigantina / Meia-Placa  [180 PP (18 PO) | 16.0 kg]", precoPc=1800, pesoKg=16.0, dest="armadura", spec="Defesa +4 | Penalidade Furt./Acrob. -3 | Zero RD | Favorita de mercenarios veteranos" },
+        { id="armaduras_5", nome="Placas Completas", label="Placas Completas  [450 PP (45 PO) | 24.0 kg]", precoPc=4500, pesoKg=24.0, dest="armadura", spec="Defesa +5 | Penalidade Furt./Acrob. -5 | Zero RD | Exige FOR 13+" },
+        { id="armaduras_6", nome="Broquel (Escudo Pequeno)", label="Broquel (Escudo Pequeno)  [10 PP (1 PO) | 1.5 kg]", precoPc=100, pesoKg=1.5, dest="armadura", spec="Escudo Defesa +1 | Penalidade 0 | Leve e agil para duelo" },
+        { id="armaduras_7", nome="Escudo Medio", label="Escudo Medio  [20 PP (2 PO) | 3.5 kg]", precoPc=200, pesoKg=3.5, dest="armadura", spec="Escudo Defesa +2 | Penalidade -1 | Padrao de infantaria" },
+        { id="armaduras_8", nome="Escudo Torre", label="Escudo Torre  [45 PP | 8.0 kg]", precoPc=450, pesoKg=8.0, dest="armadura", spec="Escudo Defesa +3 | Penalidade -3 | +2 extra em Proteger Aliado" },
+    },
+};
+
 local okInt, InternetMod = pcall(require, "internet.lua");
 if not okInt or InternetMod == nil then InternetMod = Internet or internet; end;
 local okPlg, PluginsMod = pcall(require, "plugins.lua");
@@ -86,9 +286,12 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "1.9";
+local PLUGIN_VERSION = "2.0";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
+
+local _formRef = nil;
+local _ultimaCatEmporio = nil;
 
 -- Tabela Oficial de XP Acumulada (Niveis 1 a 30)
 local XP_TABELA = {
@@ -1036,6 +1239,273 @@ local function pagarPadraoVida()
         );
     else
         aplicarDeltaCobres(-custoPc, "Padrao de Vida Mensal (" .. pvObj.nome .. ")");
+    end;
+end;
+
+local function formatarPrecoPc(pc)
+    local v = math.max(0, math.floor(num(pc, 0)));
+    if v >= 100 and (v % 100 == 0) then
+        return tostring(math.floor(v / 10)) .. " PP (" .. tostring(math.floor(v / 100)) .. " PO)";
+    elseif v >= 10 and (v % 10 == 0) then
+        return tostring(math.floor(v / 10)) .. " PP";
+    elseif v >= 10 then
+        return tostring(v) .. " PC (" .. string.format("%.1f PP", v / 10.0) .. ")";
+    else
+        return tostring(v) .. " PC";
+    end;
+end;
+
+local function nomeDestinoEmporio(dest)
+    if dest == "alquimia" then return "Alquimia, Ervas & Ferramentas"; end;
+    if dest == "armadura" then return "Armaduras, Adamante & Reliquias"; end;
+    return "Mochila & Provisoes";
+end;
+
+local function campoDestinoEmporio(dest)
+    if dest == "alquimia" then return "alquimiaSuprimentos"; end;
+    if dest == "armadura" then return "reliquiasAdamante"; end;
+    return "equipamentoMochila";
+end;
+
+local function getItemEmporioAtual()
+    if sheet == nil then return nil, nil; end;
+    local catId = tostring(sheet.emporioCat or "pacotes");
+    local lista = EMPORIO_ITENS[catId];
+    if lista == nil or #lista == 0 then
+        catId = "pacotes";
+        lista = EMPORIO_ITENS[catId];
+    end;
+    if lista == nil or #lista == 0 then return catId, nil; end;
+    local itemId = tostring(sheet.emporioItem or "");
+    for i = 1, #lista do
+        if lista[i].id == itemId then
+            return catId, lista[i];
+        end;
+    end;
+    return catId, lista[1];
+end;
+
+local function atualizarPreviewEmporio()
+    if sheet == nil then return; end;
+    local _, it = getItemEmporioAtual();
+    if it == nil then
+        sheet.emporioPreview = "Selecione uma categoria e um item do Emporio.";
+        return;
+    end;
+    local qtd = math.max(1, math.min(99, math.floor(num(sheet.emporioQtd, 1))));
+    local totalPc = it.precoPc * qtd;
+    local pesoTotal = it.pesoKg * qtd;
+    local pesoTxt = (pesoTotal > 0) and (string.format("%.1f kg", pesoTotal)) or "0 kg (carrega proprio peso)";
+    local destTxt = nomeDestinoEmporio(it.dest);
+    local resumoSpec = tostring(it.spec or "");
+    if #resumoSpec > 115 then
+        resumoSpec = string.sub(resumoSpec, 1, 112) .. "...";
+    end;
+    sheet.emporioPreview = "Total (" .. tostring(qtd) .. "x): " .. formatarPrecoPc(totalPc) .. "  |  Peso: " .. pesoTxt .. "  |  Destino: " .. destTxt .. "  |  " .. resumoSpec;
+end;
+
+local function atualizarItensEmporio(frm, forcar)
+    if frm ~= nil then _formRef = frm; end;
+    local ref = frm or _formRef or self;
+    if sheet == nil then return; end;
+    local catId = tostring(sheet.emporioCat or "pacotes");
+    local lista = EMPORIO_ITENS[catId];
+    if lista == nil or #lista == 0 then
+        catId = "pacotes";
+        sheet.emporioCat = catId;
+        lista = EMPORIO_ITENS[catId];
+    end;
+    if lista == nil or #lista == 0 then return; end;
+
+    if (not forcar) and (_ultimaCatEmporio == catId) then
+        atualizarPreviewEmporio();
+        return;
+    end;
+    _ultimaCatEmporio = catId;
+
+    local labels = {};
+    local vals = {};
+    local curId = tostring(sheet.emporioItem or "");
+    local found = false;
+    for i = 1, #lista do
+        table.insert(labels, lista[i].label);
+        table.insert(vals, lista[i].id);
+        if lista[i].id == curId then found = true; end;
+    end;
+    if not found then
+        curId = lista[1].id;
+        sheet.emporioItem = curId;
+    end;
+
+    if ref ~= nil and ref.cmbEmporioItem ~= nil then
+        pcall(function()
+            ref.cmbEmporioItem.items = labels;
+            ref.cmbEmporioItem.values = vals;
+            ref.cmbEmporioItem.value = curId;
+        end);
+    end;
+    atualizarPreviewEmporio();
+end;
+
+local function verDetalhesEmporio()
+    if sheet == nil then return; end;
+    local catId, it = getItemEmporioAtual();
+    if it == nil then
+        showMessage("Selecione um item do Emporio primeiro.");
+        return;
+    end;
+    local qtd = math.max(1, math.min(99, math.floor(num(sheet.emporioQtd, 1))));
+    local totalPc = it.precoPc * qtd;
+    local pesoUnit = (it.pesoKg > 0) and string.format("%.1f kg", it.pesoKg) or "0 kg (carrega proprio peso)";
+    local pesoTot = (it.pesoKg > 0) and string.format("%.1f kg", it.pesoKg * qtd) or "0 kg";
+    local catNome = EMPORIO_CATS[catId] or catId;
+    showMessage(
+        "EMPORIO DE ALENIA — DETALHES DO ITEM\n\n" ..
+        "Categoria: " .. catNome .. "\n" ..
+        "Item: " .. it.nome .. "\n" ..
+        "Preco Unitario: " .. formatarPrecoPc(it.precoPc) .. "  |  Total (" .. tostring(qtd) .. "x): " .. formatarPrecoPc(totalPc) .. "\n" ..
+        "Peso Unitario: " .. pesoUnit .. "  |  Peso Total: " .. pesoTot .. "\n" ..
+        "Destino no Inventario: " .. nomeDestinoEmporio(it.dest) .. "\n\n" ..
+        "Especificacoes:\n" .. tostring(it.spec or "")
+    );
+end;
+
+local function adicionarPesoCargaAtual(addKg)
+    if sheet == nil or addKg == nil or addKg <= 0 then return; end;
+    local raw = tostring(sheet.cargaAtual or ""):gsub(",", ".");
+    local atual = tonumber(raw:match("%-?%d+%.?%d*")) or 0;
+    local novo = atual + addKg;
+    local fmt = string.format("%.1f", novo):gsub("%.0$", "");
+    sheet.cargaAtual = fmt;
+end;
+
+local function comprarItemEmporio()
+    if sheet == nil then return; end;
+    local _, it = getItemEmporioAtual();
+    if it == nil then
+        showMessage("Selecione um item valido do Emporio antes de comprar.");
+        return;
+    end;
+
+    local qtd = math.max(1, math.min(99, math.floor(num(sheet.emporioQtd, 1))));
+    sheet.emporioQtd = tostring(qtd);
+
+    local totalPc = it.precoPc * qtd;
+    local pesoAdd = it.pesoKg * qtd;
+
+    local po = math.max(0, math.floor(num(sheet.moedasOuro, 0)));
+    local pp = math.max(0, math.floor(num(sheet.moedasPrata, 0)));
+    local pc = math.max(0, math.floor(num(sheet.moedasCobre, 0)));
+    local bolsaPc = (po * 100) + (pp * 10) + pc;
+    local cartasPp = math.max(0, math.floor(num(sheet.cartasCredito, 0)));
+    local usarBanco = (sheet.emporioUsarBanco == true);
+    local bancoPc = usarBanco and (cartasPp * 10) or 0;
+
+    if (bolsaPc + bancoPc) < totalPc then
+        local dicaBanco = "";
+        if (not usarBanco) and (cartasPp * 10 + bolsaPc >= totalPc) then
+            dicaBanco = "\n\nDica: Voce possui " .. tostring(cartasPp) .. " PP em Cartas de Credito. Marque 'Usar Cartas de Credito' se quiser pagar com saldo bancario.";
+        end;
+        showMessage(
+            "Dinheiro insuficiente para comprar " .. tostring(qtd) .. "x " .. it.nome .. "!\n\n" ..
+            "Custo Total: " .. formatarPrecoPc(totalPc) .. "\n" ..
+            "Disponivel na Bolsa: " .. formatarPrecoPc(bolsaPc) ..
+            (usarBanco and ("\nDisponivel no Banco: " .. tostring(cartasPp) .. " PP") or "") ..
+            dicaBanco
+        );
+        return;
+    end;
+
+    local fonteTxt = "Bolsa Fisica";
+    local sacarBancoPp = 0;
+    if bolsaPc < totalPc then
+        local faltaPc = totalPc - bolsaPc;
+        sacarBancoPp = math.ceil(faltaPc / 10.0);
+        fonteTxt = "Bolsa + " .. tostring(sacarBancoPp) .. " PP em Cartas de Credito";
+    end;
+
+    local destNome = nomeDestinoEmporio(it.dest);
+    local destField = campoDestinoEmporio(it.dest);
+
+    local function executarCompra()
+        local poNow = math.max(0, math.floor(num(sheet.moedasOuro, 0)));
+        local ppNow = math.max(0, math.floor(num(sheet.moedasPrata, 0)));
+        local pcNow = math.max(0, math.floor(num(sheet.moedasCobre, 0)));
+        local bolsaNow = (poNow * 100) + (ppNow * 10) + pcNow;
+        local bancoNowPp = math.max(0, math.floor(num(sheet.cartasCredito, 0)));
+        local usarB = (sheet.emporioUsarBanco == true);
+        local extraBancoPp = 0;
+
+        if bolsaNow >= totalPc then
+            local novoTotal = bolsaNow - totalPc;
+            local ouroMantido = math.min(poNow, math.floor(novoTotal / 100));
+            local resto = novoTotal - (ouroMantido * 100);
+            poNow = ouroMantido;
+            ppNow = math.floor(resto / 10);
+            pcNow = resto % 10;
+        elseif usarB and (bolsaNow + bancoNowPp * 10 >= totalPc) then
+            local faltaPc = totalPc - bolsaNow;
+            extraBancoPp = math.ceil(faltaPc / 10.0);
+            local trocoPc = (extraBancoPp * 10) - faltaPc;
+            bancoNowPp = bancoNowPp - extraBancoPp;
+            poNow = 0;
+            ppNow = math.floor(trocoPc / 10);
+            pcNow = trocoPc % 10;
+        else
+            showMessage("Saldo alterado: dinheiro insuficiente para concluir a compra.");
+            return;
+        end;
+
+        sheet.moedasOuro = tostring(poNow);
+        sheet.moedasPrata = tostring(ppNow);
+        sheet.moedasCobre = tostring(pcNow);
+        if extraBancoPp > 0 then
+            sheet.cartasCredito = tostring(bancoNowPp);
+        end;
+
+        local pesoTag = (pesoAdd > 0) and (string.format("%.1f kg", pesoAdd)) or "0 kg";
+        local specCurta = tostring(it.spec or "");
+        if #specCurta > 140 then
+            specCurta = string.sub(specCurta, 1, 137) .. "...";
+        end;
+        local linhaItem = "- " .. tostring(qtd) .. "x " .. it.nome .. " [" .. pesoTag .. " | " .. formatarPrecoPc(totalPc) .. "] - " .. specCurta;
+        local atualTxt = tostring(sheet[destField] or "");
+        if atualTxt == "" then
+            sheet[destField] = linhaItem;
+        else
+            sheet[destField] = atualTxt .. "\n" .. linhaItem;
+        end;
+
+        if pesoAdd > 0 then
+            adicionarPesoCargaAtual(pesoAdd);
+        end;
+
+        recalcularFicha();
+        atualizarPreviewEmporio();
+
+        local nomeChar = sheet.nome or "Explorador";
+        local bancoMsg = (extraBancoPp > 0) and (" | Banco: -" .. tostring(extraBancoPp) .. " PP") or "";
+        local pesoMsg = (pesoAdd > 0) and (" | +" .. string.format("%.1f kg", pesoAdd) .. " (Carga: " .. tostring(sheet.cargaAtual) .. " kg)") or "";
+        enviarChatOuMsg(
+            "[" .. nomeChar .. "] Comprou no Emporio: " .. tostring(qtd) .. "x " .. it.nome ..
+            " (-" .. formatarPrecoPc(totalPc) .. bancoMsg .. ")" .. pesoMsg ..
+            " -> " .. destNome .. " | Bolsa: " .. tostring(poNow) .. " PO, " .. tostring(ppNow) .. " PP, " .. tostring(pcNow) .. " PC."
+        );
+    end;
+
+    if DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+        DialogsMod.confirmYesNo(
+            "Confirmar compra no Emporio de Alenia?\n\n" ..
+            "Item: " .. tostring(qtd) .. "x " .. it.nome .. "\n" ..
+            "Custo Total: " .. formatarPrecoPc(totalPc) .. " (" .. fonteTxt .. ")\n" ..
+            "Peso Adicionado: " .. ((pesoAdd > 0) and string.format("+%.1f kg", pesoAdd) or "0 kg") .. "\n" ..
+            "Guardar em: " .. destNome,
+            function(sim)
+                if sim then executarCompra(); end;
+            end
+        );
+    else
+        executarCompra();
     end;
 end;
 
@@ -2265,7 +2735,7 @@ end;
             <!-- ABA 4: INVENTARIO & SISTEMA MONETARIO -->
             <tab title="Inventario &amp; Moedas">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="890">
+                    <layout left="0" top="0" width="1056" height="1042">
                         <rectangle left="6" top="6" width="1036" height="196" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
                             <!-- Linha 1: Moedas (Padrao Prata) + Cartas de Credito -->
                             <label left="14" top="8" width="160" height="18" text="AUREOS (PO = 10 PP)" fontColor="#D9B96A" fontSize="12" fontStyle="bold"/>
@@ -2325,17 +2795,51 @@ end;
                             <label left="14" top="168" width="1008" height="20" field="padraoVidaInfo" fontColor="#A6AEBF" fontSize="12"/>
                         </rectangle>
 
-                        <rectangle left="6" top="210" width="512" height="666" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                        <!-- CARD EMPORIO AUTOMATICO (COMPRA DIRETA -> DESCONTA MOEDAS + GUARDA NO INVENTARIO + SOMA PESO) -->
+                        <rectangle left="6" top="210" width="1036" height="142" color="#1B1E26" strokeColor="#9A7E42" strokeSize="2" xradius="6" yradius="6">
+                            <label left="14" top="8" width="540" height="22" text="EMPORIO AUTOMATICO DE ALENIA (TOMO IX + ARMAS &amp; ARMADURAS)" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
+                            <checkBox left="568" top="7" width="260" height="24" field="emporioUsarBanco" text="Usar Cartas de Credito se faltar bolsa" fontColor="#7FC48C" fontSize="12"/>
+                            <label left="834" top="8" width="188" height="22" text="155 itens • Debito automatico" fontColor="#A6AEBF" fontSize="11" horzTextAlign="trailing" vertTextAlign="center"/>
+
+                            <label left="14" top="34" width="320" height="16" text="CATEGORIA DO CATALOGO" fontColor="#A6AEBF" fontSize="11" fontStyle="bold"/>
+                            <comboBox name="cmbEmporioCat" left="14" top="52" width="322" height="34" field="emporioCat" fontSize="13"
+                                      items="{'01 - Pacotes Prontos de Expedicao (~10% desc.)', '02 - Mochilas, Recipientes &amp; Transporte', '03 - Acampamento, Fogo &amp; Iluminacao', '04 - Sobrevivencia, Exploracao &amp; Escalada', '05 - Pesca, Caca &amp; Armadilhas', '06 - Forja, Ferraria, Carpintaria &amp; Oficios', '07 - Medicina, Herbalismo &amp; Alquimia', '08 - Nautica, Navegacao &amp; Cartografia', '09 - Subterfugio, Investigacao &amp; Corte', '10 - Vestuario, Clima &amp; Provisoes', '11 - Montarias, Animais de Carga &amp; Arreios', '12 - Armas Comuns (Livro de Regras)', '13 - Armaduras &amp; Escudos (Defesa | Zero RD)'}" values="{'pacotes', 'mochilas', 'acampamento', 'sobrevivencia', 'pesca_caca', 'forja_oficios', 'alquimia_med', 'nautica', 'subterfugio', 'vestuario', 'montarias', 'armas', 'armaduras'}">
+                                <event name="onChange"><![CDATA[_formRef = self; atualizarItensEmporio(self, true);]]></event>
+                            </comboBox>
+
+                            <label left="346" top="34" width="380" height="16" text="ITEM / PACOTE (PRECO E PESO)" fontColor="#A6AEBF" fontSize="11" fontStyle="bold"/>
+                            <comboBox name="cmbEmporioItem" left="346" top="52" width="382" height="34" field="emporioItem" fontSize="13"
+                                      items="{'1. Pacote do Viajante das Estradas  [15 PP | 17.6 kg]', '2. Pacote do Explorador de Pantanos &amp; Ruinas  [25 PP | 20.7 kg]', '3. Pacote do Sobrevivente do Deserto (Gaddra)  [27 PP | 11.2 kg]', '4. Pacote do Marinheiro &amp; Pescador Costeiro  [21 PP | 22.6 kg]', '5. Pacote do Artesao Itinerante (Forja &amp; Reparos)  [37 PP | 19.7 kg]'}" values="{'pacotes_1', 'pacotes_2', 'pacotes_3', 'pacotes_4', 'pacotes_5'}">
+                                <event name="onChange"><![CDATA[atualizarPreviewEmporio();]]></event>
+                            </comboBox>
+
+                            <label left="738" top="34" width="56" height="16" text="QTD" fontColor="#D9B96A" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <edit left="738" top="52" width="56" height="34" field="emporioQtd" type="number" horzTextAlign="center" fontColor="#EAE4D6" fontSize="15" fontStyle="bold"/>
+
+                            <button left="804" top="51" width="138" height="36" text="Comprar &amp; Guardar" fontSize="13">
+                                <event name="onClick"><![CDATA[comprarItemEmporio();]]></event>
+                            </button>
+
+                            <button left="948" top="51" width="74" height="36" text="Detalhes" fontSize="12">
+                                <event name="onClick"><![CDATA[verDetalhesEmporio();]]></event>
+                            </button>
+
+                            <rectangle left="14" top="94" width="1008" height="38" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                                <label left="10" top="2" width="988" height="34" field="emporioPreview" fontColor="#D9B96A" fontSize="12" vertTextAlign="center" wordWrap="true"/>
+                            </rectangle>
+                        </rectangle>
+
+                        <rectangle left="6" top="362" width="512" height="666" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="488" height="24" text="MOCHILA, EQUIPAMENTO DE KIT &amp; PROVISOES" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="488" height="614" field="equipamentoMochila" fontSize="14"/>
                         </rectangle>
 
-                        <rectangle left="528" top="210" width="514" height="328" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="528" top="362" width="514" height="328" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="490" height="24" text="ARMADURAS, ADAMANTE &amp; RELIQUIAS RARAS (RD)" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="490" height="276" field="reliquiasAdamante" fontSize="14"/>
                         </rectangle>
 
-                        <rectangle left="528" top="548" width="514" height="328" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="528" top="700" width="514" height="328" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="490" height="24" text="ALQUIMIA, VENENOS, ERVAS &amp; FERRAMENTAS" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="40" width="490" height="276" field="alquimiaSuprimentos" fontSize="14"/>
                         </rectangle>
@@ -2434,11 +2938,11 @@ end;
                         <!-- CARD DE NOVIDADES -->
                         <rectangle left="6" top="450" width="1036" height="224" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v1.7 — Rastreador oficial de XP (Niveis 1-30), botao + Adicionar XP no chat e teto progressivo de atributos (18 Recruta / 20 Lenda / 22 Epico)." fontColor="#EAE4D6" fontSize="13"/>
-                            <label left="20" top="74" width="996" height="24" text="• v1.6 — Correcao do atualizador automatico integrado (instalacao direta dentro do Firecast sem erro de cache)." fontColor="#EAE4D6" fontSize="13"/>
-                            <label left="20" top="102" width="996" height="24" text="• v1.5 — Definicao de CD nos testes (campo rapido ou pergunta ao rolar), Defesa do Alvo em ataques, dano corpo a corpo com +FOR e Descansos." fontColor="#A6AEBF" fontSize="13"/>
-                            <label left="20" top="130" width="996" height="24" text="• v1.3/1.4 — Graduacao numerica livre em todas as pericias com grau automatico e aba Autoria &amp; Atualizacao (por Mestre Carlos)." fontColor="#A6AEBF" fontSize="13"/>
-                            <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao automatica bem-sucedida, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="#7FC48C" fontSize="13" wordWrap="true"/>
+                            <label left="20" top="46" width="996" height="24" text="• v2.0 — Emporio Automatico na aba Inventario (155 itens do Tomo IX + Armas e Armaduras): compra direta com debito de moedas/banco, peso na carga e anuncio no chat." fontColor="#EAE4D6" fontSize="13"/>
+                            <label left="20" top="74" width="996" height="24" text="• v1.9 — Teto Progressivo de Graduacao de Pericias por Nivel (+4 no Niv. 1 ate +16 no Niv. 26-30) com trava rigida e alerta automatico." fontColor="#EAE4D6" fontSize="13"/>
+                            <label left="20" top="102" width="996" height="24" text="• v1.8 — Sistema Monetario Padrao Prata (Aureos/Pratas/Cobres, Cartas de Credito Corallis/Kalis, peso 100=1kg, Padrao de Vida Mensal e +/- Transacao)." fontColor="#A6AEBF" fontSize="13"/>
+                            <label left="20" top="130" width="996" height="24" text="• v1.5-v1.7 — Rastreador oficial de XP (Niveis 1-30), teto de atributos (18/20/22), definicao de CD, Defesa do Alvo, dano corpo a corpo +FOR e Descansos." fontColor="#A6AEBF" fontSize="13"/>
+                            <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="#7FC48C" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
                 </scrollBox>
@@ -2447,10 +2951,13 @@ end;
     </rectangle>
 
     <!-- DATALINKS NA RAIZ DO FORM (REGRA 2 DO SDK 3.7b) -->
-    <dataLink fields="{'nivel', 'kitSelecionado', 'kitNomeAtual', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'pvAtual', 'pvMax', 'armaduraDef', 'escudoDef', 'rdEspecial', 'defesaOutros', 'iniciativaOutros', 'multiAcoes', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'customSkillPage', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'bancoOrigem', 'padraoVida', 'cdTeste', 'defesaAlvo', 'xpAtual', 'pluginVersaoAtual', 'statusAtualizacao', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma1_danoExtra', 'arma1_margem', 'arma1_mult', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma2_danoExtra', 'arma2_margem', 'arma2_mult', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma3_danoExtra', 'arma3_margem', 'arma3_mult', 'arma4_attr', 'arma4_per', 'arma4_extra', 'arma4_danoExtra', 'arma4_margem', 'arma4_mult', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros'}" defaultValues="{'1', 'sem_kit', '00 - Sem Kit (Livre / Media Padrao)', '8', '1', '0.75', '18', '18', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '1', '0', '25', '0', '0', 'corallis', 'modesto', '0', '0', '0', 'v1.9', 'Clique no botao acima para checar e instalar atualizacoes automaticamente.', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}"/>
+    <dataLink fields="{'nivel', 'kitSelecionado', 'kitNomeAtual', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'pvAtual', 'pvMax', 'armaduraDef', 'escudoDef', 'rdEspecial', 'defesaOutros', 'iniciativaOutros', 'multiAcoes', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'customSkillPage', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'bancoOrigem', 'padraoVida', 'emporioCat', 'emporioItem', 'emporioQtd', 'emporioPreview', 'cdTeste', 'defesaAlvo', 'xpAtual', 'pluginVersaoAtual', 'statusAtualizacao', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma1_danoExtra', 'arma1_margem', 'arma1_mult', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma2_danoExtra', 'arma2_margem', 'arma2_mult', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma3_danoExtra', 'arma3_margem', 'arma3_mult', 'arma4_attr', 'arma4_per', 'arma4_extra', 'arma4_danoExtra', 'arma4_margem', 'arma4_mult', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros'}" defaultValues="{'1', 'sem_kit', '00 - Sem Kit (Livre / Media Padrao)', '8', '1', '0.75', '18', '18', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '1', '0', '25', '0', '0', 'corallis', 'modesto', 'pacotes', 'pacotes_1', '1', 'Selecione uma categoria e um item para comprar direto para o inventario.', '0', '0', '0', 'v2.0', 'Clique no botao acima para checar e instalar atualizacoes automaticamente.', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}"/>
 
     <dataLink fields="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'nivel', 'xpAtual', 'pvMax', 'kitSelecionado', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'armaduraDef', 'escudoDef', 'defesaOutros', 'iniciativaOutros', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'padraoVida', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma4_attr', 'arma4_per', 'arma4_extra'}">
         <event name="onChange"><![CDATA[recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'emporioCat', 'emporioItem', 'emporioQtd'}">
+        <event name="onChange"><![CDATA[atualizarItensEmporio(self, false);]]></event>
     </dataLink>
     
     <dataLink fields="{'csk1_nome', 'csk1_attr', 'csk1_grau', 'csk1_outros'}">

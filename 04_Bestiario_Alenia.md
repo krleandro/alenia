@@ -41,8 +41,8 @@
 - **Atributos**: `FOR 13 (+1)`, `DES 15 (+2)`, `CON 13 (+1)`, `INT 11 (0)`, `SAB 11 (0)`, `CAR 12 (+1)`
 - **Defesa**: Aparar `17` / Esquiva `17` / Desprevenido `12` *(Couro Batido `+2`, Treinado `+3` Aparar/Esquiva)* | **RD Especial**: `0`
 - **Ataques**:
-  - *Sabre de Abordagem*: `+5` (`1d6 + 2`, `18–20 / ×2`, Ágil DES; `+7` no 1º turno de abordagem)
-  - *Adaga de Arremesso*: `+5` (`1d4 + 2`, `19–20 / ×2`, 6m)
+  - *Sabre de Abordagem*: `+5` (`1d6 + 1`, `18–20 / ×2`, ataque Ágil DES `+2` + Treinado `+3`, dano com FOR `+1`; `+7` no 1º turno de abordagem)
+  - *Adaga de Arremesso*: `+5` (`1d4 + 1`, `19–20 / ×2`, 6m, dano com FOR `+1`)
 - **Em Cena**: *Sinais*: velas baixas sem bandeira na névoa, sinos abafados. *Motivação*: pilhagem de adamante, bebidas e mapas seguros. *Fuga*: pula ao mar ou corta cabos de abordagem se o capitão cair. *Interação*: pode ser contratado como guia no Mar Intransponível mediante pagamento adiantado ou `Submundo`.
 
 ### 4. Guerreiro Tribal de Gaddra (Vargheim / OX)
@@ -62,7 +62,7 @@
 - **Atributos**: `FOR 12 (+1)`, `DES 17 (+3)`, `CON 12 (+1)`, `INT 14 (+2)`, `SAB 13 (+1)`, `CAR 12 (+1)`
 - **Defesa**: Aparar `18` / Esquiva `23` / Desprevenido `12` *(Couro Batido `+2`, Treinado `+3` Aparar, Especialista `+8` Esquiva)* | **RD Especial**: `0`
 - **Ataques**:
-  - *Adaga Envenenada*: `+11` (`1d4 + 3`, `18–20 / ×2`, Especialista `+8`; pode fazer **2 ataques com `+3` cada**). **Veneno da Floresta Negra**: CON CD 16 ou sofre `1d6` de dano imediato + `-2` em testes por `3 rodadas` (metade do dano e sem penalidade se passar).
+  - *Adaga Envenenada*: `+11` (`1d4 + 1`, `18–20 / ×2`, Especialista `+8` + DES `+3`, dano com FOR `+1`; pode fazer **2 ataques com `+3` cada**). **Veneno da Floresta Negra**: CON CD 16 ou sofre `1d6` de dano imediato + `-2` em testes por `3 rodadas` (metade do dano e sem penalidade se passar).
   - *Besta Oculta*: `+11` (`1d8`, `19–20 / ×2`, mesmo veneno).
 - **Habilidade — Sombra Mortal**: contra alvo surpreso, soma `+2d6` de dano após a rolagem (não multiplica em crítico).
 - **Em Cena**: *Sinais*: pássaros subitamente calados, aroma leve de erva amarga, janelas destrancadas sem ruído. *Motivação*: cumprir o contrato e desaparecer sem deixar testemunhas. *Fuga*: usa bomba de fumaça e foge se o elemento surpresa falhar e ficar em desvantagem numérica. *Interação*: só negocia se o contratante for traído ou se oferecerem segredo de valor muito superior.
@@ -73,7 +73,7 @@
 - **Atributos**: `FOR 15 (+2)`, `DES 18 (+4)`, `CON 15 (+2)`, `INT 13 (+1)`, `SAB 16 (+3)`, `CAR 14 (+2)`
 - **Defesa**: Aparar `29` / Esquiva `25` / Desprevenido `13` *(Armadura Leve Reforçada `+3`, Mestre `+12` Aparar, Especialista `+8` Esquiva)* | **RD Especial**: `0`
 - **Ataques**:
-  - *Lâmina Oriental de Aço Superior*: `+16` (`2d8 + 4` [Maestria de Lenda], `18–20 / ×2`; **Múltiplas Ações**: até **2 golpes com `+6`**, **3 golpes com `+2`** ou **4 golpes com `+0`**!)
+  - *Lâmina Oriental de Aço Superior*: `+16` (`2d8 + 3` [Maestria de Lenda + FOR `+2` + Aço Superior `+1`], `18–20 / ×2`; **Múltiplas Ações**: até **2 golpes com `+6`**, **3 golpes com `+2`** ou **4 golpes com `+0`**!)
 - **Habilidade — Corte Silencioso**: em *Defesa Total*, recebe `+8` na Defesa (`37` Aparar) e pode reagir com 1 contra-ataque contra quem errar por 5 ou mais.
 - **Em Cena**: *Sinais*: postura serena, bainha impecável sem ornamentos desnecessários. *Motivação*: disciplina, juramento a um senhor ou proteção de uma escola. *Fuga*: recua taticamente apenas se encurralado por bestas/arqueiros sem honra. *Interação*: aceita duelo formal, pedidos de mediação ou diálogo respeitoso; despreza covardia.
 
@@ -103,7 +103,7 @@
 - **PV**: `28` *(Golpe Devastador: `19+`)* | **Iniciativa**: `+3` | **Deslocamento**: `9m` *(Natação `12m`)*
 - **Atributos**: `FOR 15 (+2)`, `DES 16 (+3)`, `CON 14 (+2)`, `INT 2 (-4)`, `SAB 12 (+1)`, `CAR 4 (-3)`
 - **Defesa**: Aparar `15` / Esquiva `18` / Desprevenido `12` *(Couro Escamoso `+2`, Treinado `+3` Esquiva)* | **RD Especial**: `0`
-- **Ataque**: *Bote Venenoso*: `+6` (`1d8 + 3`, `19–20 / ×2`). **Veneno Paralisante**: CON CD 16 ou fica **Paralisado por `2 rodadas`** (novo teste de CON CD 16 ao final de cada turno para encerrar).
+- **Ataque**: *Bote Venenoso*: `+6` (`1d8 + 2`, `19–20 / ×2`, dano com FOR `+2`). **Veneno Paralisante**: CON CD 16 ou fica **Paralisado por `2 rodadas`** (novo teste de CON CD 16 ao final de cada turno para encerrar).
 - **Em Cena**: *Sinais*: água parada formando círculos lentos, sapos repentinamente mudos. *Motivação*: emboscar presas quentes na água rasa. *Fuga*: mergulha na lama profunda se sofrer mais de `12` de dano em um turno. *Interação*: contornável passando por terreno seco com Sobrevivência CD 15.
 
 ### 10. Escorpião-Gigante das Dunas *(Estepes Amaldiçoadas / Gaddra)*
@@ -140,7 +140,7 @@
 - **Atributos**: `FOR 15 (+2)`, `DES 16 (+3)`, `CON 14 (+2)`, `INT 3 (-4)`, `SAB 14 (+2)`, `CAR 5 (-3)`
 - **Defesa**: Aparar `14` / Esquiva `17` / Desprevenido `11` *(Plumagem Densa `+1`, Treinado `+3` Esquiva)* | **RD Especial**: `0`
 - **Ataques**:
-  - *Garras em Mergulho*: `+6` (`1d8 + 3`, `20 / ×2`, Ágil DES; após mergulho de `9m+`, tenta **Empurrar** com `+6` vs. Atletismo/Acrobacia para arremessar o alvo do desfiladeiro)
+  - *Garras em Mergulho*: `+6` (`1d8 + 2`, `20 / ×2`, ataque Ágil DES, dano com FOR `+2`; após mergulho de `9m+`, tenta **Empurrar** com `+6` vs. Atletismo/Acrobacia para arremessar o alvo do desfiladeiro)
   - *Bico Quebra-Ossos*: `+5` (`1d8 + 2`, `20 / ×3` contra alvos caídos ou feridos)
 - **Em Cena**: *Sinais*: sombra rápida cruzando o desfiladeiro sem som de asas, ossos quebrados ao pé de paredões. *Motivação*: derrubar mulas de carga ou viajantes solitários para devorá-los lá embaixo. *Fuga*: ergue voo imediatamente se sofrer `12+` de dano à distância. *Interação*: caravaneiros de Gaddra amarram tiras de pano vermelho em varas altas (quebrando a linha de mergulho) ou sacrificam uma rês morta para liberar a passagem.
 
@@ -157,7 +157,7 @@
 - **PV**: `36` *(Golpe Devastador: `25+`)* | **Iniciativa**: `+3` | **Deslocamento**: `6m` *(Natação `13,5m`)*
 - **Atributos**: `FOR 14 (+2)`, `DES 16 (+3)`, `CON 14 (+2)`, `INT 5 (-3)`, `SAB 13 (+1)`, `CAR 12 (+1)`
 - **Defesa**: Aparar `15` / Esquiva `18` / Desprevenido `12` *(Couro Viscoso `+2`, Treinado `+3` Esquiva)* | **RD Especial**: `0`
-- **Ataque**: *Mordida Serrilhada*: `+6` (`1d8 + 3`, `19–20 / ×2`, Ágil DES; agarra com Atletismo CD 15 e arrasta a presa para águas profundas).
+- **Ataque**: *Mordida Serrilhada*: `+6` (`1d8 + 2`, `19–20 / ×2`, ataque Ágil DES, dano com FOR `+2`; agarra com Atletismo CD 15 e arrasta a presa para águas profundas).
 - **Habilidade — Mimetismo Vocal**: reproduz chamados de náufragos, choro ou sinos de navio até `90m` (Percepção ou Intuição CD 16 para notar a cadência exatamente repetida na bruma).
 - **Em Cena**: *Sinais*: pedido de socorro vindo de pedras onde não há destroços, cheiro forte de peixe podre e maresia. *Motivação*: atrair botes para os recifes e devorar tripulantes isolados. *Fuga*: mergulha imediatamente se perder metade do PV ou se exposta a luz intensa de lanterna de óleo. *Interação*: marinheiros veteranos gritam uma pergunta específica — a Cantora só repete a frase, denunciando a emboscada.
 
@@ -175,7 +175,7 @@
 - **PV**: `30` *(Enxame: sofre metade do dano de armas perfurantes; dano dobrado de fogo/óleo em chamas; imune a Golpe Devastador singular)* | **Iniciativa**: `+3` | **Deslocamento**: `3m` *(Natação `10,5m`)*
 - **Atributos**: `FOR 10 (0)`, `DES 16 (+3)`, `CON 13 (+1)`, `INT 1 (-5)`, `SAB 10 (0)`, `CAR 2 (-4)`
 - **Defesa**: Aparar `13` / Esquiva `16` / Desprevenido `10` *(Treinado `+3` Esquiva)* | **RD Especial**: `0`
-- **Ataque**: *Envolvimento Cáustico*: `+6` (`1d6 + 3` mordidas e muco ácido; alvo faz CON CD 15 ou sofre `-2` em testes manuais por `2 rodadas`). Corrói cordas e redes comuns em `2 rodadas`.
+- **Ataque**: *Envolvimento Cáustico*: `+6` (`1d6 + 3` [dano ácido/enxame de múltiplas mordidas]; alvo faz CON CD 15 ou sofre `-2` em testes manuais por `2 rodadas`). Corrói cordas e redes comuns em `2 rodadas`.
 - **Em Cena**: *Sinais*: brilho esverdeado fraco sob a água parada, cheiro ácido de vinagre podre, âncoras subindo roídas. *Motivação*: alimentar-se de matéria orgânica em águas calmas à noite. *Fuga*: dispersa-se instantaneamente diante de óleo aceso na superfície ou água fervente. *Interação*: navegadores experientes içam botes e evitam ancorar em enseadas sem correnteza na lua nova.
 
 ### 18. Leviatã-dos-Recifes *(Mar dos Corais / O Ferro Velho — Patamar Lenda)*
@@ -198,7 +198,7 @@
 - **PV**: `40` *(Golpe Devastador: `27+`; sofre `+1d6` extra de dano contra fogo vivo)* | **Iniciativa**: `+4` | **Deslocamento**: `10,5m`
 - **Atributos**: `FOR 15 (+2)`, `DES 17 (+3)`, `CON 14 (+2)`, `INT 6 (-2)`, `SAB 13 (+1)`, `CAR 8 (-1)`
 - **Defesa**: Aparar `14` / Esquiva `17` / Desprevenido `11` *(Pele Seca `+1`, Treinado `+3` Esquiva)* | **RD Especial**: `0`
-- **Ataque**: *Garras Alongadas (Alcance 3m)*: `+6` (`1d8 + 3`, `19–20 / ×2`, Ágil DES; soma `+1d6` de dano contra alvos surpresos).
+- **Ataque**: *Garras Alongadas (Alcance 3m)*: `+6` (`1d8 + 2`, `19–20 / ×2`, ataque Ágil DES, dano com FOR `+2`; soma `+1d6` de dano contra alvos surpresos).
 - **Habilidade — Eco Quebrado**: repete na escuridão apenas uma frase curta de `3–4` palavras dita por sua última presa; quem o ouve pela primeira vez sem vê-lo faz SAB CD 15 *(soma `Fé Verdadeira`)* ou sofre `-2` na Iniciativa e em Percepção por `2 rodadas`.
 - **Em Cena**: *Sinais*: mesma frase suplicante repetida com exatamente o mesmo tom a cada minuto na névoa, roupas rasgadas penduradas em galhos altos. *Motivação*: atrair solitários para longe da fogueira. *Fuga*: foge para o pântano se cercado por duas ou mais fontes de fogo vivo. *Interação*: nunca responde a perguntas novas — manter a fogueira alta e ninguém se afastar sozinho anula sua vantagem.
 
@@ -216,7 +216,7 @@
 - **PV**: `34` *(Golpe Devastador: `23+`)* | **Iniciativa**: `+4` | **Deslocamento**: `9m` *(Escalada `9m`)*
 - **Atributos**: `FOR 14 (+2)`, `DES 17 (+3)`, `CON 14 (+2)`, `INT 2 (-4)`, `SAB 13 (+1)`, `CAR 3 (-4)`
 - **Defesa**: Aparar `16` / Esquiva `19` / Desprevenido `13` *(Carapaça Ferrosa `+3`, Treinado `+3` Esquiva)* | **RD Especial**: `0`
-- **Ataque**: *Quelíceras*: `+6` (`1d8 + 3`, `19–20 / ×2`, Ágil DES + **Veneno Entorpecente**: CON CD 15 ou sofre `-2` em DES e Deslocamento reduzido à metade por `3 rodadas`).
+- **Ataque**: *Quelíceras*: `+6` (`1d8 + 2`, `19–20 / ×2`, ataque Ágil DES, dano com FOR `+2` + **Veneno Entorpecente**: CON CD 15 ou sofre `-2` em DES e Deslocamento reduzido à metade por `3 rodadas`).
 - **Habilidade — Fios de Limalha**: túneis de seu ninho têm fios metálicos quase invisíveis (Percepção CD 16 com lanterna; quem corre ou investe sem notar sofre `1d8` cortante e fica **Preso** — Atletismo CD 15 para se libertar sem sofrer `1d4` adicional).
 - **Em Cena**: *Sinais*: brilho metálico finíssimo quando a lanterna raspa na parede, ratos e morcegos fatiados pendurados no teto. *Motivação*: caçar por vibração em galerias abandonadas. *Fuga*: recua para fendas estreitas se os fios forem queimados ou se perder metade do PV. *Interação*: mineradores experientes avançam testando o ar à frente com um bastão longo ou tocha baixa para revelar e romper os fios antes de passar.
 
@@ -252,7 +252,7 @@
 - **PV**: `26` *(Bando aéreo: metade do dano de armas de alvo único; vulnerável a fogo, fumaça e redes; imune a Golpe Devastador)* | **Iniciativa**: `+4` | **Deslocamento**: `3m` *(Voo `15m`)*
 - **Atributos**: `FOR 8 (-1)`, `DES 17 (+3)`, `CON 12 (+1)`, `INT 5 (-3)`, `SAB 14 (+2)`, `CAR 6 (-2)`
 - **Defesa**: Aparar `13` / Esquiva `16` / Desprevenido `10` *(Treinado `+3` Esquiva)* | **RD Especial**: `0`
-- **Ataque**: *Nuvem de Bicos*: `+6` (`1d6 + 3`, `20 / ×2`; alvo faz DES CD 15 ou fica **Ofuscado** `[-3 em ataques]` por `1 rodada`).
+- **Ataque**: *Nuvem de Bicos*: `+6` (`1d6 + 2` [dano fixo de bando aéreo], `20 / ×2`; alvo faz DES CD 15 ou fica **Ofuscado** `[-3 em ataques]` por `1 rodada`).
 - **Habilidade — Olhos da Rede**: nunca pousam a menos de `6m` de fogo vivo. Se observarem o grupo por `10 minutos` sem serem espantados, transmitem sua posição aproximada a agentes ligados à rede de Thanatos/Incognito na região.
 - **Em Cena**: *Sinais*: dezenas de corvos perfeitamente imóveis e mudos acompanhando o grupo de telhado em telhado. *Motivação*: vigiar intrusos e atrasar fugitivos perto da costa norte. *Fuga*: dispersam-se imediatamente com fumaça densa, fogo ou ao perder metade do PV. *Interação*: abater um único corvo e abrir seu papo (Medicina/Sobrevivência CD 14) fornece pista física crucial da rede do Regente.
 
@@ -286,7 +286,7 @@
 - **PV**: `96` *(Imune a venenos e sangramento)* | **Iniciativa**: `+4` | **Deslocamento**: `12m`
 - **Atributos**: `FOR 16 (+3)`, `DES 18 (+4)`, `CON 18 (+4)`, `INT 14 (+2)`, `SAB 16 (+3)`, `CAR 14 (+2)`
 - **Defesa**: Aparar `22` / Esquiva `22` / Desprevenido `16` *(Aura Sombria `+6`, Destreinado Aparar/Esquiva compensado por DES +4 e deslocamento etéreo `+2`)* | **RD Especial**: `5` *(ignorado apenas por **Adamante Puro**, fogo intenso ou rituais de **Dom Antigo / Fé Verdadeira**)*
-- **Ataques**: *Toque do Esquecimento*: `+14` (`2d8 + 4` frio/necrótico, `19–20 / ×3`; alvo faz CON CD 18 ou sofre `+1` nível de Exaustão imediato).
+- **Ataques**: *Toque do Esquecimento*: `+14` (`2d8 + 4` [dano frio/necrótico etéreo — bônus sobrenatural], `19–20 / ×3`; alvo faz CON CD 18 ou sofre `+1` nível de Exaustão imediato).
 - **Sussurro das Eras**: como ação livre, apaga chamas comuns num raio de `6m`; exige SAB CD 19 (soma `Fé Verdadeira`) para manter a coragem sem recuar.
 - **Em Cena**: *Sinais*: geada repentina formando padrões geométricos, vozes de entes falecidos sussurradas pelo vento. *Motivação*: enigmática — proteger a *Cidadela Sem Nome* ou testar intrusos marcados por *Thanatos*. *Fuga*: dissolve-se na nevasca ao amanhecer pleno ou diante de ritual bem-sucedido. *Interação*: em vez de atacar imediatamente, pode oferecer uma visão ou cobrar um sacrifício/memória em troca de passagem.
 
@@ -310,7 +310,7 @@
 - **Atributos**: `FOR 14 (+2)`, `DES 17 (+3)`, `CON 16 (+3)`, `INT 15 (+2)`, `SAB 16 (+3)`, `CAR 18 (+4)`
 - **Defesa**: Aparar `28` / Esquiva `24` / Desprevenido `13` *(Brigantina Leve/Couro Reforçado `+3`, Mestre `+12` Aparar, Especialista `+8` Esquiva)* | **RD Especial**: `2` *(medalhão de adamante antigo amplificador da rede)*
 - **Ataques**:
-  - *Sabre de Adamante Antigo*: `+16` (`2d6 + 5` [Maestria de Lenda + Adamante], `18–20 / ×2`; **Múltiplas Ações**: até **2 golpes com `+6`** ou **3 golpes com `+2`**)
+  - *Sabre de Adamante Antigo*: `+16` (`2d6 + 4` [Maestria de Lenda + FOR `+2` + Adamante `+2`], `18–20 / ×2`; **Múltiplas Ações**: até **2 golpes com `+6`** ou **3 golpes com `+2`**)
 - **Habilidades**:
   - *Voz de Quem Partiu*: como Ação Principal, sussurra memórias autênticas de um ente falecido do alvo (SAB CD 17, soma `Fé Verdadeira`, ou o alvo hesita e sofre `-3` em ataques contra ela por 1 rodada).
   - *Tripulação em Confluência*: enquanto um tripulante seu estiver a até `18m`, pode usar sua Reação para impor `-4` a um ataque contra si.
