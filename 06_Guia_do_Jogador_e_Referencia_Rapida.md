@@ -11,7 +11,7 @@ Você é um **humano explorador** em **Alenia**, um mundo medieval sombrio sem p
 
 ### 2. Escolha sua Origem *(Livre — Separada do Kit)*
 Sua cidade natal define sua cultura, sotaque e sobrenome de bastardo (se aplicável), mas **nunca limita seu ofício**:
-- **Aurora** *(Altavanne, Merlinport, Dahrma, Aeraneas, Vaarsa, Yõketsu)* — nobreza, comércio fluvial, forja de adamante. *(Bastardos: **Cinza** | Religião oficial: **Igreja da Chama Solar** — culto ao **Criador** e aos **Seis Aspectos** em três pares: **Dia & Noite**, **Colheita & Passagem**, **Forja & Lar**).*
+- **Aurora** *(Altavanne, Merlinport, Dahrma, Aeraneas, Vaarsa, Yõketsu)* — nobreza, comércio fluvial, forja de adamante. *(Bastardos: **Cinza** | Religião oficial: **Igreja da Chama Solar** — um só **Criador** em **Seis Personas vivas** organizadas em três pares: **O Vigia & A Guardiã** [Dia/Noite], **A Semeadora & O Barqueiro** [Colheita/Passagem], **O Artífice & A Anfitriã** [Forja/Lar]).*
 - **Cidade Suspensa *(Povo das Florestas)*** — autonomia arbórea, arqueiros, ervas e pactos antigos. *(Bastardos: **Bruma**)*
 - **Corallis** *(Alineus, Baldbella, Biemont, Stoneforge)* — ciência sem pólvora, medicina, náutica e recifes do Mar dos Corais. *(Bastardos: **Coral**)*
 - **Gaddra** *(OX, Naasar, Vargheim)* — clãs do deserto, Lei da Hospitalidade, oásis e sal. *(Bastardos: **Duna**)*

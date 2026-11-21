@@ -245,7 +245,7 @@
 - **Atributo Especial Inicial**: **Fé Verdadeira `1`**
 - **Perícias Iniciais (`+3`)**: Religião & Ocultismo, Persuasão, Medicina & Cirurgia, Intuição, História & Lendas
 - **Equipamento Inicial**: Cajado ou maça simples, símbolo sagrado autêntico *(em Aurora, o Sol de Seis Raios da Igreja da Chama Solar)*, vestes clericais, unguentos e `25 PP`.
-- **Habilidade — Conforto da Fé**: 1× por descanso, uma prece sincera *(como aos Aspectos do Lar, da Noite ou do Dia, ou à sua tradição)* concede `+2` em testes mentais e contra medo/horror para aliados na cena.
+- **Habilidade — Conforto da Fé**: 1× por descanso, uma prece sincera *(como às Personas da Guardiã, da Anfitriã ou do Vigia, ou à sua tradição)* concede `+2` em testes mentais e contra medo/horror para aliados na cena.
 
 ### 34. Inquisidor
 - **Evolução**: `DV 1d8` | `Per. Base 1` (`Mult. INT 0.75`)
