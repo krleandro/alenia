@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Empório &amp; Ofícios — Alenia RPG</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+    --desk: #171411;
+    --vellum: #f7f1e3;
+    --vellum-alt: #efe6d2;
+    --vellum-card: #f2ead8;
+    --ink: #221c16;
+    --ink-soft: #4e4336;
+    --crimson: #7a1f1d;
+    --crimson-dark: #571412;
+    --gold: #9a7b3b;
+    --gold-light: #cdb06e;
+    --border: #cfc2a5;
+    --sidebar-w: 256px;
+    --topbar-h: 52px;
+    --footbar-h: 56px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--desk); color: var(--ink); }
+body {
+    margin: 0;
+    font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 16.5px;
+    line-height: 1.56;
+    background: radial-gradient(circle at top, #2a241d 0%, #171411 60%, #0e0c0a 100%);
+    min-height: 100vh;
+}
+
+/* TOP BAR */
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h);
+    background: rgba(18, 15, 12, 0.97);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.45);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; z-index: 1000; backdrop-filter: blur(8px);
+}
+.topbar-brand {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.14em; color: var(--gold-light); text-decoration: none; white-space: nowrap;
+}
+.topbar-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.topbar-nav a, .btn-print, .btn-lock, .btn-toc-toggle {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #ded5c3; text-decoration: none;
+    padding: 5px 8px; border-radius: 3px; border: 1px solid transparent;
+    transition: all 0.16s ease; cursor: pointer; background: transparent;
+}
+.topbar-nav a:hover, .topbar-nav a.active {
+    color: var(--gold-light); border-color: rgba(154, 123, 59, 0.55); background: rgba(154, 123, 59, 0.12);
+}
+.btn-print { background: var(--crimson); border-color: var(--gold); color: #f7f1e3; font-weight: 600; }
+.btn-print:hover { background: #922624; color: #fff; }
+.btn-lock { display: none; border-color: rgba(205, 176, 110, 0.55); color: var(--gold-light); background: rgba(154, 123, 59, 0.14); }
+.btn-lock.visible { display: inline-block; }
+.btn-lock:hover { background: rgba(122, 31, 29, 0.65); color: #fff; }
+.btn-toc-toggle { border-color: rgba(154, 123, 59, 0.35); color: #d4cab6; }
+.btn-toc-toggle:hover { color: var(--gold-light); border-color: var(--gold); }
+
+/* SIDEBAR TOC */
+.sidebar {
+    position: fixed; top: var(--topbar-h); left: 0; bottom: var(--footbar-h); width: var(--sidebar-w);
+    background: rgba(20, 18, 16, 0.98); border-right: 1px solid rgba(154, 123, 59, 0.38);
+    padding: 16px 12px 24px; overflow-y: auto; z-index: 950;
+    transition: transform 0.22s ease;
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
+}
+body.sidebar-hidden .sidebar { transform: translateX(-100%); box-shadow: none; }
+body.sidebar-hidden .book-shell { margin-left: 0; }
+.sidebar-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold-light);
+    border-bottom: 1px solid rgba(154, 123, 59, 0.35); padding-bottom: 8px; margin: 0 0 10px 0;
+}
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin: 2px 0; }
+.toc-list a {
+    display: block; text-decoration: none; color: #cfc6b4; font-size: 14px;
+    line-height: 1.32; padding: 5px 8px; border-radius: 3px; border-left: 2px solid transparent;
+}
+.toc-list a:hover, .toc-list a.toc-active {
+    color: var(--gold-light); background: rgba(154, 123, 59, 0.14); border-left-color: var(--gold);
+}
+.toc-h2 a { font-weight: 600; color: #e8decb; margin-top: 5px; }
+.toc-h3 a { padding-left: 16px; font-size: 13px; color: #b5ab98; }
+
+/* =====================================================
+   HARDCOVER BOOK READER MODE (DEFAULT ON ALL TOMES)
+   ===================================================== */
+body.book-mode {
+    overflow: hidden;
+}
+
+.reader-stage {
+    margin-left: 0;
+    margin-top: var(--topbar-h);
+    height: calc(100vh - var(--topbar-h) - var(--footbar-h));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 46px;
+    position: relative;
+}
+
+/* Source container hidden when in paginated book-mode, visible in scroll-mode or print */
+body.book-mode .book-shell { display: none; }
+body.scroll-mode .reader-stage,
+body.scroll-mode .reader-footer-bar .pager-controls,
+body.scroll-mode .font-scale-group { display: none; }
+body.scroll-mode { overflow: auto; }
+body.scroll-mode .book-shell { padding-bottom: 84px; }
+
+/* Book Hardcover Leather Binding + Double Page Spread */
+.hardcover-wrap {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    background: linear-gradient(135deg, #3c2218 0%, #26140e 50%, #3a2016 100%);
+    padding: 6px 8px;
+    border-radius: 7px;
+    border: 1px solid rgba(154, 123, 59, 0.55);
+    box-shadow:
+        0 26px 70px rgba(0, 0, 0, 0.78),
+        0 6px 18px rgba(0, 0, 0, 0.55),
+        inset 0 0 0 1px rgba(205, 176, 110, 0.22);
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+}
+
+.book-spread {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    position: relative;
+    perspective: 2600px;
+    transform-style: preserve-3d;
+}
+
+/* =====================================================
+   3D PHYSICAL PAGE-TURN ANIMATION
+   ===================================================== */
+.flip-sheet {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: 30;
+    transform-style: preserve-3d;
+    pointer-events: none;
+    will-change: transform;
+}
+.flip-sheet.flip-next {
+    left: 50%;
+    width: 50%;
+    transform-origin: left center;
+    animation: turnPageNext 560ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+.flip-sheet.flip-prev {
+    left: 0;
+    width: 50%;
+    transform-origin: right center;
+    animation: turnPagePrev 560ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+.flip-sheet.flip-single-next {
+    left: 0;
+    width: 100%;
+    transform-origin: left center;
+    animation: turnSingleNext 480ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+.flip-sheet.flip-single-prev {
+    left: 0;
+    width: 100%;
+    transform-origin: left center;
+    animation: turnSinglePrev 480ms cubic-bezier(0.42, 0.04, 0.22, 1) forwards;
+}
+
+.flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+}
+.flip-face > .leaf {
+    width: 100% !important;
+    height: 100% !important;
+}
+.flip-face::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0;
+}
+.flip-sheet.flip-next .flip-front::before {
+    background: linear-gradient(90deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeFrontHalf 560ms ease-in-out forwards;
+}
+.flip-sheet.flip-next .flip-back::before {
+    background: linear-gradient(270deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeBackHalf 560ms ease-in-out forwards;
+}
+.flip-sheet.flip-prev .flip-front::before {
+    background: linear-gradient(270deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeFrontHalf 560ms ease-in-out forwards;
+}
+.flip-sheet.flip-prev .flip-back::before {
+    background: linear-gradient(90deg, rgba(24,16,8,0.28) 0%, rgba(24,16,8,0.08) 45%, rgba(255,250,235,0.16) 100%);
+    animation: shadeBackHalf 560ms ease-in-out forwards;
+}
+.flip-back.flip-back-next { transform: rotateY(180deg); }
+.flip-back.flip-back-prev { transform: rotateY(-180deg); }
+
+.flip-cast-shadow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 20;
+    pointer-events: none;
+}
+.flip-cast-shadow.shadow-next {
+    right: 0;
+    background: linear-gradient(90deg, rgba(22, 14, 7, 0.36) 0%, rgba(22, 14, 7, 0.12) 45%, transparent 100%);
+    animation: castShadowSweep 560ms ease-in-out forwards;
+}
+.flip-cast-shadow.shadow-prev {
+    left: 0;
+    background: linear-gradient(270deg, rgba(22, 14, 7, 0.36) 0%, rgba(22, 14, 7, 0.12) 45%, transparent 100%);
+    animation: castShadowSweep 560ms ease-in-out forwards;
+}
+
+@keyframes turnPageNext {
+    0%   { transform: rotateY(0deg); box-shadow: -2px 0 8px rgba(0,0,0,0.08); }
+    45%  { box-shadow: -22px 10px 36px rgba(15, 9, 4, 0.42); }
+    55%  { box-shadow: 22px 10px 36px rgba(15, 9, 4, 0.42); }
+    100% { transform: rotateY(-180deg); box-shadow: 2px 0 8px rgba(0,0,0,0.06); }
+}
+@keyframes turnPagePrev {
+    0%   { transform: rotateY(0deg); box-shadow: 2px 0 8px rgba(0,0,0,0.08); }
+    45%  { box-shadow: 22px 10px 36px rgba(15, 9, 4, 0.42); }
+    55%  { box-shadow: -22px 10px 36px rgba(15, 9, 4, 0.42); }
+    100% { transform: rotateY(180deg); box-shadow: -2px 0 8px rgba(0,0,0,0.06); }
+}
+@keyframes turnSingleNext {
+    0%   { transform: rotateY(0deg); opacity: 1; box-shadow: 0 8px 24px rgba(0,0,0,0.22); }
+    72%  { opacity: 0.94; box-shadow: -20px 10px 34px rgba(0,0,0,0.42); }
+    100% { transform: rotateY(-108deg); opacity: 0; }
+}
+@keyframes turnSinglePrev {
+    0%   { transform: rotateY(-102deg); opacity: 0.12; box-shadow: -20px 10px 34px rgba(0,0,0,0.42); }
+    35%  { opacity: 0.96; }
+    100% { transform: rotateY(0deg); opacity: 1; box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+}
+@keyframes shadeFrontHalf {
+    0%   { opacity: 0; }
+    48%  { opacity: 1; }
+    52%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+@keyframes shadeBackHalf {
+    0%   { opacity: 0; }
+    48%  { opacity: 0; }
+    52%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+@keyframes castShadowSweep {
+    0%   { opacity: 0.78; }
+    50%  { opacity: 0.35; }
+    100% { opacity: 0; }
+}
+
+.book-spread.anim-cover-open {
+    animation: coverOpenSwing 500ms cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
+}
+.book-spread.anim-cover-close {
+    animation: coverCloseSwing 440ms cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
+}
+@keyframes coverOpenSwing {
+    0%   { opacity: 0.35; transform: scale(0.95) rotateY(-12deg); }
+    100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+}
+@keyframes coverCloseSwing {
+    0%   { opacity: 0.4; transform: scale(1.03) rotateY(14deg); }
+    100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+}
+
+/* Interactive tactile page corners */
+.leaf-corner-btn {
+    position: absolute;
+    bottom: 0;
+    width: 44px;
+    height: 44px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 12;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+.leaf-corner-next {
+    right: 0;
+    background: linear-gradient(315deg, rgba(154,123,59,0.22) 0%, rgba(154,123,59,0.12) 28%, transparent 50%);
+}
+.leaf-corner-next:hover {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(315deg, #d7c7a7 0%, #efe6d3 36%, rgba(90,62,32,0.24) 48%, transparent 52%);
+}
+.leaf-corner-prev {
+    left: 0;
+    background: linear-gradient(45deg, rgba(154,123,59,0.22) 0%, rgba(154,123,59,0.12) 28%, transparent 50%);
+}
+.leaf-corner-prev:hover {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(45deg, #d7c7a7 0%, #efe6d3 36%, rgba(90,62,32,0.24) 48%, transparent 52%);
+}
+
+.leaf {
+    width: var(--leaf-w, 660px);
+    height: var(--leaf-h, 780px);
+    background: var(--vellum);
+    color: var(--ink);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #c9ba9a;
+}
+
+.leaf.leaf-left {
+    border-radius: 3px 0 0 3px;
+    border-right: none;
+    background: linear-gradient(90deg, #f3ecdc 0%, #f8f2e4 7%, #f8f2e4 91%, #e7dcc4 98%, #d7c7a7 100%);
+    box-shadow: inset -16px 0 24px -12px rgba(45, 30, 15, 0.34);
+}
+
+.leaf.leaf-right {
+    border-radius: 0 3px 3px 0;
+    border-left: 1px solid rgba(72, 52, 32, 0.22);
+    background: linear-gradient(90deg, #d8c8a9 0%, #e9dec7 3%, #f8f2e4 10%, #f8f2e4 93%, #f1e8d6 100%);
+    box-shadow: inset 16px 0 24px -12px rgba(45, 30, 15, 0.34);
+}
+
+.leaf.leaf-single {
+    border-radius: 3px;
+    background: linear-gradient(90deg, #efe6d4 0%, #f8f2e4 5%, #f8f2e4 95%, #efe6d4 100%);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.leaf::after {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border: 1px solid rgba(154, 123, 59, 0.26);
+    pointer-events: none;
+}
+
+.leaf-header {
+    height: 30px;
+    padding: 8px 34px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+.leaf-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 10px 34px 10px;
+    overflow: hidden;
+    font-size: calc(17.5px * var(--font-scale, 1));
+    line-height: 1.54;
+}
+.leaf-body h1.book-h1 { font-size: calc(24px * var(--font-scale, 1)); }
+.leaf-body h2 { font-size: calc(19.5px * var(--font-scale, 1)); margin: 14px 0 8px; }
+.leaf-body h3 { font-size: calc(16px * var(--font-scale, 1)); margin: 12px 0 6px; }
+.leaf-body .table-wrap { overflow-x: hidden; margin: 8px 0 11px; }
+.leaf-body table { width: 100%; font-size: calc(13.8px * var(--font-scale, 1)); line-height: 1.35; border-collapse: collapse; }
+.leaf-body thead th { padding: 5px 6px; font-size: calc(10px * var(--font-scale, 1)); overflow-wrap: break-word; }
+.leaf-body tbody td { padding: 5px 6px; overflow-wrap: break-word; word-break: normal; }
+.leaf-body table.table-dense { font-size: calc(12.2px * var(--font-scale, 1)); line-height: 1.3; }
+.leaf-body table.table-dense thead th { padding: 4px 5px; font-size: calc(9.3px * var(--font-scale, 1)); }
+.leaf-body table.table-dense tbody td { padding: 4px 5px; }
+.leaf-body table.table-ultra-dense { font-size: calc(11.1px * var(--font-scale, 1)); line-height: 1.25; }
+.leaf-body table.table-ultra-dense thead th { padding: 3.5px 4px; font-size: calc(8.6px * var(--font-scale, 1)); letter-spacing: 0.04em; }
+.leaf-body table.table-ultra-dense tbody td { padding: 3.5px 4px; }
+.leaf-body .nowrap-cell { white-space: nowrap; }
+.leaf-body blockquote.bq-cont { margin-top: 4px; border-left-style: dashed; }
+.leaf-body .callout { font-size: calc(16px * var(--font-scale, 1)); }
+.leaf-body .entry-card { font-size: calc(14.2px * var(--font-scale, 1)); line-height: 1.36; padding: 9px 12px 7px; margin: 6px 0 8px; }
+.leaf-body .entry-card.entry-card-cont { border-top-style: dashed; border-top-width: 2px; }
+.leaf-body .entry-card h3 { font-size: calc(15.5px * var(--font-scale, 1)); margin: 0 0 5px; padding-bottom: 3px; }
+.leaf-body .entry-card p { margin-bottom: 5px; }
+.leaf-body .entry-card ul { margin: 3px 0 4px; padding-left: 17px; }
+.leaf-body .entry-card li { margin-bottom: 2.5px; }
+.leaf-body .atlas-plate { margin: 8px 0 10px; padding: 6px; }
+.leaf-body .atlas-plate img { max-height: calc(var(--leaf-h, 760px) * 0.48); width: auto; max-width: 100%; height: auto; margin: 0 auto; }
+.leaf-body .atlas-plate.creature-plate { margin: 5px 0 7px; padding: 4px; background: #e8dec7; border: 1px solid var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
+.leaf-body .atlas-plate.creature-plate img { width: 100%; aspect-ratio: 16 / 9; max-height: min(250px, calc(var(--leaf-h, 760px) * 0.27)); object-fit: cover; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.creature-plate { margin: 7px 0 9px; padding: 5px; background: #e8dec7; border: 1px solid var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
+.creature-plate img { width: 100%; aspect-ratio: 16 / 9; max-height: 280px; object-fit: cover; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+
+.leaf-footer {
+    height: 30px;
+    padding: 0 34px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    flex-shrink: 0;
+}
+
+.leaf.leaf-blank {
+    background: linear-gradient(90deg, #e5dac3 0%, #f2ead8 14%, #f4ede0 100%);
+}
+.leaf-blank-ornament {
+    margin: auto;
+    font-family: 'Cinzel', Georgia, serif;
+    color: rgba(154, 123, 59, 0.38);
+    font-size: 28px;
+    letter-spacing: 0.2em;
+}
+
+/* Side floating turn arrows */
+.side-turn-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 70px;
+    background: rgba(20, 17, 14, 0.85);
+    color: var(--gold-light);
+    border: 1px solid rgba(154, 123, 59, 0.5);
+    border-radius: 4px;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.16s ease;
+}
+.side-turn-btn:hover:not(:disabled) {
+    background: var(--crimson);
+    color: #fff;
+    border-color: var(--gold-light);
+}
+.side-turn-btn:disabled { opacity: 0.22; cursor: default; }
+.side-turn-prev { left: 6px; }
+.side-turn-next { right: 6px; }
+
+.font-scale-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.font-scale-label {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    color: #bfb5a2;
+    min-width: 38px;
+    text-align: center;
+}
+
+/* BOTTOM READER BAR */
+.reader-footer-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: var(--footbar-h);
+    background: rgba(18, 15, 12, 0.97);
+    border-top: 1px solid rgba(154, 123, 59, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    z-index: 1000;
+    gap: 12px;
+}
+
+.pager-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 auto;
+}
+
+.pager-btn {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    background: #231e19;
+    color: #ede4d1;
+    border: 1px solid rgba(154, 123, 59, 0.5);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.pager-btn:hover:not(:disabled) { background: var(--crimson); color: #fff; border-color: var(--gold-light); }
+.pager-btn:disabled { opacity: 0.35; cursor: default; }
+
+.pager-status {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+    min-width: 150px;
+    text-align: center;
+}
+
+.pager-jump {
+    width: 58px;
+    padding: 5px 6px;
+    text-align: center;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 12px;
+    background: #12100d;
+    color: #f7f1e3;
+    border: 1px solid rgba(154, 123, 59, 0.5);
+    border-radius: 3px;
+}
+
+.view-mode-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mode-btn {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 9px;
+    background: transparent;
+    color: #bfb5a2;
+    border: 1px solid rgba(154, 123, 59, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+}
+.mode-btn.active, .mode-btn:hover {
+    background: rgba(154, 123, 59, 0.2);
+    color: var(--gold-light);
+    border-color: var(--gold);
+}
+
+/* SCROLL / PORTAL LAYOUT */
+.book-shell { margin-left: var(--sidebar-w); padding: 78px 26px 64px; display: flex; justify-content: center; }
+.book-shell.no-sidebar { margin-left: 0; }
+.book-page {
+    width: 100%; max-width: 920px; background: var(--vellum); color: var(--ink);
+    padding: 52px 60px 70px;
+    box-shadow: 0 24px 65px rgba(0,0,0,0.62), 0 0 0 1px rgba(154, 123, 59, 0.35);
+    border-radius: 3px; position: relative;
+}
+.book-page::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px solid rgba(154, 123, 59, 0.32); pointer-events: none;
+}
+
+/* COVER PAGE */
+.cover-page {
+    min-height: 580px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 34px 28px; margin-bottom: 42px;
+    border: 2px solid var(--crimson); outline: 1px solid var(--gold); outline-offset: -7px;
+    background: radial-gradient(circle at center, #fbf7ee 0%, #f3ead6 100%);
+    page-break-after: always; break-after: page;
+}
+.leaf-body .cover-page {
+    min-height: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 18px 20px;
+    overflow: hidden;
+}
+.leaf-body .cover-title {
+    font-size: clamp(22px, calc(var(--leaf-h, 760px) * 0.044), 36px);
+}
+.leaf-body .cover-subtitle {
+    font-size: clamp(14.5px, calc(var(--leaf-h, 760px) * 0.023), 19px);
+    margin: 8px 0 4px;
+}
+.leaf-body .cover-epigraph {
+    font-size: clamp(13.5px, calc(var(--leaf-h, 760px) * 0.021), 17px);
+    margin: 10px auto 6px;
+}
+.leaf-body .cover-thumb {
+    max-height: calc(var(--leaf-h, 760px) * 0.34);
+    margin: 10px auto;
+}
+.leaf-body .cover-edition {
+    padding-top: 10px;
+}
+.cover-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--crimson); margin-bottom: 10px;
+}
+.cover-rule {
+    width: 150px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
+    margin: 14px auto;
+}
+.cover-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 38px; font-weight: 800; line-height: 1.14;
+    letter-spacing: 0.08em; color: var(--ink); margin: 0; text-transform: uppercase;
+}
+.cover-subtitle {
+    font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 20px;
+    color: var(--ink-soft); margin: 10px 0 6px; max-width: 560px;
+}
+.cover-epigraph { font-style: italic; font-size: 18px; color: var(--crimson-dark); max-width: 500px; margin: 16px auto 10px; }
+.cover-thumb {
+    max-width: 100%; max-height: 290px; border: 2px solid var(--gold);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin: 14px auto; border-radius: 2px;
+}
+.cover-edition {
+    margin-top: auto; padding-top: 18px; font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft);
+}
+
+/* GM ENCRYPTED VAULT GATE */
+.gm-gate-box {
+    margin: 16px 0;
+    padding: 28px 22px;
+    text-align: center;
+    background: linear-gradient(180deg, #1d1916 0%, #151210 100%);
+    color: #efe6d2;
+    border: 2px solid var(--gold);
+    outline: 1px solid var(--crimson);
+    outline-offset: -6px;
+    border-radius: 4px;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.32);
+}
+.gm-vault[data-locked="false"] .gm-gate-box { display: none; }
+.gm-seal-icon { font-size: 30px; margin-bottom: 6px; }
+.gm-gate-kicker {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.2em;
+    color: var(--gold-light); text-transform: uppercase; margin-bottom: 4px;
+}
+.gm-gate-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 20px; color: #f7f1e3;
+    border: none; margin: 4px 0 8px; padding: 0;
+}
+.gm-gate-desc {
+    text-align: center; color: #cfc6b4; font-style: italic; max-width: 440px; margin: 0 auto 16px; font-size: 15.5px;
+}
+.gm-unlock-form { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 390px; margin: 0 auto; }
+.gm-pwd-input {
+    flex: 1 1 180px; padding: 8px 12px; font-family: 'EB Garamond', Georgia, serif; font-size: 16px;
+    background: #100e0c; color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-pwd-input:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 0 2px rgba(205,176,110,0.28); }
+.gm-unlock-btn {
+    padding: 8px 16px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    background: var(--crimson); color: #f7f1e3; border: 1px solid var(--gold); border-radius: 3px;
+}
+.gm-unlock-btn:hover { background: #962724; }
+.gm-gate-error { margin-top: 10px; min-height: 20px; font-size: 14px; color: #f08a84; font-weight: 600; }
+
+/* CONTENT TYPOGRAPHY */
+h1, h2, h3, h4 { font-family: 'Cinzel', Georgia, serif; color: var(--crimson); break-after: avoid; page-break-after: avoid; }
+h1.book-h1 {
+    font-size: 23px; letter-spacing: 0.05em; text-transform: uppercase;
+    border-bottom: 2px solid var(--crimson); padding-bottom: 8px; margin: 0 0 16px 0;
+}
+h2 { font-size: 18px; letter-spacing: 0.04em; margin: 18px 0 10px; padding-bottom: 5px; border-bottom: 1px solid var(--gold); }
+h3 { font-size: 15px; letter-spacing: 0.03em; margin: 14px 0 6px; color: #3d2415; }
+p { margin: 0 0 10px; text-align: justify; hyphens: auto; }
+ul, ol { margin: 4px 0 12px; padding-left: 20px; }
+li { margin-bottom: 4px; }
+strong { color: #17120d; }
+code {
+    font-family: Consolas, 'Courier New', monospace; font-size: 0.84em;
+    background: rgba(154, 123, 59, 0.14); border: 1px solid rgba(154, 123, 59, 0.28);
+    padding: 1px 4px; border-radius: 3px; color: #5b1d18;
+}
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 16px 0; }
+a { color: var(--crimson); text-decoration: underline; text-decoration-color: rgba(122, 31, 29, 0.35); text-underline-offset: 2px; }
+
+blockquote {
+    margin: 12px 0 14px; padding: 10px 15px; background: var(--vellum-card);
+    border-left: 3px solid var(--gold); font-style: italic; color: var(--ink-soft); break-inside: avoid;
+}
+.callout {
+    margin: 12px 0; padding: 11px 14px; border-radius: 2px; border: 1px solid var(--border);
+    border-left: 4px solid var(--crimson); background: #f2e7d3; color: var(--ink); break-inside: avoid; font-size: 15.5px;
+}
+.callout-title {
+    font-family: 'Cinzel', Georgia, serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--crimson); margin-bottom: 4px;
+}
+.callout.warning { border-left-color: #b4691e; background: #f6ecd7; }
+.callout.warning .callout-title { color: #8c4d10; }
+
+.formula-box {
+    margin: 10px 0 14px; padding: 9px 12px; background: #efe5cf;
+    border: 1px solid var(--gold); border-radius: 3px; text-align: center;
+    font-size: 16px; font-weight: 600; color: var(--crimson-dark); break-inside: avoid;
+}
+
+.table-wrap { width: 100%; overflow-x: auto; margin: 10px 0 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 13.8px; line-height: 1.38; border: 1px solid var(--gold); }
+thead th {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10px; letter-spacing: 0.04em;
+    text-transform: uppercase; background: var(--crimson); color: #f7f1e3;
+    padding: 7px 7px; border: 1px solid #5f1816; text-align: left;
+}
+tbody td { padding: 6px 7px; border: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--vellum-alt); }
+tr { break-inside: avoid; }
+
+.atlas-plate {
+    margin: 10px 0 14px; padding: 8px; background: #ebe1ca;
+    border: 1px solid var(--gold); box-shadow: 0 5px 14px rgba(0,0,0,0.14);
+    text-align: center; break-inside: avoid;
+}
+.atlas-plate img { width: 100%; height: auto; max-height: 460px; object-fit: contain; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.atlas-caption {
+    font-family: 'Cinzel', Georgia, serif; font-size: 10.5px; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 6px;
+}
+
+.entry-card {
+    margin: 10px 0 12px; padding: 11px 14px 9px; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
+    font-size: 15.2px;
+}
+.entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 4px; }
+
+.lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
+    z-index: 2000; padding: 24px; align-items: center; justify-content: center; cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 96vw; max-height: 92vh; border: 2px solid var(--gold); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+
+/* PORTAL GRID (INDEX.HTML) */
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 22px 0 32px; }
+.portal-card {
+    display: flex; flex-direction: column; background: var(--vellum-card);
+    border: 1px solid var(--border); border-top: 4px solid var(--crimson);
+    padding: 16px 16px 15px; text-decoration: none; color: var(--ink);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.portal-cover {
+    width: 100%; height: 148px; object-fit: cover; display: block;
+    border: 1px solid var(--gold); border-radius: 2px; margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+}
+.portal-card.gm-card { background: #211c18; color: #efe6d2; border-color: var(--gold); border-top-color: var(--gold); }
+.portal-card.gm-card .portal-title { color: #f7f1e3; }
+.portal-card.gm-card .portal-desc { color: #c7beac; }
+.portal-card.gm-card .portal-kicker, .portal-card.gm-card .portal-cta { color: var(--gold-light); }
+.portal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); border-color: var(--gold); }
+.portal-kicker { font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.16em; color: var(--crimson); font-weight: 700; }
+.portal-title { font-family: 'Cinzel', Georgia, serif; font-size: 18px; font-weight: 700; margin: 6px 0 8px; color: var(--ink); }
+.portal-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.48; margin: 0; text-align: left; }
+.portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+.tome-divider { page-break-before: always; break-before: page; }
+
+@media (max-width: 1020px) {
+    .sidebar { transform: translateX(-100%); }
+    body.sidebar-open-mobile .sidebar { transform: translateX(0); box-shadow: 6px 0 30px rgba(0,0,0,0.7); }
+    .book-shell, .reader-stage { margin-left: 0; }
+    .book-page { padding: 28px 22px 42px; }
+    .side-turn-btn { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .book-spread, .flip-sheet, .flip-cast-shadow, .flip-face::before { animation: none !important; }
+}
+
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@media print {
+    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; overflow: visible !important; }
+    .topbar, .sidebar, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar { display: none !important; }
+    body.book-mode .book-shell, .book-shell { display: block !important; margin: 0 !important; padding: 0 !important; }
+    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    .book-page::before { display: none !important; }
+    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: var(--crimson-dark); text-decoration: none; }
+    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+}
+</style>
+</head>
+<body class="book-mode sidebar-hidden" data-book-title="Empório &amp; Ofícios">
+    <header class="topbar"><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><nav class="topbar-nav"><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Mostrar/Ocultar Sumário">☰ Sumário</button><a href="index.html">Biblioteca</a><a href="01_Livro_de_Regras.html">Regras</a><a href="02_Livro_do_Cenario.html">Cenário</a><a href="03_Catalogo_de_Kits.html">36 Kits</a><a href="04_Bestiario_de_Alenia.html">🔒 Bestiário</a><a href="05_Onomastica_e_Toponimia.html">Onomástica</a><a href="06_Guia_do_Jogador.html">Guia Jogador</a><a href="07_Aventura_Inicial.html">🔒 Aventura</a><a href="08_Acervo_Oculto_de_Sellene.html">🔒 Acervo Sellene</a><a href="09_Catalogo_de_Equipamentos.html" class="active">Equipamentos</a><a href="Alenia_Compendio_Completo.html">Compêndio</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <aside class="sidebar"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#como-usar-este-empório-peso-carga-preços-e-ofícios-0">Como Usar Este Empório (Peso, Carga, Preços e Ofícios)</a></li><li class="toc-h2"><a href="#1-mochilas-recipientes-transporte-pessoal-1">1. Mochilas, Recipientes &amp; Transporte Pessoal</a></li><li class="toc-h2"><a href="#2-acampamento-fogo-iluminação-2">2. Acampamento, Fogo &amp; Iluminação</a></li><li class="toc-h2"><a href="#3-sobrevivência-exploração-escalada-3">3. Sobrevivência, Exploração &amp; Escalada</a></li><li class="toc-h2"><a href="#4-pesca-caça-armadilhas-de-campo-4">4. Pesca, Caça &amp; Armadilhas de Campo</a></li><li class="toc-h2"><a href="#5-forja-metalurgia-carpintaria-engenharia-sem-pólvora-5">5. Forja, Metalurgia, Carpintaria &amp; Engenharia (Sem Pólvora)</a></li><li class="toc-h2"><a href="#6-medicina-herbalismo-alquimia-6">6. Medicina, Herbalismo &amp; Alquimia</a></li><li class="toc-h2"><a href="#7-náutica-viagens-marítimas-7">7. Náutica &amp; Viagens Marítimas</a></li><li class="toc-h2"><a href="#8-subterfúgio-investigação-corte-8">8. Subterfúgio, Investigação &amp; Corte</a></li><li class="toc-h2"><a href="#9-vestuário-clima-provisões-9">9. Vestuário, Clima &amp; Provisões</a></li><li class="toc-h2"><a href="#10-montarias-arreios-pacotes-prontos-de-expedição-10">10. Montarias, Arreios &amp; Pacotes Prontos de Expedição</a></li><li class="toc-h3"><a href="#montarias-animais-de-carga-arreios-11">Montarias, Animais de Carga &amp; Arreios</a></li><li class="toc-h3"><a href="#5-pacotes-prontos-de-compra-rápida-para-agilizar-a-criação-de-personagens-12">5 Pacotes Prontos de Compra Rápida (Para Agilizar a Criação de Personagens)</a></li></ul></aside>
+    
+    <section id="reader-stage" class="reader-stage" aria-label="Leitor em Formato de Livro">
+        <button class="side-turn-btn side-turn-prev btn-prev-page" type="button" title="Página Anterior (←)">‹</button>
+        <div class="hardcover-wrap">
+            <div id="book-spread" class="book-spread"></div>
+        </div>
+        <button class="side-turn-btn side-turn-next btn-next-page" type="button" title="Próxima Página (→)">›</button>
+    </section>
+    <footer class="reader-footer-bar">
+        <div class="view-mode-group" title="Modo de visualização">
+            <button class="mode-btn active" data-mode="spread" type="button">📖 2 Páginas</button>
+            <button class="mode-btn" data-mode="single" type="button">📄 1 Página</button>
+            <button class="mode-btn" data-mode="scroll" type="button">📜 Contínuo</button>
+        </div>
+        <div class="pager-controls">
+            <button class="pager-btn btn-prev-page" type="button">‹ Anterior</button>
+            <span id="pager-status" class="pager-status">Carregando...</span>
+            <input id="pager-jump" class="pager-jump" type="number" min="1" value="1" title="Ir para página" aria-label="Número da página"/>
+            <button class="pager-btn btn-next-page" type="button">Próxima ›</button>
+        </div>
+        <div class="font-scale-group" title="Tamanho da letra do livro">
+            <button id="btn-font-down" class="mode-btn" type="button" title="Diminuir fonte">A−</button>
+            <span id="font-scale-label" class="font-scale-label">100%</span>
+            <button id="btn-font-up" class="mode-btn" type="button" title="Aumentar fonte">A+</button>
+        </div>
+    </footer>
+        
+    <main class="book-shell">
+        <article class="book-page">
+            
+    <section class="cover-page">
+        <div class="cover-kicker">ALENIA RPG • TOMO IX</div>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title">Empório &amp; Ofícios</h1>
+        <div class="cover-subtitle">Acampamento, Sobrevivência, Pesca, Forja, Alquimia, Náutica &amp; Carga</div>
+        <div class="cover-rule"></div>
+        <img class="cover-thumb" src="assets/capa_09_equipamentos.jpg" alt="Ilustração de capa — Empório &amp; Ofícios"/>
+        <p class="cover-epigraph">“Uma espada boa vence um duelo; mas são corda firme, pederneira seca e sal na mochila que mantêm um explorador vivo até o inverno.”</p>
+        <div class="cover-edition">Edição Revisada v2.0 • RRPG Firecast</div>
+    </section>
+    
+<h1 id="alenia-rpg-empório-catálogo-de-equipamentos-ofícios-e-sobrevivência-tomo-ix-0" class="book-h1">ALENIA RPG — Empório &amp; Catálogo de Equipamentos, Ofícios e Sobrevivência <em>(Tomo IX)</em></h1>
+<blockquote><em>&quot;Uma espada boa vence um duelo; mas são uma corda firme, pederneira seca, botas sem furo e sal na mochila que mantêm um explorador vivo até o inverno.&quot;</em> — <strong>Ditado dos Batedores de Altrax</strong></blockquote>
+<hr/>
+<h2 id="como-usar-este-empório-peso-carga-preços-e-ofícios-0">Como Usar Este Empório <em>(Peso, Carga, Preços e Ofícios)</em></h2>
+<p>Este tomo reúne o catálogo completo de <strong>equipamentos de aventura, acampamento, sobrevivência, pesca, caça, forja, engenharia sem pólvora, medicina, náutica, subterfúgio e vestuário</strong> de Alenia — todos calibrados ao <strong>Padrão Prata</strong> e às regras de carga da Edição Revisada v2.0.</p>
+<ul>
+<li><strong>Padrão Monetário <em>(Tomo I, Seção 9)</strong></em>: <strong><code>1 Áureo (PO)</code> = <code>10 Escudos/Pratas (PP)</code> = <code>100 Vinténs/Cobres (PC)</code></strong>. Moedas físicas pesam <strong><code>100 moedas = 1 kg</code></strong>.</li>
+<li><strong>Capacidade de Carga (<code>FOR × 5 kg</code>)</strong>:<ul><li><strong>Até <code>75%</code> da Capacidade</strong>: carga normal, sem penalidades.</li><li><strong>De <code>76%</code> a <code>100%</code> <em>(Carga Pesada)</strong></em>: <code>-1</code> em <em>Acrobacia</em>, <em>Escalada</em>, <em>Natação</em> e <em>Furtividade</em>.</li><li><strong>Acima de <code>100%</code> <em>(Sobrecarga — máx. <code>150%</code>)</strong></em>: deslocamento reduzido à metade (<code>4,5m</code>), <code>-3</code> em testes físicos e exige CON CD 13 a cada 2 horas de marcha para evitar <code>+1</code> nível de Exaustão.</li></ul></li>
+<li><strong>Qualidade das Ferramentas</strong>:<ul><li><strong>Sem Ferramentas Adequadas</strong>: tentar um ofício especializado <em>(forja, cirurgia, fechaduras, alquimia, cartografia)</em> impõe <strong><code>-3</code></strong> no teste ou torna a tarefa impossível.</li><li><strong>Ferramenta Comum <em>(preço de tabela)</strong></em>: permite realizar o ofício normalmente.</li><li><strong>Obra-Prima <em>(+<code>150 PP</code> sobre o valor base)</strong></em>: acabamento excepcional de <em>Aeraneas</em>, <em>Stoneforge</em> ou <em>Baldbella</em> — concede <strong><code>+1</code></strong> permanente nos testes usando aquele conjunto.</li></ul></li>
+<li><strong>Armas e Armaduras de Combate</strong>: tabelas completas de armas (<code>Adaga 4 PP</code> até <code>Besta Pesada 75 PP</code>), armaduras (<code>Gibão 12 PP</code> até <code>Placas Completas 450 PP</code> — zero RD passiva) e <em>Adamante</em> estão no <strong><a href="01_Livro_de_Regras.html">Livro de Regras — Seção 9.6</a></strong>.</li>
+</ul>
+<hr/>
+<h2 id="1-mochilas-recipientes-transporte-pessoal-1">1. Mochilas, Recipientes &amp; Transporte Pessoal</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Mochila de Couro Reforçado</strong></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Comporta até <code>18 kg</code> de carga (<code>~35 L</code>); correias largas para marcha longa e ganchos laterais para corda ou rolo de dormir.</td></tr><tr><td style="text-align:left"><strong>Alforje de Sela <em>(Par)</strong></em></td><td style="text-align:center"><code>4 PP</code></td><td style="text-align:center"><code>2,5 kg</code></td><td style="text-align:left">Comporta até <code>30 kg</code> distribuídos sobre cavalo ou mula; abas duplas protegem provisões contra poeira e chuva leve.</td></tr><tr><td style="text-align:left"><strong>Saco de Lona Comum</strong></td><td style="text-align:center"><code>2 PC</code></td><td style="text-align:center"><code>0,3 kg</code></td><td style="text-align:left">Comporta até <code>12 kg</code>; útil para pilhagem rápida ou transporte de grãos, mas rasga fácil contra objetos cortantes.</td></tr><tr><td style="text-align:left"><strong>Saco Impermeável Encerado</strong></td><td style="text-align:center"><code>8 PC</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left">Lona tratada com cera de abelha e óleo; protege pergaminhos, pederneira, sal ou ervas contra chuva e travessias de rio (<code>6 kg</code> máx.).</td></tr><tr><td style="text-align:left"><strong>Odre de Couro <em>(2 Litros)</strong></em></td><td style="text-align:center"><code>4 PC</code></td><td style="text-align:center"><code>0,3 kg</code> <em>(vazio)</em></td><td style="text-align:left">Pesa <code>2,3 kg</code> cheio; garante água para <strong>1 dia inteiro</strong> em clima temperado <em>(ou ½ dia em calor extremo de Gaddra)</em>.</td></tr><tr><td style="text-align:left"><strong>Cantil de Latão ou Barro Cozido <em>(1 L)</strong></em></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>0,4 kg</code> <em>(vazio)</em></td><td style="text-align:left">Pesa <code>1,4 kg</code> cheio; conserva água mais fresca que couro e não transmite gosto de pele curtida.</td></tr><tr><td style="text-align:left"><strong>Tubo Selado para Mapas &amp; Cartas</strong></td><td style="text-align:center"><code>15 PC</code></td><td style="text-align:center"><code>0,4 kg</code></td><td style="text-align:left">Cilindro de couro rígido ou latão com tampa rosqueada e cera; protege até <code>10</code> folhas contra água e fogo rápido.</td></tr><tr><td style="text-align:left"><strong>Cinto de Bolsos / Bandoleira</strong></td><td style="text-align:center"><code>15 PC</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left">Mantém até <code>6</code> itens pequenos <em>(frascos, pederneira, gazuas, adaga, ataduras)</em> acessíveis como <strong>Ação Livre</strong> em vez de revirar a mochila.</td></tr><tr><td style="text-align:left"><strong>Bolsa Oculta de Moedas</strong></td><td style="text-align:center"><code>6 PC</code></td><td style="text-align:center"><code>0,1 kg</code></td><td style="text-align:left">Costurada sob a túnica ou bota; comporta até <code>50</code> moedas (<code>0,5 kg</code>) e impõe <strong><code>-4</code></strong> em testes de <em>Prestidigitação</em> de batedores de carteira.</td></tr><tr><td style="text-align:left"><strong>Baú de Viagem com Fechadura</strong></td><td style="text-align:center"><code>8 PP</code></td><td style="text-align:center"><code>10,0 kg</code></td><td style="text-align:left">Madeira grossa com cantoneiras de ferro (<code>60 kg</code> de capacidade); exige <em>Ladinagem CD 15</em> ou <em>FOR CD 18</em> para arrombar.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="2-acampamento-fogo-iluminação-2">2. Acampamento, Fogo &amp; Iluminação</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Tenda Simples <em>(1–2 pessoas)</strong></em></td><td style="text-align:center"><code>5 PP</code></td><td style="text-align:center"><code>4,5 kg</code></td><td style="text-align:left">Lona grossa com estacas de madeira; protege contra vento e chuva moderada, concedendo <strong><code>+2</code></strong> em <em>Sobrevivência</em> contra Exaustão noturna.</td></tr><tr><td style="text-align:left"><strong>Tenda de Expedição <em>(4 pessoas)</strong></em></td><td style="text-align:center"><code>14 PP</code></td><td style="text-align:center"><code>11,0 kg</code></td><td style="text-align:left">Lona dupla impermeabilizada com estrutura reforçada; resiste a tempestades de outono e areia de Gaddra (<code>+3</code> contra Exaustão climática; exige mula ou carroça).</td></tr><tr><td style="text-align:left"><strong>Saco de Dormir <em>(Lã / Pele Forrada)</strong></em></td><td style="text-align:center"><code>15 PC</code> / <code>5 PP</code></td><td style="text-align:center"><code>2,0 kg</code> / <code>3,5 kg</code></td><td style="text-align:left">Modelo de lã cobre noites frescas; modelo forrado de pele de inverno anula penalidades de frio moderado nos <em>Montes Ferraur</em> e <em>Rubecina</em>.</td></tr><tr><td style="text-align:left"><strong>Rede de Acampamento <em>(Lona)</strong></em></td><td style="text-align:center"><code>12 PC</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Essencial nos <em>Pântanos Nebulosos</em> e <em>Voernock</em>: mantém o explorador acima da lama, insetos e serpentes durante o descanso.</td></tr><tr><td style="text-align:left"><strong>Lona Encerada <em>(3m × 3m)</strong></em></td><td style="text-align:center"><code>15 PC</code></td><td style="text-align:center"><code>2,0 kg</code></td><td style="text-align:left">Abrigo improvisado, cobertura de carroça, coletor de água da chuva ou maca de emergência para feridos.</td></tr><tr><td style="text-align:left"><strong>Pederneira, Aço e Caixa de Isca</strong></td><td style="text-align:center"><code>6 PC</code></td><td style="text-align:center"><code>0,3 kg</code></td><td style="text-align:left">Acende fogueira seca em <code>1 minuto</code> <em>(ou <code>Sobrevivência CD 14</code> sob umidade)</em>. Indispensável fora das cidades.</td></tr><tr><td style="text-align:left"><strong>Pavios Encerados <em>(Maço com 10)</strong></em></td><td style="text-align:center"><code>4 PC</code></td><td style="text-align:center"><code>0,2 kg</code></td><td style="text-align:left">Queimam por <code>2 minutos</code> mesmo sob garoa; concedem <strong><code>+3</code></strong> em testes para acender fogo em terreno úmido.</td></tr><tr><td style="text-align:left"><strong>Tocha Comum <em>(Feixe de 5)</strong></em></td><td style="text-align:center"><code>2 PC</code></td><td style="text-align:center"><code>2,5 kg</code> <em>(5 un.)</em></td><td style="text-align:left">Cada tocha ilumina <code>6m</code> claramente (<code>+6m</code> penumbra) por <strong><code>1 hora</code></strong>; espanta feras comuns e pode causar <code>1d4</code> fogo improvisado.</td></tr><tr><td style="text-align:left"><strong>Lanterna Comum de Ferro</strong></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Ilumina <code>9m</code> em círculo (<code>+6m</code> penumbra); consome <code>1</code> frasco de óleo a cada <strong><code>6 horas</code></strong> e resiste melhor ao vento que tochas.</td></tr><tr><td style="text-align:left"><strong>Lanterna Blindada <em>(Furta-Fogo)</strong></em></td><td style="text-align:center"><code>6 PP</code></td><td style="text-align:center"><code>1,2 kg</code></td><td style="text-align:left">Possui venezianas de cobre que fecham totalmente a luz em Ação Livre ou direcionam feixe frontal de <code>15m</code>; favorita de vigias, batedores e ladrões.</td></tr><tr><td style="text-align:left"><strong>Óleo de Lamparina <em>(Frasco 0,5 L)</strong></em></td><td style="text-align:center"><code>3 PC</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left">Alimenta lanterna por <code>6 horas</code>. Se arremessado e aceso (<code>6m</code>), queima <code>1,5m</code> por <code>2 rodadas</code> causando <code>1d6</code> fogo/rodada.</td></tr><tr><td style="text-align:left"><strong>Velas de Sebo <em>(10 un.) / Cera </em>(10 un.)</strong>*</td><td style="text-align:center"><code>2 PC</code> / <code>8 PC</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left">Queimam por <code>1 hora</code> (<code>2m</code> de luz); cera de abelha não solta fumaça forte nem cheiro de gordura dentro de ruínas fechadas.</td></tr><tr><td style="text-align:left"><strong>Panela / Caçarola de Ferro</strong></td><td style="text-align:center"><code>12 PC</code></td><td style="text-align:center"><code>2,5 kg</code></td><td style="text-align:left">Permite ferver água suspeita <em>(anula risco de doença hídrica)</em>, cozinhar caça e derreter neve em altitudes frias.</td></tr><tr><td style="text-align:left"><strong>Grelha Dobrável &amp; Talheres de Ferro</strong></td><td style="text-align:center"><code>8 PC</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Facilita preparo de peixe e carne sem desperdício em acampamentos rápidos.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="3-sobrevivência-exploração-escalada-3">3. Sobrevivência, Exploração &amp; Escalada</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Corda de Cânhamo <em>(15 metros)</strong></em></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>4,5 kg</code></td><td style="text-align:left">Suporta até <code>350 kg</code>; exige <code>FOR CD 18</code> para arrebentar. Fundamental para poços, encostas e amarrações.</td></tr><tr><td style="text-align:left"><strong>Corda de Seda Trançada <em>(15 metros)</strong></em></td><td style="text-align:center"><code>10 PP</code></td><td style="text-align:center"><code>2,0 kg</code></td><td style="text-align:left">Metade do peso e volume da corda de cânhamo, suporta <code>450 kg</code> e concede <strong><code>+1</code></strong> em testes de <em>Escalada</em> e nós firmes.</td></tr><tr><td style="text-align:left"><strong>Arpéu de Ferro Forjado</strong></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>1,8 kg</code></td><td style="text-align:left">Gancho de três pontas para fixar cordas em muralhas, galhos ou amuradas de navio <em>(arremesso até <code>9m</code>, Atletismo/Armas à Distância CD 13)</em>.</td></tr><tr><td style="text-align:left"><strong>Pítons / Cravos de Escalada <em>(10 un.)</strong></em></td><td style="text-align:center"><code>15 PC</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Cravados em fendas de pedra ou gelo com martelo; concedem <strong><code>+2</code></strong> em <em>Escalada</em> e evitam quedas fatais em grupo amarrado.</td></tr><tr><td style="text-align:left"><strong>Polia com Roldana de Ferro</strong></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Permite erguer até <strong>4×</strong> o peso normal com corda <em>(excelente para içar baús, resgatar feridos em galerias ou erguer barcos)</em>.</td></tr><tr><td style="text-align:left"><strong>Pé-de-Cabra de Aço</strong></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>2,2 kg</code></td><td style="text-align:left">Concede <strong><code>+2</code></strong> em testes de <em>FOR / Atletismo</em> para arrombar portas travadas, tampas de sarcófagos ou grades enferrujadas (<code>1d6</code> improvisada).</td></tr><tr><td style="text-align:left"><strong>Pá de Campanha</strong></td><td style="text-align:center"><code>15 PC</code></td><td style="text-align:center"><code>2,0 kg</code></td><td style="text-align:left">Cava trincheiras, enterra mortos <em>(Rito da Passagem)</em>, limpa neve ou escava areia e lama em ruínas.</td></tr><tr><td style="text-align:left"><strong>Picareta de Escavação</strong></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>3,5 kg</code></td><td style="text-align:left">Ferramenta padrão dos mineiros de <em>Aeraneas</em> para abrir pedra solta, gelo duro ou entulho de desabamentos.</td></tr><tr><td style="text-align:left"><strong>Machadinha de Lenhador</strong></td><td style="text-align:center"><code>15 PC</code></td><td style="text-align:center"><code>1,2 kg</code></td><td style="text-align:left">Corta lenha, abre trilhas em galhos densos e prepara estacas de acampamento <em>(também serve como arma leve <code>1d6</code>, <code>20/×3</code>)</em>.</td></tr><tr><td style="text-align:left"><strong>Facão de Mato <em>(Terçado)</strong></em></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Abre passagem em vegetação fechada <em>(Cidade Suspensa, Pântanos, Ilha das Safiras)</em> reduzindo penalidade de terreno difícil em viagem.</td></tr><tr><td style="text-align:left"><strong>Pedra de Amolar</strong></td><td style="text-align:center"><code>2 PC</code></td><td style="text-align:center"><code>0,3 kg</code></td><td style="text-align:left">Mantém o fio de lâminas comuns após combates prolongados ou exposição à maresia <em>(evita penalidade de lâmina cega <code>-1</code> dano)</em>.</td></tr><tr><td style="text-align:left"><strong>Apito de Osso ou Latão</strong></td><td style="text-align:center"><code>5 PC</code></td><td style="text-align:center"><code>0,1 kg</code></td><td style="text-align:left">Audível a até <code>400m</code> em campo aberto <em>(ou <code>150m</code> em neblina densa)</em> para coordenar batedores e sentinelas.</td></tr><tr><td style="text-align:left"><strong>Espelho de Aço Polido</strong></td><td style="text-align:center"><code>5 PP</code></td><td style="text-align:center"><code>0,2 kg</code></td><td style="text-align:left">Permite espiar esquinas, enviar sinais de luz sob o sol a até <code>3 km</code> ou conferir respiração de feridos inconscientes.</td></tr><tr><td style="text-align:left"><strong>Bússola Magnética <em>(Corallis)</strong></em></td><td style="text-align:center"><code>15 PP</code></td><td style="text-align:center"><code>0,2 kg</code></td><td style="text-align:left">Concede <strong><code>+2</code></strong> em <em>Sobrevivência</em> e <em>Navegação</em> para não se perder sob neblina ou céu nublado <em>(nota: enlouquece perto de grandes veios de adamante!)</em>.</td></tr><tr><td style="text-align:left"><strong>Luneta Simples / de Precisão <em>(Helmer)</strong></em></td><td style="text-align:center"><code>35 PP</code> / <code>90 PP</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left">Amplia visão em <code>2×</code> <em>(simples)</em> ou <code>4×</code> <em>(Observatório Helmer)</em>; concede <strong><code>+2</code></strong> ou <strong><code>+4</code></strong> em <em>Percepção</em> à longa distância.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="4-pesca-caça-armadilhas-de-campo-4">4. Pesca, Caça &amp; Armadilhas de Campo</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Vara, Linha e Estojo de Anzóis</strong></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Permite pescar em rios, lagos ou costa (<code>Sobrevivência CD 12</code> garante <code>1d4</code> rações frescas em 2 horas de pesca).</td></tr><tr><td style="text-align:left"><strong>Tarrafa / Rede de Pesca <em>(Arremesso)</strong></em></td><td style="text-align:center"><code>3 PP</code></td><td style="text-align:center"><code>2,5 kg</code></td><td style="text-align:left">Cobre raio de <code>3m</code> em águas rasas (<code>Sobrevivência CD 13</code> rende <code>2d4</code> rações de peixe; em emergência, pode imobilizar presa pequena).</td></tr><tr><td style="text-align:left"><strong>Arpão de Pesca Manual</strong></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>1,8 kg</code></td><td style="text-align:left">Ponta farpada com corda de <code>9m</code>; ideal para peixes grandes de estuário ou recife (<code>1d6</code>, arremesso <code>6m</code>).</td></tr><tr><td style="text-align:left"><strong>Covo Dobrável <em>(Armadilha de Peixe)</strong></em></td><td style="text-align:center"><code>15 PC</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Cesto cônico de vime e corda deixado submerso durante a noite (<code>Sobrevivência CD 12</code> captura <code>1d4+1</code> rações sem gastar tempo ativo).</td></tr><tr><td style="text-align:left"><strong>Laços de Arame <em>(Jogo de 6)</strong></em></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left">Armadilhas discretas para coelhos, aves e caça miúda (<code>Sobrevivência CD 13</code> garante <code>1d4</code> rações por noite em matas ou estepes).</td></tr><tr><td style="text-align:left"><strong>Armadilha de Mandíbula de Aço</strong></td><td style="text-align:center"><code>6 PP</code></td><td style="text-align:center"><code>6,0 kg</code></td><td style="text-align:left">Fixada por corrente e pino no chão (<code>Percepção CD 15</code> para notar oculta); ao disparar causa <strong><code>1d8+2</code></strong> perfurante e prende o alvo (<code>FOR CD 16</code> para abrir).</td></tr><tr><td style="text-align:left"><strong>Isca Aromática Seca <em>(5 doses)</strong></em></td><td style="text-align:center"><code>5 PC</code></td><td style="text-align:center"><code>0,3 kg</code></td><td style="text-align:left">Pasta de peixe salgado, sangue seco ou ervas; concede <strong><code>+2</code></strong> em testes de caça, pesca ou para atrair feras para uma emboscada.</td></tr><tr><td style="text-align:left"><strong>Chamariz de Osso <em>(Aves / Cervos)</strong></em></td><td style="text-align:center"><code>8 PC</code></td><td style="text-align:center"><code>0,1 kg</code></td><td style="text-align:left">Imita chamados naturais de fauna local (<code>+2</code> em <em>Sobrevivência</em> para rastrear ou aproximar-se de caça).</td></tr><tr><td style="text-align:left"><strong>Faca de Esfolar &amp; Desossar</strong></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>0,3 kg</code></td><td style="text-align:left">Lâmina curta e curva; concede <strong><code>+2</code></strong> para extrair couros intactos, glândulas de veneno ou carne aproveitável sem estragar a carcaça.</td></tr><tr><td style="text-align:left"><strong>Sal Grosso de Bayd <em>(Bloco 1 kg)</strong></em></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Conserva até <code>10 kg</code> de carne ou peixe caçado por <code>3 semanas</code> <em>(e em oásis remotos de Gaddra circula diretamente como moeda!)</em>.</td></tr><tr><td style="text-align:left"><strong>Gancho e Corda de Açougueiro</strong></td><td style="text-align:center"><code>6 PC</code></td><td style="text-align:center"><code>0,8 kg</code></td><td style="text-align:left">Permite suspender caça longe de predadores terrestres durante a noite ou pendurar provisões em galhos altos.</td></tr><tr><td style="text-align:left"><strong>Aljava Impermeável <em>(20 Flechas)</strong></em></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>0,6 kg</code></td><td style="text-align:left">Couro oleado com tampa; impede que a chuva ou umidade dos pântanos encharque as penas das flechas <em>(mantendo precisão intacta)</em>.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="5-forja-metalurgia-carpintaria-engenharia-sem-pólvora-5">5. Forja, Metalurgia, Carpintaria &amp; Engenharia <em>(Sem Pólvora)</em></h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Ferramentas Portáteis de Ferreiro</strong></td><td style="text-align:center"><code>20 PP</code></td><td style="text-align:center"><code>6,0 kg</code></td><td style="text-align:left">Martelo de pena, tenazes, punções, limas e cinzéis; habilita testes de <strong>Forja &amp; Metalurgia</strong> para reparos de campo em armas, armaduras e ferraduras.</td></tr><tr><td style="text-align:left"><strong>Fole de Campanha <em>(Dobrável)</strong></em></td><td style="text-align:center"><code>8 PP</code></td><td style="text-align:center"><code>3,5 kg</code></td><td style="text-align:left">Couro reforçado e bico de ferro; permite improvisar forja de campo quente o bastante para reforjar ferro comum <em>(não atinge temperatura de adamante)</em>.</td></tr><tr><td style="text-align:left"><strong>Bigorna Leve de Carroça</strong></td><td style="text-align:center"><code>25 PP</code></td><td style="text-align:center"><code>18,0 kg</code></td><td style="text-align:left">Ferro fundido compacto para acampamentos militares ou oficinas móveis; dispensa forja fixa para reparos completos de armaduras.</td></tr><tr><td style="text-align:left"><strong>Saco de Carvão Mineral <em>(10 kg)</strong></em></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>10,0 kg</code></td><td style="text-align:left">Sustenta uma forja por <code>1 dia</code> inteiro de trabalho pesado <em>(exige carvão de alta queima de Ferraur para ligas especiais)</em>.</td></tr><tr><td style="text-align:left"><strong>Caixa de Ferramentas de Carpinteiro</strong></td><td style="text-align:center"><code>12 PP</code></td><td style="text-align:center"><code>5,0 kg</code></td><td style="text-align:left">Enxó, formões, plaina, esquadro, martelo e broca manual; essencial para reparos de carroças, pontes, barricadas e cascos de barco.</td></tr><tr><td style="text-align:left"><strong>Serrote de Aço</strong></td><td style="text-align:center"><code>3 PP</code></td><td style="text-align:center"><code>1,2 kg</code></td><td style="text-align:left">Corta vigas de madeira, grades de madeira ou galhos grossos silenciosamente comparado ao machado.</td></tr><tr><td style="text-align:left"><strong>Kit de Engenharia &amp; Mecânica <em>(Stoneforge)</strong></em></td><td style="text-align:center"><code>35 PP</code></td><td style="text-align:center"><code>4,5 kg</code></td><td style="text-align:left">Chaves de ajuste, compassos de latão, molas, engrenagens de reposição, nível de água e alicates; habilita <strong>Engenharia &amp; Mecânica</strong> para construir/desarmar mecanismos complexos.</td></tr><tr><td style="text-align:left"><strong>Furadeira Manual de Arco</strong></td><td style="text-align:center"><code>4 PP</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Perfura madeira, osso e chapas finas de metal sem fazer barulho alto; útil tanto para carpinteiros quanto para invasores.</td></tr><tr><td style="text-align:left"><strong>Cola de Osso &amp; Pote de Breu Vegetal</strong></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Veda rachaduras em cascos, fixa cabos de ferramentas e impermeabiliza juntas de couro ou madeira.</td></tr><tr><td style="text-align:left"><strong>Pregos, Cravos e Parafusos <em>(50 un.)</strong></em></td><td style="text-align:center"><code>5 PC</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Necessários para erguer barricadas (<code>+2</code> na resistência de portas travadas) ou reparos estruturais.</td></tr><tr><td style="text-align:left"><strong>Corrente de Ferro <em>(3 metros)</strong></em></td><td style="text-align:center"><code>5 PP</code></td><td style="text-align:center"><code>5,0 kg</code></td><td style="text-align:left">Suporta <code>1.000 kg</code> (<code>FOR CD 22</code> para romper); usada para prender prisioneiros perigosos, cargas pesadas ou travar portões.</td></tr><tr><td style="text-align:left"><strong>Cadeado Comum / de Precisão <em>(Kalis)</strong></em></td><td style="text-align:center"><code>4 PP</code> / <code>18 PP</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left">Comum exige <em>Ladinagem CD 15</em>; modelo de precisão com travas duplas exige <strong><code>Ladinagem CD 21</code></strong>.</td></tr><tr><td style="text-align:left"><strong>Cunha de Ferro para Portas <em>(Par)</strong></em></td><td style="text-align:center"><code>4 PC</code></td><td style="text-align:center"><code>0,6 kg</code></td><td style="text-align:left">Impõe <strong><code>+4</code></strong> na CD de <em>FOR</em> para arrombar uma porta fechada por dentro — salva vidas em estalagens perigosas!</td></tr></tbody></table></div>
+<hr/>
+<h2 id="6-medicina-herbalismo-alquimia-6">6. Medicina, Herbalismo &amp; Alquimia</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Estojo Médico &amp; Cirúrgico</strong></td><td style="text-align:center"><code>25 PP</code></td><td style="text-align:center"><code>2,0 kg</code></td><td style="text-align:left">Bisturis, pinças, agulhas curvas, fios de sutura, talas e tinturas (<code>10</code> usos); habilita <strong>Medicina &amp; Cirurgia</strong> para tratar <em>Ferimentos Graves</em> e estabilizar moribundos.</td></tr><tr><td style="text-align:left"><strong>Instrumentos Cirúrgicos de Precisão <em>(Baldbella)</strong></em></td><td style="text-align:center"><code>85 PP</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Lâminas finíssimas de liga temperada; concedem <strong><code>+2</code></strong> em cirurgias complexas e extrações delicadas.</td></tr><tr><td style="text-align:left"><strong>Ataduras Limpas &amp; Fio <em>(5 usos)</strong></em></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>0,4 kg</code></td><td style="text-align:left">Reduz de <code>CD 15</code> para <strong><code>CD 12</code></strong> o teste de <em>Medicina</em> para estabilizar aliados moribundos ou estancar <em>Sangramento</em>.</td></tr><tr><td style="text-align:left"><strong>Cataplasma de Ervas <em>(1 dose)</strong></em></td><td style="text-align:center"><code>3 PP</code></td><td style="text-align:center"><code>0,2 kg</code></td><td style="text-align:left">Aplicado durante <em>Descanso Curto</em> ou <em>Longo</em>, soma <strong><code>+1d4</code> PV</strong> extras à recuperação natural <em>(máx. 1× por descanso)</em> e ajuda contra febres.</td></tr><tr><td style="text-align:left"><strong>Aguardente Antisséptica <em>(Frasco)</strong></em></td><td style="text-align:center"><code>5 PC</code></td><td style="text-align:center"><code>0,6 kg</code></td><td style="text-align:left">Limpa feridas antes da sutura (<code>+1</code> em <em>Medicina</em> contra infecção) e também serve como combustível de emergência.</td></tr><tr><td style="text-align:left"><strong>Bolsa Alquímica Completa</strong></td><td style="text-align:center"><code>40 PP</code></td><td style="text-align:center"><code>4,0 kg</code></td><td style="text-align:left">Alambiques portáteis, balança de precisão, funis, frascos e reagentes básicos; habilita <strong>Alquimia &amp; Venenos</strong> em campo.</td></tr><tr><td style="text-align:left"><strong>Prensa de Ervas, Pilão &amp; Almofariz</strong></td><td style="text-align:center"><code>6 PP</code></td><td style="text-align:center"><code>2,0 kg</code></td><td style="text-align:left">Ferramenta base de <strong>Herbalismo &amp; Natureza</strong> para extrair seivas, secar raízes <em>(como as da Ilha das Safiras)</em> e preparar unguentos sem gastar moedas em reagentes.</td></tr><tr><td style="text-align:left"><strong>Frasco de Ácido Comum <em>(Alquímico)</strong></em></td><td style="text-align:center"><code>15 PP</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left">Arremesso até <code>6m</code> (<em>Armas à Distância</em>): causa <strong><code>2d4</code></strong> de dano ácido direto <em>(ignora armadura comum; corrói fechaduras simples em <code>1 min</code>)</em>.</td></tr><tr><td style="text-align:left"><strong>Bomba de Fumaça Seca</strong></td><td style="text-align:center"><code>10 PP</code></td><td style="text-align:center"><code>0,4 kg</code></td><td style="text-align:left">Estoura ao impacto (<code>6m</code>), criando nuvem densa de <code>4,5m</code> de raio por <code>3 rodadas</code> <em>(concede cobertura total contra ataques à distância e permite fuga)</em>.</td></tr><tr><td style="text-align:left"><strong>Frasco de Óleo Incendiário <em>(Alcatrão)</strong></em></td><td style="text-align:center"><code>12 PP</code></td><td style="text-align:center"><code>0,6 kg</code></td><td style="text-align:left">Pávio aceso + arremesso (<code>6m</code>): causa <strong><code>1d6</code></strong> fogo imediato + <strong><code>1d6</code></strong> na rodada seguinte se o alvo não apagar com Ação Principal <em>(temido por criaturas vulneráveis ao fogo)</em>.</td></tr><tr><td style="text-align:left"><strong>Antídoto Comum <em>(1 dose)</strong></em></td><td style="text-align:center"><code>15 PP</code></td><td style="text-align:center"><code>0,2 kg</code></td><td style="text-align:left">Concede <strong><code>+4</code></strong> em testes de <em>CON</em> contra venenos naturais <em>(serpentes, escorpiões, toxinas de rua)</em> por <code>1 hora</code>, ou permite refazer 1 teste falho.</td></tr><tr><td style="text-align:left"><strong>Calmante / Sonífero Herbal <em>(1 dose)</strong></em></td><td style="text-align:center"><code>8 PP</code></td><td style="text-align:center"><code>0,2 kg</code></td><td style="text-align:left">Misturado em bebida: alvo testa <em>CON CD 14</em> ou sofre sonolência (<code>-2</code> Percepção/Iniciativa por <code>2 horas</code>; dose tripla induz sono profundo).</td></tr><tr><td style="text-align:left"><strong>Máscara de Pano com Vinagre &amp; Ervas</strong></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>0,2 kg</code></td><td style="text-align:left">Concede <strong><code>+3</code></strong> em testes de <em>CON</em> contra fumaça, miasmas de pântano e nuvens de esporos <em>(ex.: Lanterna-de-Turfa)</em>.</td></tr><tr><td style="text-align:left"><strong>Frascos de Vidro com Rolha <em>(5 un.)</strong></em></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left">Para coletar amostras de água, sangue, veneno, cinzas ou seivas raras em expedições.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="7-náutica-viagens-marítimas-7">7. Náutica &amp; Viagens Marítimas</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Astrolábio de Latão <em>(Corallis)</strong></em></td><td style="text-align:center"><code>45 PP</code></td><td style="text-align:center"><code>0,8 kg</code></td><td style="text-align:left">Mede altura solar/estelar em alto-mar; concede <strong><code>+2</code></strong> em <em>Navegação &amp; Náutica</em> fora da vista da costa <em>(indispensável rumo a Kalis ou Thanatos)</em>.</td></tr><tr><td style="text-align:left"><strong>Ampulheta Marítima <em>(1 hora)</strong></em></td><td style="text-align:center"><code>6 PP</code></td><td style="text-align:center"><code>0,6 kg</code></td><td style="text-align:left">Controla turnos de vigia, velocidade do barco e duração de rituais ou marés.</td></tr><tr><td style="text-align:left"><strong>Prumo com Linha de Sondagem <em>(30m)</strong></em></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Peso de chumbo com sebo na base para medir profundidade e detectar recifes ocultos (<code>+2</code> em <em>Navegação</em> no <em>Mar dos Corais</em>).</td></tr><tr><td style="text-align:left"><strong>Cartas Náuticas Seladas <em>(por Região)</strong></em></td><td style="text-align:center"><code>15 PP</code></td><td style="text-align:center"><code>0,3 kg</code></td><td style="text-align:left">Mapeiam correntes, faróis e escolhos de uma região <em>(ex.: Mar dos Corais, Estuário de Merlinport)</em>; concedem <strong><code>+2</code></strong> em <em>Navegação</em> naquela área.</td></tr><tr><td style="text-align:left"><strong>Gancho de Abordagem com Corda <em>(10m)</strong></em></td><td style="text-align:center"><code>4 PP</code></td><td style="text-align:center"><code>3,0 kg</code></td><td style="text-align:left">Projetado para prender velames e amuradas inimigas sem deslizar; suporta <code>400 kg</code>.</td></tr><tr><td style="text-align:left"><strong>Kit de Calafetagem <em>(Estopa, Breu &amp; Tábuas)</strong></em></td><td style="text-align:center"><code>10 PP</code></td><td style="text-align:center"><code>8,0 kg</code></td><td style="text-align:left">Permite a um marinheiro ou carpinteiro reparar <strong><code>2d6</code> pontos de avaria</strong> no casco de um barco em <code>1 hora</code> (<code>Navegação</code> ou <code>Engenharia CD 14</code>).</td></tr><tr><td style="text-align:left"><strong>Boia de Cortiça <em>(Salva-Vidas)</strong></em></td><td style="text-align:center"><code>3 PP</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Anula penalidade de fadiga em <em>Natação</em> e permite manter um náufrago inconsciente à tona.</td></tr><tr><td style="text-align:left"><strong>Capa Impermeável Oleada</strong></td><td style="text-align:center"><code>3 PP</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Lona pesada tratada com óleo de linhaça; protege contra borrifos gelados do <em>Mar das Cinzas</em> e chuvas torrenciais (<code>+2</code> contra frio úmido).</td></tr><tr><td style="text-align:left"><strong>Âncora Leve de Bote <em>(com 15m corda)</strong></em></td><td style="text-align:center"><code>8 PP</code></td><td style="text-align:center"><code>9,0 kg</code></td><td style="text-align:left">Mantém barcos pequenos e esquifes fundeados perto de enseadas e naufrágios.</td></tr><tr><td style="text-align:left"><strong>Sineta de Bronze &amp; Bandeiras de Sinal</strong></td><td style="text-align:center"><code>6 PP</code></td><td style="text-align:center"><code>2,0 kg</code></td><td style="text-align:left">Comunicação entre navios à vista ou aviso de posição na neblina cerrada.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="8-subterfúgio-investigação-corte-8">8. Subterfúgio, Investigação &amp; Corte</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Jogo de Gazuas Comum / de Precisão</strong></td><td style="text-align:center"><code>20 PP</code> / <code>75 PP</code></td><td style="text-align:center"><code>0,4 kg</code></td><td style="text-align:left">Habilita <strong>Ladinagem &amp; Fechaduras</strong>; versão de precisão <em>(contrabando de Kalis)</em> concede <strong><code>+2</code></strong> para abrir fechaduras complexas e cofres.</td></tr><tr><td style="text-align:left"><strong>Estojo de Disfarce &amp; Maquiagem</strong></td><td style="text-align:center"><code>20 PP</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Pigmentos, ceras, barbas postiças, tintura de cabelo e lentes escuras (<code>10</code> usos); habilita <strong>Disfarce</strong> convincente.</td></tr><tr><td style="text-align:left"><strong>Kit de Caligrafia &amp; Falsificação</strong></td><td style="text-align:center"><code>25 PP</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Penas finas, tintas variadas, raspadores de pergaminho, lacres e pós secantes; habilita falsificar documentos e salvo-condutos (<code>Enganação / Idiomas</code>).</td></tr><tr><td style="text-align:left"><strong>Selo de Cera &amp; Bastões de Lacre <em>(5 un.)</strong></em></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>0,3 kg</code></td><td style="text-align:left">Lacre oficial ou anel de sinete personalizado para autenticar cartas e impedir violação discreta.</td></tr><tr><td style="text-align:left"><strong>Tinta Invisível <em>(Frasco)</strong></em></td><td style="text-align:center"><code>5 PP</code></td><td style="text-align:center"><code>0,2 kg</code></td><td style="text-align:left">Revela-se apenas quando aquecida suavemente sobre chama de vela <em>(muito usada por agentes de Kalis e Sabina de Pontáuria)</em>.</td></tr><tr><td style="text-align:left"><strong>Algemas de Ferro com Chave</strong></td><td style="text-align:center"><code>8 PP</code></td><td style="text-align:center"><code>1,2 kg</code></td><td style="text-align:left">Prendem pulsos com segurança (<code>Ladinagem CD 16</code> ou <code>FOR CD 20</code> para escapar; modelo reforçado custa <code>20 PP</code> e sobe CD em <code>+3</code>).</td></tr><tr><td style="text-align:left"><strong>Estrepes <em>(Bolsa com 20 pontas)</strong></em></td><td style="text-align:center"><code>3 PP</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Cobre um quadrado de <code>1,5m × 1,5m</code>; quem pisar sem ver (<code>Percepção CD 14</code>) sofre <code>1d4</code> dano e reduz deslocamento pela metade até tratar o pé.</td></tr><tr><td style="text-align:left"><strong>Bolsa de Giz &amp; Pó Fino</strong></td><td style="text-align:center"><code>3 PC</code></td><td style="text-align:center"><code>0,3 kg</code></td><td style="text-align:left">Marca caminhos em minas/ruínas, detecta correntes de ar atrás de paredes falsas e revela fios de armadilha.</td></tr><tr><td style="text-align:left"><strong>Lupa de Relojoeiro <em>(Sellene)</strong></em></td><td style="text-align:center"><code>18 PP</code></td><td style="text-align:center"><code>0,1 kg</code></td><td style="text-align:left">Concede <strong><code>+2</code></strong> em <em>Investigação</em> e <em>Barganha</em> para examinar moedas raspadas, selos adulterados, cicatrizes finas ou mecanismos diminutos.</td></tr><tr><td style="text-align:left"><strong>Caderno de Pergaminho, Penas &amp; Tinta</strong></td><td style="text-align:center"><code>3 PP</code></td><td style="text-align:center"><code>0,5 kg</code></td><td style="text-align:left"><code>60</code> folhas costuradas em couro; essencial para mapeamento, registros de expedição e tradução de cifras.</td></tr><tr><td style="text-align:left"><strong>Dados Comuns / Dados Viciados</strong></td><td style="text-align:center"><code>2 PC</code> / <code>5 PP</code></td><td style="text-align:center"><code>0,1 kg</code></td><td style="text-align:left">Dados viciados concedem <strong><code>+3</code></strong> em apostas de taverna <em>(Percepção ou Intuição CD 16 revela a fraude — risco imediato de briga!)</em>.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="9-vestuário-clima-provisões-9">9. Vestuário, Clima &amp; Provisões</h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Roupas Comuns de Viagem</strong></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>1,5 kg</code></td><td style="text-align:left">Túnica grossa, calças reforçadas, cinto e capa simples; padrão de estradas sem chamar atenção.</td></tr><tr><td style="text-align:left"><strong>Traje Fino de Corte <em>(Altavanne / Baldbella)</strong></em></td><td style="text-align:center"><code>25 PP</code></td><td style="text-align:center"><code>2,0 kg</code></td><td style="text-align:left">Lã tingida, bordados discretos e botas limpas; exigido para audiências nobres sem penalidade de <code>-2</code> em <em>Etiqueta &amp; Corte</em>.</td></tr><tr><td style="text-align:left"><strong>Vestes Aristocráticas com Brasão</strong></td><td style="text-align:center"><code>120 PP</code></td><td style="text-align:center"><code>3,0 kg</code></td><td style="text-align:left">Sedas importadas, broches de prata e peles finas; reforça <code>Status 3–5</code> e concede <strong><code>+1</code></strong> em primeiras impressões na alta nobreza.</td></tr><tr><td style="text-align:left"><strong>Manto de Inverno Forrado de Pele</strong></td><td style="text-align:center"><code>6 PP</code></td><td style="text-align:center"><code>3,0 kg</code></td><td style="text-align:left">Concede <strong><code>+3</code></strong> em <em>Sobrevivência</em> contra frio extremo nos <em>Montes Ferraur</em>, <em>Passo de Rubecina</em> e <em>Mar das Cinzas</em>.</td></tr><tr><td style="text-align:left"><strong>Botas Reforçadas de Marcha</strong></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>1,2 kg</code></td><td style="text-align:left">Solado espesso pregado; evita bolhas e penalidades em marchas forçadas de vários dias.</td></tr><tr><td style="text-align:left"><strong>Botas Altas Impermeáveis <em>(Pântano)</strong></em></td><td style="text-align:center"><code>4 PP</code></td><td style="text-align:center"><code>1,8 kg</code></td><td style="text-align:left">Couro engraxado até o joelho; protege contra sanguessugas, lama ácida e reduz risco de picadas baixas em <em>Voernock</em>.</td></tr><tr><td style="text-align:left"><strong>Turbante, Manto Leve &amp; Véu <em>(Gaddra)</strong></em></td><td style="text-align:center"><code>2 PP</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Tecido claro respirável; concede <strong><code>+3</code></strong> em testes contra insolação, tempestades de areia e sede nas dunas de Gaddra.</td></tr><tr><td style="text-align:left"><strong>Luvas Grossas de Couro <em>(Forja / Escalada)</strong></em></td><td style="text-align:center"><code>1 PP</code></td><td style="text-align:center"><code>0,3 kg</code></td><td style="text-align:left">Protegem mãos contra queimaduras leves, espinhos e atrito de corda em descidas rápidas.</td></tr><tr><td style="text-align:left"><strong>Rações Secas de Viagem <em>(7 dias)</strong></em></td><td style="text-align:center"><code>5 PP</code></td><td style="text-align:center"><code>3,5 kg</code></td><td style="text-align:left">Carne seca, queijo duro, pão escuro e frutas secas; duram <code>1 mês</code> secas <em>(indispensável fora das estradas principais)</em>.</td></tr><tr><td style="text-align:left"><strong>Biscoito Naval &amp; Carne Salgada <em>(14 dias)</strong></em></td><td style="text-align:center"><code>6 PP</code></td><td style="text-align:center"><code>6,0 kg</code></td><td style="text-align:left">Sabor duro e salgado, mas dura até <code>4 meses</code> no porão de um navio sem estragar.</td></tr><tr><td style="text-align:left"><strong>Cantil de Vinho Bom / Cerveja Escura</strong></td><td style="text-align:center"><code>5 PC</code> / <code>2 PC</code></td><td style="text-align:center"><code>1,0 kg</code></td><td style="text-align:left">Eleva moral no acampamento ou serve para quebrar o gelo em negociações de estrada.</td></tr><tr><td style="text-align:left"><strong>Forragem para Montaria <em>(7 dias)</strong></em></td><td style="text-align:center"><code>15 PC</code></td><td style="text-align:center"><code>7,0 kg</code></td><td style="text-align:left">Aveia e feno prensado para travessias sem pasto <em>(obrigatório no Passo de Rubecina no inverno e nas dunas de Gaddra)</em>.</td></tr></tbody></table></div>
+<hr/>
+<h2 id="10-montarias-arreios-pacotes-prontos-de-expedição-10">10. Montarias, Arreios &amp; Pacotes Prontos de Expedição</h2>
+<h3 id="montarias-animais-de-carga-arreios-11">Montarias, Animais de Carga &amp; Arreios</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Animal / Equipamento</th><th style="text-align:center">Preço</th><th style="text-align:center">Peso / Carga Útil</th><th style="text-align:left">Especificações &amp; Uso em Mesa</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Mula de Carga</strong></td><td style="text-align:center"><code>45 PP</code></td><td style="text-align:center">Carrega <code>180 kg</code></td><td style="text-align:left">Deslocamento <code>12m</code>; pé firme em montanhas (<em>Ferraur / Rubecina</em>) e quase imune a pânico trivial.</td></tr><tr><td style="text-align:left"><strong>Cavalo de Estrada</strong></td><td style="text-align:center"><code>120 PP</code></td><td style="text-align:center">Carrega <code>150 kg</code></td><td style="text-align:left">Deslocamento <code>18m</code>; viaja até <code>48 km/dia</code> em estradas boas; assusta-se em combate sem treino.</td></tr><tr><td style="text-align:left"><strong>Montaria do Deserto <em>(OX — Gaddra)</strong></em></td><td style="text-align:center"><code>150 PP</code></td><td style="text-align:center">Carrega <code>160 kg</code></td><td style="text-align:left">Deslocamento <code>16,5m</code>; suporta <code>3 dias</code> sem água sob calor escaldante sem sofrer Exaustão.</td></tr><tr><td style="text-align:left"><strong>Cavalo de Guerra Treinado</strong></td><td style="text-align:center"><code>320 PP</code></td><td style="text-align:center">Carrega <code>200 kg</code></td><td style="text-align:left">Deslocamento <code>16,5m</code>, <code>36 PV</code>; treinado para não fugir sob aço, fogo ou gritos (<code>+2</code> em <em>Cavalgar</em> em combate).</td></tr><tr><td style="text-align:left"><strong>Cão de Caça / Guarda Treinado</strong></td><td style="text-align:center"><code>30 PP</code></td><td style="text-align:center"><code>—</code></td><td style="text-align:left"><code>14 PV</code>, <code>Percepção +6</code> <em>(faro aguçado)</em>; alerta o acampamento contra emboscadas noturnas e ajuda a rastrear (<code>+2</code> <em>Sobrevivência</em>).</td></tr><tr><td style="text-align:left"><strong>Sela, Freio &amp; Estribos</strong></td><td style="text-align:center"><code>10 PP</code></td><td style="text-align:center"><code>7,0 kg</code></td><td style="text-align:left">Necessário para cavalgar longas distâncias ou combater montado sem penalidade de <code>-3</code> em <em>Cavalgar</em>.</td></tr><tr><td style="text-align:left"><strong>Barda de Couro Batido <em>(Montaria)</strong></em></td><td style="text-align:center"><code>40 PP</code></td><td style="text-align:center"><code>12,0 kg</code></td><td style="text-align:left">Concede <strong><code>+2</code> na Defesa</strong> da montaria <em>(zero RD passiva, seguindo a regra de Alenia)</em>.</td></tr><tr><td style="text-align:left"><strong>Carroça Reforçada <em>(sem animais)</strong></em></td><td style="text-align:center"><code>40 PP</code></td><td style="text-align:center">Carrega <code>400 kg</code></td><td style="text-align:left">Exige <code>2</code> mulas ou <code>2</code> cavalos (<code>130 PP</code> completa com 2 mulas); ideal para expedições comerciais ou transporte de forja móvel.</td></tr></tbody></table></div>
+<h3 id="5-pacotes-prontos-de-compra-rápida-para-agilizar-a-criação-de-personagens-12">5 Pacotes Prontos de Compra Rápida <em>(Para Agilizar a Criação de Personagens)</em></h3>
+<p>Em vez de somar item por item na primeira sessão, qualquer explorador pode comprar um pacote fechado pronto:</p>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Pacote Pronto</th><th style="text-align:center">Preço Fechado</th><th style="text-align:center">Peso Total</th><th style="text-align:left">Itens Incluídos no Pacote</th></tr></thead><tbody><tr><td style="text-align:left"><strong>1. Pacote do Viajante das Estradas</strong></td><td style="text-align:center"><strong><code>14 PP</code></strong></td><td style="text-align:center"><code>12,5 kg</code></td><td style="text-align:left">Mochila de couro, saco de dormir de lã, tenda simples, odre (2L), pederneira + 10 pavios, 5 tochas, panela de ferro, pedra de amolar, rações (7 dias).</td></tr><tr><td style="text-align:left"><strong>2. Pacote do Explorador de Pântanos &amp; Ruínas</strong></td><td style="text-align:center"><strong><code>38 PP</code></strong></td><td style="text-align:center"><code>15,0 kg</code></td><td style="text-align:left">Mochila de couro, saco encerado, rede de acampamento, lanterna blindada + 2 óleos, corda 15m + arpéu, pé-de-cabra, facão de mato, botas impermeáveis, bolsa de giz, ataduras (5 usos), rações (7 dias).</td></tr><tr><td style="text-align:left"><strong>3. Pacote do Sobrevivente do Deserto <em>(Gaddra)</strong></em></td><td style="text-align:center"><strong><code>26 PP</code></strong></td><td style="text-align:center"><code>13,0 kg</code></td><td style="text-align:left">Mochila de couro, turbante e véu de Gaddra, lona encerada (3×3m), 3 odres (6L), pederneira, sal de Bayd (1 kg), laços de caça (6), faca de esfolar, antídoto comum (1), rações (7 dias).</td></tr><tr><td style="text-align:left"><strong>4. Pacote do Marinheiro &amp; Pescador Costeiro</strong></td><td style="text-align:center"><strong><code>32 PP</code></strong></td><td style="text-align:center"><code>14,0 kg</code></td><td style="text-align:left">Saco encerado, capa impermeável oleada, vara e anzóis, tarrafa de pesca, arpão manual, covo dobrável, corda 15m, lanterna comum + 2 óleos, sal de Bayd (1 kg), faca de esfolar, biscoito naval (14 dias).</td></tr><tr><td style="text-align:left"><strong>5. Pacote do Artesão Itinerante <em>(Forja &amp; Reparos)</strong></em></td><td style="text-align:center"><strong><code>48 PP</code></strong></td><td style="text-align:center"><code>17,5 kg</code></td><td style="text-align:left">Mochila de couro, ferramentas portáteis de ferreiro, fole de campanha, luvas grossas de couro, pedra de amolar, cola e breu, 50 pregos, pederneira, lanterna comum + 2 óleos, odre (2L), rações (7 dias).</td></tr></tbody></table></div>
+        </article>
+    </main>
+    <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
+        <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
+    </div>
+    <script>
+(function() {
+    const SESSION_KEY = 'alenia_gm_unlock_key';
+    const MODE_KEY = 'alenia_reader_mode';
+    const FONT_KEY = 'alenia_font_scale';
+
+    function b64ToBytes(b64) {
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return bytes;
+    }
+
+    async function decryptBlock(cipherObj, password) {
+        const enc = new TextEncoder();
+        const keyMat = await crypto.subtle.importKey('raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']);
+        const aesKey = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: b64ToBytes(cipherObj.s), iterations: cipherObj.it, hash: 'SHA-256' },
+            keyMat, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+        );
+        const plainBuf = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: b64ToBytes(cipherObj.i) }, aesKey, b64ToBytes(cipherObj.c)
+        );
+        return JSON.parse(new TextDecoder().decode(plainBuf));
+    }
+
+    function tagNowrapCells(root) {
+        const reShortNum = /^\s*(?:[+-]?\d+(?:\s*[–\-—]\s*\d+)?|[+-]?\d*d\d+(?:\s*[+-]\s*\d+)?|\d+(?:,\d+)?[×x%]?)\s*$/i;
+        (root || document).querySelectorAll('table').forEach(tbl => {
+            const cols = tbl.querySelectorAll('thead th').length;
+            if (cols >= 6) tbl.classList.add('table-ultra-dense');
+            else if (cols === 5) tbl.classList.add('table-dense');
+            if (cols <= 4) {
+                tbl.querySelectorAll('tbody td').forEach(td => {
+                    if (td.children.length === 0 || (td.children.length === 1 && td.firstElementChild.tagName === 'STRONG')) {
+                        const txt = (td.textContent || '').trim();
+                        if (txt.length > 0 && txt.length <= 10 && reShortNum.test(txt)) {
+                            td.classList.add('nowrap-cell');
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /* =====================================================
+       HARDCOVER BOOK PAGINATOR ENGINE
+       ===================================================== */
+    const BookReader = {
+        enabled: false,
+        mode: 'spread', // 'spread' (2 pages), 'single' (1 page), 'scroll'
+        pages: [],      // array of HTML strings (one per book page)
+        anchorMap: {},  // element id -> page index (0-based)
+        currentIdx: 0,  // index of left (or single) page shown
+        bookTitle: '',
+
+        fontScale: 1,
+
+        async init() {
+            const stage = document.getElementById('reader-stage');
+            if (!stage) return; // index.html portal does not paginate
+            this.enabled = true;
+            this.bookTitle = document.body.dataset.bookTitle || 'Alenia RPG';
+
+            const savedScale = parseFloat(localStorage.getItem(FONT_KEY) || '1');
+            if (!isNaN(savedScale) && savedScale >= 0.8 && savedScale <= 1.4) {
+                this.fontScale = Math.round(savedScale * 20) / 20;
+            }
+            this.applyFontScale(this.fontScale, false);
+
+            const savedMode = localStorage.getItem(MODE_KEY);
+            if (savedMode === 'spread' || savedMode === 'single' || savedMode === 'scroll') {
+                this.mode = savedMode;
+            } else {
+                this.mode = window.innerWidth >= 1040 ? 'spread' : 'single';
+            }
+
+            // Wait briefly for web fonts so initial page count is accurate on first paint
+            if (document.fonts && document.fonts.ready) {
+                await Promise.race([
+                    document.fonts.ready,
+                    new Promise(res => setTimeout(res, 1200))
+                ]);
+            }
+
+            this.bindControls();
+            this.applyMode(this.mode, false);
+
+            // Re-paginate cleanly if any map image finishes loading after initial paint
+            const source = document.querySelector('.book-page');
+            if (source) {
+                let imgTimer = null;
+                source.querySelectorAll('img').forEach(img => {
+                    if (!img.complete) {
+                        img.addEventListener('load', () => {
+                            clearTimeout(imgTimer);
+                            imgTimer = setTimeout(() => {
+                                if (this.mode !== 'scroll') {
+                                    const prev = this.currentIdx;
+                                    this.paginate();
+                                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                }
+                            }, 120);
+                        }, { once: true });
+                    }
+                });
+            }
+
+            let resizeTimer = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (this.mode !== 'scroll') {
+                        const prev = this.currentIdx;
+                        this.paginate();
+                        this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                    }
+                }, 220);
+            });
+        },
+
+        applyFontScale(scale, repaginate = true) {
+            this.fontScale = Math.max(0.85, Math.min(1.35, Math.round(scale * 20) / 20));
+            document.documentElement.style.setProperty('--font-scale', String(this.fontScale));
+            const lbl = document.getElementById('font-scale-label');
+            if (lbl) lbl.textContent = Math.round(this.fontScale * 100) + '%';
+            if (repaginate) {
+                localStorage.setItem(FONT_KEY, String(this.fontScale));
+                if (this.mode !== 'scroll') {
+                    const prev = this.currentIdx;
+                    this.paginate();
+                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                }
+            }
+        },
+
+        effectiveMode() {
+            if (this.mode === 'scroll') return 'scroll';
+            if (this.mode === 'spread' && window.innerWidth < 1040) return 'single';
+            return this.mode;
+        },
+
+        computeLeafDimensions() {
+            const eff = this.effectiveMode();
+            // Full-width book stage (sidebar opens as overlay drawer so book is ALWAYS large & centered!)
+            const availW = window.innerWidth - 96;
+            const availH = window.innerHeight - 52 - 56 - 16;
+            const leafH = Math.max(500, Math.min(1040, availH));
+            let leafW;
+            if (eff === 'spread') {
+                // Generous open hardcover spread filling ~88-94% of desktop viewport
+                const maxByAspect = Math.round(leafH * 0.90);
+                leafW = Math.min(820, maxByAspect, Math.floor(availW / 2) - 9);
+                leafW = Math.max(380, leafW);
+            } else {
+                const maxByAspect = Math.round(leafH * 0.92);
+                leafW = Math.min(880, maxByAspect, Math.max(320, availW));
+            }
+            document.documentElement.style.setProperty('--leaf-w', leafW + 'px');
+            document.documentElement.style.setProperty('--leaf-h', leafH + 'px');
+            // 2px border + 30px header + 30px footer + 20px safety breathing room (guarantees ZERO clipping / ZERO scrollbars)
+            return { leafW, leafH, bodyH: leafH - 82 };
+        },
+
+        collectBlocks(container) {
+            const blocks = [];
+            function walk(parent) {
+                for (const child of Array.from(parent.children)) {
+                    if (child.tagName === 'SECTION' && child.classList.contains('tome-divider')) {
+                        walk(child);
+                    } else if (child.classList.contains('gm-vault') && child.getAttribute('data-locked') === 'false') {
+                        const unlocked = child.querySelector('.gm-unlocked-content');
+                        if (unlocked) walk(unlocked);
+                    } else {
+                        blocks.push(child);
+                    }
+                }
+            }
+            walk(container);
+            return blocks;
+        },
+
+        paginate() {
+            const source = document.querySelector('.book-page');
+            if (!source) return;
+            const { leafW, bodyH } = this.computeLeafDimensions();
+
+            // Offscreen measurement leaf matching exact styles & width
+            const measurer = document.createElement('div');
+            measurer.className = 'leaf leaf-single';
+            measurer.style.cssText = `position:fixed; left:-99999px; top:0; width:${leafW}px; height:auto; visibility:hidden; pointer-events:none;`;
+            const mBody = document.createElement('div');
+            mBody.className = 'leaf-body';
+            mBody.style.overflow = 'visible';
+            measurer.appendChild(mBody);
+            document.body.appendChild(measurer);
+
+            const rawBlocks = this.collectBlocks(source);
+            const pages = [];
+            const anchorMap = {};
+
+            let curNodes = [];
+
+            const flushPage = () => {
+                if (curNodes.length === 0) return;
+                const pageIdx = pages.length;
+                const wrap = document.createElement('div');
+                curNodes.forEach(n => {
+                    if (n.id) anchorMap[n.id] = pageIdx;
+                    n.querySelectorAll('[id]').forEach(el => { anchorMap[el.id] = pageIdx; });
+                    wrap.appendChild(n);
+                });
+                pages.push(wrap.innerHTML);
+                curNodes = [];
+                mBody.innerHTML = '';
+            };
+
+            const isHeading = (el) => el && /^H[1-4]$/.test(el.tagName);
+
+            const popOrphanHeadings = (allowShortIntro) => {
+                const carried = [];
+                // Optionally pull a single short intro <p> sitting right under a heading if there's earlier content on the page
+                if (
+                    allowShortIntro &&
+                    curNodes.length >= 3 &&
+                    curNodes[curNodes.length - 1].tagName === 'P' &&
+                    (curNodes[curNodes.length - 1].textContent || '').trim().length <= 180 &&
+                    isHeading(curNodes[curNodes.length - 2])
+                ) {
+                    carried.unshift(curNodes.pop());
+                    if (mBody.lastChild) mBody.removeChild(mBody.lastChild);
+                }
+                while (curNodes.length > 0 && isHeading(curNodes[curNodes.length - 1])) {
+                    carried.unshift(curNodes.pop());
+                    if (mBody.lastChild) mBody.removeChild(mBody.lastChild);
+                }
+                // Never empty the entire page when carrying headings (prevents infinite loops)
+                if (curNodes.length === 0 && carried.length > 0) {
+                    carried.forEach(node => {
+                        curNodes.push(node);
+                        mBody.appendChild(node);
+                    });
+                    return [];
+                }
+                return carried;
+            };
+
+            const restoreCarried = (carried) => {
+                carried.forEach(node => {
+                    curNodes.push(node);
+                    mBody.appendChild(node);
+                });
+            };
+
+            const placeTableWrap = (tableWrap) => {
+                tagNowrapCells(tableWrap);
+                const table = tableWrap.querySelector('table');
+                const tbody = table ? table.querySelector('tbody') : null;
+                const rows = tbody ? Array.from(tbody.querySelectorAll(':scope > tr')) : [];
+                if (!table || !tbody || rows.length <= 1) {
+                    // Fallback to atomic placement for trivial 0-1 row tables
+                    placeAtomic(tableWrap);
+                    return;
+                }
+
+                // Fast path: whole table fits right now!
+                mBody.appendChild(tableWrap);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(tableWrap);
+                    return;
+                }
+                mBody.removeChild(tableWrap);
+
+                const theadOrig = table.querySelector('thead');
+                const tblCls = table.className || '';
+                const buildChunk = () => {
+                    const w = document.createElement('div');
+                    w.className = tableWrap.className;
+                    const t = document.createElement('table');
+                    if (tblCls) t.className = tblCls;
+                    if (theadOrig) t.appendChild(theadOrig.cloneNode(true));
+                    const tb = document.createElement('tbody');
+                    t.appendChild(tb);
+                    w.appendChild(t);
+                    return { w, tb };
+                };
+
+                let rowIdx = 0;
+                while (rowIdx < rows.length) {
+                    const chunk = buildChunk();
+                    mBody.appendChild(chunk.w);
+                    let addedHere = 0;
+
+                    while (rowIdx < rows.length) {
+                        const rowClone = rows[rowIdx].cloneNode(true);
+                        chunk.tb.appendChild(rowClone);
+                        if (mBody.scrollHeight > bodyH) {
+                            if (addedHere === 0 && curNodes.length === 0) {
+                                // Single super-tall row alone on fresh page: keep it so we make forward progress
+                                addedHere++;
+                                rowIdx++;
+                                break;
+                            }
+                            chunk.tb.removeChild(rowClone);
+                            break;
+                        }
+                        addedHere++;
+                        rowIdx++;
+                    }
+
+                    // Avoid leaving just 1 lonely row at bottom of a non-empty page if more rows remain
+                    if (addedHere === 0 || (addedHere === 1 && rowIdx < rows.length && curNodes.length > 0)) {
+                        mBody.removeChild(chunk.w);
+                        rowIdx -= addedHere;
+                        const carried = popOrphanHeadings(true);
+                        flushPage();
+                        restoreCarried(carried);
+                        continue;
+                    }
+
+                    curNodes.push(chunk.w);
+                    if (rowIdx < rows.length) {
+                        flushPage();
+                    }
+                }
+            };
+
+            const placeList = (listEl) => {
+                const items = Array.from(listEl.children).filter(el => el.tagName === 'LI');
+                if (items.length <= 1) {
+                    placeAtomic(listEl);
+                    return;
+                }
+                mBody.appendChild(listEl);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(listEl);
+                    return;
+                }
+                mBody.removeChild(listEl);
+
+                let idx = 0;
+                const baseStart = parseInt(listEl.getAttribute('start') || '1', 10) || 1;
+                while (idx < items.length) {
+                    const chunk = document.createElement(listEl.tagName);
+                    if (listEl.className) chunk.className = listEl.className;
+                    if (listEl.tagName === 'OL' && idx > 0) {
+                        chunk.setAttribute('start', String(baseStart + idx));
+                    }
+                    mBody.appendChild(chunk);
+                    let addedHere = 0;
+
+                    while (idx < items.length) {
+                        const liClone = items[idx].cloneNode(true);
+                        chunk.appendChild(liClone);
+                        if (mBody.scrollHeight > bodyH) {
+                            if (addedHere === 0 && curNodes.length === 0) {
+                                addedHere++;
+                                idx++;
+                                break;
+                            }
+                            chunk.removeChild(liClone);
+                            break;
+                        }
+                        addedHere++;
+                        idx++;
+                    }
+
+                    if (addedHere === 0) {
+                        mBody.removeChild(chunk);
+                        const carried = popOrphanHeadings(true);
+                        flushPage();
+                        restoreCarried(carried);
+                        continue;
+                    }
+
+                    curNodes.push(chunk);
+                    if (idx < items.length) {
+                        flushPage();
+                    }
+                }
+            };
+
+            const placeEntryCard = (cardEl) => {
+                // Fast path 1: whole card fits on current page
+                mBody.appendChild(cardEl);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(cardEl);
+                    return;
+                }
+                mBody.removeChild(cardEl);
+
+                // Fast path 2: flush current non-empty page and try placing whole card on fresh page
+                if (curNodes.length > 0) {
+                    const carried = popOrphanHeadings(true);
+                    flushPage();
+                    restoreCarried(carried);
+                    mBody.appendChild(cardEl);
+                    if (mBody.scrollHeight <= bodyH) {
+                        curNodes.push(cardEl);
+                        return;
+                    }
+                    mBody.removeChild(cardEl);
+                }
+
+                // Fallback: card itself is taller than a full page (e.g., epic boss or high font zoom) — split its children cleanly!
+                const kids = Array.from(cardEl.children);
+                let curCard = document.createElement('div');
+                curCard.className = cardEl.className;
+                mBody.appendChild(curCard);
+
+                const startContinuationCard = () => {
+                    if (curCard.children.length > 0) {
+                        curNodes.push(curCard);
+                        flushPage();
+                    } else if (curCard.parentNode === mBody) {
+                        mBody.removeChild(curCard);
+                    }
+                    curCard = document.createElement('div');
+                    curCard.className = cardEl.className + ' entry-card-cont';
+                    mBody.appendChild(curCard);
+                };
+
+                for (const child of kids) {
+                    if (child.tagName === 'UL' || child.tagName === 'OL') {
+                        const lis = Array.from(child.children).filter(el => el.tagName === 'LI');
+                        let subList = document.createElement(child.tagName);
+                        curCard.appendChild(subList);
+                        for (const li of lis) {
+                            const liClone = li.cloneNode(true);
+                            subList.appendChild(liClone);
+                            if (mBody.scrollHeight > bodyH && (subList.children.length > 1 || curCard.children.length > 1)) {
+                                subList.removeChild(liClone);
+                                if (subList.children.length === 0) curCard.removeChild(subList);
+                                startContinuationCard();
+                                subList = document.createElement(child.tagName);
+                                curCard.appendChild(subList);
+                                subList.appendChild(liClone);
+                            }
+                        }
+                        if (subList.children.length === 0 && subList.parentNode === curCard) curCard.removeChild(subList);
+                    } else {
+                        const cClone = child.cloneNode(true);
+                        curCard.appendChild(cClone);
+                        if (mBody.scrollHeight > bodyH && curCard.children.length > 1) {
+                            curCard.removeChild(cClone);
+                            startContinuationCard();
+                            curCard.appendChild(cClone);
+                        }
+                    }
+                }
+                if (curCard.children.length > 0) {
+                    curNodes.push(curCard);
+                } else if (curCard.parentNode === mBody) {
+                    mBody.removeChild(curCard);
+                }
+            };
+
+            const placeBlockquote = (bqEl) => {
+                mBody.appendChild(bqEl);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(bqEl);
+                    return;
+                }
+                mBody.removeChild(bqEl);
+
+                const kids = Array.from(bqEl.children);
+                if (kids.length <= 1) {
+                    placeAtomic(bqEl);
+                    return;
+                }
+
+                let idx = 0;
+                while (idx < kids.length) {
+                    const chunk = document.createElement('blockquote');
+                    chunk.className = bqEl.className + (idx > 0 ? ' bq-cont' : '');
+                    mBody.appendChild(chunk);
+                    let addedHere = 0;
+
+                    while (idx < kids.length) {
+                        const cClone = kids[idx].cloneNode(true);
+                        chunk.appendChild(cClone);
+                        if (mBody.scrollHeight > bodyH) {
+                            if (addedHere === 0 && curNodes.length === 0) {
+                                addedHere++;
+                                idx++;
+                                break;
+                            }
+                            chunk.removeChild(cClone);
+                            break;
+                        }
+                        addedHere++;
+                        idx++;
+                    }
+
+                    if (addedHere === 0) {
+                        mBody.removeChild(chunk);
+                        const carried = popOrphanHeadings(true);
+                        flushPage();
+                        restoreCarried(carried);
+                        continue;
+                    }
+
+                    curNodes.push(chunk);
+                    if (idx < kids.length) {
+                        flushPage();
+                    }
+                }
+            };
+
+            const placeAtomic = (clone) => {
+                mBody.appendChild(clone);
+                if (mBody.scrollHeight > bodyH && curNodes.length > 0) {
+                    mBody.removeChild(clone);
+                    const carried = popOrphanHeadings(true);
+                    flushPage();
+                    restoreCarried(carried);
+                    curNodes.push(clone);
+                    mBody.appendChild(clone);
+                } else {
+                    curNodes.push(clone);
+                }
+            };
+
+            for (let idx = 0; idx < rawBlocks.length; idx++) {
+                const orig = rawBlocks[idx];
+                const clone = orig.cloneNode(true);
+
+                // Cover pages always occupy their own dedicated full page
+                if (clone.classList.contains('cover-page')) {
+                    flushPage();
+                    const pageIdx = pages.length;
+                    if (clone.id) anchorMap[clone.id] = pageIdx;
+                    pages.push(clone.outerHTML);
+                    continue;
+                }
+
+                // Skip standalone <hr> at top of a fresh page
+                if (clone.tagName === 'HR' && curNodes.length === 0) continue;
+
+                // Start major H1 on a fresh page if current page already has content
+                if (clone.tagName === 'H1' && curNodes.length > 0) {
+                    flushPage();
+                }
+
+                if (clone.classList.contains('table-wrap')) {
+                    placeTableWrap(clone);
+                } else if (clone.classList.contains('entry-card')) {
+                    placeEntryCard(clone);
+                } else if (clone.tagName === 'BLOCKQUOTE') {
+                    placeBlockquote(clone);
+                } else if (clone.tagName === 'UL' || clone.tagName === 'OL') {
+                    placeList(clone);
+                } else {
+                    placeAtomic(clone);
+                }
+            }
+            flushPage();
+            document.body.removeChild(measurer);
+
+            this.pages = pages.length > 0 ? pages : ['<p>Volume vazio.</p>'];
+            this.anchorMap = anchorMap;
+        },
+
+        flipTimer: null,
+        pendingCommit: null,
+
+        finishPendingFlip() {
+            if (this.flipTimer) {
+                clearTimeout(this.flipTimer);
+                this.flipTimer = null;
+            }
+            if (this.pendingCommit) {
+                const fn = this.pendingCommit;
+                this.pendingCommit = null;
+                fn();
+            }
+        },
+
+        isCoverPage(i) {
+            return Boolean(this.pages[i] && this.pages[i].includes('class="cover-page"'));
+        },
+
+        normalizeIdx(rawIdx) {
+            const total = this.pages.length;
+            let idx = Math.max(0, Math.min(rawIdx, total - 1));
+            if (this.effectiveMode() === 'spread') {
+                if (!(idx === 0 && this.isCoverPage(0))) {
+                    if (idx % 2 === 0) idx = Math.max(1, idx - 1);
+                }
+            }
+            return idx;
+        },
+
+        makeLeafHtml(pageIdx, sideCls, interactive = true) {
+            const total = this.pages.length;
+            if (pageIdx < 0 || pageIdx >= total) {
+                return `<div class="leaf ${sideCls} leaf-blank"><div class="leaf-blank-ornament">✦</div></div>`;
+            }
+            const cover = this.isCoverPage(pageIdx);
+            const hdr = cover ? '' : `<div class="leaf-header"><span>ALENIA RPG</span><span>${this.bookTitle}</span></div>`;
+            const ftr = cover ? '' : `<div class="leaf-footer">— ${pageIdx + 1} —</div>`;
+            let corner = '';
+            if (interactive) {
+                if ((sideCls === 'leaf-right' || sideCls === 'leaf-single') && pageIdx + 1 < total) {
+                    corner += '<button class="leaf-corner-btn leaf-corner-next" type="button" title="Virar página (→)" aria-label="Próxima página"></button>';
+                }
+                if (sideCls === 'leaf-left' || (sideCls === 'leaf-single' && pageIdx > 0)) {
+                    corner += '<button class="leaf-corner-btn leaf-corner-prev" type="button" title="Página anterior (←)" aria-label="Página anterior"></button>';
+                }
+            }
+            return `<div class="leaf ${sideCls}">${hdr}<div class="leaf-body">${this.pages[pageIdx]}</div>${ftr}${corner}</div>`;
+        },
+
+        updateHud(idx) {
+            const eff = this.effectiveMode();
+            const total = this.pages.length;
+            let statusText = '';
+            if (eff === 'spread') {
+                if (idx === 0 && this.isCoverPage(0)) {
+                    statusText = `Capa • 1 / ${total}`;
+                } else {
+                    const rNum = Math.min(total, idx + 2);
+                    statusText = (idx + 1 < total) ? `Págs. ${idx + 1}–${rNum} de ${total}` : `Pág. ${idx + 1} de ${total}`;
+                }
+            } else {
+                statusText = (idx === 0 && this.isCoverPage(0)) ? `Capa • 1 / ${total}` : `Pág. ${idx + 1} de ${total}`;
+            }
+
+            const statusEl = document.getElementById('pager-status');
+            if (statusEl) statusEl.textContent = statusText;
+            const jumpEl = document.getElementById('pager-jump');
+            if (jumpEl) { jumpEl.value = String(idx + 1); jumpEl.max = String(total); }
+
+            const atStart = idx === 0;
+            const atEnd = eff === 'spread' ? (idx === 0 ? total <= 1 : idx + 2 >= total) : (idx + 1 >= total);
+            document.querySelectorAll('.btn-prev-page').forEach(b => b.disabled = atStart);
+            document.querySelectorAll('.btn-next-page').forEach(b => b.disabled = atEnd);
+
+            this.highlightActiveToc(idx, eff === 'spread' ? idx + 1 : idx);
+        },
+
+        renderCurrentSpread() {
+            this.finishPendingFlip();
+            const spreadEl = document.getElementById('book-spread');
+            if (!spreadEl) return;
+            const eff = this.effectiveMode();
+            const idx = this.normalizeIdx(this.currentIdx);
+            this.currentIdx = idx;
+
+            spreadEl.classList.remove('anim-cover-open', 'anim-cover-close');
+            if (eff === 'spread' && !(idx === 0 && this.isCoverPage(0))) {
+                spreadEl.innerHTML = this.makeLeafHtml(idx, 'leaf-left', true) + this.makeLeafHtml(idx + 1, 'leaf-right', true);
+            } else {
+                spreadEl.innerHTML = this.makeLeafHtml(idx, 'leaf-single', true);
+            }
+            this.updateHud(idx);
+        },
+
+        turnTo(rawTargetIdx, dir) {
+            this.finishPendingFlip();
+            const spreadEl = document.getElementById('book-spread');
+            if (!spreadEl) return;
+
+            const eff = this.effectiveMode();
+            const prevIdx = this.normalizeIdx(this.currentIdx);
+            const nextIdx = this.normalizeIdx(rawTargetIdx);
+            if (nextIdx === prevIdx) return;
+
+            const direction = dir || (nextIdx > prevIdx ? 1 : -1);
+            const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduced) {
+                this.currentIdx = nextIdx;
+                this.renderCurrentSpread();
+                return;
+            }
+
+            this.currentIdx = nextIdx;
+            this.updateHud(nextIdx);
+
+            const prevWasCover = eff === 'spread' && prevIdx === 0 && this.isCoverPage(0);
+            const nextIsCover = eff === 'spread' && nextIdx === 0 && this.isCoverPage(0);
+
+            // Case 1: Opening or closing the hardcover cover
+            if (prevWasCover || nextIsCover) {
+                spreadEl.classList.remove('anim-cover-open', 'anim-cover-close');
+                if (nextIsCover) {
+                    spreadEl.innerHTML = this.makeLeafHtml(0, 'leaf-single', true);
+                } else {
+                    spreadEl.innerHTML = this.makeLeafHtml(nextIdx, 'leaf-left', true) + this.makeLeafHtml(nextIdx + 1, 'leaf-right', true);
+                }
+                void spreadEl.offsetWidth;
+                const cls = prevWasCover ? 'anim-cover-open' : 'anim-cover-close';
+                spreadEl.classList.add(cls);
+                const commit = () => spreadEl.classList.remove(cls);
+                this.pendingCommit = commit;
+                this.flipTimer = setTimeout(() => { this.flipTimer = null; this.pendingCommit = null; commit(); }, 500);
+                return;
+            }
+
+            // Case 2: 2-Page Open Spread Physical Double-Sided 3D Flip
+            if (eff === 'spread') {
+                const isNext = direction > 0;
+                const baseLeft = isNext ? prevIdx : nextIdx;
+                const baseRight = isNext ? nextIdx + 1 : prevIdx + 1;
+                const frontPage = isNext ? prevIdx + 1 : prevIdx;
+                const backPage = isNext ? nextIdx : nextIdx + 1;
+
+                const flipCls = isNext ? 'flip-next' : 'flip-prev';
+                const frontSide = isNext ? 'leaf-right' : 'leaf-left';
+                const backSide = isNext ? 'leaf-left' : 'leaf-right';
+                const backFlipCls = isNext ? 'flip-back-next' : 'flip-back-prev';
+                const shadowCls = isNext ? 'shadow-next' : 'shadow-prev';
+
+                spreadEl.innerHTML =
+                    this.makeLeafHtml(baseLeft, 'leaf-left', false) +
+                    this.makeLeafHtml(baseRight, 'leaf-right', false) +
+                    `<div class="flip-cast-shadow ${shadowCls}"></div>` +
+                    `<div class="flip-sheet ${flipCls}">` +
+                        `<div class="flip-face flip-front">${this.makeLeafHtml(frontPage, frontSide, false)}</div>` +
+                        `<div class="flip-face flip-back ${backFlipCls}">${this.makeLeafHtml(backPage, backSide, false)}</div>` +
+                    `</div>`;
+
+                const commit = () => {
+                    spreadEl.innerHTML = this.makeLeafHtml(nextIdx, 'leaf-left', true) + this.makeLeafHtml(nextIdx + 1, 'leaf-right', true);
+                };
+                this.pendingCommit = commit;
+                this.flipTimer = setTimeout(() => { this.flipTimer = null; this.pendingCommit = null; commit(); }, 570);
+                return;
+            }
+
+            // Case 3: Single-Page 3D Peel / Swing-In
+            const isNext = direction > 0;
+            const underIdx = isNext ? nextIdx : prevIdx;
+            const sheetIdx = isNext ? prevIdx : nextIdx;
+            const flipCls = isNext ? 'flip-single-next' : 'flip-single-prev';
+
+            spreadEl.innerHTML =
+                this.makeLeafHtml(underIdx, 'leaf-single', false) +
+                `<div class="flip-sheet ${flipCls}">` +
+                    `<div class="flip-face flip-front">${this.makeLeafHtml(sheetIdx, 'leaf-single', false)}</div>` +
+                `</div>`;
+
+            const commit = () => {
+                spreadEl.innerHTML = this.makeLeafHtml(nextIdx, 'leaf-single', true);
+            };
+            this.pendingCommit = commit;
+            this.flipTimer = setTimeout(() => { this.flipTimer = null; this.pendingCommit = null; commit(); }, 490);
+        },
+
+        highlightActiveToc(pStart, pEnd) {
+            document.querySelectorAll('.toc-list a').forEach(a => {
+                const href = a.getAttribute('href') || '';
+                if (!href.startsWith('#')) return;
+                const targetPage = this.anchorMap[href.slice(1)];
+                const active = targetPage !== undefined && targetPage >= pStart && targetPage <= pEnd;
+                a.classList.toggle('toc-active', active);
+            });
+        },
+
+        step(dir) {
+            if (this.effectiveMode() === 'scroll') return;
+            const eff = this.effectiveMode();
+            let target = this.currentIdx;
+            if (eff === 'spread') {
+                if (dir > 0) {
+                    if (this.currentIdx === 0) target = 1;
+                    else target = Math.min(this.pages.length - 1, this.currentIdx + 2);
+                } else {
+                    if (this.currentIdx <= 1) target = 0;
+                    else target = Math.max(1, this.currentIdx - 2);
+                }
+            } else {
+                target = Math.max(0, Math.min(this.pages.length - 1, this.currentIdx + dir));
+            }
+            this.turnTo(target, dir);
+        },
+
+        goToPage(pageIdx, animate = false) {
+            const clamped = Math.max(0, Math.min(this.pages.length - 1, pageIdx));
+            if (animate) {
+                this.turnTo(clamped);
+            } else {
+                this.currentIdx = clamped;
+                this.renderCurrentSpread();
+            }
+        },
+
+        applyMode(newMode, persist = true) {
+            if (!newMode) return;
+            this.finishPendingFlip();
+            this.mode = newMode;
+            if (persist) localStorage.setItem(MODE_KEY, newMode);
+            document.body.classList.toggle('book-mode', newMode !== 'scroll');
+            document.body.classList.toggle('scroll-mode', newMode === 'scroll');
+            if (newMode === 'scroll' && window.innerWidth > 1020) {
+                document.body.classList.remove('sidebar-hidden');
+            } else if (newMode !== 'scroll') {
+                document.body.classList.add('sidebar-hidden');
+            }
+            document.querySelectorAll('.mode-btn[data-mode]').forEach(b => {
+                b.classList.toggle('active', b.dataset.mode === newMode);
+            });
+            if (newMode !== 'scroll') {
+                this.paginate();
+                this.renderCurrentSpread();
+            }
+        },
+
+        bindControls() {
+            document.querySelectorAll('.btn-prev-page').forEach(b => b.addEventListener('click', () => this.step(-1)));
+            document.querySelectorAll('.btn-next-page').forEach(b => b.addEventListener('click', () => this.step(1)));
+
+            // Clickable tactile book page corners
+            const spreadEl = document.getElementById('book-spread');
+            if (spreadEl) {
+                spreadEl.addEventListener('click', (e) => {
+                    if (e.target.closest('.leaf-corner-next')) {
+                        e.stopPropagation();
+                        this.step(1);
+                    } else if (e.target.closest('.leaf-corner-prev')) {
+                        e.stopPropagation();
+                        this.step(-1);
+                    }
+                });
+            }
+
+            const jumpEl = document.getElementById('pager-jump');
+            if (jumpEl) {
+                jumpEl.addEventListener('change', () => {
+                    const n = parseInt(jumpEl.value, 10);
+                    if (!isNaN(n)) this.goToPage(n - 1, true);
+                });
+            }
+
+            document.querySelectorAll('.mode-btn[data-mode]').forEach(b => {
+                b.addEventListener('click', () => this.applyMode(b.dataset.mode, true));
+            });
+
+            const btnFontDown = document.getElementById('btn-font-down');
+            const btnFontUp = document.getElementById('btn-font-up');
+            if (btnFontDown) btnFontDown.addEventListener('click', () => this.applyFontScale(this.fontScale - 0.1, true));
+            if (btnFontUp) btnFontUp.addEventListener('click', () => this.applyFontScale(this.fontScale + 0.1, true));
+
+            const tocBtn = document.getElementById('btn-toc-toggle');
+            if (tocBtn) {
+                tocBtn.addEventListener('click', () => {
+                    if (window.innerWidth <= 1020) {
+                        document.body.classList.toggle('sidebar-open-mobile');
+                    } else {
+                        document.body.classList.toggle('sidebar-hidden');
+                    }
+                });
+            }
+
+            // Close overlay TOC drawer if clicking on the book stage outside sidebar
+            const stage = document.getElementById('reader-stage');
+            if (stage) {
+                stage.addEventListener('click', () => {
+                    if (this.mode !== 'scroll') {
+                        document.body.classList.add('sidebar-hidden');
+                        document.body.classList.remove('sidebar-open-mobile');
+                    }
+                });
+            }
+
+            // Keyboard arrow / PageUp / PageDown turning
+            document.addEventListener('keydown', (e) => {
+                if (this.mode === 'scroll') return;
+                if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+                if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); this.step(1); }
+                else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.step(-1); }
+            });
+
+            // Intercept TOC anchor clicks to jump directly to the exact book page!
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                sidebar.addEventListener('click', (e) => {
+                    const a = e.target.closest('a[href^="#"]');
+                    if (!a || this.mode === 'scroll') return;
+                    const id = a.getAttribute('href').slice(1);
+                    if (this.anchorMap[id] !== undefined) {
+                        e.preventDefault();
+                        this.goToPage(this.anchorMap[id], true);
+                        document.body.classList.add('sidebar-hidden');
+                        document.body.classList.remove('sidebar-open-mobile');
+                    }
+                });
+            }
+        }
+    };
+
+    /* =====================================================
+       GM AES-256-GCM VAULT UNLOCKER (SYNCS WITH BOOK MODE)
+       ===================================================== */
+    async function unlockAllVaults(password, silent) {
+        // Always decrypt the authoritative vaults inside .book-page first!
+        const sourceRoot = document.querySelector('.book-page') || document;
+        const vaults = sourceRoot.querySelectorAll('.gm-vault[data-locked="true"]');
+        let anyUnlocked = false;
+        let failed = false;
+
+        for (const v of vaults) {
+            const scriptEl = v.querySelector('script.gm-cipher');
+            const outEl = v.querySelector('.gm-unlocked-content');
+            if (!scriptEl || !outEl) continue;
+            try {
+                const cipherObj = JSON.parse(scriptEl.textContent);
+                const data = await decryptBlock(cipherObj, password);
+                outEl.innerHTML = data.html || '';
+                v.setAttribute('data-locked', 'false');
+                if (data.toc) {
+                    const tocList = document.querySelector('.toc-list');
+                    if (tocList) {
+                        const tmp = document.createElement('div');
+                        tmp.innerHTML = data.toc;
+                        while (tmp.firstChild) tocList.appendChild(tmp.firstChild);
+                    }
+                }
+                anyUnlocked = true;
+            } catch (e) {
+                failed = true;
+            }
+        }
+
+        if (anyUnlocked) {
+            sessionStorage.setItem(SESSION_KEY, password);
+            const lockBtn = document.getElementById('btn-lock-gm');
+            if (lockBtn) lockBtn.classList.add('visible');
+            if (BookReader.enabled && BookReader.mode !== 'scroll') {
+                const cur = BookReader.currentIdx;
+                BookReader.paginate();
+                BookReader.goToPage(cur);
+            }
+        } else if (failed) {
+            if (silent) {
+                sessionStorage.removeItem(SESSION_KEY);
+            } else {
+                document.querySelectorAll('.gm-gate-error').forEach(el => {
+                    el.textContent = 'Senha incorreta — o selo do Mestre permanece fechado.';
+                });
+            }
+        }
+    }
+
+    // Document-level event delegation (works cleanly across cloned book pages & scroll mode)
+    document.addEventListener('submit', async (e) => {
+        const form = e.target.closest('.gm-unlock-form');
+        if (!form) return;
+        e.preventDefault();
+        const input = form.querySelector('.gm-pwd-input');
+        const pwd = input ? input.value : '';
+        if (!pwd) return;
+        if (!window.crypto || !window.crypto.subtle) {
+            const errEl = form.parentElement.querySelector('.gm-gate-error');
+            if (errEl) errEl.textContent = 'Abra por HTTPS (Render) ou localhost para habilitar descriptografia do navegador.';
+            return;
+        }
+        await unlockAllVaults(pwd, false);
+    });
+
+    document.addEventListener('click', (e) => {
+        const img = e.target.closest('.atlas-plate img');
+        if (!img) return;
+        const lb = document.getElementById('atlas-lightbox');
+        const lbImg = document.getElementById('atlas-lightbox-img');
+        if (lb && lbImg) {
+            lbImg.src = img.src;
+            lb.classList.add('open');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) {
+            lb.addEventListener('click', () => lb.classList.remove('open'));
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lb.classList.remove('open'); });
+        }
+
+        const lockBtn = document.getElementById('btn-lock-gm');
+        if (lockBtn) {
+            if (sessionStorage.getItem(SESSION_KEY)) lockBtn.classList.add('visible');
+            lockBtn.addEventListener('click', () => {
+                sessionStorage.removeItem(SESSION_KEY);
+                location.reload();
+            });
+        }
+
+        // If already unlocked in this session, decrypt BEFORE initial pagination!
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved && window.crypto && window.crypto.subtle) {
+            await unlockAllVaults(saved, true);
+        }
+
+        await BookReader.init();
+    });
+})();
+</script>
+</body>
+</html>

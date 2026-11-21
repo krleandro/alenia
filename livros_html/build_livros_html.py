@@ -123,6 +123,18 @@ BOOKS = [
         "cover_map": "assets/capa_08_acervo_sellene.jpg",
         "gm_only": True,
     },
+    {
+        "src": "09_Catalogo_de_Equipamentos_e_Oficios.md",
+        "out": "09_Catalogo_de_Equipamentos.html",
+        "num": "TOMO IX",
+        "short": "Equipamentos",
+        "title": "Empório & Ofícios",
+        "subtitle": "Acampamento, Sobrevivência, Pesca, Forja, Alquimia, Náutica & Carga",
+        "epigraph": "“Uma espada boa vence um duelo; mas são corda firme, pederneira seca e sal na mochila que mantêm um explorador vivo até o inverno.”",
+        "desc": "Catálogo completo com mais de 120 itens de aventura e ofícios com peso (kg), preço no Padrão Prata e especificações mecânicas: acampamento, sobrevivência, pesca, caça, forja, engenharia sem pólvora, medicina, náutica, subterfúgio, vestuário, montarias e 5 pacotes prontos.",
+        "cover_map": "assets/capa_09_equipamentos.jpg",
+        "gm_only": False,
+    },
 ]
 
 CHAPTER_MAPS = {
@@ -2100,6 +2112,7 @@ def rewrite_link(url: str) -> str:
         "06_Guia_do_Jogador_e_Referencia_Rapida.md": "06_Guia_do_Jogador.html",
         "07_Aventura_Inicial_Cinzas_no_Estuario.md": "07_Aventura_Inicial.html",
         "08_Acervo_Oculto_de_Sellene.md": "08_Acervo_Oculto_de_Sellene.html",
+        "09_Catalogo_de_Equipamentos_e_Oficios.md": "09_Catalogo_de_Equipamentos.html",
     }
     for k, v in mapping.items():
         if k in url:
@@ -2646,7 +2659,7 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">8 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Ficha Firecast v1.9</div>
+        <div class="cover-subtitle">9 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Empório de Ofícios • Ficha Firecast v1.9</div>
         <div class="cover-rule"></div>
         <div style="margin: 8px 0 4px;">
             <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 18px; border-radius:3px; font-weight:700;">⬇ Baixar Plugin da Ficha Firecast (v1.9)</a>

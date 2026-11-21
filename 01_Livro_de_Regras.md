@@ -436,6 +436,8 @@ Entre expedições (ou por mês de campanha), cada explorador escolhe um **Padr�
 
 ### 9.6 Tabelas de Preços de Referência
 
+*(Para o catálogo completo com mais de 120 equipamentos de acampamento, sobrevivência, pesca, caça, forja, engenharia, medicina, náutica, subterfúgio, vestuário, montarias e pacotes prontos — todos com peso em `kg` e especificações — consulte o **[Tomo IX — Empório & Catálogo de Equipamentos e Ofícios](09_Catalogo_de_Equipamentos_e_Oficios.md)**.)*
+
 #### Cotidiano, Viagem e Ferramentas
 | Item / Serviço | Preço Médio | Observação |
 | :--- | :---: | :--- |
