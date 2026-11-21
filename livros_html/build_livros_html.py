@@ -2156,6 +2156,24 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
             i += 1
             continue
 
+        m_img = re.match(r"^!\[([^\]]*)\]\(([^)]+)\)\s*$", stripped)
+        if m_img:
+            cap = m_img.group(1).strip()
+            src_raw = m_img.group(2).strip().replace("\\", "/")
+            if src_raw.startswith("ilustracoes/"):
+                src_web = "assets/" + src_raw.split("/", 1)[1]
+            else:
+                src_web = rewrite_link(src_raw)
+            cap_html = f'<figcaption class="atlas-caption">{inline_md(cap)}</figcaption>' if cap else ""
+            out.append(
+                f'<figure class="atlas-plate">'
+                f'<img src="{html.escape(src_web, quote=True)}" alt="{html.escape(cap or "Ilustração de Alenia")}" loading="lazy"/>'
+                f'{cap_html}'
+                f'</figure>'
+            )
+            i += 1
+            continue
+
         if stripped.startswith(">"):
             q_lines = []
             while i < n and lines[i].strip().startswith(">"):

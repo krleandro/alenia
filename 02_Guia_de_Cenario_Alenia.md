@@ -161,6 +161,8 @@ Para evitar tanto o politeísmo *(seis deuses competindo entre si)* quanto a abs
 | **Par III — O Ofício** | **5. O Artífice** *(A Forja)* | Homem de ombros largos, sobrancelhas franzidas, avental chamuscado e antebraços marcados por fagulhas; **calado, exigente, orgulhoso de obra bem feita**, despreza preguiça e serviço mal-acabado. | Bigorna e martelo / Compasso | *"O Artífice firme teu braço."* / *"O metal bom não teme o malho."* |
 | **Par III — O Ofício** | **6. A Anfitriã** *(O Lar)* | Senhora calorosa de rosto marcado por rugas de riso, cheiro de pão assando e porta encostada; **acolhedora com qualquer viajante honesto**, mas sua ira contra quem fere uma criança ou trai sua mesa é mais temida que a espada do Vigia. | Lareira acesa / Chave e tigela | *"Pela mesa da Anfitriã, entra e come."* / *"Fogo na pedra, porta aberta."* |
 
+![A Grande Catedral do Sol de Seis Raios em Altavanne — rotunda de mármore claro sob o teto de vidro que banha de sol as seis estátuas das Personas (da esquerda para a direita: O Vigia, A Guardiã, A Semeadora, O Barqueiro, O Artífice e A Anfitriã)](ilustracoes/catedral_seis_personas.jpg)
+
 > **Cantiga das Seis Personas *(Recitada pelas crianças de Aurora antes de dormir)***:
 > *O Vigia te vê ao clarear,*
 > *A Guardiã te embala ao deitar,*
