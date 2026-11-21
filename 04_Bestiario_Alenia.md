@@ -9,6 +9,7 @@
 - **RD Especial**: `0` em todos os humanos com armaduras comuns. Aparece apenas em monstros raríssimos ou horrores de Incognito.
 - **Constituição Explícita**: toda criatura viva possui `CON` e modificador listados para testes de **Golpe Devastador (`> 2/3 PV`)**, venenos e manobras.
 - **Uso em Cena**: cada entrada inclui **Sinais de Presença**, **Motivação**, **Condição de Fuga** e **Interação Não-Combativa** para evitar combates mecânicos vazios.
+- **Sobre Dragões em Alenia**: propositalmente **não** existem fichas comuns de dragões neste Bestiário. Em Alenia, dragões são **eventos escatológicos** raríssimos, friamente inteligentes, impossíveis de domar e voltados à destruição de reinos *(como **A Sombra**, abatida em 356 por Severor I Valerion)* — pertencem à escala de catástrofes históricas e campanhas inteiras, jamais a encontros rotineiros.
 
 ---
 
