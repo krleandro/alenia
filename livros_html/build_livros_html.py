@@ -598,32 +598,37 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
 .leaf-body {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 10px 36px 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    font-size: calc(18px * var(--font-scale, 1));
-    line-height: 1.56;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(154, 123, 59, 0.4) transparent;
+    padding: 10px 34px 10px;
+    overflow: hidden;
+    font-size: calc(17.5px * var(--font-scale, 1));
+    line-height: 1.54;
 }
-.leaf-body h1.book-h1 { font-size: calc(25px * var(--font-scale, 1)); }
-.leaf-body h2 { font-size: calc(20px * var(--font-scale, 1)); margin: 16px 0 9px; }
-.leaf-body h3 { font-size: calc(16.5px * var(--font-scale, 1)); margin: 13px 0 6px; }
-.leaf-body table { font-size: calc(14.5px * var(--font-scale, 1)); line-height: 1.38; }
-.leaf-body thead th { padding: 6px 8px; font-size: calc(10.5px * var(--font-scale, 1)); }
-.leaf-body tbody td { padding: 6px 8px; }
-.leaf-body tbody td code,
+.leaf-body h1.book-h1 { font-size: calc(24px * var(--font-scale, 1)); }
+.leaf-body h2 { font-size: calc(19.5px * var(--font-scale, 1)); margin: 14px 0 8px; }
+.leaf-body h3 { font-size: calc(16px * var(--font-scale, 1)); margin: 12px 0 6px; }
+.leaf-body .table-wrap { overflow-x: hidden; margin: 8px 0 11px; }
+.leaf-body table { width: 100%; font-size: calc(13.8px * var(--font-scale, 1)); line-height: 1.35; border-collapse: collapse; }
+.leaf-body thead th { padding: 5px 6px; font-size: calc(10px * var(--font-scale, 1)); overflow-wrap: break-word; }
+.leaf-body tbody td { padding: 5px 6px; overflow-wrap: break-word; word-break: normal; }
+.leaf-body table.table-dense { font-size: calc(12.2px * var(--font-scale, 1)); line-height: 1.3; }
+.leaf-body table.table-dense thead th { padding: 4px 5px; font-size: calc(9.3px * var(--font-scale, 1)); }
+.leaf-body table.table-dense tbody td { padding: 4px 5px; }
+.leaf-body table.table-ultra-dense { font-size: calc(11.1px * var(--font-scale, 1)); line-height: 1.25; }
+.leaf-body table.table-ultra-dense thead th { padding: 3.5px 4px; font-size: calc(8.6px * var(--font-scale, 1)); letter-spacing: 0.04em; }
+.leaf-body table.table-ultra-dense tbody td { padding: 3.5px 4px; }
 .leaf-body .nowrap-cell { white-space: nowrap; }
-.leaf-body .callout { font-size: calc(16.5px * var(--font-scale, 1)); }
-.leaf-body .entry-card { font-size: calc(14.4px * var(--font-scale, 1)); line-height: 1.38; padding: 9px 12px 7px; margin: 6px 0 8px; }
+.leaf-body blockquote.bq-cont { margin-top: 4px; border-left-style: dashed; }
+.leaf-body .callout { font-size: calc(16px * var(--font-scale, 1)); }
+.leaf-body .entry-card { font-size: calc(14.2px * var(--font-scale, 1)); line-height: 1.36; padding: 9px 12px 7px; margin: 6px 0 8px; }
 .leaf-body .entry-card.entry-card-cont { border-top-style: dashed; border-top-width: 2px; }
 .leaf-body .entry-card h3 { font-size: calc(15.5px * var(--font-scale, 1)); margin: 0 0 5px; padding-bottom: 3px; }
 .leaf-body .entry-card p { margin-bottom: 5px; }
 .leaf-body .entry-card ul { margin: 3px 0 4px; padding-left: 17px; }
 .leaf-body .entry-card li { margin-bottom: 2.5px; }
-.leaf-body .atlas-plate img { max-height: calc(var(--leaf-h, 760px) * 0.64); }
+.leaf-body .atlas-plate { margin: 8px 0 10px; padding: 6px; }
+.leaf-body .atlas-plate img { max-height: calc(var(--leaf-h, 760px) * 0.48); width: auto; max-width: 100%; height: auto; margin: 0 auto; }
 .leaf-body .atlas-plate.creature-plate { margin: 5px 0 7px; padding: 4px; background: #e8dec7; border: 1px solid var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
-.leaf-body .atlas-plate.creature-plate img { width: 100%; aspect-ratio: 16 / 9; max-height: min(260px, calc(var(--leaf-h, 760px) * 0.28)); object-fit: cover; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
+.leaf-body .atlas-plate.creature-plate img { width: 100%; aspect-ratio: 16 / 9; max-height: min(250px, calc(var(--leaf-h, 760px) * 0.27)); object-fit: cover; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
 .creature-plate { margin: 7px 0 9px; padding: 5px; background: #e8dec7; border: 1px solid var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
 .creature-plate img { width: 100%; aspect-ratio: 16 / 9; max-height: 280px; object-fit: cover; display: block; border: 1px solid #3c3124; cursor: zoom-in; }
 
@@ -802,7 +807,26 @@ body.scroll-mode .book-shell { padding-bottom: 84px; }
     min-height: 100%;
     height: 100%;
     margin: 0;
-    padding: 24px 20px;
+    padding: 18px 20px;
+    overflow: hidden;
+}
+.leaf-body .cover-title {
+    font-size: clamp(22px, calc(var(--leaf-h, 760px) * 0.044), 36px);
+}
+.leaf-body .cover-subtitle {
+    font-size: clamp(14.5px, calc(var(--leaf-h, 760px) * 0.023), 19px);
+    margin: 8px 0 4px;
+}
+.leaf-body .cover-epigraph {
+    font-size: clamp(13.5px, calc(var(--leaf-h, 760px) * 0.021), 17px);
+    margin: 10px auto 6px;
+}
+.leaf-body .cover-thumb {
+    max-height: calc(var(--leaf-h, 760px) * 0.34);
+    margin: 10px auto;
+}
+.leaf-body .cover-edition {
+    padding-top: 10px;
 }
 .cover-kicker {
     font-family: 'Cinzel', Georgia, serif; font-size: 11.5px; letter-spacing: 0.24em;
@@ -1026,12 +1050,19 @@ SHARED_JS = r"""
 
     function tagNowrapCells(root) {
         const reShortNum = /^\s*(?:[+-]?\d+(?:\s*[–\-—]\s*\d+)?|[+-]?\d*d\d+(?:\s*[+-]\s*\d+)?|\d+(?:,\d+)?[×x%]?)\s*$/i;
-        (root || document).querySelectorAll('tbody td').forEach(td => {
-            if (td.children.length === 0 || (td.children.length === 1 && td.firstElementChild.tagName === 'STRONG')) {
-                const txt = (td.textContent || '').trim();
-                if (txt.length > 0 && txt.length <= 12 && reShortNum.test(txt)) {
-                    td.classList.add('nowrap-cell');
-                }
+        (root || document).querySelectorAll('table').forEach(tbl => {
+            const cols = tbl.querySelectorAll('thead th').length;
+            if (cols >= 6) tbl.classList.add('table-ultra-dense');
+            else if (cols === 5) tbl.classList.add('table-dense');
+            if (cols <= 4) {
+                tbl.querySelectorAll('tbody td').forEach(td => {
+                    if (td.children.length === 0 || (td.children.length === 1 && td.firstElementChild.tagName === 'STRONG')) {
+                        const txt = (td.textContent || '').trim();
+                        if (txt.length > 0 && txt.length <= 10 && reShortNum.test(txt)) {
+                            td.classList.add('nowrap-cell');
+                        }
+                    }
+                });
             }
         });
     }
@@ -1151,8 +1182,8 @@ SHARED_JS = r"""
             }
             document.documentElement.style.setProperty('--leaf-w', leafW + 'px');
             document.documentElement.style.setProperty('--leaf-h', leafH + 'px');
-            // 2px border + 30px header + 30px footer + 10px safety breathing room
-            return { leafW, leafH, bodyH: leafH - 72 };
+            // 2px border + 30px header + 30px footer + 20px safety breathing room (guarantees ZERO clipping / ZERO scrollbars)
+            return { leafW, leafH, bodyH: leafH - 82 };
         },
 
         collectBlocks(container) {
@@ -1265,10 +1296,12 @@ SHARED_JS = r"""
                 mBody.removeChild(tableWrap);
 
                 const theadOrig = table.querySelector('thead');
+                const tblCls = table.className || '';
                 const buildChunk = () => {
                     const w = document.createElement('div');
                     w.className = tableWrap.className;
                     const t = document.createElement('table');
+                    if (tblCls) t.className = tblCls;
                     if (theadOrig) t.appendChild(theadOrig.cloneNode(true));
                     const tb = document.createElement('tbody');
                     t.appendChild(tb);
@@ -1446,6 +1479,58 @@ SHARED_JS = r"""
                 }
             };
 
+            const placeBlockquote = (bqEl) => {
+                mBody.appendChild(bqEl);
+                if (mBody.scrollHeight <= bodyH) {
+                    curNodes.push(bqEl);
+                    return;
+                }
+                mBody.removeChild(bqEl);
+
+                const kids = Array.from(bqEl.children);
+                if (kids.length <= 1) {
+                    placeAtomic(bqEl);
+                    return;
+                }
+
+                let idx = 0;
+                while (idx < kids.length) {
+                    const chunk = document.createElement('blockquote');
+                    chunk.className = bqEl.className + (idx > 0 ? ' bq-cont' : '');
+                    mBody.appendChild(chunk);
+                    let addedHere = 0;
+
+                    while (idx < kids.length) {
+                        const cClone = kids[idx].cloneNode(true);
+                        chunk.appendChild(cClone);
+                        if (mBody.scrollHeight > bodyH) {
+                            if (addedHere === 0 && curNodes.length === 0) {
+                                addedHere++;
+                                idx++;
+                                break;
+                            }
+                            chunk.removeChild(cClone);
+                            break;
+                        }
+                        addedHere++;
+                        idx++;
+                    }
+
+                    if (addedHere === 0) {
+                        mBody.removeChild(chunk);
+                        const carried = popOrphanHeadings(true);
+                        flushPage();
+                        restoreCarried(carried);
+                        continue;
+                    }
+
+                    curNodes.push(chunk);
+                    if (idx < kids.length) {
+                        flushPage();
+                    }
+                }
+            };
+
             const placeAtomic = (clone) => {
                 mBody.appendChild(clone);
                 if (mBody.scrollHeight > bodyH && curNodes.length > 0) {
@@ -1485,6 +1570,8 @@ SHARED_JS = r"""
                     placeTableWrap(clone);
                 } else if (clone.classList.contains('entry-card')) {
                     placeEntryCard(clone);
+                } else if (clone.tagName === 'BLOCKQUOTE') {
+                    placeBlockquote(clone);
                 } else if (clone.tagName === 'UL' || clone.tagName === 'OL') {
                     placeList(clone);
                 } else {
@@ -1966,6 +2053,26 @@ def clean_formula(expr: str) -> str:
     return html.escape(s)
 
 
+_IMG_DIM_CACHE = {}
+
+
+def img_dim_attrs(src_rel: str) -> str:
+    if src_rel in _IMG_DIM_CACHE:
+        return _IMG_DIM_CACHE[src_rel]
+    out = ""
+    try:
+        from PIL import Image
+        full = os.path.join(OUT_DIR, src_rel.replace("/", os.sep))
+        if os.path.exists(full):
+            with Image.open(full) as im:
+                w, h = im.size
+                out = f' width="{w}" height="{h}"'
+    except Exception:
+        out = ""
+    _IMG_DIM_CACHE[src_rel] = out
+    return out
+
+
 def rewrite_link(url: str) -> str:
     if "alenia_mapa_mundi_atualizado" in url:
         return "assets/alenia_mapa_mundi_atualizado.jpg"
@@ -2138,7 +2245,7 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
                     if plain_title.startswith(key):
                         out.append(
                             f'<figure class="atlas-plate">'
-                            f'<img src="{img_rel}" alt="{html.escape(cap)}" loading="lazy"/>'
+                            f'<img src="{img_rel}" alt="{html.escape(cap)}"{img_dim_attrs(img_rel)}/>'
                             f'<figcaption class="atlas-caption">{html.escape(cap)}</figcaption>'
                             f'</figure>'
                         )
@@ -2149,7 +2256,7 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
                     if plain_title.startswith(key):
                         out.append(
                             f'<figure class="atlas-plate creature-plate">'
-                            f'<img src="{img_rel}" alt="{html.escape(plain_title)}" loading="lazy"/>'
+                            f'<img src="{img_rel}" alt="{html.escape(plain_title)}"{img_dim_attrs(img_rel)}/>'
                             f'</figure>'
                         )
                         break
@@ -2167,7 +2274,7 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
             cap_html = f'<figcaption class="atlas-caption">{inline_md(cap)}</figcaption>' if cap else ""
             out.append(
                 f'<figure class="atlas-plate">'
-                f'<img src="{html.escape(src_web, quote=True)}" alt="{html.escape(cap or "Ilustração de Alenia")}" loading="lazy"/>'
+                f'<img src="{html.escape(src_web, quote=True)}" alt="{html.escape(cap or "Ilustração de Alenia")}"{img_dim_attrs(src_web)}/>'
                 f'{cap_html}'
                 f'</figure>'
             )
