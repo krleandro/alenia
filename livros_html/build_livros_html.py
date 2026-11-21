@@ -147,6 +147,18 @@ BOOKS = [
         "cover_map": "assets/capa_10_herbario_seleni.jpg",
         "gm_only": False,
     },
+    {
+        "src": "11_Cronica_das_Terras_e_das_Mares.md",
+        "out": "11_Cronica_das_Terras_e_das_Mares.html",
+        "num": "TOMO XI",
+        "short": "Linha do Tempo",
+        "title": "Crônica das Terras e das Marés",
+        "subtitle": "Linha do Tempo de Alenia • 100 Acontecimentos em 8 Épocas, Pranchas Históricas & Atlas",
+        "epigraph": "“O rei mandou escrever que fundara a cidade. Debaixo da praça onde ergueram sua estátua encontramos três ruas, dois cemitérios e a soleira de uma casa.”",
+        "desc": "Linha do tempo ilustrada em pergaminho medieval com 100 acontecimentos (T001–T100) das terras antigas ao Ano 418 EF, 8 pranchas renascentistas científicas, filtros por época e marcos canônicos, atlas de fundações, hidrografia e caderno do Mestre selado por AES-256.",
+        "cover_map": "assets/capa_11_cronica_alenia.jpg",
+        "gm_only": False,
+    },
 ]
 
 CHAPTER_MAPS = {
@@ -2163,6 +2175,7 @@ def sync_assets():
         (os.path.join(ROOT_DIR, "mapas", "regionais", "mapa_regional_kalis.jpg"), "mapa_regional_kalis.jpg"),
         (os.path.join(ROOT_DIR, "mapas", "regionais", "mapa_regional_incognito.jpg"), "mapa_regional_incognito.jpg"),
         (os.path.join(ROOT_DIR, "capas", "capa_10_herbario_seleni.jpg"), "capa_10_herbario_seleni.jpg"),
+        (os.path.join(ROOT_DIR, "capas", "capa_11_cronica_alenia.jpg"), "capa_11_cronica_alenia.jpg"),
     ]
     for fn in sorted(os.listdir(os.path.join(ROOT_DIR, "ilustracoes"))) if os.path.isdir(os.path.join(ROOT_DIR, "ilustracoes")) else []:
         if fn.lower().endswith((".jpg", ".jpeg", ".png")):
@@ -2227,6 +2240,7 @@ def rewrite_link(url: str) -> str:
         "08_Acervo_Oculto_de_Sellene.md": "08_Acervo_Oculto_de_Sellene.html",
         "09_Catalogo_de_Equipamentos_e_Oficios.md": "09_Catalogo_de_Equipamentos.html",
         "10_Herbario_de_Seleni.md": "10_Herbario_de_Seleni.html",
+        "11_Cronica_das_Terras_e_das_Mares.md": "11_Cronica_das_Terras_e_das_Mares.html",
     }
     for k, v in mapping.items():
         if k in url:
@@ -2300,7 +2314,7 @@ def split_md_with_gm_sections(md_text: str):
                 cur_gm = True
                 cur_gm_level = lvl
                 if plain.startswith("Caderno reservado ao mestre"):
-                    cur_label = "Caderno Reservado ao Mestre — Herbário de Seleni"
+                    cur_label = "Caderno Reservado ao Mestre"
                 else:
                     cur_label = "Segredos do Mestre — " + ("A Grande Ameaça" if lvl == 2 else "Regras Ocultas de Campanha")
                 continue
@@ -2583,7 +2597,7 @@ def build_topbar(active_file: str, page_title: str, has_toc: bool) -> str:
 
 
 def build_sidebar(active_file: str, toc_items, has_toc: bool) -> str:
-    romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"]
+    romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"]
     public_items = []
     gm_items = []
     for idx, b in enumerate(BOOKS):
@@ -2659,15 +2673,1330 @@ def build_cover(num: str, title: str, subtitle: str, epigraph: str, cover_map: s
     """
 
 
-def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=None, force_sidebar: bool = False, enable_book_reader: bool = True) -> str:
+CHRONICLE_CSS = r"""
+/* =====================================================
+   TOMO XI — MEDIEVAL PARCHMENT SCROLL TIMELINE
+   ===================================================== */
+body.chronicle-mode .book-shell {
+    padding: 72px 18px 72px;
+}
+body.chronicle-mode:not(.sidebar-hidden) .sidebar-backdrop {
+    display: block;
+}
+body.chronicle-mode .book-page {
+    max-width: 1340px;
+    padding: 34px 36px 56px;
+    background: radial-gradient(circle at top center, #faf3e2 0%, #f3e7ce 55%, #ebdab7 100%);
+    box-shadow:
+        0 26px 75px rgba(0, 0, 0, 0.72),
+        0 0 0 1px rgba(154, 123, 59, 0.48),
+        inset 0 0 42px rgba(132, 92, 42, 0.14);
+}
+body.chronicle-mode .book-page::before {
+    inset: 10px;
+    border: 1px solid rgba(154, 123, 59, 0.36);
+}
+
+/* HERO / ILLUMINATED MANUSCRIPT TITLE HEADER */
+.chronicle-hero {
+    display: grid;
+    grid-template-columns: 270px 1fr;
+    gap: 28px;
+    align-items: center;
+    padding: 26px 28px;
+    margin-bottom: 22px;
+    border: 2px solid var(--crimson);
+    outline: 1px solid var(--gold);
+    outline-offset: -7px;
+    background: radial-gradient(circle at 25% 50%, #fbf6ea 0%, #f1e3c4 100%);
+    box-shadow: 0 10px 26px rgba(42, 26, 12, 0.14);
+}
+.chronicle-hero-cover {
+    margin: 0 !important;
+    padding: 8px !important;
+    background: #efe3c6 !important;
+    border: 1px solid var(--gold) !important;
+}
+.chronicle-hero-cover img {
+    width: 100%;
+    max-height: 290px;
+    object-fit: cover;
+    display: block;
+    cursor: zoom-in;
+}
+.chronicle-hero-kicker {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    font-weight: 700;
+}
+.chronicle-hero-title {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 32px;
+    line-height: 1.15;
+    margin: 6px 0 8px;
+    color: #24180e;
+    border: none !important;
+    padding: 0 !important;
+}
+.chronicle-hero-sub {
+    font-style: italic;
+    font-size: 16.5px;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+}
+.chronicle-hero-epigraph {
+    font-style: italic;
+    font-size: 15px;
+    color: #3f3021;
+    border-left: 3px solid var(--crimson);
+    padding: 6px 14px;
+    margin: 0 0 14px;
+    background: rgba(154, 123, 59, 0.08);
+}
+.chronicle-hero-epigraph span {
+    display: block;
+    font-style: normal;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+}
+.chronicle-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.chronicle-stat-pill {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 2px;
+    background: rgba(31, 81, 86, 0.1);
+    border: 1px solid rgba(31, 81, 86, 0.35);
+    color: #1a4347;
+    font-weight: 600;
+}
+.chronicle-stat-pill.canon {
+    background: rgba(122, 31, 29, 0.1);
+    border-color: rgba(122, 31, 29, 0.38);
+    color: var(--crimson-dark);
+}
+
+/* COLLAPSIBLE EDITORIAL GUIDE */
+.chronicle-guide {
+    margin: 0 0 22px;
+    border: 1px solid rgba(154, 123, 59, 0.55);
+    background: rgba(246, 236, 212, 0.72);
+    border-radius: 3px;
+}
+.chronicle-guide > summary {
+    cursor: pointer;
+    padding: 11px 18px;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson-dark);
+    font-weight: 700;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.chronicle-guide > summary::-webkit-details-marker { display: none; }
+.chronicle-guide > summary::after {
+    content: "▾ Expandir";
+    font-size: 10.5px;
+    color: var(--gold);
+}
+.chronicle-guide[open] > summary::after {
+    content: "▴ Recolher";
+}
+.chronicle-guide-inner {
+    padding: 4px 22px 18px;
+    border-top: 1px solid rgba(154, 123, 59, 0.3);
+}
+
+/* INTERACTIVE FILTER TOOLBAR */
+.chronicle-toolbar {
+    position: relative;
+    z-index: 20;
+    background: linear-gradient(180deg, rgba(31, 24, 18, 0.97) 0%, rgba(22, 17, 13, 0.97) 100%);
+    border: 1px solid rgba(154, 123, 59, 0.65);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 0 0 28px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
+    color: #efe6d2;
+}
+.chronicle-era-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+.era-pill {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px solid rgba(154, 123, 59, 0.42);
+    background: rgba(255, 255, 255, 0.04);
+    color: #ded4c1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.era-pill:hover {
+    border-color: var(--gold-light);
+    color: var(--gold-light);
+    background: rgba(154, 123, 59, 0.16);
+}
+.era-pill.active {
+    background: var(--crimson);
+    border-color: var(--gold-light);
+    color: #fff6e0;
+    font-weight: 700;
+}
+.chronicle-controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+.chronicle-search {
+    flex: 1 1 240px;
+    min-width: 180px;
+    padding: 6px 11px;
+    border-radius: 3px;
+    border: 1px solid rgba(154, 123, 59, 0.55);
+    background: #14100c;
+    color: #f7f1e3;
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 15px;
+}
+.chronicle-search::placeholder { color: #9c8f7a; font-style: italic; }
+.chronicle-toggle-btn {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 7px 11px;
+    border-radius: 3px;
+    border: 1px solid rgba(154, 123, 59, 0.48);
+    background: rgba(154, 123, 59, 0.12);
+    color: #e6dac4;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.chronicle-toggle-btn:hover { border-color: var(--gold-light); color: #fff; }
+.chronicle-toggle-btn.active {
+    background: #1f5156;
+    border-color: #79b8be;
+    color: #fff;
+    font-weight: 700;
+}
+.chronicle-toggle-btn.canon-toggle.active {
+    background: var(--crimson);
+    border-color: var(--gold-light);
+}
+.chronicle-count {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+/* ERA BANNER & RENAISSANCE HISTORICAL PLATE */
+.chronicle-era {
+    margin: 0 0 46px;
+    scroll-margin-top: 68px;
+}
+.chronicle-era.is-hidden { display: none; }
+
+.era-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 22px;
+    margin-bottom: 16px;
+    background: linear-gradient(90deg, rgba(122, 31, 29, 0.1) 0%, rgba(154, 123, 59, 0.14) 50%, rgba(122, 31, 29, 0.06) 100%);
+    border-top: 2px solid var(--crimson);
+    border-bottom: 1px solid var(--gold);
+    border-left: 4px solid var(--crimson);
+}
+.era-banner-kicker {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    font-weight: 700;
+}
+.era-banner-title {
+    font-family: 'Cinzel', Georgia, serif !important;
+    font-size: 24px !important;
+    color: #24180e !important;
+    margin: 2px 0 3px !important;
+    border: none !important;
+    padding: 0 !important;
+}
+.era-banner-summary {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 0;
+}
+.era-banner-meta {
+    text-align: right;
+    flex-shrink: 0;
+}
+.era-period-badge {
+    display: inline-block;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #f7f1e3;
+    background: #2b1e14;
+    border: 1px solid var(--gold);
+    padding: 5px 12px;
+    border-radius: 2px;
+}
+.era-count-sub {
+    display: block;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin-top: 4px;
+}
+
+.chronicle-plate {
+    margin: 0 0 22px !important;
+    padding: 12px 14px 10px !important;
+    background: linear-gradient(180deg, #f3e6c8 0%, #ead6af 100%) !important;
+    border: 1px solid var(--gold) !important;
+    outline: 1px solid rgba(122, 31, 29, 0.25);
+    outline-offset: -5px;
+    box-shadow: 0 8px 22px rgba(42, 26, 12, 0.16);
+}
+.chronicle-plate img {
+    width: 100%;
+    max-height: 430px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    cursor: zoom-in;
+    border-radius: 2px;
+    mix-blend-mode: multiply;
+}
+.chronicle-plate figcaption {
+    margin-top: 8px;
+    font-style: italic;
+    font-size: 14px;
+    color: #4a3723;
+    text-align: center;
+}
+
+/* =====================================================
+   MEDIEVAL ROLLED PARCHMENT SCROLL STRIP (3–4 EVENTS)
+   Inspired by classic rolled medieval manuscript scrolls
+   ===================================================== */
+.tl-scroll-wrap {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    margin: 0 0 10px;
+    filter: drop-shadow(0 12px 22px rgba(32, 19, 8, 0.28));
+}
+.tl-scroll-wrap.is-hidden { display: none; }
+
+/* Turned Wooden Scroll Rollers + Curled Parchment Edges */
+.tl-roller {
+    width: 34px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+    border-radius: 10px;
+    background: linear-gradient(
+        90deg,
+        #9f713b 0%,
+        #d8b170 18%,
+        #f7e9c7 42%,
+        #fdf6e3 54%,
+        #d4ac6b 78%,
+        #8a5e2d 100%
+    );
+    border: 1px solid #7d5225;
+    box-shadow:
+        inset 0 10px 16px rgba(96, 56, 18, 0.32),
+        inset 0 -10px 16px rgba(96, 56, 18, 0.34),
+        0 4px 12px rgba(20, 11, 4, 0.35);
+}
+.tl-roller::before,
+.tl-roller::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 16px;
+    background: linear-gradient(90deg, #2d160a 0%, #7a4622 35%, #a16538 52%, #592f15 80%, #241007 100%);
+    border: 1px solid #2b1409;
+    border-radius: 3px;
+}
+.tl-roller::before { top: -15px; border-bottom: none; border-radius: 4px 4px 1px 1px; }
+.tl-roller::after { bottom: -15px; border-top: none; border-radius: 1px 1px 4px 4px; }
+.tl-roller-left { margin-right: -8px; }
+.tl-roller-right { margin-left: -8px; }
+
+/* Central Aged Parchment Sheet */
+.tl-strip {
+    flex: 1 1 auto;
+    min-width: 0;
+    position: relative;
+    padding: 24px 26px 26px;
+    background:
+        radial-gradient(ellipse at center, #fcf5e3 0%, #f5e7c6 62%, #e6cb99 100%);
+    border-top: 2px solid #966a38;
+    border-bottom: 2px solid #966a38;
+    box-shadow:
+        inset 20px 0 24px -12px rgba(98, 59, 20, 0.38),
+        inset -20px 0 24px -12px rgba(98, 59, 20, 0.38),
+        inset 0 14px 22px -12px rgba(138, 88, 34, 0.28),
+        inset 0 -14px 22px -12px rgba(138, 88, 34, 0.32);
+}
+.tl-strip::before {
+    content: "";
+    position: absolute;
+    inset: 6px 14px;
+    border-top: 1px solid rgba(122, 82, 39, 0.32);
+    border-bottom: 1px solid rgba(122, 82, 39, 0.32);
+    pointer-events: none;
+}
+
+.tl-strip-label {
+    position: absolute;
+    top: 7px;
+    right: 20px;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(94, 62, 28, 0.72);
+    pointer-events: none;
+}
+
+/* 3-ROW x N-COLUMN HORIZONTAL TIMELINE GRID */
+.tl-grid {
+    display: grid;
+    grid-template-rows: auto 48px auto;
+    column-gap: 14px;
+    row-gap: 0;
+    position: relative;
+}
+.tl-grid.tl-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tl-grid.tl-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.tl-slot { min-width: 0; position: relative; }
+.tl-slot.is-hidden { display: none !important; }
+.tl-slot-top {
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    padding-bottom: 20px;
+}
+.tl-slot-axis {
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.tl-slot-bottom {
+    grid-row: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding-top: 20px;
+}
+
+/* Continuous Sepia Horizontal Axis + Arrows */
+.tl-slot-axis::before {
+    content: "";
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    top: 50%;
+    height: 2.5px;
+    background: #473019;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+.tl-axis-arrow {
+    position: absolute;
+    right: -13px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    line-height: 1;
+    color: #473019;
+    z-index: 2;
+    pointer-events: none;
+}
+.tl-slot-axis.is-last-vis .tl-axis-arrow {
+    right: -4px;
+}
+
+/* Circular Timeline Node (Teal-Bronze like reference, Crimson-Gold for Canonical Landmarks) */
+.tl-node {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #2f7077 0%, #1d4e53 72%, #13363a 100%);
+    border: 2.5px solid #f7ecd2;
+    box-shadow: 0 0 0 2px #473019, 0 2px 6px rgba(24, 14, 5, 0.35);
+    z-index: 3;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f9eed2;
+    font-size: 10px;
+    font-weight: 700;
+}
+.tl-node.is-canon {
+    width: 26px;
+    height: 26px;
+    background: radial-gradient(circle at 35% 35%, #a32c29 0%, #7a1f1d 70%, #4d110f 100%);
+    border: 2.5px solid #e7ca82;
+    box-shadow: 0 0 0 2px #473019, 0 0 10px rgba(122, 31, 29, 0.35);
+}
+
+/* Vertical Ink Stems Connecting Cards & Medallions to the Axis */
+.tl-slot-top::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -14px;
+    width: 2px;
+    height: 34px;
+    background: #473019;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+.tl-slot-bottom::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -14px;
+    width: 2px;
+    height: 34px;
+    background: #473019;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+.tl-medallion-slot.tl-slot-top::after { height: 26px; }
+.tl-medallion-slot.tl-slot-bottom::before { height: 26px; }
+
+/* Opposite Date & Place Medallion (Balances Above/Below Axis Rhythm) */
+.tl-medallion {
+    margin: 0 auto;
+    max-width: 94%;
+    text-align: center;
+    padding: 7px 11px;
+    background: rgba(252, 245, 228, 0.78);
+    border: 1px solid rgba(138, 102, 48, 0.52);
+    border-radius: 3px;
+    box-shadow: 0 2px 8px rgba(56, 36, 14, 0.1);
+}
+.tl-medallion.is-canon {
+    border-color: rgba(122, 31, 29, 0.55);
+    background: rgba(253, 244, 232, 0.92);
+}
+.tl-med-code {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    color: #1f5156;
+}
+.tl-medallion.is-canon .tl-med-code { color: var(--crimson); }
+.tl-med-date {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #2b1d10;
+    line-height: 1.25;
+    margin: 2px 0;
+}
+.tl-med-place {
+    font-size: 12.5px;
+    font-style: italic;
+    color: #5c4833;
+    line-height: 1.25;
+}
+
+/* EVENT CARD */
+.tl-card {
+    background: linear-gradient(180deg, rgba(255, 250, 238, 0.94) 0%, rgba(247, 237, 214, 0.94) 100%);
+    border: 1px solid rgba(132, 98, 48, 0.58);
+    border-top: 3px solid #1f5156;
+    border-radius: 3px;
+    padding: 11px 13px 10px;
+    box-shadow: 0 4px 14px rgba(48, 29, 10, 0.12);
+    position: relative;
+    z-index: 2;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tl-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(48, 29, 10, 0.2);
+}
+.tl-card.is-canon {
+    border-top-color: var(--crimson);
+    border-color: rgba(122, 31, 29, 0.45);
+    background: linear-gradient(180deg, rgba(255, 250, 240, 0.98) 0%, rgba(248, 234, 212, 0.96) 100%);
+}
+.tl-card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+.tl-code-badge {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 2px 6px;
+    border-radius: 2px;
+    background: #1f5156;
+    color: #f7f1e3;
+}
+.tl-card.is-canon .tl-code-badge { background: var(--crimson); }
+.tl-date-tag {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #45301a;
+}
+.tl-canon-pill {
+    margin-left: auto;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 8.8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 2px;
+    background: rgba(122, 31, 29, 0.12);
+    border: 1px solid rgba(122, 31, 29, 0.4);
+    color: var(--crimson-dark);
+    font-weight: 700;
+}
+.tl-card-title {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.28;
+    color: #21160d;
+    margin: 0 0 4px;
+}
+.tl-card-meta {
+    font-size: 12.2px;
+    font-style: italic;
+    color: #6b543b;
+    line-height: 1.3;
+    margin: 0 0 7px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted rgba(138, 102, 48, 0.4);
+}
+.tl-card-body {
+    font-size: 14px;
+    line-height: 1.44;
+    color: #261e16;
+    margin: 0;
+    text-align: left;
+}
+.tl-card-body p {
+    margin: 0 0 6px;
+    text-align: left;
+}
+.tl-card-body p:last-child { margin-bottom: 0; }
+
+/* EXPANDABLE "HERANÇA EM 418" DRAWER */
+.tl-legacy {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(154, 123, 59, 0.34);
+}
+.tl-legacy > summary {
+    cursor: pointer;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson-dark);
+    font-weight: 700;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.tl-legacy > summary::-webkit-details-marker { display: none; }
+.tl-legacy > summary::after {
+    content: "+";
+    font-size: 13px;
+    line-height: 1;
+    color: var(--gold);
+}
+.tl-legacy[open] > summary::after { content: "−"; }
+.tl-legacy-body {
+    margin-top: 6px;
+    font-size: 13.4px;
+    line-height: 1.42;
+    color: #3a2d20;
+    background: rgba(154, 123, 59, 0.09);
+    padding: 7px 9px;
+    border-left: 2px solid var(--gold);
+    border-radius: 0 2px 2px 0;
+}
+
+/* SUCCESSIVE ROW CONTINUATION CONNECTOR */
+.tl-flow-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 2px 0 18px;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6b4c28;
+}
+.tl-flow-next.is-hidden { display: none; }
+.tl-flow-next::before,
+.tl-flow-next::after {
+    content: "";
+    flex: 1 1 80px;
+    max-width: 240px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(122, 82, 39, 0.55), transparent);
+}
+
+/* EMPTY FILTER STATE */
+.chronicle-empty {
+    display: none;
+    text-align: center;
+    padding: 36px 20px;
+    border: 1px dashed var(--gold);
+    background: rgba(246, 236, 212, 0.7);
+    font-style: italic;
+    color: var(--ink-soft);
+    margin: 20px 0 36px;
+}
+.chronicle-empty.visible { display: block; }
+
+/* COMPLEMENTARY SECTIONS (IX–XII & GM VAULT) */
+.chronicle-appendix {
+    margin-top: 44px;
+    padding-top: 24px;
+    border-top: 2px solid var(--crimson);
+}
+.chronicle-appendix h2 {
+    scroll-margin-top: 130px;
+}
+
+/* RESPONSIVE: TABLET & MOBILE VERTICAL PARCHMENT TIMELINE */
+@media (max-width: 1060px) {
+    body.chronicle-mode .book-page { padding: 24px 18px 46px; }
+    .chronicle-hero { grid-template-columns: 1fr; text-align: center; padding: 20px; }
+    .chronicle-hero-cover { max-width: 260px; margin: 0 auto !important; }
+    .chronicle-stats { justify-content: center; }
+    .tl-roller { display: none; }
+    .tl-strip {
+        padding: 20px 16px 20px 20px;
+        border: 1px solid #966a38;
+        border-radius: 4px;
+    }
+    .tl-strip::before { inset: 5px; }
+    .tl-grid,
+    .tl-grid.tl-cols-3,
+    .tl-grid.tl-cols-4 {
+        display: flex !important;
+        flex-direction: column;
+        gap: 14px;
+        padding-left: 26px;
+        border-left: 2.5px solid #473019;
+    }
+    .tl-slot-axis,
+    .tl-medallion-slot { display: none !important; }
+    .tl-card-slot {
+        padding: 0 !important;
+        grid-column: auto !important;
+        grid-row: auto !important;
+    }
+    .tl-card-slot::before,
+    .tl-card-slot::after { display: none !important; }
+    .tl-card::before {
+        content: "";
+        position: absolute;
+        left: -36px;
+        top: 14px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #1f5156;
+        border: 2px solid #f7ecd2;
+        box-shadow: 0 0 0 2px #473019;
+    }
+    .tl-card.is-canon::before {
+        background: var(--crimson);
+        border-color: #e7ca82;
+    }
+    .tl-card::after {
+        content: "";
+        position: absolute;
+        left: -20px;
+        top: 21px;
+        width: 19px;
+        height: 2px;
+        background: #473019;
+    }
+}
+
+@media print {
+    .chronicle-toolbar { display: none !important; }
+    .tl-roller { display: none !important; }
+    .tl-scroll-wrap { filter: none !important; break-inside: avoid; page-break-inside: avoid; }
+    .tl-legacy { display: block; }
+}
+"""
+
+CHRONICLE_JS = r"""
+(function() {
+    const timelineRoot = document.getElementById('chronicle-timeline');
+    if (!timelineRoot) return;
+
+    const eraPills = Array.from(document.querySelectorAll('.era-pill'));
+    const searchInput = document.getElementById('chronicle-search');
+    const btnCanon = document.getElementById('btn-toggle-canon');
+    const btnLegacy = document.getElementById('btn-toggle-legacy');
+    const countEl = document.getElementById('chronicle-count');
+    const emptyEl = document.getElementById('chronicle-empty');
+
+    let selectedEra = 'ALL';
+    let canonOnly = false;
+    let legacyOpen = false;
+
+    function applyFilters() {
+        const q = (searchInput ? searchInput.value : '').trim().toLowerCase();
+        let visibleEvents = 0;
+
+        document.querySelectorAll('.chronicle-era').forEach(eraEl => {
+            const eraId = eraEl.dataset.era;
+            const eraAllowed = (selectedEra === 'ALL' || selectedEra === eraId);
+            if (!eraAllowed) {
+                eraEl.classList.add('is-hidden');
+                return;
+            }
+
+            let eraVisibleCount = 0;
+            const wraps = Array.from(eraEl.querySelectorAll('.tl-scroll-wrap'));
+            const connectors = Array.from(eraEl.querySelectorAll('.tl-flow-next'));
+
+            wraps.forEach((wrap, wIdx) => {
+                const grid = wrap.querySelector('.tl-grid');
+                if (!grid) return;
+                const codes = (grid.dataset.codes || '').split(',').filter(Boolean);
+                const visibleCodes = [];
+
+                codes.forEach(code => {
+                    const cardSlot = grid.querySelector(`.tl-card-slot[data-ev="${code}"]`);
+                    if (!cardSlot) return;
+                    const isCanon = cardSlot.dataset.canon === '1';
+                    const hay = (cardSlot.dataset.search || '').toLowerCase();
+                    const matchCanon = !canonOnly || isCanon;
+                    const matchQuery = !q || hay.includes(q);
+                    const show = matchCanon && matchQuery;
+
+                    grid.querySelectorAll(`.tl-slot[data-ev="${code}"]`).forEach(sl => {
+                        sl.classList.toggle('is-hidden', !show);
+                    });
+                    if (show) visibleCodes.push(code);
+                });
+
+                if (visibleCodes.length === 0) {
+                    wrap.classList.add('is-hidden');
+                } else {
+                    wrap.classList.remove('is-hidden');
+                    eraVisibleCount += visibleCodes.length;
+                    grid.style.gridTemplateColumns = `repeat(${visibleCodes.length}, minmax(0, 1fr))`;
+                    visibleCodes.forEach((code, colIdx) => {
+                        grid.querySelectorAll(`.tl-slot[data-ev="${code}"]`).forEach(sl => {
+                            sl.style.gridColumn = String(colIdx + 1);
+                            if (sl.classList.contains('tl-slot-axis')) {
+                                sl.classList.toggle('is-last-vis', colIdx === visibleCodes.length - 1);
+                            }
+                        });
+                    });
+                }
+
+                if (connectors[wIdx]) {
+                    connectors[wIdx].classList.toggle('is-hidden', visibleCodes.length === 0);
+                }
+            });
+
+            // Hide trailing connector after the last visible strip in an era
+            let lastVisIdx = -1;
+            wraps.forEach((w, idx) => { if (!w.classList.contains('is-hidden')) lastVisIdx = idx; });
+            connectors.forEach((c, idx) => {
+                if (idx >= lastVisIdx) c.classList.add('is-hidden');
+            });
+
+            eraEl.classList.toggle('is-hidden', eraVisibleCount === 0);
+            visibleEvents += eraVisibleCount;
+        });
+
+        if (countEl) {
+            countEl.textContent = `Exibindo ${visibleEvents} de 100 acontecimentos`;
+        }
+        if (emptyEl) {
+            emptyEl.classList.toggle('visible', visibleEvents === 0);
+        }
+    }
+
+    eraPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            selectedEra = pill.dataset.era;
+            eraPills.forEach(p => p.classList.toggle('active', p === pill));
+            applyFilters();
+            if (selectedEra !== 'ALL') {
+                const target = document.querySelector(`.chronicle-era[data-era="${selectedEra}"]`);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    if (btnCanon) {
+        btnCanon.addEventListener('click', () => {
+            canonOnly = !canonOnly;
+            btnCanon.classList.toggle('active', canonOnly);
+            applyFilters();
+        });
+    }
+
+    if (btnLegacy) {
+        btnLegacy.addEventListener('click', () => {
+            legacyOpen = !legacyOpen;
+            btnLegacy.classList.toggle('active', legacyOpen);
+            btnLegacy.textContent = legacyOpen ? '📜 Recolher Heranças em 418' : '📜 Expandir Heranças em 418';
+            document.querySelectorAll('.tl-legacy').forEach(d => { d.open = legacyOpen; });
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+    }
+
+    // Close sidebar drawer when clicking TOC links on Chronicle page
+    document.querySelectorAll('.toc-list a').forEach(a => {
+        a.addEventListener('click', () => {
+            document.body.classList.add('sidebar-hidden');
+            document.body.classList.remove('sidebar-open-mobile');
+        });
+    });
+})();
+"""
+
+
+def partition_rows_3_4(items):
+    """Partition any list into balanced horizontal rows of strictly 3 or 4 items (never 1 or 2)."""
+    n = len(items)
+    if n <= 4:
+        return [items] if items else []
+    rem = n % 4
+    if rem == 0:
+        sizes = [4] * (n // 4)
+    elif rem == 3:
+        sizes = [4] * (n // 4) + [3]
+    elif rem == 2:
+        sizes = [4] * (n // 4 - 1) + [3, 3]
+    else:  # rem == 1 (n >= 5; for n==5 -> [3,2], for n>=9 -> 4s + [3,3,3])
+        if n == 5:
+            sizes = [3, 2]
+        else:
+            sizes = [4] * (n // 4 - 2) + [3, 3, 3]
+    rows = []
+    pos = 0
+    for sz in sizes:
+        rows.append(items[pos:pos + sz])
+        pos += sz
+    return rows
+
+
+def render_chronicle_timeline_page(bk: dict, md_content: str):
+    """Build custom Medieval Parchment Scroll Timeline page for Tomo XI."""
+    era_periods = {
+        "I": ("Tempos geológicos até cerca de 1800 AF", "Montanhas, bacias, costas, geleiras e solos moldam possibilidades de vida."),
+        "II": ("Cerca de 900–1 AF", "Comunidades, migrações, embarcações e mercados antecedem o calendário real."),
+        "III": ("1–112 EF", "Altavanne organiza poder, trabalho, rotas e campanhas contra as matas."),
+        "IV": ("113–219 EF", "Autonomias negociadas, navegação e instituições de saber."),
+        "V": ("220–347 EF", "Crédito, epidemias, guerras kalitas, arquivos e expedições perdidas."),
+        "VI": ("348–356 EF", "A Sombra devasta Aurora e destrói a legitimidade do ramo reinante."),
+        "VII": ("357–404 EF", "Reconstrução, promessas, água e novas dependências econômicas."),
+        "VIII": ("405–418 EF", "O passado converge em crises que os personagens ainda podem mudar."),
+    }
+    era_romans = ("I", "II", "III", "IV", "V", "VI", "VII", "VIII")
+
+    # Split Markdown by top-level H2 sections
+    parts = re.split(r"(?=^##\s+)", md_content, flags=re.M)
+    intro_guide_md = ""
+    era_sections = []
+    appendix_chunks = []
+
+    for part in parts:
+        m_h2 = re.match(r"^##\s+(.+)$", part.strip(), flags=re.M)
+        if not m_h2:
+            continue
+        h2_title = m_h2.group(1).strip()
+        if h2_title.startswith("Como ler esta história"):
+            intro_guide_md = part
+        else:
+            m_era = re.match(r"^(I|II|III|IV|V|VI|VII|VIII)\s+[—–-]\s+(.+)$", h2_title)
+            if m_era:
+                era_sections.append((m_era.group(1), m_era.group(2).strip(), part))
+            else:
+                appendix_chunks.append(part)
+
+    # Parse all 8 Eras and their 100 events
+    parsed_eras = []
+    total_events = 0
+    total_canon = 0
+
+    for roman, era_name, raw_sec in era_sections:
+        # Extract era illustration image if present
+        m_img = re.search(r"!\[([^\]]*)\]\(([^)]+)\)", raw_sec)
+        plate_alt = m_img.group(1).strip() if m_img else ""
+        plate_src = ("assets/" + os.path.basename(m_img.group(2).strip())) if m_img else ""
+
+        ev_blocks = re.split(r"(?=^###\s+T\d{3}\s)", raw_sec, flags=re.M)
+        events = []
+        for blk in ev_blocks[1:]:
+            lines = blk.strip().splitlines()
+            if not lines:
+                continue
+            m_eh = re.match(r"^###\s+(T\d{3})\s+[—–-]\s+([^:]+):\s*(.+)$", lines[0].strip())
+            if not m_eh:
+                continue
+            code = m_eh.group(1).strip()
+            date_str = m_eh.group(2).strip()
+            title_str = m_eh.group(3).strip()
+
+            body_lines = [ln.strip() for ln in lines[1:] if ln.strip()]
+            meta_raw = ""
+            if body_lines and body_lines[0].startswith("**") and body_lines[0].endswith("**"):
+                meta_raw = body_lines.pop(0).strip("*").strip()
+
+            # Split meta_raw into Category · Place · Status
+            meta_parts = [p.strip().rstrip(".") for p in meta_raw.split("·")]
+            cat_str = meta_parts[0] if len(meta_parts) >= 1 else ""
+            place_str = meta_parts[1] if len(meta_parts) >= 2 else ""
+            status_str = meta_parts[2] if len(meta_parts) >= 3 else ""
+            is_canon = ("marco estabelecido" in meta_raw.lower()) or ("marcos estabelecidos" in meta_raw.lower())
+
+            desc_paras = []
+            legacy_label = "Herança em 418"
+            legacy_text = ""
+            for bl in body_lines:
+                m_leg = re.match(r"^\*\*(Herança[^*:]+):\*\*\s*(.+)$", bl)
+                if m_leg:
+                    legacy_label = m_leg.group(1).strip()
+                    legacy_text = m_leg.group(2).strip()
+                else:
+                    desc_paras.append(bl)
+
+            total_events += 1
+            if is_canon:
+                total_canon += 1
+
+            events.append({
+                "code": code,
+                "date": date_str,
+                "title": title_str,
+                "meta_raw": meta_raw,
+                "category": cat_str,
+                "place": place_str,
+                "status": status_str,
+                "is_canon": is_canon,
+                "desc_paras": desc_paras,
+                "legacy_label": legacy_label,
+                "legacy_text": legacy_text,
+            })
+
+        parsed_eras.append({
+            "roman": roman,
+            "name": era_name,
+            "id": f"epoca-{roman.lower()}",
+            "period": era_periods.get(roman, ("", ""))[0],
+            "summary": era_periods.get(roman, ("", ""))[1],
+            "plate_src": plate_src,
+            "plate_alt": plate_alt,
+            "events": events,
+        })
+
+    # Build Sidebar TOC
+    toc_items = []
+    for era in parsed_eras:
+        toc_items.append((2, f"{era['roman']} — {era['name']}", era["id"]))
+
+    # Render collapsible Editorial Guide ("Como ler esta história")
+    guide_html = ""
+    if intro_guide_md:
+        guide_inner, _ = md_to_html(intro_guide_md, id_prefix="guia-", card_h3=False, inject_maps=False)
+        guide_html = f"""
+        <details class="chronicle-guide">
+            <summary>📜 Como Ler Esta Crônica — Calendário (AF / EF), Fontes &amp; Tabela das Oito Épocas</summary>
+            <div class="chronicle-guide-inner">{guide_inner}</div>
+        </details>
+        """
+
+    # Build Era Filter Pills
+    era_pills = ['<button class="era-pill active" data-era="ALL" type="button">Todas (100)</button>']
+    for era in parsed_eras:
+        era_pills.append(
+            f'<button class="era-pill" data-era="{era["roman"]}" type="button" '
+            f'title="{html.escape(era["name"])} ({html.escape(era["period"])})">'
+            f'{era["roman"]} · {html.escape(era["name"].split()[0] if len(era["name"]) > 22 else era["name"])} ({len(era["events"])})</button>'
+        )
+    # Better crisp pill labels
+    era_short_labels = {
+        "I": "I · Terras Antigas",
+        "II": "II · Antes da Coroa",
+        "III": "III · A Forja",
+        "IV": "IV · Pactos & Portos",
+        "V": "V · Livros Fechados",
+        "VI": "VI · O Eclipse",
+        "VII": "VII · Faixa Negra",
+        "VIII": "VIII · Ano 418",
+    }
+    era_pills = ['<button class="era-pill active" data-era="ALL" type="button">Todas (100)</button>']
+    for era in parsed_eras:
+        lbl = era_short_labels.get(era["roman"], era["roman"])
+        era_pills.append(
+            f'<button class="era-pill" data-era="{era["roman"]}" type="button" '
+            f'title="{html.escape(era["name"])} — {html.escape(era["period"])}">'
+            f'{html.escape(lbl)}</button>'
+        )
+
+    # Render Hero Banner
+    hero_html = f"""
+    <section class="chronicle-hero">
+        <figure class="atlas-plate chronicle-hero-cover">
+            <img src="{bk['cover_map']}" alt="Capa — {html.escape(bk['title'])}"{img_dim_attrs(bk['cover_map'])}/>
+        </figure>
+        <div>
+            <div class="chronicle-hero-kicker">ALENIA RPG • {html.escape(bk['num'])} • LINHA DO TEMPO ILUSTRADA</div>
+            <h1 class="chronicle-hero-title">{html.escape(bk['title'])}</h1>
+            <p class="chronicle-hero-sub">Uma história de Alenia: das montanhas anteriores à memória aos conflitos do Ano 418 da Era da Forja.</p>
+            <blockquote class="chronicle-hero-epigraph">
+                “O rei mandou escrever que fundara a cidade. Debaixo da praça onde ergueram sua estátua encontramos três ruas, dois cemitérios e a soleira de uma casa. Nenhum deles sabia o nome do rei.”
+                <span>— Nota atribuída à cartógrafa Benetta de Litore.</span>
+            </blockquote>
+            <div class="chronicle-stats">
+                <span class="chronicle-stat-pill">✦ {total_events} Acontecimentos (T001–T100)</span>
+                <span class="chronicle-stat-pill">✦ 8 Épocas em Pergaminho</span>
+                <span class="chronicle-stat-pill">✦ 8 Pranchas Renascentistas</span>
+                <span class="chronicle-stat-pill canon">★ {total_canon} Marcos Canônicos</span>
+            </div>
+        </div>
+    </section>
+    {guide_html}
+    <div class="chronicle-toolbar" role="region" aria-label="Filtros da Linha do Tempo">
+        <div class="chronicle-era-pills">{"".join(era_pills)}</div>
+        <div class="chronicle-controls-row">
+            <input id="chronicle-search" class="chronicle-search" type="search" placeholder="Buscar acontecimento, ano, cidade, casa ou personagem..." aria-label="Buscar na linha do tempo"/>
+            <button id="btn-toggle-canon" class="chronicle-toggle-btn canon-toggle" type="button">★ Apenas Marcos Canônicos ({total_canon})</button>
+            <button id="btn-toggle-legacy" class="chronicle-toggle-btn" type="button">📜 Expandir Heranças em 418</button>
+            <span id="chronicle-count" class="chronicle-count">Exibindo {total_events} de {total_events} acontecimentos</span>
+        </div>
+    </div>
+    <div id="chronicle-empty" class="chronicle-empty">Nenhum acontecimento corresponde aos filtros atuais. Limpe a busca ou selecione “Todas”.</div>
+    """
+
+    # Render All 8 Eras with Successive 3–4 Event Medieval Scroll Strips
+    era_blocks_html = []
+    for era in parsed_eras:
+        rows = partition_rows_3_4(era["events"])
+        plate_html = ""
+        if era["plate_src"]:
+            plate_html = (
+                f'<figure class="atlas-plate chronicle-plate">'
+                f'<img src="{html.escape(era["plate_src"], quote=True)}" alt="{html.escape(era["plate_alt"])}"{img_dim_attrs(era["plate_src"])} loading="lazy"/>'
+                f'<figcaption>{html.escape(era["plate_alt"])}</figcaption>'
+                f'</figure>'
+            )
+
+        strips_html = []
+        for r_idx, row in enumerate(rows):
+            n_cols = len(row)
+            codes_csv = ",".join(ev["code"] for ev in row)
+            row_range = f"{row[0]['code']} → {row[-1]['code']}"
+            slots_html = []
+
+            for c_idx, ev in enumerate(row):
+                col_num = c_idx + 1
+                is_top_card = (c_idx % 2 == 0)  # Odd cols (1,3) above axis; Even cols (2,4) below axis
+                canon_cls = " is-canon" if ev["is_canon"] else ""
+                canon_flag = "1" if ev["is_canon"] else "0"
+                search_blob = html.escape(
+                    f"{ev['code']} {ev['date']} {ev['title']} {ev['meta_raw']} "
+                    f"{' '.join(ev['desc_paras'])} {ev['legacy_text']} {era['name']}",
+                    quote=True,
+                )
+
+                desc_html = "".join(f"<p>{inline_md(p)}</p>" for p in ev["desc_paras"])
+                legacy_html = ""
+                if ev["legacy_text"]:
+                    legacy_html = (
+                        f'<details class="tl-legacy">'
+                        f'<summary>✦ {html.escape(ev["legacy_label"])}</summary>'
+                        f'<div class="tl-legacy-body">{inline_md(ev["legacy_text"])}</div>'
+                        f'</details>'
+                    )
+
+                canon_badge = '<span class="tl-canon-pill">★ Marco</span>' if ev["is_canon"] else ""
+                card_html = (
+                    f'<article class="tl-card{canon_cls}" id="{ev["code"].lower()}">'
+                    f'<div class="tl-card-head">'
+                    f'<span class="tl-code-badge">{html.escape(ev["code"])}</span>'
+                    f'<span class="tl-date-tag">{html.escape(ev["date"])}</span>'
+                    f'{canon_badge}'
+                    f'</div>'
+                    f'<h3 class="tl-card-title">{inline_md(ev["title"])}</h3>'
+                    f'<div class="tl-card-meta">{html.escape(ev["category"])}'
+                    f'{(" · " + html.escape(ev["place"])) if ev["place"] else ""}</div>'
+                    f'<div class="tl-card-body">{desc_html}</div>'
+                    f'{legacy_html}'
+                    f'</article>'
+                )
+
+                medallion_html = (
+                    f'<div class="tl-medallion{canon_cls}">'
+                    f'<div class="tl-med-code">{html.escape(ev["code"])}{" · ★ MARCO" if ev["is_canon"] else ""}</div>'
+                    f'<div class="tl-med-date">{html.escape(ev["date"])}</div>'
+                    f'<div class="tl-med-place">{html.escape(ev["place"] or ev["category"])}</div>'
+                    f'</div>'
+                )
+
+                node_sym = "★" if ev["is_canon"] else ""
+                last_cls = " is-last-vis" if c_idx == n_cols - 1 else ""
+                axis_html = (
+                    f'<div class="tl-slot tl-slot-axis{last_cls}" data-ev="{ev["code"]}" style="grid-column:{col_num}">'
+                    f'<span class="tl-node{canon_cls}" title="{html.escape(ev["code"] + " — " + ev["date"])}">{node_sym}</span>'
+                    f'<span class="tl-axis-arrow" aria-hidden="true">▸</span>'
+                    f'</div>'
+                )
+
+                if is_top_card:
+                    top_slot = (
+                        f'<div class="tl-slot tl-slot-top tl-card-slot" data-ev="{ev["code"]}" '
+                        f'data-canon="{canon_flag}" data-search="{search_blob}" style="grid-column:{col_num}">'
+                        f'{card_html}</div>'
+                    )
+                    bot_slot = (
+                        f'<div class="tl-slot tl-slot-bottom tl-medallion-slot" data-ev="{ev["code"]}" '
+                        f'style="grid-column:{col_num}">{medallion_html}</div>'
+                    )
+                else:
+                    top_slot = (
+                        f'<div class="tl-slot tl-slot-top tl-medallion-slot" data-ev="{ev["code"]}" '
+                        f'style="grid-column:{col_num}">{medallion_html}</div>'
+                    )
+                    bot_slot = (
+                        f'<div class="tl-slot tl-slot-bottom tl-card-slot" data-ev="{ev["code"]}" '
+                        f'data-canon="{canon_flag}" data-search="{search_blob}" style="grid-column:{col_num}">'
+                        f'{card_html}</div>'
+                    )
+
+                slots_html.append(top_slot + axis_html + bot_slot)
+
+            strips_html.append(f"""
+            <div class="tl-scroll-wrap" data-row="{r_idx + 1}">
+                <div class="tl-roller tl-roller-left" aria-hidden="true"></div>
+                <div class="tl-strip">
+                    <div class="tl-strip-label">Faixa {r_idx + 1}/{len(rows)} · {html.escape(row_range)}</div>
+                    <div class="tl-grid tl-cols-{n_cols}" data-codes="{codes_csv}">
+                        {"".join(slots_html)}
+                    </div>
+                </div>
+                <div class="tl-roller tl-roller-right" aria-hidden="true"></div>
+            </div>
+            """)
+
+            if r_idx < len(rows) - 1:
+                nxt_row = rows[r_idx + 1]
+                strips_html.append(
+                    f'<div class="tl-flow-next">⤵ Segue na faixa abaixo ({nxt_row[0]["code"]} → {nxt_row[-1]["code"]})</div>'
+                )
+
+        era_blocks_html.append(f"""
+        <section class="chronicle-era" id="{era['id']}" data-era="{era['roman']}">
+            <header class="era-banner">
+                <div>
+                    <div class="era-banner-kicker">ÉPOCA {era['roman']} DE VIII</div>
+                    <h2 class="era-banner-title">{html.escape(era['name'])}</h2>
+                    <p class="era-banner-summary">{html.escape(era['summary'])}</p>
+                </div>
+                <div class="era-banner-meta">
+                    <span class="era-period-badge">{html.escape(era['period'])}</span>
+                    <span class="era-count-sub">{len(era['events'])} acontecimentos · {len(rows)} faixas de pergaminho</span>
+                </div>
+            </header>
+            {plate_html}
+            {"".join(strips_html)}
+        </section>
+        """)
+
+    # Render Complementary Sections (IX, X, XI, AES-256-GCM Caderno Reservado ao Mestre, XII, Fontes)
+    appendix_md = "\n\n".join(appendix_chunks)
+    appendix_html, appendix_toc = render_public_doc_with_sealed_sections(
+        appendix_md, id_prefix="ap-", card_h3=False, inject_maps=False
+    )
+    toc_items.extend(appendix_toc)
+
+    full_body = (
+        hero_html
+        + f'<div id="chronicle-timeline">{"".join(era_blocks_html)}</div>'
+        + f'<section class="chronicle-appendix">{appendix_html}</section>'
+    )
+    return full_body, toc_items
+
+
+def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=None, force_sidebar: bool = False, enable_book_reader: bool = True, extra_css: str = "", extra_js: str = "", body_extra_class: str = "") -> str:
     has_toc = force_sidebar or (toc_items is not None and len(toc_items) > 0)
     sidebar_html = build_sidebar(active_file, toc_items, has_toc)
     shell_cls = "book-shell"
 
     reader_ui = ""
-    body_cls = ""
+    classes = []
     if enable_book_reader:
-        body_cls = ' class="book-mode sidebar-hidden"'
+        classes.extend(["book-mode", "sidebar-hidden"])
         reader_ui = """
     <section id="reader-stage" class="reader-stage" aria-label="Leitor em Formato de Livro">
         <button class="side-turn-btn side-turn-prev btn-prev-page" type="button" title="Página Anterior (←)">‹</button>
@@ -2695,6 +4024,11 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
         </div>
     </footer>
         """
+    if body_extra_class:
+        classes.extend(body_extra_class.split())
+    body_cls = f' class="{" ".join(classes)}"' if classes else ""
+    extra_style_tag = f"\n    <style>{extra_css}</style>" if extra_css else ""
+    extra_script_tag = f"\n    <script>{extra_js}</script>" if extra_js else ""
 
     return f"""<!DOCTYPE html>
 <html lang="pt-BR">
@@ -2702,7 +4036,7 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{html.escape(page_title)} — Alenia RPG</title>
-    <style>{SHARED_CSS}</style>
+    <style>{SHARED_CSS}</style>{extra_style_tag}
 </head>
 <body{body_cls} data-book-title="{html.escape(page_title)}">
     {build_topbar(active_file, page_title, has_toc)}
@@ -2716,7 +4050,7 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
     <div id="atlas-lightbox" class="lightbox" title="Clique ou pressione ESC para fechar">
         <img id="atlas-lightbox-img" src="" alt="Ampliação do Mapa"/>
     </div>
-    <script>{SHARED_JS}</script>
+    <script>{SHARED_JS}</script>{extra_script_tag}
 </body>
 </html>
 """
@@ -2733,7 +4067,7 @@ def main():
         build_cover(
             "COMPÊNDIO INTEGRAL",
             "ALENIA RPG",
-            "Regras, Cenário & Atlas, 36 Kits, Empório, Herbário de Seleni & Volumes Selados do Mestre",
+            "Regras, Cenário & Atlas, 36 Kits, Empório, Herbário de Seleni, Crônica & Volumes Selados do Mestre",
             "“Cinco terras, um único aço. O volume definitivo para mestres e exploradores de Alenia.”",
             "assets/alenia_mapa_mundi_atualizado.jpg",
         )
@@ -2785,6 +4119,35 @@ def main():
                 f'{c_gated}'
                 f'</section>'
             )
+        elif bk["out"] == "11_Cronica_das_Terras_e_das_Mares.html":
+            chronicle_body, chronicle_toc = render_chronicle_timeline_page(bk, md_content)
+            full_doc = wrap_html_doc(
+                bk["title"],
+                bk["out"],
+                chronicle_body,
+                chronicle_toc,
+                force_sidebar=True,
+                enable_book_reader=False,
+                extra_css=CHRONICLE_CSS,
+                extra_js=CHRONICLE_JS,
+                body_extra_class="chronicle-mode sidebar-hidden",
+            )
+            with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
+                f.write(full_doc)
+            print(f"[OK] {bk['out']:34s} (PERGAMINHO TIMELINE • {len(chronicle_toc)} secoes)")
+
+            c_inner, c_pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix=f"t{idx+1}-", card_h3=False, inject_maps=False)
+            tome_anchor = f"tomo-{idx+1}"
+            compendium_toc.append((2, f"{bk['num']} — {bk['title']}", tome_anchor))
+            for lvl, lbl, hid in c_pub_toc:
+                if lvl == 2:
+                    compendium_toc.append((3, lbl, hid))
+            compendium_parts.append(
+                f'<section id="{tome_anchor}" class="tome-divider">'
+                f'{build_cover(bk["num"], bk["title"], bk["subtitle"], bk["epigraph"], bk["cover_map"])}'
+                f'{c_inner}'
+                f'</section>'
+            )
         else:
             body_inner, pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps)
             full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + body_inner, pub_toc, enable_book_reader=True)
@@ -2813,7 +4176,12 @@ def main():
     cards = []
     for bk in BOOKS:
         cls = "portal-card gm-card" if bk["gm_only"] else "portal-card"
-        cta = "🔒 Destrancar Livro (Mestre) →" if bk["gm_only"] else "Abrir Livro →"
+        if bk["gm_only"]:
+            cta = "🔒 Destrancar Livro (Mestre) →"
+        elif bk["out"] == "11_Cronica_das_Terras_e_das_Mares.html":
+            cta = "📜 Abrir Linha do Tempo →"
+        else:
+            cta = "Abrir Livro →"
         thumb = f'<img class="portal-cover" src="{bk["cover_map"]}" alt="Capa — {html.escape(bk["title"])}" loading="lazy"/>' if bk["cover_map"] else ""
         cards.append(f"""
         <a class="{cls}" href="{bk['out']}">
@@ -2839,7 +4207,7 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">10 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Empório • Herbário de Seleni • Firecast v2.3</div>
+        <div class="cover-subtitle">11 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Empório • Herbário • Linha do Tempo • Firecast v2.3</div>
         <div class="cover-rule"></div>
         <div style="margin: 8px 0 4px;">
             <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 18px; border-radius:3px; font-weight:700;">⬇ Baixar Plugin da Ficha Firecast (v2.3)</a>
