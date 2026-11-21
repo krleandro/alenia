@@ -465,6 +465,93 @@ def load_emporio_catalog():
             "spec": spec,
         })
 
+    # Classificacao de consumiveis: item_id -> (usos_por_unidade, nome_no_slot, efeito_chat)
+    consumiveis_meta = {
+        "acampamento_8": (10, "Pavio Encerado", "Queima por 2 min mesmo sob garoa; +3 em testes para acender fogo na chuva."),
+        "acampamento_9": (5, "Tocha Comum", "Ilumina 6m claramente (+6m penumbra) por 1 hora."),
+        "acampamento_12": (1, "Oleo de Lamparina (Frasco 0,5 L)", "Alimenta lanterna por 6h ou arremesso incendiario (6m, 1d4 fogo/rodada)."),
+        "acampamento_13": (10, "Vela de Sebo", "Ilumina raio de 2m por 1 hora."),
+        "acampamento_14": (10, "Vela de Cera de Abelha", "Ilumina raio de 2m por 1 hora sem fumaca nem cheiro forte."),
+        "sobrevivencia_4": (10, "Piton / Cravo de Escalada", "Cravado em pedra/gelo com martelo; +2 em Escalada e ancora de corda."),
+        "pesca_caca_5": (6, "Laco de Arame (Armadilha)", "Armadilha discreta para caca miuda (Sobrevivencia CD 13 durante a noite)."),
+        "pesca_caca_7": (5, "Isca Aromatica Seca (Dose)", "+2 em Sobrevivencia para pescar ou atrair presa para armadilha."),
+        "pesca_caca_10": (1, "Sal Grosso de Bayd (1 kg)", "Conserva ate 10 kg de carne ou peixe cacado por 3 semanas."),
+        "pesca_caca_12": (20, "Flecha (Aljava Impermeavel)", "Dispara 1 flecha protegida contra chuva e umidade."),
+        "forja_oficios_4": (1, "Saco de Carvao Mineral (10 kg)", "Sustenta uma forja por 1 dia inteiro de trabalho pesado."),
+        "forja_oficios_9": (3, "Cola de Osso & Breu (Dose)", "Veda rachaduras, fixa cabos de ferramentas ou repara equipamento."),
+        "forja_oficios_10": (5, "Pregos & Cravos (Lote 10 un.)", "Usado em barricadas (+2 resistencia) ou reparos estruturais."),
+        "alquimia_med_3": (5, "Atadura Limpa & Fio", "Reduz Medicina de CD 15 para CD 12 para estancar sangramento/estabilizar."),
+        "alquimia_med_4": (1, "Cataplasma de Ervas", "Aplicado no Descanso Curto/Longo: soma +1d4 PV extras na recuperacao."),
+        "alquimia_med_5": (3, "Aguardente Antisseptica (Dose)", "Limpa feridas antes da sutura (+1 em Medicina contra infeccoes)."),
+        "alquimia_med_8": (1, "Frasco de Acido Comum", "Arremesso 6m vs Defesa Esquiva sem armadura comum: 2d6 acido (ou corroi fechadura/corrente)."),
+        "alquimia_med_9": (1, "Bomba de Fumaca Seca", "Arremesso 6m: nuvem densa de 4,5m de raio por 3 rodadas (ocultamento total)."),
+        "alquimia_med_10": (1, "Frasco de Oleo Incendiario", "Arremesso 6m: 1d6 fogo imediato + 1d4 fogo/rodada por 2 rodadas ate apagar."),
+        "alquimia_med_11": (1, "Antidoto Comum", "+4 em testes de CON contra venenos naturais por 1 hora."),
+        "alquimia_med_12": (1, "Calmante / Sonifero Herbal", "Em bebida: alvo testa CON CD 14 ou sofre sono pesado por 2 horas."),
+        "alquimia_med_14": (5, "Frasco de Vidro com Rolha", "Usado para coletar amostra de agua, sangue, veneno ou cinzas."),
+        "nautica_6": (1, "Kit de Calafetagem", "Repara 2d6 pontos de casco de embarcacao em 1 hora de trabalho."),
+        "subterfugio_5": (5, "Bastao de Lacre & Selo", "Sela carta ou documento com cera quente."),
+        "subterfugio_6": (5, "Tinta Invisivel (Dose)", "Escreve mensagem secreta revelada apenas sobre chama de vela."),
+        "subterfugio_8": (1, "Bolsa de Estrepes (20 pontas)", "Cobre 1,5m x 1,5m; Percepcao CD 14 ou sofre 1d4 dano e metade do deslocamento."),
+        "subterfugio_9": (10, "Giz & Po Fino (Porcao)", "Marca caminhos em ruinas ou detecta correntes de ar/mecanismos ocultos."),
+        "vestuario_9": (7, "Racao Seca de Viagem (Dia)", "Consome 1 dia de racao seca (sustenta 1 dia de viagem sem Exaustao por fome)."),
+        "vestuario_10": (14, "Biscoito Naval & Carne Salgada (Dia)", "Consome 1 dia de provisao naval (sustenta 1 dia em travessia maritima)."),
+        "vestuario_11": (4, "Vinho Bom (Dose)", "Eleva moral no acampamento ou quebra o gelo em negociacao."),
+        "vestuario_12": (4, "Cerveja Escura (Dose)", "Caneca de cerveja escura para o acampamento."),
+        "vestuario_13": (7, "Forragem para Montaria (Dia)", "Alimenta 1 montaria por 1 dia em travessia sem pasto."),
+    }
+
+    # Conteudo exato dos 5 Pacotes Prontos (desempacotados automaticamente nos slots!)
+    pacotes_conteudo = {
+        "pacotes_1": [
+            ("mochilas_1", 1), ("acampamento_3", 1), ("acampamento_1", 1), ("mochilas_5", 1),
+            ("acampamento_7", 1), ("acampamento_8", 1), ("acampamento_9", 1), ("acampamento_15", 1),
+            ("sobrevivencia_11", 1), ("vestuario_9", 1),
+        ],
+        "pacotes_2": [
+            ("mochilas_1", 1), ("mochilas_4", 1), ("acampamento_5", 1), ("acampamento_11", 1),
+            ("acampamento_12", 2), ("sobrevivencia_1", 1), ("sobrevivencia_3", 1), ("sobrevivencia_6", 1),
+            ("sobrevivencia_10", 1), ("vestuario_6", 1), ("subterfugio_9", 1), ("alquimia_med_3", 1),
+            ("vestuario_9", 1),
+        ],
+        "pacotes_3": [
+            ("mochilas_1", 1), ("vestuario_7", 1), ("acampamento_6", 1), ("mochilas_5", 3),
+            ("acampamento_7", 1), ("pesca_caca_10", 1), ("pesca_caca_5", 1), ("pesca_caca_9", 1),
+            ("alquimia_med_11", 1), ("vestuario_9", 1),
+        ],
+        "pacotes_4": [
+            ("mochilas_4", 1), ("nautica_8", 1), ("pesca_caca_1", 1), ("pesca_caca_2", 1),
+            ("pesca_caca_3", 1), ("pesca_caca_4", 1), ("sobrevivencia_1", 1), ("acampamento_10", 1),
+            ("acampamento_12", 2), ("pesca_caca_10", 1), ("pesca_caca_9", 1), ("vestuario_10", 1),
+        ],
+        "pacotes_5": [
+            ("mochilas_1", 1), ("forja_oficios_1", 1), ("forja_oficios_2", 1), ("vestuario_8", 1),
+            ("sobrevivencia_11", 1), ("forja_oficios_9", 1), ("forja_oficios_10", 1), ("acampamento_7", 1),
+            ("acampamento_10", 1), ("acampamento_12", 2), ("mochilas_5", 1), ("vestuario_9", 1),
+        ],
+    }
+
+    for cid, _ in cats:
+        for it in items_by_cat[cid]:
+            iid = it["id"]
+            if iid in consumiveis_meta:
+                usos, snome, efeito = consumiveis_meta[iid]
+                it["tipo"] = "cons"
+                it["usos"] = usos
+                it["slotNome"] = snome
+                it["pesoUn"] = round(it["pesoKg"] / float(usos), 3) if it["pesoKg"] > 0 else 0.0
+                it["efeito"] = efeito
+            else:
+                it["tipo"] = "arma" if cid == "armas" else ("armadura" if cid == "armaduras" else "equip")
+                it["usos"] = 1
+                it["slotNome"] = it["nome"]
+                it["pesoUn"] = it["pesoKg"]
+                it["efeito"] = it["spec"][:145] + ("..." if len(it["spec"]) > 145 else "")
+            if iid in pacotes_conteudo:
+                it["pacoteItens"] = pacotes_conteudo[iid]
+            else:
+                it["pacoteItens"] = []
+
     return cats, items_by_cat
 
 
@@ -494,13 +581,33 @@ def build_lua_script(emporio_cats, emporio_items) -> str:
     for cid, _ in emporio_cats:
         emp_items_lua.append(f"    [{lua_str(cid)}] = {{")
         for it in emporio_items[cid]:
-            lbl = f"{it['nome']}  [{_fmt_price_label(it['precoPc'])} | {it['pesoKg']:.1f} kg]" if it["pesoKg"] > 0 else f"{it['nome']}  [{_fmt_price_label(it['precoPc'])}]"
+            tag_cons = " [Cons.]" if it["tipo"] == "cons" else ""
+            lbl = (
+                f"{it['nome']}{tag_cons}  [{_fmt_price_label(it['precoPc'])} | {it['pesoKg']:.1f} kg]"
+                if it["pesoKg"] > 0
+                else f"{it['nome']}{tag_cons}  [{_fmt_price_label(it['precoPc'])}]"
+            )
+            pack_str = ""
+            if it["pacoteItens"]:
+                pack_parts = [f"{{ id={lua_str(pid)}, qtd={pq} }}" for pid, pq in it["pacoteItens"]]
+                pack_str = ", pacoteItens={ " + ", ".join(pack_parts) + " }"
             emp_items_lua.append(
-                f"        {{ id={lua_str(it['id'])}, nome={lua_str(it['nome'])}, label={lua_str(lbl)}, "
-                f"precoPc={it['precoPc']}, pesoKg={it['pesoKg']}, dest={lua_str(it['dest'])}, spec={lua_str(it['spec'])} }},"
+                f"        {{ id={lua_str(it['id'])}, nome={lua_str(it['nome'])}, slotNome={lua_str(it['slotNome'])}, "
+                f"label={lua_str(lbl)}, precoPc={it['precoPc']}, pesoKg={it['pesoKg']}, pesoUn={it['pesoUn']}, "
+                f"tipo={lua_str(it['tipo'])}, usos={it['usos']}, dest={lua_str(it['dest'])}, "
+                f"efeito={lua_str(it['efeito'])}, spec={lua_str(it['spec'])}{pack_str} }},"
             )
         emp_items_lua.append("    },")
     emp_items_lua.append("};")
+
+    emp_index_lua = [
+        "local EMPORIO_BY_ID = {};",
+        "for _, lista in pairs(EMPORIO_ITENS) do",
+        "    for i = 1, #lista do",
+        "        EMPORIO_BY_ID[lista[i].id] = lista[i];",
+        "    end;",
+        "end;",
+    ]
 
     lua = (
         "\n".join(kits_lua)
@@ -510,6 +617,8 @@ def build_lua_script(emporio_cats, emporio_items) -> str:
         + "\n".join(emp_cats_lua)
         + "\n\n"
         + "\n".join(emp_items_lua)
+        + "\n\n"
+        + "\n".join(emp_index_lua)
         + r"""
 
 local okInt, InternetMod = pcall(require, "internet.lua");
@@ -520,7 +629,7 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "2.0";
+local PLUGIN_VERSION = "2.1";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
 
@@ -554,6 +663,8 @@ local PADROES_VIDA = {
 
 local recalcularFicha;
 local atualizarPaginaCustomSkills;
+local atualizarPaginaInventario;
+local recalcularPesoInventario;
 
 local function num(v, def)
     local n = tonumber(v);
@@ -1038,6 +1149,12 @@ recalcularFicha = function()
     end;
 
     atualizarPaginaCustomSkills();
+    if atualizarPaginaInventario ~= nil then
+        atualizarPaginaInventario();
+    end;
+    if recalcularPesoInventario ~= nil then
+        recalcularPesoInventario(false);
+    end;
 
     local armDef = num(sheet.armaduraDef, 0);
     local escDef = num(sheet.escudoDef, 0);
@@ -1489,16 +1606,245 @@ local function formatarPrecoPc(pc)
     end;
 end;
 
-local function nomeDestinoEmporio(dest)
-    if dest == "alquimia" then return "Alquimia, Ervas & Ferramentas"; end;
-    if dest == "armadura" then return "Armaduras, Adamante & Reliquias"; end;
-    return "Mochila & Provisoes";
+local function parsePesoNum(val)
+    local raw = tostring(val or "0"):gsub(",", ".");
+    local n = tonumber(raw:match("%-?%d+%.?%d*"));
+    if n == nil or n < 0 then return 0; end;
+    return n;
 end;
 
-local function campoDestinoEmporio(dest)
-    if dest == "alquimia" then return "alquimiaSuprimentos"; end;
-    if dest == "armadura" then return "reliquiasAdamante"; end;
-    return "equipamentoMochila";
+local function fmtPesoNum(v)
+    local n = tonumber(v) or 0;
+    if n <= 0 then return "0"; end;
+    if n < 0.1 then
+        return string.format("%.2f", n):gsub("0+$", ""):gsub("%.$", "");
+    end;
+    return string.format("%.2f", n):gsub("0+$", ""):gsub("%.$", "");
+end;
+
+local function getInvSlotNodeByGlobal(globalIdx)
+    if sheet == nil then return nil; end;
+    if sheet.invSlots == nil then sheet.invSlots = {}; end;
+    local key = "it" .. tostring(globalIdx);
+    if sheet.invSlots[key] == nil then
+        sheet.invSlots[key] = {};
+    end;
+    return sheet.invSlots[key];
+end;
+
+local function getInvSlotNode(slotIdx)
+    if sheet == nil then return nil, 1; end;
+    local pagina = math.max(1, math.floor(num(sheet.invPage, 1)));
+    local globalIdx = (pagina - 1) * 10 + slotIdx;
+    return getInvSlotNodeByGlobal(globalIdx), globalIdx;
+end;
+
+recalcularPesoInventario = function(atualizarCarga)
+    if sheet == nil then return 0, 0; end;
+    local totalKg = 0;
+    local ocupados = 0;
+    if sheet.invSlots ~= nil then
+        local filhos = NDB.getChildNodes(sheet.invSlots);
+        for i = 1, #filhos do
+            local nd = filhos[i];
+            local nm = tostring(nd.nome or ""):gsub("^%s+", ""):gsub("%s+$", "");
+            if nm ~= "" then
+                ocupados = ocupados + 1;
+                local q = math.max(0, math.floor(num(nd.qtd, 0)));
+                local p = parsePesoNum(nd.peso);
+                totalKg = totalKg + (q * p);
+            end;
+        end;
+    end;
+    sheet.invPesoTotal = string.format("%.1f kg (%d itens)", totalKg, ocupados);
+    if (atualizarCarga == true) or (ocupados > 0) then
+        local fmt = string.format("%.1f", totalKg):gsub("%.0$", "");
+        sheet.cargaAtual = fmt;
+    end;
+    return totalKg, ocupados;
+end;
+
+atualizarPaginaInventario = function()
+    if sheet == nil or sheet._updatingInv then return; end;
+    sheet._updatingInv = true;
+    local pagina = math.max(1, math.floor(num(sheet.invPage, 1)));
+    local inicio = (pagina - 1) * 10 + 1;
+    local fim = pagina * 10;
+    sheet.invPageLabel = "Pag. " .. tostring(pagina) .. " (" .. tostring(inicio) .. "-" .. tostring(fim) .. ")";
+    for i = 1, 10 do
+        local node = getInvSlotNode(i);
+        local nome = (node ~= nil and node.nome) or "";
+        local tipo = (node ~= nil and node.tipo and node.tipo ~= "" and node.tipo) or "equip";
+        local qtd = (node ~= nil and node.qtd and node.qtd ~= "" and node.qtd) or "";
+        local peso = (node ~= nil and node.peso and node.peso ~= "" and node.peso) or "";
+        local nota = (node ~= nil and node.nota) or "";
+        sheet["inv" .. i .. "_nome"] = nome;
+        sheet["inv" .. i .. "_tipo"] = tipo;
+        sheet["inv" .. i .. "_qtd"] = tostring(qtd);
+        sheet["inv" .. i .. "_peso"] = tostring(peso);
+        sheet["inv" .. i .. "_nota"] = nota;
+    end;
+    sheet._updatingInv = false;
+end;
+
+local function salvarInvSlot(slotIdx)
+    if sheet == nil or sheet._updatingInv then return; end;
+    local node, gIdx = getInvSlotNode(slotIdx);
+    if node == nil then return; end;
+    local nome = tostring(sheet["inv" .. slotIdx .. "_nome"] or "");
+    local tipo = tostring(sheet["inv" .. slotIdx .. "_tipo"] or "equip");
+    if tipo == "" then tipo = "equip"; end;
+    local qtdStr = tostring(sheet["inv" .. slotIdx .. "_qtd"] or "");
+    if nome:gsub("%s+", "") ~= "" and qtdStr:gsub("%s+", "") == "" then
+        qtdStr = "1";
+        sheet._updatingInv = true;
+        sheet["inv" .. slotIdx .. "_qtd"] = "1";
+        sheet._updatingInv = false;
+    end;
+    node.nome = nome;
+    node.tipo = tipo;
+    node.qtd = qtdStr;
+    node.peso = tostring(sheet["inv" .. slotIdx .. "_peso"] or "");
+    node.nota = tostring(sheet["inv" .. slotIdx .. "_nota"] or "");
+    local maxIdx = math.max(20, math.floor(num(sheet.invMaxIdx, 20)));
+    if gIdx > maxIdx then sheet.invMaxIdx = tostring(gIdx); end;
+    recalcularPesoInventario(true);
+end;
+
+local function mudarPaginaInventario(delta)
+    if sheet == nil then return; end;
+    local pag = math.max(1, math.floor(num(sheet.invPage, 1)) + delta);
+    sheet.invPage = tostring(pag);
+    local maxIdx = math.max(20, math.floor(num(sheet.invMaxIdx, 20)));
+    if pag * 10 > maxIdx then sheet.invMaxIdx = tostring(pag * 10); end;
+    atualizarPaginaInventario();
+end;
+
+local function adicionarOuEmpilharNoInventario(nome, tipo, qtdAdd, pesoUn, nota)
+    if sheet == nil then return 1, 1, false; end;
+    if sheet.invSlots == nil then sheet.invSlots = {}; end;
+    local filhos = NDB.getChildNodes(sheet.invSlots);
+    local maxIdx = math.max(30, math.floor(num(sheet.invMaxIdx, 30)), #filhos + 15);
+    local alvoNome = tostring(nome or ""):gsub("^%s+", ""):gsub("%s+$", ""):lower();
+    local alvoTipo = tostring(tipo or "equip");
+    local primeiroVazio = nil;
+
+    for idx = 1, maxIdx do
+        local key = "it" .. tostring(idx);
+        local nd = sheet.invSlots[key];
+        local nm = (nd ~= nil and tostring(nd.nome or ""):gsub("^%s+", ""):gsub("%s+$", "")) or "";
+        if nm == "" then
+            if primeiroVazio == nil then primeiroVazio = idx; end;
+        elseif nm:lower() == alvoNome and (tostring(nd.tipo or "equip") == alvoTipo) then
+            local qAtual = math.max(0, math.floor(num(nd.qtd, 0)));
+            nd.qtd = tostring(qAtual + qtdAdd);
+            if parsePesoNum(nd.peso) == 0 and pesoUn > 0 then
+                nd.peso = fmtPesoNum(pesoUn);
+            end;
+            if tostring(nd.nota or "") == "" and tostring(nota or "") ~= "" then
+                nd.nota = nota;
+            end;
+            local pag = math.floor((idx - 1) / 10) + 1;
+            return idx, pag, true;
+        end;
+    end;
+
+    local destIdx = primeiroVazio or (maxIdx + 1);
+    if destIdx > maxIdx then
+        sheet.invMaxIdx = tostring(destIdx + 10);
+    end;
+    local nd = getInvSlotNodeByGlobal(destIdx);
+    nd.nome = nome;
+    nd.tipo = alvoTipo;
+    nd.qtd = tostring(qtdAdd);
+    nd.peso = fmtPesoNum(pesoUn);
+    nd.nota = nota or "";
+    local pag = math.floor((destIdx - 1) / 10) + 1;
+    return destIdx, pag, false;
+end;
+
+local function usarSlotInventario(slotIdx)
+    if sheet == nil then return; end;
+    local node = getInvSlotNode(slotIdx);
+    local nome = tostring((node ~= nil and node.nome) or sheet["inv" .. slotIdx .. "_nome"] or ""):gsub("^%s+", ""):gsub("%s+$", "");
+    if nome == "" then
+        showMessage("Este slot esta vazio. Digite um item ou compre no Emporio acima.");
+        return;
+    end;
+    local tipo = tostring((node ~= nil and node.tipo) or sheet["inv" .. slotIdx .. "_tipo"] or "equip");
+    local qtd = math.max(0, math.floor(num((node ~= nil and node.qtd) or sheet["inv" .. slotIdx .. "_qtd"], 0)));
+    local pesoUn = parsePesoNum((node ~= nil and node.peso) or sheet["inv" .. slotIdx .. "_peso"]);
+    local nota = tostring((node ~= nil and node.nota) or sheet["inv" .. slotIdx .. "_nota"] or ""):gsub("^%s+", ""):gsub("%s+$", "");
+    local nomeChar = sheet.nome or "Explorador";
+    local det = (nota ~= "") and (" — " .. nota) or "";
+
+    if tipo == "cons" then
+        if qtd <= 0 then
+            showMessage("Sem usos/unidades restantes de '" .. nome .. "'!\nCompre mais no Emporio acima ou clique em [+1] para reabastecer.");
+            return;
+        end;
+        local novaQtd = qtd - 1;
+        if node ~= nil then node.qtd = tostring(novaQtd); end;
+        sheet._updatingInv = true;
+        sheet["inv" .. slotIdx .. "_qtd"] = tostring(novaQtd);
+        sheet._updatingInv = false;
+        recalcularPesoInventario(true);
+
+        local pesoMsg = (pesoUn > 0) and (" | -" .. fmtPesoNum(pesoUn) .. " kg") or "";
+        local restoMsg = (novaQtd == 0) and " [ESGOTADO!]" or (" [Restam: " .. tostring(novaQtd) .. "]");
+        enviarChatOuMsg("[" .. nomeChar .. "] Usou consumivel: " .. nome .. " (-1" .. pesoMsg .. ")" .. restoMsg .. det);
+    else
+        local tipoLbl = (tipo == "arma" and "arma") or (tipo == "armadura" and "armadura/escudo") or "equipamento";
+        enviarChatOuMsg("[" .. nomeChar .. "] Utilizou " .. tipoLbl .. ": " .. nome .. " (x" .. tostring(math.max(1, qtd)) .. ")" .. det);
+    end;
+end;
+
+local function ajustarQtdSlotInventario(slotIdx, delta)
+    if sheet == nil then return; end;
+    local node = getInvSlotNode(slotIdx);
+    local nome = tostring((node ~= nil and node.nome) or sheet["inv" .. slotIdx .. "_nome"] or ""):gsub("^%s+", ""):gsub("%s+$", "");
+    if nome == "" then
+        showMessage("Preencha o nome do item neste slot antes de ajustar a quantidade.");
+        return;
+    end;
+    local qtd = math.max(0, math.floor(num((node ~= nil and node.qtd) or sheet["inv" .. slotIdx .. "_qtd"], 0)));
+    local novaQtd = math.max(0, qtd + delta);
+    if node ~= nil then node.qtd = tostring(novaQtd); end;
+    sheet._updatingInv = true;
+    sheet["inv" .. slotIdx .. "_qtd"] = tostring(novaQtd);
+    sheet._updatingInv = false;
+    recalcularPesoInventario(true);
+end;
+
+local function limparSlotInventario(slotIdx)
+    if sheet == nil then return; end;
+    local node = getInvSlotNode(slotIdx);
+    local nome = tostring((node ~= nil and node.nome) or sheet["inv" .. slotIdx .. "_nome"] or ""):gsub("^%s+", ""):gsub("%s+$", "");
+    local function executarLimpeza()
+        if node ~= nil then
+            node.nome = "";
+            node.tipo = "equip";
+            node.qtd = "";
+            node.peso = "";
+            node.nota = "";
+        end;
+        sheet._updatingInv = true;
+        sheet["inv" .. slotIdx .. "_nome"] = "";
+        sheet["inv" .. slotIdx .. "_tipo"] = "equip";
+        sheet["inv" .. slotIdx .. "_qtd"] = "";
+        sheet["inv" .. slotIdx .. "_peso"] = "";
+        sheet["inv" .. slotIdx .. "_nota"] = "";
+        sheet._updatingInv = false;
+        recalcularPesoInventario(true);
+    end;
+    if nome ~= "" and DialogsMod ~= nil and type(DialogsMod.confirmYesNo) == "function" then
+        DialogsMod.confirmYesNo(
+            "Remover '" .. nome .. "' deste slot do inventario?",
+            function(sim) if sim then executarLimpeza(); end; end
+        );
+    else
+        executarLimpeza();
+    end;
 end;
 
 local function getItemEmporioAtual()
@@ -1530,12 +1876,16 @@ local function atualizarPreviewEmporio()
     local totalPc = it.precoPc * qtd;
     local pesoTotal = it.pesoKg * qtd;
     local pesoTxt = (pesoTotal > 0) and (string.format("%.1f kg", pesoTotal)) or "0 kg (carrega proprio peso)";
-    local destTxt = nomeDestinoEmporio(it.dest);
+    local tipoTxt = (it.tipo == "cons") and ("Consumivel (" .. tostring(it.usos * qtd) .. " usos)")
+        or ((it.pacoteItens ~= nil and #it.pacoteItens > 0) and ("Desempacota " .. tostring(#it.pacoteItens) .. " slots"))
+        or ((it.tipo == "arma") and "Arma")
+        or ((it.tipo == "armadura") and "Armadura/Escudo")
+        or "Equipamento";
     local resumoSpec = tostring(it.spec or "");
-    if #resumoSpec > 115 then
-        resumoSpec = string.sub(resumoSpec, 1, 112) .. "...";
+    if #resumoSpec > 105 then
+        resumoSpec = string.sub(resumoSpec, 1, 102) .. "...";
     end;
-    sheet.emporioPreview = "Total (" .. tostring(qtd) .. "x): " .. formatarPrecoPc(totalPc) .. "  |  Peso: " .. pesoTxt .. "  |  Destino: " .. destTxt .. "  |  " .. resumoSpec;
+    sheet.emporioPreview = "Total (" .. tostring(qtd) .. "x): " .. formatarPrecoPc(totalPc) .. "  |  Peso: " .. pesoTxt .. "  |  " .. tipoTxt .. "  |  " .. resumoSpec;
 end;
 
 local function atualizarItensEmporio(frm, forcar)
@@ -1593,24 +1943,19 @@ local function verDetalhesEmporio()
     local pesoUnit = (it.pesoKg > 0) and string.format("%.1f kg", it.pesoKg) or "0 kg (carrega proprio peso)";
     local pesoTot = (it.pesoKg > 0) and string.format("%.1f kg", it.pesoKg * qtd) or "0 kg";
     local catNome = EMPORIO_CATS[catId] or catId;
+    local tipoInfo = (it.tipo == "cons")
+        and ("Consumivel Utilizavel — concede " .. tostring(it.usos * qtd) .. " uso(s) no slot (" .. fmtPesoNum(it.pesoUn) .. " kg por uso)")
+        or ((it.pacoteItens ~= nil and #it.pacoteItens > 0) and ("Pacote Completo — desempacota automaticamente " .. tostring(#it.pacoteItens) .. " itens nos Slots de Inventario (ja com consumiveis prontos para usar!)"))
+        or "Equipamento Permanente (guardado em Slot de Inventario)";
     showMessage(
         "EMPORIO DE ALENIA — DETALHES DO ITEM\n\n" ..
         "Categoria: " .. catNome .. "\n" ..
         "Item: " .. it.nome .. "\n" ..
+        "Tipo: " .. tipoInfo .. "\n" ..
         "Preco Unitario: " .. formatarPrecoPc(it.precoPc) .. "  |  Total (" .. tostring(qtd) .. "x): " .. formatarPrecoPc(totalPc) .. "\n" ..
-        "Peso Unitario: " .. pesoUnit .. "  |  Peso Total: " .. pesoTot .. "\n" ..
-        "Destino no Inventario: " .. nomeDestinoEmporio(it.dest) .. "\n\n" ..
+        "Peso Unitario: " .. pesoUnit .. "  |  Peso Total: " .. pesoTot .. "\n\n" ..
         "Especificacoes:\n" .. tostring(it.spec or "")
     );
-end;
-
-local function adicionarPesoCargaAtual(addKg)
-    if sheet == nil or addKg == nil or addKg <= 0 then return; end;
-    local raw = tostring(sheet.cargaAtual or ""):gsub(",", ".");
-    local atual = tonumber(raw:match("%-?%d+%.?%d*")) or 0;
-    local novo = atual + addKg;
-    local fmt = string.format("%.1f", novo):gsub("%.0$", "");
-    sheet.cargaAtual = fmt;
 end;
 
 local function comprarItemEmporio()
@@ -1658,8 +2003,10 @@ local function comprarItemEmporio()
         fonteTxt = "Bolsa + " .. tostring(sacarBancoPp) .. " PP em Cartas de Credito";
     end;
 
-    local destNome = nomeDestinoEmporio(it.dest);
-    local destField = campoDestinoEmporio(it.dest);
+    local isPacote = (it.pacoteItens ~= nil and #it.pacoteItens > 0);
+    local destResumo = isPacote
+        and ("Slots de Inventario (desempacota " .. tostring(#it.pacoteItens) .. " itens automaticamente)")
+        or ((it.tipo == "cons") and ("Slot Consumivel (" .. tostring(it.usos * qtd) .. " usos — botao [Usar])") or "Slot de Inventario");
 
     local function executarCompra()
         local poNow = math.max(0, math.floor(num(sheet.moedasOuro, 0)));
@@ -1697,23 +2044,35 @@ local function comprarItemEmporio()
             sheet.cartasCredito = tostring(bancoNowPp);
         end;
 
-        local pesoTag = (pesoAdd > 0) and (string.format("%.1f kg", pesoAdd)) or "0 kg";
-        local specCurta = tostring(it.spec or "");
-        if #specCurta > 140 then
-            specCurta = string.sub(specCurta, 1, 137) .. "...";
-        end;
-        local linhaItem = "- " .. tostring(qtd) .. "x " .. it.nome .. " [" .. pesoTag .. " | " .. formatarPrecoPc(totalPc) .. "] - " .. specCurta;
-        local atualTxt = tostring(sheet[destField] or "");
-        if atualTxt == "" then
-            sheet[destField] = linhaItem;
+        local pagAlvo = math.max(1, math.floor(num(sheet.invPage, 1)));
+        local detalheAdicao = "";
+        if isPacote then
+            local primeiroPag = nil;
+            for p = 1, #it.pacoteItens do
+                local comp = it.pacoteItens[p];
+                local subIt = EMPORIO_BY_ID[comp.id];
+                if subIt ~= nil then
+                    local totalUsos = (subIt.usos or 1) * (comp.qtd or 1) * qtd;
+                    local _, pagSlot = adicionarOuEmpilharNoInventario(subIt.slotNome or subIt.nome, subIt.tipo or "equip", totalUsos, subIt.pesoUn or subIt.pesoKg or 0, subIt.efeito or subIt.spec or "");
+                    if primeiroPag == nil then primeiroPag = pagSlot; end;
+                end;
+            end;
+            if primeiroPag ~= nil then pagAlvo = primeiroPag; end;
+            detalheAdicao = " (" .. tostring(#it.pacoteItens) .. " itens desempacotados nos Slots)";
         else
-            sheet[destField] = atualTxt .. "\n" .. linhaItem;
+            local totalUsos = (it.usos or 1) * qtd;
+            local _, pagSlot, empilhou = adicionarOuEmpilharNoInventario(it.slotNome or it.nome, it.tipo or "equip", totalUsos, it.pesoUn or it.pesoKg or 0, it.efeito or it.spec or "");
+            pagAlvo = pagSlot;
+            if it.tipo == "cons" then
+                detalheAdicao = " (+" .. tostring(totalUsos) .. " usos" .. (empilhou and " empilhados" or "") .. " nos Slots)";
+            else
+                detalheAdicao = empilhou and " (empilhado nos Slots)" or " (adicionado aos Slots)";
+            end;
         end;
 
-        if pesoAdd > 0 then
-            adicionarPesoCargaAtual(pesoAdd);
-        end;
-
+        sheet.invPage = tostring(pagAlvo);
+        atualizarPaginaInventario();
+        recalcularPesoInventario(true);
         recalcularFicha();
         atualizarPreviewEmporio();
 
@@ -1723,7 +2082,7 @@ local function comprarItemEmporio()
         enviarChatOuMsg(
             "[" .. nomeChar .. "] Comprou no Emporio: " .. tostring(qtd) .. "x " .. it.nome ..
             " (-" .. formatarPrecoPc(totalPc) .. bancoMsg .. ")" .. pesoMsg ..
-            " -> " .. destNome .. " | Bolsa: " .. tostring(poNow) .. " PO, " .. tostring(ppNow) .. " PP, " .. tostring(pcNow) .. " PC."
+            detalheAdicao .. " | Bolsa: " .. tostring(poNow) .. " PO, " .. tostring(ppNow) .. " PP, " .. tostring(pcNow) .. " PC."
         );
     end;
 
@@ -1733,7 +2092,7 @@ local function comprarItemEmporio()
             "Item: " .. tostring(qtd) .. "x " .. it.nome .. "\n" ..
             "Custo Total: " .. formatarPrecoPc(totalPc) .. " (" .. fonteTxt .. ")\n" ..
             "Peso Adicionado: " .. ((pesoAdd > 0) and string.format("+%.1f kg", pesoAdd) or "0 kg") .. "\n" ..
-            "Guardar em: " .. destNome,
+            "Destino: " .. destResumo,
             function(sim)
                 if sim then executarCompra(); end;
             end
@@ -2067,6 +2426,29 @@ def build_lfm() -> str:
                 </button>
             </rectangle>''')
 
+    inv_tipo_items = "{'Consumivel', 'Equipamento', 'Arma', 'Armadura'}"
+    inv_tipo_values = "{'cons', 'equip', 'arma', 'armadura'}"
+    inv_rows = []
+    for i in range(1, 11):
+        ty = 82 + (i - 1) * 41
+        inv_rows.append(f'''
+            <rectangle left="10" top="{ty}" width="1016" height="37" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="3" yradius="3">
+                <edit left="6" top="4" width="254" height="29" field="inv{i}_nome" textPrompt="Slot {i} (compre no Emporio ou digite)..." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                <comboBox left="264" top="4" width="102" height="29" field="inv{i}_tipo" items="{xml_attr(inv_tipo_items)}" values="{xml_attr(inv_tipo_values)}" fontSize="12"/>
+                <edit left="370" top="4" width="54" height="29" field="inv{i}_qtd" type="number" horzTextAlign="center" fontColor="{TEXT_GOLD}" fontSize="14" fontStyle="bold"/>
+                <edit left="428" top="4" width="54" height="29" field="inv{i}_peso" horzTextAlign="center" fontColor="{TEXT_MAIN}" fontSize="13"/>
+                <edit left="486" top="4" width="370" height="29" field="inv{i}_nota" textPrompt="Efeito / notas (enviado ao chat ao usar)..." fontColor="{TEXT_MUTED}" fontSize="12"/>
+                <button left="860" top="4" width="66" height="29" text="Usar" fontSize="12">
+                    <event name="onClick"><![CDATA[usarSlotInventario({i});]]></event>
+                </button>
+                <button left="930" top="4" width="38" height="29" text="+1" fontSize="12">
+                    <event name="onClick"><![CDATA[ajustarQtdSlotInventario({i}, 1);]]></event>
+                </button>
+                <button left="972" top="4" width="38" height="29" text="X" fontSize="12">
+                    <event name="onClick"><![CDATA[limparSlotInventario({i});]]></event>
+                </button>
+            </rectangle>''')
+
     recalc_fields = [
         "forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma",
         "nivel", "xpAtual", "pvMax", "kitSelecionado", "kitDvFaces", "kitPerBase", "kitMultInt",
@@ -2087,7 +2469,8 @@ def build_lfm() -> str:
         "kitPerBase", "kitMultInt", "pvAtual", "pvMax", "armaduraDef", "escudoDef",
         "rdEspecial", "defesaOutros", "iniciativaOutros", "multiAcoes",
         "esp_status", "esp_fe", "esp_submundo", "esp_dom", "esp_livre",
-        "customSkillPage", "moedasOuro", "moedasPrata", "moedasCobre",
+        "customSkillPage", "invPage", "invMaxIdx", "invPageLabel", "invPesoTotal",
+        "moedasOuro", "moedasPrata", "moedasCobre",
         "cartasCredito", "bancoOrigem", "padraoVida",
         "emporioCat", "emporioItem", "emporioQtd", "emporioPreview",
         "cdTeste", "defesaAlvo", "xpAtual",
@@ -2098,11 +2481,12 @@ def build_lfm() -> str:
         "1", "0.75", "18", "18", "0", "0",
         "0", "0", "0", "1",
         "0", "0", "0", "0", "0",
-        "1", "0", "25", "0",
+        "1", "1", "30", "Pag. 1 (1-10)", "0.0 kg (0 itens)",
+        "0", "25", "0",
         "0", "corallis", "modesto",
-        "pacotes", init_item_id, "1", "Selecione uma categoria e um item para comprar direto para o inventario.",
+        "pacotes", init_item_id, "1", "Selecione uma categoria e um item para comprar direto para os Slots de Inventario.",
         "0", "0", "0",
-        "v2.0", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "v2.1", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -2117,6 +2501,14 @@ def build_lfm() -> str:
         custom_datalinks.append(f'''
     <dataLink fields="{xml_attr(cfields)}">
         <event name="onChange"><![CDATA[salvarCustomSlot({i}); recalcularFicha();]]></event>
+    </dataLink>''')
+
+    inv_datalinks = []
+    for i in range(1, 11):
+        ifields = lua_items_str([f"inv{i}_nome", f"inv{i}_tipo", f"inv{i}_qtd", f"inv{i}_peso", f"inv{i}_nota"])
+        inv_datalinks.append(f'''
+    <dataLink fields="{xml_attr(ifields)}">
+        <event name="onChange"><![CDATA[salvarInvSlot({i});]]></event>
     </dataLink>''')
 
     lfm = f'''<?xml version="1.0" encoding="UTF-8"?>
@@ -2439,7 +2831,7 @@ def build_lfm() -> str:
             <!-- ABA 4: INVENTARIO & SISTEMA MONETARIO -->
             <tab title="Inventario &amp; Moedas">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="1042">
+                    <layout left="0" top="0" width="1056" height="1130">
                         <rectangle left="6" top="6" width="1036" height="196" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <!-- Linha 1: Moedas (Padrao Prata) + Cartas de Credito -->
                             <label left="14" top="8" width="160" height="18" text="AUREOS (PO = 10 PP)" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold"/>
@@ -2533,19 +2925,48 @@ def build_lfm() -> str:
                             </rectangle>
                         </rectangle>
 
-                        <rectangle left="6" top="362" width="512" height="666" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="488" height="24" text="MOCHILA, EQUIPAMENTO DE KIT &amp; PROVISOES" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <textEditor left="12" top="40" width="488" height="614" field="equipamentoMochila" fontSize="14"/>
+                        <!-- CARD INVENTARIO EM SLOTS ILIMITADOS & CONSUMIVEIS UTILIZAVEIS -->
+                        <rectangle left="6" top="362" width="1036" height="504" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="14" top="10" width="410" height="24" text="INVENTARIO EM SLOTS &amp; CONSUMIVEIS (ILIMITADO)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
+
+                            <rectangle left="430" top="8" width="174" height="28" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label align="client" field="invPesoTotal" fontColor="{TEXT_GREEN}" fontSize="12" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+
+                            <button left="614" top="7" width="96" height="30" text="&lt; Anterior" fontSize="12">
+                                <event name="onClick"><![CDATA[mudarPaginaInventario(-1);]]></event>
+                            </button>
+                            <label left="714" top="8" width="118" height="28" field="invPageLabel" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            <button left="836" top="7" width="188" height="30" text="Proxima / +10 Slots &gt;" fontSize="12">
+                                <event name="onClick"><![CDATA[mudarPaginaInventario(1);]]></event>
+                            </button>
+
+                            <label left="14" top="40" width="1008" height="18" text="Compras do Emporio entram direto nos slots (Pacotes desempacotam sozinhos!). Em itens do tipo Consumivel, [Usar] desconta 1 carga, atualiza o peso e envia no chat." fontColor="{TEXT_MUTED}" fontSize="11"/>
+
+                            <label left="16" top="62" width="254" height="16" text="NOME DO ITEM" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold"/>
+                            <label left="274" top="62" width="102" height="16" text="TIPO" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="380" top="62" width="54" height="16" text="QTD/USOS" fontColor="{TEXT_GOLD}" fontSize="10" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="438" top="62" width="54" height="16" text="KG/UN" fontColor="{TEXT_MUTED}" fontSize="10" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="496" top="62" width="370" height="16" text="EFEITO / ESPECIFICACAO (ENVIADO AO CHAT AO USAR)" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold"/>
+                            <label left="870" top="62" width="150" height="16" text="ACOES" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+
+                            {"".join(inv_rows)}
                         </rectangle>
 
-                        <rectangle left="528" top="362" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="490" height="24" text="ARMADURAS, ADAMANTE &amp; RELIQUIAS RARAS (RD)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <textEditor left="12" top="40" width="490" height="276" field="reliquiasAdamante" fontSize="14"/>
+                        <!-- NOTAS COMPLEMENTARES & RETROCOMPATIBILIDADE -->
+                        <rectangle left="6" top="876" width="338" height="240" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="10" top="8" width="318" height="22" text="MOCHILA / KIT (NOTAS LIVRES)" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
+                            <textEditor left="10" top="34" width="318" height="196" field="equipamentoMochila" fontSize="13"/>
                         </rectangle>
 
-                        <rectangle left="528" top="700" width="514" height="328" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="490" height="24" text="ALQUIMIA, VENENOS, ERVAS &amp; FERRAMENTAS" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <textEditor left="12" top="40" width="490" height="276" field="alquimiaSuprimentos" fontSize="14"/>
+                        <rectangle left="354" top="876" width="338" height="240" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="10" top="8" width="318" height="22" text="ARMADURAS, ADAMANTE &amp; RELIQUIAS (RD)" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
+                            <textEditor left="10" top="34" width="318" height="196" field="reliquiasAdamante" fontSize="13"/>
+                        </rectangle>
+
+                        <rectangle left="702" top="876" width="340" height="240" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="10" top="8" width="320" height="22" text="ALQUIMIA, VENENOS &amp; FERRAMENTAS" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
+                            <textEditor left="10" top="34" width="320" height="196" field="alquimiaSuprimentos" fontSize="13"/>
                         </rectangle>
                     </layout>
                 </scrollBox>
@@ -2642,10 +3063,10 @@ def build_lfm() -> str:
                         <!-- CARD DE NOVIDADES -->
                         <rectangle left="6" top="450" width="1036" height="224" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v2.0 — Emporio Automatico na aba Inventario (155 itens do Tomo IX + Armas e Armaduras): compra direta com debito de moedas/banco, peso na carga e anuncio no chat." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="74" width="996" height="24" text="• v1.9 — Teto Progressivo de Graduacao de Pericias por Nivel (+4 no Niv. 1 ate +16 no Niv. 26-30) com trava rigida e alerta automatico." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="102" width="996" height="24" text="• v1.8 — Sistema Monetario Padrao Prata (Aureos/Pratas/Cobres, Cartas de Credito Corallis/Kalis, peso 100=1kg, Padrao de Vida Mensal e +/- Transacao)." fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <label left="20" top="130" width="996" height="24" text="• v1.5-v1.7 — Rastreador oficial de XP (Niveis 1-30), teto de atributos (18/20/22), definicao de CD, Defesa do Alvo, dano corpo a corpo +FOR e Descansos." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="46" width="996" height="24" text="• v2.1 — Inventario em Slots Ilimitados com botao [Usar] em todos os consumiveis (desconta uso, atualiza carga e anuncia no chat) + desempacote automatico dos 5 Pacotes." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="74" width="996" height="24" text="• v2.0 — Emporio Automatico na aba Inventario (155 itens do Tomo IX + Armas e Armaduras): compra direta com debito de moedas/banco, empilhamento e anuncio no chat." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="102" width="996" height="24" text="• v1.9 — Teto Progressivo de Graduacao de Pericias por Nivel (+4 no Niv. 1 ate +16 no Niv. 26-30) com trava rigida e alerta automatico." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="130" width="996" height="24" text="• v1.5-v1.8 — Sistema Monetario Padrao Prata, Cartas de Credito, Padrao de Vida Mensal, XP (Niveis 1-30), CD, Defesa do Alvo, dano +FOR e Descansos." fontColor="{TEXT_MUTED}" fontSize="13"/>
                             <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
@@ -2664,12 +3085,14 @@ def build_lfm() -> str:
         <event name="onChange"><![CDATA[atualizarItensEmporio(self, false);]]></event>
     </dataLink>
     {"".join(custom_datalinks)}
+    {"".join(inv_datalinks)}
 </form>
 '''
     with open(LFM_PATH, "w", encoding="utf-8") as f:
         f.write(lfm)
     total_emp = sum(len(v) for v in emporio_items.values())
-    print(f"[OK] AleniaFicha.lfm v2.0 gerado ({len(lfm)} bytes, {len(emporio_cats)} categorias / {total_emp} itens no Emporio).")
+    total_cons = sum(1 for v in emporio_items.values() for it in v if it["tipo"] == "cons")
+    print(f"[OK] AleniaFicha.lfm v2.1 gerado ({len(lfm)} bytes, {len(emporio_cats)} categorias / {total_emp} itens / {total_cons} consumiveis utilizaveis).")
 
 
 if __name__ == "__main__":
