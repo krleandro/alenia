@@ -73,18 +73,39 @@ $$\text{Resultado} = 1\text{d}20 + \text{Modificador do Atributo} + \text{Grau d
 | **25** | Muito Difícil | Cruzar o Mar dos Corais sob tempestade, decifrar inscrição de Kelgore |
 | **30** | Lendária / Extrema | Trabalhar adamante puro em campo, sobreviver a tempestade em Incognito |
 
-### Graduação Livre, Graus Automáticos e Travas de Patamar
-Em Alenia, as perícias evoluem por **graduação numérica contínua** (`+0, +1, +2, +3, +4, +5...` — você **não** fica preso a saltos fixos). Conforme os pontos investidos na perícia, a ficha classifica automaticamente o **Grau de Domínio** do personagem, usado como referência para pré-requisitos de Talentos, *Defesa Total* e travas de *Múltiplas Ações*:
+### Graduação Livre, Graus Automáticos e Teto Progressivo por Nível
+Em Alenia, as perícias evoluem por **graduação numérica contínua** (`+0, +1, +2, +3, +4...` — você **não** fica preso a saltos fixos), **mas toda perícia respeita um Teto Máximo de Graduação conforme o Nível do personagem**. Isso preserva a matemática do d20, impede a concentração abusiva de todos os pontos em uma única perícia *(como levar `Aparar` a `+30`)* e incentiva personagens amplos e verossímeis.
 
-| Grau Automático | Graduação (Bônus) | Custo por Graduação | Custo Acumulado (Mínimo) | Requisito Mínimo |
+Conforme a graduação investida, a ficha classifica automaticamente o **Grau de Domínio**, usado como referência para pré-requisitos de Talentos, *Defesa Total* e travas de *Múltiplas Ações*:
+
+| Grau Automático | Graduação (Bônus) | Custo por Graduação | Custo Acumulado *(do zero)* | Requisito Mínimo |
 | :--- | :---: | :---: | :---: | :--- |
 | **Destreinado** | `+0` | `—` | `0 pts` | Nenhum |
 | **Iniciante** | `+1` a `+2` | `1 pt / grad.` | `1 a 2 pts` | Nenhum *(ainda não cumpre pré-requisito "Treinado")* |
-| **Treinado** | `+3` a `+7` | `1 pt / grad.` | `3 a 7 pts` | Nível 1+ *(Kit inicial começa em `+3` gratuito)* |
-| **Especialista** | `+8` a `+11` | `2 pts / grad.` | `9 a 15 pts` | **Nível 5+** *(veterano reconhecido)* |
-| **Mestre** | `+12+` | `3 pts / grad.` | `18+ pts` | **Nível 11+ (Patamar Lenda)** *(ou Feito excepcional aprovado pelo Mestre)* |
+| **Treinado** | `+3` a `+7` | `1 pt / grad.` | `3 a 7 pts` | Nível `1+` *(Kit inicial começa em `+3` gratuito)* |
+| **Especialista** | `+8` a `+11` | `2 pts / grad.` | `9 a 15 pts` | **Nível `5+`** *(veterano reconhecido)* |
+| **Mestre** | `+12` a `+16` | `3 pts / grad.` | `18 a 30 pts` | **Nível `11+` (Lenda: máx. `+14` \| Épico: máx. `+16`)** |
 
-*(Nota: Perícias recebidas como **Treinado (`+3`)** pelo Kit inicial já contam com os `3 pts` iniciais pagos — subir uma delas para `+4` custa `1 pt`; chegar a `+7` custa `+4 pts`; subir para `+8` [Especialista, Nív. 5+] custa `+2 pts` adicionais, e assim por diante.)*
+#### Teto Progressivo de Graduação por Nível *(Regra Obrigatória)*
+Nenhuma perícia *(fixa ou livre)* pode ultrapassar o **Teto de Graduação** correspondente ao nível atual do personagem:
+
+| Nível do Personagem | Patamar | **Teto Máximo de Graduação** | Regra Rápida |
+| :---: | :---: | :---: | :--- |
+| **Nív. 1** | Recruta | **`+4`** | `Nível + 3` *(impede concentração extrema no Nív. 1)* |
+| **Nív. 2** | Recruta | **`+5`** | `Nível + 3` |
+| **Nív. 3** | Recruta | **`+6`** | `Nível + 3` |
+| **Nív. 4** | Recruta | **`+7`** | `Nível + 3` *(topo de Treinado)* |
+| **Nív. 5** | Recruta | **`+8`** | Libera **Especialista** |
+| **Nív. 6 – 7** | Recruta | **`+9`** | Progressão Especialista |
+| **Nív. 8 – 9** | Recruta | **`+10`** | Progressão Especialista |
+| **Nív. 10** | Recruta | **`+11`** | Topo de **Especialista** *(Ápice Recruta)* |
+| **Nív. 11 – 13** | **Lenda** | **`+12`** | Libera **Mestre** |
+| **Nív. 14 – 16** | **Lenda** | **`+13`** | Mestre Veterano |
+| **Nív. 17 – 20** | **Lenda** | **`+14`** | Topo de **Lenda** *(Ápice Lenda)* |
+| **Nív. 21 – 25** | **Épico** | **`+15`** | **Mestre Épico** |
+| **Nív. 26 – 30** | **Épico** | **`+16`** | **Teto Absoluto de Alenia** *(30 pts acumulados)* |
+
+*(Nota: Perícias recebidas como **Treinado (`+3`)** pelo Kit inicial já contam com os `3 pts` iniciais pagos — subir uma delas para `+4` no Nív. 1 custa `1 pt`; chegar a `+7` no Nív. 4 custa `+4 pts`; subir para `+8` no Nív. 5 custa `+2 pts` adicionais; alcançar `+12` no Nív. 11 custa `15 pts` além do `+3` inicial — ou `18 pts` partindo do zero — e o teto absoluto `+16` no Nív. 26–30 custa `30 pts` partindo do zero.)*
 
 ### Pontos de Perícia (Uniforme e Equilibrado)
 Em todas as fórmulas de perícia, aplica-se sempre a proteção **`máx(0, Mod. INT)`**, garantindo que Inteligência baixa nunca reduza o ganho abaixo da base do Kit:
@@ -92,7 +113,7 @@ Em todas as fórmulas de perícia, aplica-se sempre a proteção **`máx(0, Mod.
 - **Ao Subir de Nível**: recebe `máx(1, ⌊(Base do Kit + máx(0, Mod. INT) × Mult. INT) × Fator de Patamar⌋)` pontos de perícia.
 - **Sem Kit (Média Padrão)**: `Base = 1`, `Mult. INT = 0,75`, `DV = 1d8`.
 
-*(Exemplo de calibração: um **Erudito** com `INT 18 (+4)`, `Base 2`, `Mult. INT 1,25` recebe `7 pts` no Nív. 1 e `7 pts/nível` em Recruta. No Nív. 10 terá ~70 pts totais — podendo distribuir graduações livres como `+5`, `+7` ou `+9` entre dezenas de perícias sem criar nenhum Mestre precoce. No Nív. 20, somando o patamar Lenda `1,5×`, alcançará **4 a 6 Maestrias (`+12+`)** genuínas, mantendo especialização real mesmo até o Nív. 30!)*
+*(Exemplo de calibração com o Teto Progressivo: um **Erudito** com `INT 18 (+4)` acumula `~80 pts` livres até o Nível 11. Como o **Teto de Graduação no Nív. 11 é `+12`** [`15 pts` a partir de uma perícia do Kit ou `18 pts` do zero], ele jamais pode despejar tudo em `Aparar`; em vez disso, domina **4 a 6 áreas distintas** em alto nível, mantendo Defesas e CDs (`10` a `30`) sempre equilibradas contra o Bestiário até o Nív. 30, onde o bônus máximo humano atinge `Mod. +6` + `Grad. +16` = **`+22`**!)*
 
 ### Lista Oficial de Perícias (34 Perícias + Perícias Livres Ilimitadas)
 Além das **34 perícias oficiais** abaixo, o jogador pode criar **quantas perícias personalizadas quiser** na ficha do Firecast (ex.: *Forja de Adamante*, *Pilotagem nos Corais*, *Dialeto de Yõketsu*), seguindo os mesmos custos e travas de patamar:
@@ -125,38 +146,38 @@ Em **Alenia**, a evolução **não** é engessada em matar inimigos. Personagens
 - **Regra Opcional *(Marcos de Campanha)***: mesas que preferirem dispensar a contagem de XP podem conceder níveis diretamente ao encerrar arcos narrativos relevantes (a cada 2–4 sessões).
 
 ### 5.2 Tabela Completa de Evolução (Níveis 1 a 30)
-| Nível | XP Acumulada | XP Próx. Nível | Patamar | Teto Atributo | Ganhos Especiais do Nível *(além de PV + Perícias)* |
-| :---: | :---: | :---: | :---: | :---: | :--- |
-| **1** | `0` | `300` | Recruta | `18 (+4)` | Kit Inicial (`+3` grátis nas perícias do Kit) + Pontos Livres |
-| **2** | `300` | `+500` | Recruta | `18 (+4)` | **+1 Talento** |
-| **3** | `800` | `+700` | Recruta | `18 (+4)` | **`+1` Atributo Base** *(máx. 18)* |
-| **4** | `1.500` | `+1.000` | Recruta | `18 (+4)` | **+1 Talento** |
-| **5** | `2.500` | `+1.300` | Recruta | `18 (+4)` | **Libera Grau Especialista (`+8` a `+11` em perícias)** |
-| **6** | `3.800` | `+1.700` | Recruta | `18 (+4)` | **+1 Talento** + **`+1` Atributo Base** *(máx. 18)* |
-| **7** | `5.500` | `+2.000` | Recruta | `18 (+4)` | Evolução de PV e Perícias |
-| **8** | `7.500` | `+2.500` | Recruta | `18 (+4)` | **+1 Talento** |
-| **9** | `10.000` | `+3.000` | Recruta | `18 (+4)` | **`+1` Atributo Base** *(máx. 18)* |
-| **10** | `13.000` | `+4.000` | Recruta | `18 (+4)` | **+1 Talento** *(Ápice Recruta)* |
-| **11** | `17.000` | `+4.500` | **Lenda** | **`20 (+5)`** | **Perícias `1,5×` • Maestria `+1 dado` • Libera Mestre (`+12+`) & Kits de Lenda** |
-| **12** | `21.500` | `+5.000` | Lenda | `20 (+5)` | **+1 Talento** + **`+1` Atributo Base** *(máx. 20)* |
-| **13** | `26.500` | `+5.500` | Lenda | `20 (+5)` | Evolução de PV e Perícias (`1,5×`) |
-| **14** | `32.000` | `+6.000` | Lenda | `20 (+5)` | **+1 Talento** |
-| **15** | `38.000` | `+7.000` | Lenda | `20 (+5)` | **`+1` Atributo Base** *(máx. 20)* |
-| **16** | `45.000` | `+7.500` | Lenda | `20 (+5)` | **+1 Talento** |
-| **17** | `52.500` | `+8.500` | Lenda | `20 (+5)` | Evolução de PV e Perícias (`1,5×`) |
-| **18** | `61.000` | `+9.000` | Lenda | `20 (+5)` | **+1 Talento** + **`+1` Atributo Base** *(máx. 20)* |
-| **19** | `70.000` | `+10.000` | Lenda | `20 (+5)` | Evolução de PV e Perícias (`1,5×`) |
-| **20** | `80.000` | `+12.000` | Lenda | `20 (+5)` | **+1 Talento** *(Ápice Lenda)* |
-| **21** | `92.000` | `+13.000` | **Épico** | **`22 (+6)`** | **Perícias `2×` • Maestria `+2 dados` • `+1` Atributo Base • Kits Épicos** |
-| **22** | `105.000` | `+15.000` | Épico | `22 (+6)` | **+1 Talento** |
-| **23** | `120.000` | `+16.000` | Épico | `22 (+6)` | Evolução de PV e Perícias (`2×`) |
-| **24** | `136.000` | `+18.000` | Épico | `22 (+6)` | **+1 Talento** + **`+1` Atributo Base** *(máx. 22)* |
-| **25** | `154.000` | `+20.000` | Épico | `22 (+6)` | Evolução de PV e Perícias (`2×`) |
-| **26** | `174.000` | `+22.000` | Épico | `22 (+6)` | **+1 Talento** |
-| **27** | `196.000` | `+24.000` | Épico | `22 (+6)` | **`+1` Atributo Base** *(máx. 22)* |
-| **28** | `220.000` | `+26.000` | Épico | `22 (+6)` | **+1 Talento** |
-| **29** | `246.000` | `+29.000` | Épico | `22 (+6)` | Evolução de PV e Perícias (`2×`) |
-| **30** | `275.000` | `—` | Épico | `22 (+6)` | **+1 Talento** + **`+1` Atributo Base** *(Ápice Épico)* |
+| Nível | XP Acumulada | XP Próx. Nível | Patamar | Teto Atrib. | Teto Grad. | Ganhos Especiais do Nível *(além de PV + Perícias)* |
+| :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| **1** | `0` | `300` | Recruta | `18 (+4)` | **`+4`** | Kit Inicial (`+3` grátis nas perícias do Kit) + Pontos Livres |
+| **2** | `300` | `+500` | Recruta | `18 (+4)` | **`+5`** | **+1 Talento** |
+| **3** | `800` | `+700` | Recruta | `18 (+4)` | **`+6`** | **`+1` Atributo Base** *(máx. 18)* |
+| **4** | `1.500` | `+1.000` | Recruta | `18 (+4)` | **`+7`** | **+1 Talento** *(topo de Treinado)* |
+| **5** | `2.500` | `+1.300` | Recruta | `18 (+4)` | **`+8`** | **Libera Grau Especialista (`+8` a `+11`)** |
+| **6** | `3.800` | `+1.700` | Recruta | `18 (+4)` | **`+9`** | **+1 Talento** + **`+1` Atributo Base** *(máx. 18)* |
+| **7** | `5.500` | `+2.000` | Recruta | `18 (+4)` | **`+9`** | Evolução de PV e Perícias |
+| **8** | `7.500` | `+2.500` | Recruta | `18 (+4)` | **`+10`** | **+1 Talento** |
+| **9** | `10.000` | `+3.000` | Recruta | `18 (+4)` | **`+10`** | **`+1` Atributo Base** *(máx. 18)* |
+| **10** | `13.000` | `+4.000` | Recruta | `18 (+4)` | **`+11`** | **+1 Talento** *(Ápice Recruta — topo de Especialista)* |
+| **11** | `17.000` | `+4.500` | **Lenda** | **`20 (+5)`** | **`+12`** | **Perícias `1,5×` • Maestria `+1 dado` • Libera Mestre (`+12` a `+14`) & Kits de Lenda** |
+| **12** | `21.500` | `+5.000` | Lenda | `20 (+5)` | **`+12`** | **+1 Talento** + **`+1` Atributo Base** *(máx. 20)* |
+| **13** | `26.500` | `+5.500` | Lenda | `20 (+5)` | **`+12`** | Evolução de PV e Perícias (`1,5×`) |
+| **14** | `32.000` | `+6.000` | Lenda | `20 (+5)` | **`+13`** | **+1 Talento** |
+| **15** | `38.000` | `+7.000` | Lenda | `20 (+5)` | **`+13`** | **`+1` Atributo Base** *(máx. 20)* |
+| **16** | `45.000` | `+7.500` | Lenda | `20 (+5)` | **`+13`** | **+1 Talento** |
+| **17** | `52.500` | `+8.500` | Lenda | `20 (+5)` | **`+14`** | Evolução de PV e Perícias (`1,5×`) |
+| **18** | `61.000` | `+9.000` | Lenda | `20 (+5)` | **`+14`** | **+1 Talento** + **`+1` Atributo Base** *(máx. 20)* |
+| **19** | `70.000` | `+10.000` | Lenda | `20 (+5)` | **`+14`** | Evolução de PV e Perícias (`1,5×`) |
+| **20** | `80.000` | `+12.000` | Lenda | `20 (+5)` | **`+14`** | **+1 Talento** *(Ápice Lenda)* |
+| **21** | `92.000` | `+13.000` | **Épico** | **`22 (+6)`** | **`+15`** | **Perícias `2×` • Maestria `+2 dados` • `+1` Atributo Base • Kits Épicos** |
+| **22** | `105.000` | `+15.000` | Épico | `22 (+6)` | **`+15`** | **+1 Talento** |
+| **23** | `120.000` | `+16.000` | Épico | `22 (+6)` | **`+15`** | Evolução de PV e Perícias (`2×`) |
+| **24** | `136.000` | `+18.000` | Épico | `22 (+6)` | **`+15`** | **+1 Talento** + **`+1` Atributo Base** *(máx. 22)* |
+| **25** | `154.000` | `+20.000` | Épico | `22 (+6)` | **`+15`** | Evolução de PV e Perícias (`2×`) |
+| **26** | `174.000` | `+22.000` | Épico | `22 (+6)` | **`+16`** | **+1 Talento** *(atinge o Teto Absoluto `+16`)* |
+| **27** | `196.000` | `+24.000` | Épico | `22 (+6)` | **`+16`** | **`+1` Atributo Base** *(máx. 22)* |
+| **28** | `220.000` | `+26.000` | Épico | `22 (+6)` | **`+16`** | **+1 Talento** |
+| **29** | `246.000` | `+29.000` | Épico | `22 (+6)` | **`+16`** | Evolução de PV e Perícias (`2×`) |
+| **30** | `275.000` | `—` | Épico | `22 (+6)` | **`+16`** | **+1 Talento** + **`+1` Atributo Base** *(Ápice Épico)* |
 
 ### 5.3 Pontos de Vida por Dado de Vida (Estilo D&D conforme a Natureza do Kit)
 - **Dado de Vida (DV) do Kit**:
@@ -168,11 +189,11 @@ Em **Alenia**, a evolução **não** é engessada em matar inimigos. Personagens
 - **PV ao Subir de Nível**: role **`1dX + Mod. CON`** (mínimo `1 PV` por nível; opção fixa para quem não quiser rolar: metade arredondada para cima do DV + `Mod. CON`, ex.: `1d10` = `6 + Mod. CON`, `1d8` = `5 + Mod. CON`, `1d6` = `4 + Mod. CON`).
 
 ### 5.4 Os 3 Patamares Dinâmicos, Tetos e Troca de Kit
-| Patamar | Níveis | Teto Atributo | Pontos de Perícia | Maestria de Combate *(Dano Base)* | Papel no Mundo |
-| :--- | :---: | :---: | :---: | :--- | :--- |
-| **Recruta** | `1 – 10` | `18 (+4)` | `1×` taxa base | Dano normal da arma | Exploradores, soldados e viajantes vulneráveis. Acesso aos **36 Kits Universais**. |
-| **Lenda** | `11 – 20` | `20 (+5)` | `1,5×` (+50%) | **`+1` dado individual** do tipo da arma *(Especialista/Mestre)* | Figuras célebres e temidas; destrava grau **Mestre (`+12+`)** e futuros **Kits de Lenda**. |
-| **Épico** | `21 – 30` | `22 (+6)` | `2×` (o dobro) | **`+2` dados individuais** do tipo da arma *(Mestre)* | Nomes imortais capazes de encarar horrores de Incognito; destrava futuros **Kits Épicos**. |
+| Patamar | Níveis | Teto Atributo | Teto Grad. | Pontos de Perícia | Maestria de Combate *(Dano Base)* | Papel no Mundo |
+| :--- | :---: | :---: | :---: | :---: | :--- | :--- |
+| **Recruta** | `1 – 10` | `18 (+4)` | `+4` a `+11` | `1×` taxa base | Dano normal da arma | Exploradores, soldados e viajantes vulneráveis. Acesso aos **36 Kits Universais**. |
+| **Lenda** | `11 – 20` | `20 (+5)` | `+12` a `+14` | `1,5×` (+50%) | **`+1` dado individual** do tipo da arma *(Especialista/Mestre)* | Figuras célebres e temidas; destrava grau **Mestre (`+12` a `+14`)** e futuros **Kits de Lenda**. |
+| **Épico** | `21 – 30` | `22 (+6)` | `+15` a `+16` | `2×` (o dobro) | **`+2` dados individuais** do tipo da arma *(Mestre)* | Nomes imortais capazes de encarar horrores de Incognito; teto absoluto **`+16`** e futuros **Kits Épicos**. |
 
 - **Exemplos de Maestria de Combate**: soma-se `+1` dado individual do mesmo tipo da arma (e **não** o conjunto inteiro de dados) em Lenda, e `+2` dados individuais em Épico.
   - *Espada Longa (`1d8`)*: Recruta `1d8` → Lenda **`2d8`** → Épico **`3d8`**.
@@ -213,7 +234,7 @@ Um combatente pode dividir sua Ação Principal em **`N` ataques** (ou ações f
    - **Destreinado / Iniciante (`+0` a `+2`)**: máximo **`1` ação** (não pode dividir).
    - **Treinado (`+3` a `+7`)**: máximo **`2` ações**.
    - **Especialista (`+8` a `+11`)**: máximo **`3` ações**.
-   - **Mestre (`+12+`)**: máximo **`4` ações**.
+   - **Mestre (`+12` a `+16`)**: máximo **`4` ações**.
 2. **Fórmula do Bônus por Ação** *(para `N ≥ 2`)*:
 $$\text{Bônus por Ação} = \left\lfloor \frac{\text{Bônus Total de Ataque}}{N} \right\rfloor - N$$
 3. **Regra Anti-Abuso (Bônus Mínimo)**: você só pode declarar `N` ações se o `Bônus por Ação` resultante for **`≥ 0`** (se ficar negativo, reduza `N`). Isso impede "pesca de 20 natural" com dezenas de ataques sem habilidade real.

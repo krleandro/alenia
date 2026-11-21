@@ -283,7 +283,7 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "1.8";
+local PLUGIN_VERSION = "1.9";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
 
@@ -292,6 +292,14 @@ local XP_TABELA = {
     0, 300, 800, 1500, 2500, 3800, 5500, 7500, 10000, 13000,
     17000, 21500, 26500, 32000, 38000, 45000, 52500, 61000, 70000, 80000,
     92000, 105000, 120000, 136000, 154000, 174000, 196000, 220000, 246000, 275000
+};
+
+-- Teto Progressivo de Graduacao por Nivel (Niveis 1 a 30)
+-- 1-4: Niv+3 (+4..+7) | 5-10: +8..+11 | 11-20 Lenda: +12..+14 | 21-30 Epico: +15..+16
+local TETO_GRAD_POR_NIVEL = {
+    4, 5, 6, 7, 8, 9, 9, 10, 10, 11,
+    12, 12, 12, 13, 13, 13, 14, 14, 14, 14,
+    15, 15, 15, 15, 15, 16, 16, 16, 16, 16
 };
 
 -- Padrao de Vida Mensal (em PP — Padrao Prata: 1 PO = 10 PP = 100 PC)
@@ -595,16 +603,28 @@ local function rolarSubirNivelPV()
     end;
 end;
 
--- Graduacao numerica livre (+0, +1, +2, +3...) com classificacao automatica de grau:
--- 0 = Destreinado | 1-2 = Iniciante | 3-7 = Treinado | 8-11 = Especialista (Niv 5+) | 12+ = Mestre (Niv 11+)
+-- Graduacao numerica livre (+0..+16) com Teto Progressivo por Nivel e classificacao automatica:
+-- 0 = Destreinado | 1-2 = Iniciante | 3-7 = Treinado | 8-11 = Especialista (Niv 5+) | 12-16 = Mestre (Niv 11+: +12..+14 Lenda, +15..+16 Epico)
+local function getTetoGraduacao(nivel)
+    local niv = math.max(1, math.min(30, math.floor(num(nivel, 1))));
+    return TETO_GRAD_POR_NIVEL[niv] or 16;
+end;
+
+local function grauEfetivo(rawVal, nivel)
+    local g = math.max(0, math.floor(num(rawVal, 0)));
+    local teto = getTetoGraduacao(nivel);
+    if g > teto then return teto, true, g; end;
+    return g, false, g;
+end;
+
 local function nomeGrau(grau, nivel)
-    local g = math.floor(num(grau, 0));
-    local niv = math.floor(num(nivel, 1));
-    if g >= 12 then
-        if niv < 11 then return "Mestre (N11+)"; end;
+    local g = math.max(0, math.floor(num(grau, 0)));
+    local teto = getTetoGraduacao(nivel);
+    if g > teto then
+        return "TETO +" .. tostring(teto) .. "!";
+    elseif g >= 12 then
         return "Mestre";
     elseif g >= 8 then
-        if niv < 5 then return "Espec. (N5+)"; end;
         return "Especialista";
     elseif g >= 3 then
         return "Treinado";
@@ -615,9 +635,10 @@ local function nomeGrau(grau, nivel)
     end;
 end;
 
--- Custo progressivo por graduacao: 1-7 = 1 pt cada | 8-11 = 2 pts cada | 12+ = 3 pts cada
+-- Custo progressivo por graduacao (respeitando o teto maximo absoluto +16 = 30 pts):
+-- 1-7 = 1 pt cada | 8-11 = 2 pts cada | 12-16 = 3 pts cada
 local function custoGrau(grau)
-    local g = math.max(0, math.floor(num(grau, 0)));
+    local g = math.max(0, math.min(16, math.floor(num(grau, 0))));
     if g <= 7 then
         return g;
     elseif g <= 11 then
@@ -628,7 +649,7 @@ local function custoGrau(grau)
 end;
 
 recalcularFicha = function()
-    if sheet == nil then return; end;
+    if sheet == nil or sheet._clampingGrad then return; end;
 
     local mFor = getMod("forca");
     local mDes = getMod("destreza");
@@ -645,9 +666,14 @@ recalcularFicha = function()
     sheet.mod_car = fmtMod(mCar);
 
     local nivel = math.max(1, math.min(30, math.floor(num(sheet.nivel, 1))));
+    local tetoGrad = getTetoGraduacao(nivel);
+    local mesmoNivel = (sheet._lastNivel == nivel);
+    sheet._lastNivel = nivel;
+
     local patNome, _, tetoAttr = getPatamarInfo(nivel);
     sheet.patamarTexto = patNome;
-    sheet.tetoAtributoTexto = "Teto: " .. tostring(tetoAttr) .. " (" .. fmtMod(math.floor((tetoAttr - 10) / 2)) .. ")";
+    sheet.tetoAtributoTexto = "Teto Atrib: " .. tostring(tetoAttr) .. " | Grad: +" .. tostring(tetoGrad);
+    sheet.tetoGradTexto = "Teto Grad. Niv. " .. tostring(nivel) .. ": +" .. tostring(tetoGrad);
 
     local xpAtual = math.max(0, math.floor(num(sheet.xpAtual, 0)));
     if nivel >= 30 then
@@ -723,15 +749,28 @@ recalcularFicha = function()
     local kitGratis = {};
     for i = 1, #kit.pericias do kitGratis[kit.pericias[i]] = true; end;
 
+    local ajustadas = {};
+    local acimaTeto = {};
     local ptsGastos = 0;
     for i = 1, #SKILLS do
         local sk = SKILLS[i];
-        local grau = num(sheet[sk.field .. "_grau"], 0);
+        local rawVal = sheet[sk.field .. "_grau"];
+        local gRaw = math.max(0, math.floor(num(rawVal, 0)));
+        if gRaw > tetoGrad and mesmoNivel then
+            sheet._clampingGrad = true;
+            sheet[sk.field .. "_grau"] = tostring(tetoGrad);
+            sheet._clampingGrad = false;
+            gRaw = tetoGrad;
+            table.insert(ajustadas, sk.nome);
+        elseif gRaw > tetoGrad then
+            table.insert(acimaTeto, sk.nome);
+        end;
+        local gEf = math.min(gRaw, tetoGrad);
         local outros = num(sheet[sk.field .. "_outros"], 0);
-        local tot = getMod(sk.attr) + grau + outros;
+        local tot = getMod(sk.attr) + gEf + outros;
         sheet[sk.field .. "_total"] = fmtMod(tot);
-        sheet[sk.field .. "_rank"] = nomeGrau(grau, nivel);
-        local c = custoGrau(grau);
+        sheet[sk.field .. "_rank"] = nomeGrau(gRaw, nivel);
+        local c = custoGrau(gEf);
         if kitGratis[sk.field] then c = math.max(0, c - 3); end;
         ptsGastos = ptsGastos + c;
     end;
@@ -741,31 +780,44 @@ recalcularFicha = function()
     if sheet.customSkills ~= nil then
         local filhos = NDB.getChildNodes(sheet.customSkills);
         for i = 1, #filhos do
-            ptsGastos = ptsGastos + custoGrau(filhos[i].grau);
+            local cgEf, excedeu = grauEfetivo(filhos[i].grau, nivel);
+            if excedeu then
+                table.insert(acimaTeto, (filhos[i].nome and filhos[i].nome ~= "" and filhos[i].nome) or "Pericia Livre");
+            end;
+            ptsGastos = ptsGastos + custoGrau(cgEf);
         end;
     end;
     sheet.periciasGastas = tostring(ptsGastos);
+
+    if #ajustadas > 0 then
+        sheet.avisoTetoGrad = "TRAVA ATIVA: " .. table.concat(ajustadas, ", ") .. " ajustada(s) ao teto do Nivel " .. tostring(nivel) .. " (+" .. tostring(tetoGrad) .. ")!";
+    elseif #acimaTeto > 0 then
+        sheet.avisoTetoGrad = "ATENCAO: " .. tostring(#acimaTeto) .. " pericia(s) acima do teto do Nivel " .. tostring(nivel) .. " (+" .. tostring(tetoGrad) .. ") — bonus travado em +" .. tostring(tetoGrad) .. " ate ajustar ou subir nivel!";
+    else
+        sheet.avisoTetoGrad = "Dentro do Teto de Graduacao do Nivel " .. tostring(nivel) .. " (max +" .. tostring(tetoGrad) .. " | Teto Absoluto Alenia: +16 no Niv. 26-30).";
+    end;
 
     atualizarPaginaCustomSkills();
 
     local armDef = num(sheet.armaduraDef, 0);
     local escDef = num(sheet.escudoDef, 0);
     local defOutros = num(sheet.defesaOutros, 0);
-    local trAparar = num(sheet.per_aparar_grau, 0) + num(sheet.per_aparar_outros, 0);
-    local trEsquiva = num(sheet.per_esquiva_grau, 0) + num(sheet.per_esquiva_outros, 0);
+    local trAparar = grauEfetivo(sheet.per_aparar_grau, nivel) + num(sheet.per_aparar_outros, 0);
+    local trEsquiva = grauEfetivo(sheet.per_esquiva_grau, nivel) + num(sheet.per_esquiva_outros, 0);
 
     sheet.defAparar = tostring(10 + mDes + armDef + escDef + trAparar + defOutros);
     sheet.defEsquiva = tostring(10 + mDes + armDef + escDef + trEsquiva + defOutros);
     sheet.defDesprevenido = tostring(10 + armDef + escDef + defOutros);
 
-    local trPerc = num(sheet.per_percepcao_grau, 0);
+    local trPerc = grauEfetivo(sheet.per_percepcao_grau, nivel);
     sheet.iniciativaTotal = fmtMod(mDes + math.floor(trPerc / 3) + num(sheet.iniciativaOutros, 0));
 
     for idx = 1, 4 do
         local aAttr = sheet["arma" .. idx .. "_attr"] or "forca";
         local aPer = sheet["arma" .. idx .. "_per"] or "per_armas_brancas";
         local aExtra = num(sheet["arma" .. idx .. "_extra"], 0);
-        local atkTot = getMod(aAttr) + num(sheet[aPer .. "_grau"], 0) + num(sheet[aPer .. "_outros"], 0) + aExtra;
+        local gArma = grauEfetivo(sheet[aPer .. "_grau"], nivel);
+        local atkTot = getMod(aAttr) + gArma + num(sheet[aPer .. "_outros"], 0) + aExtra;
         sheet["arma" .. idx .. "_atk"] = fmtMod(atkTot);
     end;
 
@@ -820,7 +872,7 @@ end;
 
 local function rolarPericia(fieldId, nomePer, attrField)
     if sheet == nil then return; end;
-    local g = num(sheet[fieldId .. "_grau"], 0);
+    local g = grauEfetivo(sheet[fieldId .. "_grau"], sheet.nivel);
     local tot = getMod(attrField) + g + num(sheet[fieldId .. "_outros"], 0);
     local rk = nomeGrau(g, sheet.nivel);
     rolarD20("Pericia: " .. nomePer .. " (+" .. tostring(g) .. " — " .. rk .. ")", tot, "");
@@ -845,7 +897,7 @@ local function rolarArma(idx)
     local mult = num(sheet["arma" .. idx .. "_mult"], 2);
     local nAcoes = math.max(1, math.min(4, math.floor(num(sheet.multiAcoes, 1))));
 
-    local grauPer = num(sheet[aPer .. "_grau"], 0);
+    local grauPer = grauEfetivo(sheet[aPer .. "_grau"], sheet.nivel);
     local limiteN = maxAcoesPorGrau(grauPer);
     if nAcoes > limiteN then
         showMessage("Multiplas Acoes bloqueadas pela regra v2.0!\nSeu grau nesta pericia (+" .. tostring(grauPer) .. ") permite no maximo " .. tostring(limiteN) .. " acao(oes) por turno.");
@@ -962,7 +1014,11 @@ end;
 local function acaoDefensiva(modo)
     if sheet == nil then return; end;
     local nomeChar = sheet.nome or "Explorador";
-    local maxTreino = math.max(num(sheet.per_aparar_grau, 0), num(sheet.per_esquiva_grau, 0), num(sheet.per_escudos_grau, 0));
+    local maxTreino = math.max(
+        grauEfetivo(sheet.per_aparar_grau, sheet.nivel),
+        grauEfetivo(sheet.per_esquiva_grau, sheet.nivel),
+        grauEfetivo(sheet.per_escudos_grau, sheet.nivel)
+    );
     local bonus = 4;
     if maxTreino >= 12 then bonus = 8;
     elseif maxTreino >= 8 then bonus = 6; end;
@@ -996,12 +1052,13 @@ atualizarPaginaCustomSkills = function()
         local attr = (node ~= nil and node.attr) or "inteligencia";
         local grau = (node ~= nil and node.grau) or "0";
         local outros = (node ~= nil and node.outros) or "0";
+        local gEf = grauEfetivo(grau, niv);
         sheet["csk" .. i .. "_nome"] = nome;
         sheet["csk" .. i .. "_attr"] = attr;
         sheet["csk" .. i .. "_grau"] = tostring(grau);
         sheet["csk" .. i .. "_rank"] = nomeGrau(grau, niv);
         sheet["csk" .. i .. "_outros"] = tostring(outros);
-        local tot = getMod(attr) + num(grau, 0) + num(outros, 0);
+        local tot = getMod(attr) + gEf + num(outros, 0);
         sheet["csk" .. i .. "_total"] = fmtMod(tot);
     end;
     sheet._updatingCustom = false;
@@ -1012,12 +1069,23 @@ local function salvarCustomSlot(slotIdx)
     local node = getCustomSlotNode(slotIdx);
     if node == nil then return; end;
     local niv = math.max(1, math.min(30, math.floor(num(sheet.nivel, 1))));
+    local tetoGrad = getTetoGraduacao(niv);
+    local gRaw = math.max(0, math.floor(num(sheet["csk" .. slotIdx .. "_grau"], 0)));
+    if gRaw > tetoGrad then
+        gRaw = tetoGrad;
+        sheet._updatingCustom = true;
+        sheet["csk" .. slotIdx .. "_grau"] = tostring(tetoGrad);
+        sheet._updatingCustom = false;
+        local nomeAlvo = sheet["csk" .. slotIdx .. "_nome"];
+        if nomeAlvo == nil or nomeAlvo == "" then nomeAlvo = "Pericia Livre #" .. tostring(slotIdx); end;
+        sheet.avisoTetoGrad = "TRAVA ATIVA: " .. nomeAlvo .. " ajustada ao teto do Nivel " .. tostring(niv) .. " (+" .. tostring(tetoGrad) .. ")!";
+    end;
     node.nome = sheet["csk" .. slotIdx .. "_nome"] or "";
     node.attr = sheet["csk" .. slotIdx .. "_attr"] or "inteligencia";
-    node.grau = sheet["csk" .. slotIdx .. "_grau"] or "0";
+    node.grau = tostring(gRaw);
     node.outros = sheet["csk" .. slotIdx .. "_outros"] or "0";
-    sheet["csk" .. slotIdx .. "_rank"] = nomeGrau(node.grau, niv);
-    local tot = getMod(node.attr) + num(node.grau, 0) + num(node.outros, 0);
+    sheet["csk" .. slotIdx .. "_rank"] = nomeGrau(gRaw, niv);
+    local tot = getMod(node.attr) + gRaw + num(node.outros, 0);
     sheet["csk" .. slotIdx .. "_total"] = fmtMod(tot);
 end;
 
@@ -1034,7 +1102,7 @@ local function rolarCustomSkill(slotIdx)
     local nome = sheet["csk" .. slotIdx .. "_nome"];
     if nome == nil or nome == "" then nome = "Pericia Livre #" .. tostring(slotIdx); end;
     local attr = sheet["csk" .. slotIdx .. "_attr"] or "inteligencia";
-    local grau = num(sheet["csk" .. slotIdx .. "_grau"], 0);
+    local grau = grauEfetivo(sheet["csk" .. slotIdx .. "_grau"], sheet.nivel);
     local outros = num(sheet["csk" .. slotIdx .. "_outros"], 0);
     local rk = nomeGrau(grau, sheet.nivel);
     rolarD20("Pericia Livre: " .. nome .. " (+" .. tostring(grau) .. " — " .. rk .. ")", getMod(attr) + grau + outros, "");
@@ -1442,7 +1510,7 @@ def build_lfm() -> str:
         col = 0 if i < 17 else 1
         row = i if i < 17 else i - 17
         lx = 10 if col == 0 else 522
-        ty = 60 + row * 42
+        ty = 84 + row * 42
         skill_rows.append(f'''
             <rectangle left="{lx}" top="{ty}" width="504" height="38" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="3" yradius="3">
                 <label left="6" top="4" width="168" height="30" text="{sname}" fontColor="{TEXT_MAIN}" fontSize="13" vertTextAlign="center"/>
@@ -1512,7 +1580,7 @@ def build_lfm() -> str:
         "1", "0", "25", "0",
         "0", "corallis", "modesto",
         "0", "0", "0",
-        "v1.8", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "v1.9", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -1794,32 +1862,37 @@ def build_lfm() -> str:
             <!-- ABA 3: PERICIAS & TALENTOS -->
             <tab title="Pericias &amp; Talentos">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="1280">
-                        <rectangle left="6" top="6" width="1036" height="784" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="710" height="24" text="34 PERICIAS — GRADUACAO LIVRE (0 Destr | 1-2 Inic | 3-7 Trein | 8-11 Espec N5+ | 12+ Mestre N11+)" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
-                            <label left="724" top="10" width="156" height="24" text="Pts Gastos / Sugeridos:" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="trailing" vertTextAlign="center"/>
-                            <label left="884" top="10" width="56" height="24" field="periciasGastas" fontColor="{TEXT_MAIN}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
-                            <label left="940" top="10" width="16" height="24" text="/" fontColor="{TEXT_MUTED}" fontSize="15" horzTextAlign="center" vertTextAlign="center"/>
-                            <label left="956" top="10" width="64" height="24" field="periciasSugeridas" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                    <layout left="0" top="0" width="1056" height="1304">
+                        <rectangle left="6" top="6" width="1036" height="808" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="8" width="710" height="22" text="34 PERICIAS — GRADUACAO COM TETO (0 Destr | 1-2 Inic | 3-7 Trein | 8-11 Espec | 12-16 Mestre)" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
+                            <label left="724" top="8" width="156" height="22" text="Pts Gastos / Sugeridos:" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="trailing" vertTextAlign="center"/>
+                            <label left="884" top="8" width="56" height="22" field="periciasGastas" fontColor="{TEXT_MAIN}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            <label left="940" top="8" width="16" height="22" text="/" fontColor="{TEXT_MUTED}" fontSize="15" horzTextAlign="center" vertTextAlign="center"/>
+                            <label left="956" top="8" width="64" height="22" field="periciasSugeridas" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
 
-                            <label left="16" top="38" width="168" height="18" text="PERICIA" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
-                            <label left="186" top="38" width="34" height="18" text="ATTR" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="222" top="38" width="42" height="18" text="GRAD" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="266" top="38" width="96" height="18" text="GRAU AUTO" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="366" top="38" width="40" height="18" text="OUT" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="410" top="38" width="44" height="18" text="TOT" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <rectangle left="12" top="34" width="198" height="22" color="{BG_INPUT}" strokeColor="{BORDER_CRIMSON}" strokeSize="1" xradius="3" yradius="3">
+                                <label align="client" field="tetoGradTexto" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+                            <label left="218" top="34" width="806" height="22" field="avisoTetoGrad" fontColor="{TEXT_CRIMSON}" fontSize="12" vertTextAlign="center"/>
 
-                            <label left="528" top="38" width="168" height="18" text="PERICIA" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
-                            <label left="698" top="38" width="34" height="18" text="ATTR" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="734" top="38" width="42" height="18" text="GRAD" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="778" top="38" width="96" height="18" text="GRAU AUTO" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="878" top="38" width="40" height="18" text="OUT" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
-                            <label left="922" top="38" width="44" height="18" text="TOT" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="16" top="62" width="168" height="18" text="PERICIA" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
+                            <label left="186" top="62" width="34" height="18" text="ATTR" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="222" top="62" width="42" height="18" text="GRAD" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="266" top="62" width="96" height="18" text="GRAU AUTO" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="366" top="62" width="40" height="18" text="OUT" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="410" top="62" width="44" height="18" text="TOT" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+
+                            <label left="528" top="62" width="168" height="18" text="PERICIA" fontColor="{TEXT_MUTED}" fontSize="12" fontStyle="bold"/>
+                            <label left="698" top="62" width="34" height="18" text="ATTR" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="734" top="62" width="42" height="18" text="GRAD" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="778" top="62" width="96" height="18" text="GRAU AUTO" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="878" top="62" width="40" height="18" text="OUT" fontColor="{TEXT_MUTED}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="922" top="62" width="44" height="18" text="TOT" fontColor="{TEXT_GOLD}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
 
                             {"".join(skill_rows)}
                         </rectangle>
 
-                        <rectangle left="6" top="798" width="1036" height="292" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="822" width="1036" height="292" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="560" height="26" text="PERICIAS LIVRES / PERSONALIZADAS (CRIE QUANTAS QUISER!)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <button left="590" top="8" width="136" height="32" text="&lt; Pag. Ant." fontSize="13">
                                 <event name="onClick"><![CDATA[mudarPaginaCustom(-1);]]></event>
@@ -1828,12 +1901,12 @@ def build_lfm() -> str:
                             <button left="834" top="8" width="190" height="32" text="Proxima / +10 Slots &gt;" fontSize="13">
                                 <event name="onClick"><![CDATA[mudarPaginaCustom(1);]]></event>
                             </button>
-                            <label left="12" top="44" width="1010" height="20" text="Digite qualquer pericia nova (ex: Forja de Adamante, Navegacao nos Corais, Dialeto de Yoketsu) e avance paginas para mais." fontColor="{TEXT_MUTED}" fontSize="12"/>
+                            <label left="12" top="44" width="1010" height="20" text="Digite qualquer pericia nova (ex: Forja de Adamante, Navegacao nos Corais, Dialeto de Yoketsu) — tambem respeita o Teto de Graduacao do nivel." fontColor="{TEXT_MUTED}" fontSize="12"/>
 
                             {"".join(custom_rows)}
                         </rectangle>
 
-                        <rectangle left="6" top="1098" width="1036" height="170" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="1122" width="1036" height="170" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="1010" height="24" text="TALENTOS, MANOBRAS DE COMBATE &amp; ESPECIALIZACOES (Niveis pares ou treino)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <textEditor left="12" top="38" width="1012" height="120" field="talentosManobras" fontSize="14"/>
                         </rectangle>
