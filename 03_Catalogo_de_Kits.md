@@ -244,14 +244,14 @@
 - **Evolução**: `DV 1d6` | `Per. Base 2` (`Mult. INT 0.75`)
 - **Atributo Especial Inicial**: **Fé Verdadeira `1`**
 - **Perícias Iniciais (`+3`)**: Religião & Ocultismo, Persuasão, Medicina & Cirurgia, Intuição, História & Lendas
-- **Equipamento Inicial**: Cajado ou maça simples, símbolo sagrado autêntico, vestes clericais, unguentos e `25 PP`.
-- **Habilidade — Conforto da Fé**: 1× por descanso, uma prece sincera concede `+2` em testes mentais e contra medo/horror para aliados na cena.
+- **Equipamento Inicial**: Cajado ou maça simples, símbolo sagrado autêntico *(em Aurora, o Sol de Seis Raios da Igreja da Chama Solar)*, vestes clericais, unguentos e `25 PP`.
+- **Habilidade — Conforto da Fé**: 1× por descanso, uma prece sincera *(como aos Aspectos do Lar, da Noite ou do Dia, ou à sua tradição)* concede `+2` em testes mentais e contra medo/horror para aliados na cena.
 
 ### 34. Inquisidor
 - **Evolução**: `DV 1d8` | `Per. Base 1` (`Mult. INT 0.75`)
 - **Atributo Especial Inicial**: **Fé Verdadeira `1`**
 - **Perícias Iniciais (`+3`)**: Intimidação, Investigação, Religião & Ocultismo, Intuição, Armas Brancas
-- **Equipamento Inicial**: Espada longa ou martelo de guerra, manto com insígnia, algemas, couro batido e `30 PP`.
+- **Equipamento Inicial**: Espada longa ou martelo de guerra, manto com insígnia *(como o manto cinza-cal da Ordem da Chama Branca em Aurora)*, algemas, couro batido e `30 PP`.
 - **Habilidade — Vontade Inabalável**: Soma `Fé Verdadeira` em todos os testes contra medo, intimidação, manipulações mentais e horrores sobrenaturais.
 
 ### 35. Ermitão / Sobrevivente

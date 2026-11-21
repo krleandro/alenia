@@ -137,15 +137,70 @@ Em **Alenia**, o comércio corre sob o **Padrão Prata** (`1 PO = 10 PP = 100 PC
 
 ## 10. Religiões, Ordens e Cronologia Curta
 
-### Tradições Religiosas e Fé Verdadeira (Convicção Plural)
+### 10.1 Religião Oficial de Aurora: A Igreja da Chama Solar *(O Criador e os Seis Aspectos)*
+> *"Uma só Chama acendeu o mundo; seis raios sustentam o pão, o teto, o ferro e o descanso dos homens."*
+
+A fé oficial do **Reino Capital de Aurora** é a **Igreja da Chama Solar**, um culto monoteísta estruturado em torno do **Criador** *(chamado também de O Primeiro Fogo ou A Chama Una)* e de seus **Seis Aspectos** — faces cotidianas pelas quais a divindade se manifesta na vida comum da humanidade. Segundo a ortodoxia, nenhum olhar mortal suporta contemplar o Criador inteiro; por isso Ele se divide em **Três Pares Complementares**, onde **nenhum Aspecto é maligno** e todos são indispensáveis à ordem do mundo.
+
+Seu símbolo oficial é o **Sol de Seis Raios** *(um disco solar central cercado por três pares opostos de raios)*, gravado em ferro, bronze ou cera nas entradas de vilas, tribunais, celeiros e oficinas de todo o reino.
+
+#### Os Seis Aspectos do Criador *(Os Três Pares da Vida Comum)*
+| Par | Aspecto | Domínio Cotidiano | Símbolo Popular | Principais Devotos & Centros | Prece / Expressão Popular |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Par I — O Tempo** | **1. O Dia** *(A Chama Clara)* | Verdade, lei, vigília, justiça, trabalho honesto, juramentos e coragem em campo aberto | Disco solar aberto / Balança | Juízes, guardas, nobres, viajantes ao amanhecer *(Altavanne)* | *"Que o Dia te veja inteiro."* |
+| **Par I — O Tempo** | **2. A Noite** *(A Brasa Velada)* | Descanso, sono sem pesadelos, cura silenciosa, misericórdia, segredos guardados e vigília noturna | Lamparina coberta / Meia-lua de cinza | Médicos, parteiras, sentinelas, enlutados, navegadores sob as estrelas *(Merlinport)* | *"Que a Noite te cubra em paz."* |
+| **Par II — O Ciclo** | **3. A Colheita** *(O Pão Dourado)* | Terra fértil, chuva mansa, semeadura, fartura, gratidão e partilha do alimento | Feixe de trigo / Foice curva | Camponeses, moleiros, estalajadeiros, mercadores de grãos *(Vale de Dahrma)* | *"Grão na terra, pão na mesa."* |
+| **Par II — O Ciclo** | **4. A Passagem** *(A Cinza Silenciosa)* | Inverno, encerramento dos ciclos, morte natural, luto digno, memória dos antepassados e repouso sem retorno | Ampulheta / Tocha invertida | Coveiros, idosos, viúvos, soldados antes da batalha *(Cemitérios murados)* | *"Da chama viemos, à cinza descansamos."* |
+| **Par III — O Ofício** | **5. A Forja** *(O Fogo Vivo)* | Trabalho duro, ferro, adamante, ofícios manuais, engenharia, estradas e armas justas | Bigorna e martelo / Centelha | Ferreiros, mineradores, pedreiros, carpinteiros, soldados *(Aeraneas & Lavroga)* | *"O metal bom não teme o malho."* |
+| **Par III — O Ofício** | **6. O Lar** *(A Lareira Acesa)* | Família, casamento, hospitalidade, nascimento, teto seguro, abrigo ao viajante e cuidado dos fracos | Lareira / Chave e tigela | Famílias, anfitriões, artesãos domésticos, órfãos, estalagens honestas *(vilas e estradas)* | *"Fogo na pedra, porta aberta ao justo."* |
+
+#### Vida Cotidiana, Ritos de Passagem e as 4 Grandes Festas
+Em Aurora, a fé não vive trancada em tratados — ela dita o ritmo das estações e dos gestos simples: o camponês de **Dahrma** deixa o primeiro feixe de trigo no altar da **Colheita**; o ferreiro de **Aeraneas** bate três vezes na bigorna pela **Forja** antes de temperar uma lâmina; mães em **Merlinport** deixam uma lamparina velada na janela pela **Noite** e pelo **Lar** enquanto os barcos cruzam a neblina.
+
+- **Ritos de Passagem**:
+  - *Bênção da Lareira (Nascimento)*: a criança recebe seu nome diante de uma brasa morna e de um pão partido (*Lar* e *Dia*).
+  - *Juramento dos Dois Raios (Casamento)*: os noivos atam um cordão carmesim e cinza sobre o altar do *Lar*, jurando fidelidade *"do pão à cinza"*.
+  - *Rito da Cinza (Funeral)*: cremação *(comum entre nobres, marinheiros e vítimas de praga)* ou sepultamento com um **Vintém de cobre** na palma e a prece da *Passagem* para selar o descanso definitivo dos mortos.
+- **As 4 Grandes Festas do Ano**:
+  1. **Dia da Primeira Centelha *(Início da Primavera)***: bênção das sementes (*Colheita*) e acendimento do fogo novo nas forjas e lareiras (*Forja* e *Lar*).
+  2. **Solstício do Dia Claro *(Auge do Verão)***: grandes feiras em Altavanne e Merlinport, audiências abertas, investiduras de cavaleiros e perdão de pequenas dívidas sob o *Dia*.
+  3. **Festa dos Celeiros *(Outono)***: maior celebração popular do vale do Rio Aurélio e de Dahrma — banquetes comunais, entrega do dízimo de grãos para o inverno e danças sob a *Colheita*.
+  4. **Vigília das Brasas *(Noite mais longa do Inverno)***: ninguém dorme sozinho; famílias mantêm a lareira acesa até a aurora rezando à *Noite* e à *Passagem* pelos mortos do ano e perdoando ofensas antigas.
+
+#### Hierarquia em Altavanne e as 4 Ordens da Igreja
+A sede da fé é a **Grande Catedral do Sol de Seis Raios**, em **Altavanne**, erguida em pedra clara e bronze no alto da colina fronteira ao Paço Real da Casa Valerion:
+- **Alto Luminar de Altavanne**: chefe supremo da Igreja *(atualmente o idoso e pragmático **Alto Luminar Aemilius de Pontáuria**, pressionado simultaneamente pela Regente Valora e pelo marechal Lucian Leonastis para abençoar um sucessor)*.
+- **Círculo dos Seis Vigários**: seis prelados que administram os cofres, os dízimos e os grandes santuários dedicados a cada Aspecto.
+- **Reitores de Paróquia & Irmãos de Estrada**: sacerdotes locais, capelães portuários e pregadores itinerantes que vivem diretamente entre o povo.
+
+Quatro ordens internas dão rosto prático — e político — à Igreja:
+1. **Irmãos da Lareira e do Pão *(Lar & Colheita)***: mantêm celeiros públicos contra a fome, orfanatos e abrigos de estrada; profundamente queridos pelo povo comum e críticos do luxo da corte.
+2. **Vigilantes da Brasa Velada *(Noite & Passagem)***: monges médicos, guardiões de cemitérios e administradores de hospícios e leprosários. São os primeiros a detectar epidemias — e os primeiros a suspeitar quando algo de *Thanatos* toca os vivos.
+3. **Mestres do Malho Sagrado *(Forja)***: clérigos-artesãos de Aeraneas e Lavroga que abençoam galerias de mineração, fiscalizam pesos e medidas e hoje se veem divididos na greve das Minas de Ferraur.
+4. **Ordem da Chama Branca *(Braço Inquisitorial Radical — O Dia levado ao extremo)***: nascida para investigar ritos de sangue e relíquias proibidas de Incognito, radicalizou-se diante dos boatos de mortos retornando de *Thanatos*. Seus **Inquisidores da Chama Branca** *(ver [Bestiário — Parte I](04_Bestiario_Alenia.md))* vestem mantos cinza-cal, marcam portas suspeitas com cruzes de cal e acreditam que **só o fogo impiedoso purifica quem viola a Passagem** — entrando frequentemente em choque com os *Vigilantes da Brasa Velada* e com o próprio Alto Luminar.
+
+#### Pecados, Heresias e o Choque com *Thanatos*
+- **Pecados Graves do Cotidiano**: violar a hospitalidade sob o *Lar*, falsificar moedas ou pesos sob a *Forja* e o *Dia*, incendiar colheitas ou profanar túmulos da *Passagem*.
+- **As Três Heresias Capitais**:
+  1. **Negação da Passagem**: tentar chamar mortos de volta ou recusar o repouso final. É por isso que os boatos dos **Despertos de Thanatos** e qualquer promessa de vencer a morte constituem a maior crise espiritual da história da Igreja — dividindo o clero entre quem quer queimá-los (*Chama Branca*) e quem busca investigá-los e salvá-los com misericórdia (*Brasa Velada*).
+  2. **Ritos de Sangue & Culto a Incognito**: sacrifícios humanos, invocação de ecos do norte ou adoração às ruínas anteriores à Era da Forja.
+  3. **Idolatria Fragmentada**: adorar um único Aspecto como divindade separada, negando a unidade do Criador *(seitas rurais isoladas são pressionadas ou taxadas, mas raramente levadas à fogueira sem crime de sangue)*.
+
+#### Uso Prático na Mesa *(Fé Verdadeira, Asilo e Ganchos)*
+- **Devoção Pessoal (para qualquer PJ)**: mesmo sem ser *Sacerdote* ou *Inquisidor*, qualquer personagem de Aurora pode escolher um **Aspecto de Devoção** *(ex.: um Ferreiro ou Soldado devoto da Forja; um Médico da Noite; um Cavaleiro do Dia)* para enriquecer juramentos, preces e relações com paróquias locais.
+- **Santuário e Direito de Asilo**: sob a lei do *Lar* e da *Noite*, um fugitivo desarmado que toque o altar de um templo da Chama Solar tem direito a **1 noite de asilo inviolável** antes de ser entregue à justiça do *Dia* *(respeitado por guardas comuns, mas frequentemente testado por agentes de Kalis ou inquisidores radicais)*.
+- **Fé Verdadeira & Ritos *(Tomo I, Seção 10)***: realizar vigília ou prece sincera num templo consagrado ao Aspecto pertinente concede o modificador oficial de **`+2` (Local de Poder / Consagração)** em ritos ou bênçãos sutis de *Fé Verdadeira* — sem criar magias instantâneas de combate.
+
+---
+
+### 10.2 Outras Tradições Religiosas e Fé Verdadeira *(Convicção Plural)*
 Em Alenia, **Fé Verdadeira não pertence a uma única igreja**: ela floresce em qualquer devoto de convicção genuína e inabalável, seja qual for sua tradição:
-- **Igreja da Chama Solar *(Aurora)***: cultua a Luz e a Ordem que forjaram a civilização; ordena sacerdotes e inquisidores em Altavanne. Considera heresia ritos de sangue e qualquer veneração a Incognito.
-- **Círculo das Raízes *(Cidade Suspensa)***: reverência aos ciclos da mata e aos ancestrais; rejeita templos de pedra.
-- **Culto das Marés & Estrelas *(Corallis)***: crença marítima e filosófica que vê nas marés e astros uma harmonia matemática; tolerante com a ciência da Academia de Sellene.
+- **Círculo das Raízes *(Cidade Suspensa)***: reverência aos ciclos da mata e aos ancestrais; rejeita templos de pedra *(tolerado em Aurora pelo Tratado de Vergod, embora visto com desconfiança pela Chama Branca)*.
+- **Culto das Marés & Estrelas *(Corallis)***: crença marítima e filosófica que vê nas marés e astros uma harmonia matemática; tolerante com a ciência da Academia de Sellene e com a cirurgia de Baldbella.
 - **Caminhos do Sol e do Sangue *(Gaddra)***: juramentos sagrados de água, sol e hospitalidade conduzidos por Anciões das Dunas e Árbitros do Sangue.
 - **Irmandade do Véu Silencioso *(Kalis)***: ordem ascética que prega que os deuses se ocultam atrás de um véu — a fé é provada pelo silêncio, disciplina e resistência ao pavor.
 
-### Linha do Tempo Curta de Alenia
+### 10.3 Linha do Tempo Curta de Alenia
 - **Era Antiga (há mais de 1.200 anos)**: civilizações esquecidas erguem monumentos em Incognito e nas *Ruínas de Kelgore*; seu colapso deixa apenas cinzas, lendas e o fenômeno de *Thanatos*.
 - **Ano 1 da Era da Forja**: descoberta das grandes veias de **adamante** nos Montes Ferraur; fundação de *Altavanne* e ascensão da *Casa Valerion*.
 - **Ano 112**: *Tratado de Vergod* encerra as guerras florestais, reconhecendo a autonomia da *Cidade Suspensa*.
