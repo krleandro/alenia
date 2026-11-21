@@ -335,6 +335,8 @@ Toda a sociedade de Aurora organiza-se em **sete degraus jurídicos claros**, di
 
 > *"Bastava alguém gritar 'a sombra!' para uma praça inteira se esvaziar — até que um senhor sem trono ficou de pé debaixo das asas dela."* — **Crônica da Faixa Negra, Arquivo de Altavanne**
 
+![A Sombra sobrevoando Altavanne durante os Anos do Eclipse (348–356) — asas negras rasgadas tapando o sol sobre a capital em chamas enquanto balistas de cerco se erguem nas torres](ilustracoes/a_sombra_sobre_altavanne.jpg)
+
 A legitimidade atual da linha reinante da **Casa Valerion** não repousa apenas na antiguidade do *Pacto das Bigornas*: ela foi refundada a sangue e cinza há sessenta e dois anos, no verão do **Ano 356**, pelo avô do atual rei enfermo — **Severor I Valerion, *o Rei da Última Sombra***. Matar **A Sombra** significou muito mais do que abater uma fera gigante: significou **interromper um evento escatológico que ameaçava apagar os reinos dos homens**.
 
 #### Dragões em Alenia — Eventos Escatológicos
