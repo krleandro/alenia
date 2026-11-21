@@ -35,7 +35,7 @@
 - **Atributo Especial Inicial**: **Status `1`**
 - **Perícias Iniciais (`+3`)**: Armas Brancas, Aparar, Escudos, Cavalgar, Etiqueta & Corte
 - **Equipamento Inicial**: Espada longa, escudo médio, cota de malha, tabardo com brasão, sela e `40 PP`.
-- **Habilidade — Juramento de Aço**: `+2` em Cavalgar em combate e `+2` na Defesa ao usar *Proteger Aliado* com escudo.
+- **Habilidade — Juramento de Aço**: `+2` em Cavalgar em combate e `+2` na Defesa ao usar *Proteger Aliado* com escudo. *(Ver o Rito de Consagração e deveres da Cavalaria no [Manual da Coroa, Nobreza e Cavalaria](02_Guia_de_Cenario_Alenia.md).)*
 
 ### 03. Soldado / Veterano
 - **Evolução**: `DV 1d10` | `Per. Base 1` (`Mult. INT 0.50`)
@@ -225,7 +225,7 @@
 - **Atributo Especial Inicial**: **Status `2`**
 - **Perícias Iniciais (`+3`)**: Etiqueta & Corte, Persuasão, História & Lendas, Cavalgar, Armas Brancas
 - **Equipamento Inicial**: Florete ou espada longa fina, anel de sinete, vestes nobres, manto de viagem, cavalo e `80 PP`.
-- **Habilidade — Peso do Nome**: Invoca hospitalidade, audiências e crédito em cidades que reconheçam sua linhagem usando seu `Status` sem rolar em pedidos rotineiros.
+- **Habilidade — Peso do Nome**: Invoca hospitalidade, audiências e crédito em cidades que reconheçam sua linhagem usando seu `Status` sem rolar em pedidos rotineiros. *(Ver títulos, direitos legais e Grandes Casas no [Manual da Coroa, Nobreza e Cavalaria](02_Guia_de_Cenario_Alenia.md).)*
 
 ### 31. Diplomata / Conselheiro
 - **Evolução**: `DV 1d6` | `Per. Base 2` (`Mult. INT 1.00`)

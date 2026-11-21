@@ -250,7 +250,142 @@ Em Alenia, **Fé Verdadeira não pertence a uma única igreja**: ela floresce em
 
 ---
 
-## 11. Guia Operacional de Viagens, Distâncias e Estações
+## 11. Manual da Coroa, da Nobreza e da Cavalaria de Aurora
+
+> *"Uma coroa de ouro sem o juramento dos Lordes não passa de metal pesado; um Lorde sem o respeito à Lei do Dia não passa de salteador com castelo; e um Cavaleiro que esquece o pão dos humildes já quebrou a própria espada."* — **Código das Bigornas, Altavanne**
+
+Este manual codifica o funcionamento real do poder no **Reino Capital de Aurora** — do Trono de Altavanne e seu Conselho de Seis Ofícios às Grandes Casas, leis feudais, privilégios da nobreza e o rito solene de consagração de um Cavaleiro.
+
+---
+
+### 11.1 A Coroa de Aurora e o Trono do Alto Rei *(Paço de Altavanne)*
+Aurora **não** é uma tirania absoluta — é uma **monarquia feudal contratual** nascida no **Ano 1 da Era da Forja**, quando as Casas do vale do Rio Aurélio e dos Montes Ferraur firmaram o **Pacto das Bigornas**. Pelo Pacto, a **Casa Valerion** recebeu o Trono de Altavanne sob três compromissos: arbitrar disputas entre Lordes, defender as fronteiras contra invasões externas e administrar o monopólio do **adamante** em benefício da paz do reino.
+
+- **Poderes Exclusivos da Coroa**:
+  1. Declarar guerra continental e erguer o **Estandarte Real** *(convocação obrigatória de todos os Lordes juramentados)*.
+  2. Cunhar **Áureos (`PO`)** e **Escudos (`PP`)** na Casa da Moeda de Altavanne.
+  3. Conceder, tributar ou revogar licenças de extração e fundição de **adamante** em Ferraur.
+  4. Criar novos Lordes, conceder feudos vagos, emitir **Salvo-Condutos Reais** e **legitimar bastardos (`Cinza`)** por decreto selado.
+  5. Presidir a **Alta Corte do Dia**, instância suprema de apelação para nobres.
+- **Freios Reais ao Poder do Rei**: mesmo um Alto Rei saudável não governa sozinho — precisa do referendo do **Conselho da Coroa** para novos impostos extraordinários, respeita os **Forais Comerciais** de Merlinport, está juridicamente vinculado ao **Tratado de Vergod** com a Cidade Suspensa e depende da bênção pública da **Igreja da Chama Solar** *(a coroação só tem plena legitimidade quando o Alto Luminar unge a fronte do monarca diante das Seis Personas)*.
+- **Leis de Sucessão & a Crise do Ano 418**:
+  - A Coroa segue **primogenitura cognática** *(o filho ou a filha legítima mais velha herda; na falta de descendentes diretos, a linha passa aos irmãos do monarca)*.
+  - Com o **Alto Rei Severor III Valerion** gravemente doente e sem filho vivo, sua irmã **Valora Valerion** assumiu a **Regência** por direito de sangue. Porém, o **Marechal Lucian Leonastis** contesta que uma Regência sem herdeiro direto enfraquece Aurora diante de Gaddra, Kalis e da greve em Ferraur — exigindo a convocação de um **Grande Concílio das Casas** para eleger um regente militar ou novo herdeiro.
+
+---
+
+### 11.2 O Conselho da Coroa *(Os Seis Ofícios de Altavanne)*
+No salão circular da **Mesa do Sol**, no Paço Real de Altavanne, o Alto Rei governa assessorado por **Seis Conselheiros** *(espelhando simbolicamente os Seis Raios da fé auroriana)*, além de um sétimo assento consultivo — sem voto de guerra, mas de imenso peso político — reservado ao **Alto Luminar da Igreja da Chama Solar**:
+
+| Ofício do Conselho | Pasta & Autoridade Real | Ocupante Atual *(Ano 418)* | Posição na Crise Política |
+| :--- | :--- | :--- | :--- |
+| **1. Grão-Chanceler** *(O Selo)* | Guarda o Grande Selo da Coroa, redige leis, preside o Conselho na ausência do Rei e conduz a diplomacia com Corallis, Gaddra e Vergod. | **Regente Valora Valerion** *(acumula o cargo)* | Defende a continuidade da Casa Valerion e soluções diplomáticas para Ferraur e Vergod. |
+| **2. Marechal do Reino** *(A Espada)* | Comanda as guarnições reais, fortalezas de fronteira e a convocação militar dos estandartes das Grandes Casas. | **Marechal Lucian Leonastis** | Herói dos Picos de Rubecina; quer esmagar a greve em Aeraneas pela força e pressiona por um Grande Concílio. |
+| **3. Grão-Lorde do Adamante** *(A Bigorna)* | Administra as Minas de Ferraur, cotas de extração, forjas reais em Aeraneas e o combate ao contrabando do metal. | **Grão-Lorde Aurelian Ferraris** | Preso no fogo cruzado: tenta negociar segurança com os mineiros sem perder o apoio da Coroa. |
+| **4. Mestre da Balança** *(O Cofre)* | Supervisiona o Tesouro Real, a Casa da Moeda, pedágios fluviais e letras de crédito junto aos bancos de Corallis. | **Lady Serina Scutauria** | Aliada pragmática de Valora, mas protege antes de tudo os cofres e portos de Merlinport. |
+| **5. Preboste da Coroa** *(A Lei)* | Chefe supremo dos juízes reais, patrulhas de estrada e investigações de alta traição — sua autoridade atravessa fronteiras de qualquer feudo. | **Preboste Valen de Pontáuria** | Jurista incorruptível *(primo do Alto Luminar e tio de Sabina)*; recusa servir a qualquer facção fora da lei. |
+| **6. Guardião dos Selos Secretos** *(O Véu)* | Controla o correio cifrado do trono, mensageiros reais e contraespionagem frente a Kalis e Corallis. | **Cassian d'Altrax** *(interino)* | Figura opaca vinda da fronteira noroeste; tanto Valora quanto Leonastis suspeitam que joga por conta própria. |
+
+---
+
+### 11.3 Hierarquia Feudal, Títulos Oficiais e Tratamento em Corte
+Toda a sociedade de Aurora organiza-se em **sete degraus jurídicos claros**, diretamente ligados ao atributo especial **`Status`** e ao **Padrão de Vida Mensal** *(Tomo I, Seção 9.5)*:
+
+| Degrau & Título | Tratamento em Corte | Domínio / Função Típica | Tropas Típicas | `Status` | Padrão de Vida |
+| :--- | :--- | :--- | :---: | :---: | :--- |
+| **Alto Rei / Rainha** *(ou Regente)* | *"Vossa Alteza Solar"* / *"Majestade"* | Coroa de Aurora, Altavanne e monopólio do adamante | `3.000+` *(guarda real)* | **`5`** | Aristocrático *(Coroa)* |
+| **Grandes Lordes** *(Chefes das Grandes Casas)* | *"Meu Lorde / Minha Lady"* / *"Vossa Graça"* | Governam províncias inteiras; juram diretamente ao Trono | `600 – 1.500` homens | **`4`** | Aristocrático (`450+ PP/mês`) |
+| **Castelões & Barões de Terra** | *"Castelão"* / *"Senhor(a) de [Lugar]"* | Fortalezas estratégicas, pontes, pedreiras ou vilas muradas | `80 – 250` homens | **`3`** | Abastado (`150 PP/mês`) |
+| **Prebostes & Magistrados da Coroa** | *"Preboste"* / *"Magistrado"* | Nobreza togada *(não hereditária)* nomeada pelo Rei para julgar e fiscalizar | `20 – 60` guardas reais | **`2–3`** | Confortável / Abastado |
+| **Cavaleiros Juramentados** *(de Terra ou Andantes)* | ***"Sor"*** *(masc.)* / ***"Dama"*** *(fem.)* | Título **não hereditário** ganho por vigília e consagração; comandam lanças ou protegem feudos | `0 – 20` homens-de-armas | **`1–2`** | Modesto / Confortável |
+| **Escudeiros, Pagens & Filhos Segundos** | *"Escudeiro"* / *"Jovem [Nome]"* | Aprendizes de cavalaria e herdeiros sem terra servindo a um Senhor ou Cavaleiro | `—` | **`1`** | Modesto (`15 PP/mês`) |
+| **Povo Livre & Bastardos (`Cinza`)** | Pelo nome ou ofício | Artesãos, mercadores, lavradores e soldados. Bastardos nobres usam o sobrenome **`Cinza`**, não herdam terras e portam o brasão paterno cortado por faixa cinza *(salvo Legitimação Real)* | `—` | **`0–1`** | Pobre / Modesto |
+
+---
+
+### 11.4 As Grandes Casas e Praças-Fortes de Aurora *(Tabuleiro do Ano 418)*
+| Casa Nobre | Sede & Domínio | Brasão & Lema | Liderança Atual | Força Principal | Posição na Crise de 418 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Casa Valerion** | **Altavanne** *(Capital & Vale Central)* | *Coroa dourada sobre bigorna negra em campo carmesim* — **"Do Fogo, a Ordem."** | Alto Rei *Severor III* *(enfermo)* / Regente *Valora Valerion* | Legitimidade da Coroa, Guarda Real e controle da Casa da Moeda | Luta para evitar guerra civil e encerrar a greve de Ferraur sem massacre. |
+| **Casa Leonastis** | **Vaarsa** *(Picos de Rubecina & Fronteira Sul)* | *Leão de ferro erguido sobre três picos rubros* — **"Ferro Não Recua."** | Marechal *Lucian Leonastis* | Infantaria pesada veterana e controle do Passo de Rubecina | Contesta a Regência; flerta com nobres impacientes para impor um governo marcial. |
+| **Casa Scutauria** | **Merlinport** *(Estuário do Rio Aurélio)* | *Escudo de ouro sobre ondas azuis e âncora* — **"O Rio Alimenta a Coroa."** | Lorde *Marcus Scutauria* *(e Lady Serina no Conselho)* | Frotas fluviais, alfândega portuária e crédito com Corallis | Apoia Valora enquanto o comércio continuar aberto; teme impostos de guerra. |
+| **Casa Ferraris** | **Aeraneas** *(Montes & Minas de Ferraur)* | *Picareta e malho cruzados sob estrela prateada* — **"Paciência Corta a Rocha."** | Grão-Lorde *Aurelian Ferraris* | Mestres-forjadores e gestão direta das minas de adamante | Paralisada pela greve após o desabamento; pede tempo e proteção contra Leonastis. |
+| **Casa d'Altrax** | **Forte de Altrax** *(Noroeste & Pântanos)* | *Torre negra erguida sobre névoa prateada* — **"Vigiamos Onde a Estrada Termina."** | Castelã *Aurelia d'Altrax* | Patrulheiros de pântano, vigias de fronteira e rede de batedores | Cautelosa e independente; vigia tensões com a Cidade Suspensa e rotas clandestinas. |
+| **Casa Montavalle** | **Dahrma** *(Vale Agrícola Sudoeste)* | *Feixe de trigo dourado sobre ponte de pedra* — **"Quem Guarda o Pão, Guarda a Paz."** | Lorde *Lorian Montavalle* | Maior celeiro de grãos de Aurora e cavalaria ligeira de estrada | Neutra na aparência, mas especuladores de grãos começam a testar sua autoridade. |
+
+- **Casas Vassalas & Enclaves Relevantes**: a **Casa de Pontáuria** *(guardiã da grande ponte central do Rio Aurélio, berço de juristas e clérigos como o Alto Luminar Aemilius, o Preboste Valen e a agente Sabina)*; a **Castelania de Lavroga** *(pedreiras e vigia das estepes no sudoeste)*; o entreposto fronteiriço de **Vergod** *(regido pelo Tratado de Vergod com o Conselho das Copas)*; e o enclave marítimo de **Yõketsu** *(na costa leste, que paga tributo comercial à Coroa mantendo autonomia cultural e suas próprias escolas de esgrima)*.
+
+---
+
+### 11.5 Direitos, Deveres e Privilégios Legais da Nobreza *(O Código de Altavanne)*
+
+#### Os 5 Direitos e Privilégios da Nobreza
+1. **Direito de Fosso e Forca *(Alta e Baixa Justiça)***: Grandes Lordes e Castelões julgam crimes comuns dentro de seus feudos. Apenas nobres e cavaleiros têm o direito garantido de apelar contra uma sentença local diretamente ao **Preboste da Coroa** ou ao **Alto Rei**.
+2. **Julgamento por Pares & Direito de Resgate**: um nobre ou cavaleiro **jamais** pode ser açoitado no pelourinho ou enforcado como ladrão comum — em condenação capital, tem direito à execução limpa pela espada sob o olhar do *Vigia*. Em guerra, é costume capturá-lo vivo para **resgate em prata ou cartas de crédito** *(tipicamente `200–500 PP` por um Cavaleiro, `800–2.000+ PP` por um Barão ou Lorde)*.
+3. **Direito de Porte, Escolta e Brasão**: nobres e cavaleiros podem portar espadas longas dentro das muralhas de Altavanne e manter homens armados com as cores da Casa *(plebeus e mercenários precisam de salvo-conduto real ou registro de guilda dentro da capital)*.
+4. **Isenção de Corveia e Pedágios Locais**: a nobreza é isenta de trabalho braçal obrigatório e de pedágios menores dentro da própria província — pagando, em contrapartida, o **Tributo de Escudo** *(prata e homens armados sempre que a Coroa convoca)*.
+5. **Direito ao Duelo de Honra *(Juízo do Dia)***: diante de acusação grave de calúnia, quebra de palavra ou traição sem prova documental definitiva, um nobre pode exigir **Duelo Formal ao Primeiro Sangue ou até a Rendição** sob um magistrado — podendo lutar pessoalmente ou nomear um **Campeão** *(o que abre contratos perigosos e lucrativos para PJs duelistas, mercenários e cavaleiros!)*.
+
+#### Os 4 Deveres Sagrados *(Quebrar = Perda de Honra, Terras ou Cabeça)*
+1. **Chamado do Estandarte**: responder em até `15 dias` com sua cota de cavaleiros, suprimentos e soldados quando a Coroa erguer o Estandarte Real.
+2. **Guarda das Estradas e do Pão**: um senhor que cobra impostos mas abandona suas vilas a salteadores, feras ou fome sem socorro pode sofrer intervenção direta do Preboste da Coroa.
+3. **Paz do Teto *(Lei da Anfitriã)***: ferir, prender à traição ou assassinar um hóspede após oferecer-lhe pão e sal sob seu teto mancha uma Casa por gerações — crime considerado mais infame que a derrota em campo aberto.
+4. **Respeito ao Monopólio do Adamante**: minerar, fundir ou comercializar adamante fora das cotas seladas em Aeraneas constitui **Alta Traição**, punível com confisco de terras, extinção do título e execução.
+
+---
+
+### 11.6 A Cavalaria de Aurora e o Rito Solene de Consagração
+
+Em Aurora, a **Cavalaria não se herda pelo sangue**: o filho de um Grande Lorde nasce nobre, mas **não nasce Cavaleiro** — precisa merecer as esporas como Pagem (`7–12 anos`), servir como Escudeiro (`13–18 anos`) e passar pela consagração. Da mesma forma, **qualquer homem ou mulher livre — inclusive plebeus ou bastardos `Cinza`** — pode ser consagrado Cavaleiro por um feito extraordinário de coragem, justiça ou proteção de inocentes.
+
+- **Quem Pode Consagrar um Cavaleiro?**: o **Alto Rei**, um **Grande Lorde**, ou **qualquer Cavaleiro Juramentado** *(diante de testemunhas — pois a tradição ensina que "o aço reconhece o aço")*.
+- **O Que o Título Concede em Jogo**: direito ao tratamento **`Sor`** *(masc.)* ou **`Dama`** *(fem.)*, porte livre de armas nas cidades reais, direito a brasão pessoal e um **Feito legítimo de `+1 Status`** *(conforme aval do Mestre)* — acompanhado do peso real de responder pelos seis votos diante do povo e da corte.
+
+#### As 4 Etapas do Rito Solene *(A Vigília das Duas Luzes)*
+1. **A Vigília da Guardiã *(Véspera — Do Pôr do Sol ao Amanhecer)***: o candidato banha-se em água fria *(deixando para trás antigas culpas)*, veste túnica simples de linho cinza sem adornos e passa a **noite inteira em vigília silenciosa e jejum** dentro de uma igreja da Chama Solar *(ou junto a uma fogueira limpa, em campanha)*, com sua espada desembainhada e suas esporas pousadas à sua frente. Medita sob *A Guardiã* e *O Barqueiro* sobre o peso real de tirar ou poupar uma vida.
+2. **A Apresentação ao Amanhecer *(Sob o Olhar do Vigia)***: ao primeiro raio da manhã *(nas grandes cerimônias do **Solstício do Dia Claro**, sob a cúpula de vidro da Grande Catedral de Altavanne)*, o candidato ajoelha-se desarmado sobre um joelho diante do sagrante e de pelo menos duas testemunhas. Um padrinho entrega a espada limpa ao sagrante.
+3. **Os Seis Toques e os Dizeres Oficiais da Consagração *(Prontos para Ler em Mesa)***:
+   O sagrante ergue a lâmina e toca suavemente os ombros do candidato em **seis toques pausados** *(três pares alternados — um por cada Persona do Criador)*, recitando a fórmula canônica:
+
+   > **Sagrante**: *"Quem se ajoelha diante desta lâmina sob a luz do Sol de Seis Raios?"*
+   > **Candidato**: *"[Nome], livre de juramento contrário, pronto a servir sem temor e a morrer sem desonra."*
+   >
+   > **Sagrante *(tocando alternadamente o ombro esquerdo e o direito a cada voto)***:
+   > *"Em nome do **Vigia**, ordeno-te que sejas verdadeiro — que tua língua jamais sirva à mentira nem tua espada à covardia.*
+   > *Em nome da **Guardiã**, ordeno-te que sejas misericordioso — que poupes o rendido e escutes quem clama no escuro.*
+   > *Em nome da **Semeadora**, ordeno-te que protejas o pão e o suor dos humildes, sem pilhar quem te alimenta.*
+   > *Em nome do **Artífice**, ordeno-te que honres teu ofício, mantenhas teu aço limpo e cumpras o que prometes.*
+   > *Em nome da **Anfitriã**, ordeno-te que defendas os fracos, as crianças e a paz de toda mesa honesta.*
+   > *Em nome do **Barqueiro**, ordeno-te que não temas o fim — pois a honra sobrevive às cinzas."*
+   >
+   > **Sagrante *(apoiando a lâmina plana sobre o ombro direito pela última vez)***:
+   > *"Juras guardar estes seis votos diante do Criador, da Coroa e dos homens?"*
+   > **Candidato**: *"Eu juro — do pão à cinza, pela minha espada e pelo meu nome."*
+   >
+   > **Sagrante *(abaixando a lâmina e estendendo a mão para erguê-lo)***:
+   > *"Então ergue-te, **Sor / Dama [Nome]**, Cavaleiro de Aurora. Que o teu aço seja firme, e que o Dia jamais te encontre indigno."*
+
+4. **As Esporas e o Golpe da Memória *(A Coleira)***: o novo cavaleiro recebe as esporas de ferro ou prata, cinge a própria espada e recebe do sagrante uma **palma firme no ombro *(ou leve golpe ritual no rosto)*** acompanhada das palavras: *"Recebe este golpe em paz — pois é o último que suportarás sem ter o dever de responder."*
+
+#### Rito de Campo de Batalha & Degradação *(A Espora Quebrada)*
+- **Consagração de Lama e Sangue *(Emergência em Guerra)***: quando um escudeiro, soldado ou explorador realiza um ato heroico em plena batalha ou cerco, qualquer Cavaleiro pode consagrá-lo ali mesmo, de joelhos na terra, com a fórmula curta:
+  > *"Pelo **Vigia**, sê justo; pela **Anfitriã**, protege os fracos; pelo **Barqueiro**, não temas a morte. Ergue-te, **Sor / Dama [Nome]**, Cavaleiro de Aurora!"*
+  O título tem **exatamente a mesma validade legal** que o rito da Catedral, exigindo apenas duas testemunhas vivas para registro posterior junto ao Preboste.
+- **O Rito da Espora Quebrada *(Degradação)***: se um cavaleiro comete alta traição, viola a *Paz do Teto* ou massacra inocentes rendidos, pode ser degradado em praça pública: um ferreiro parte suas esporas com um malho sobre uma bigorna, seu escudo é pintado de negro e pendurado de cabeça para baixo, e seu nome é riscado a faca dos livros da Coroa — tornando-se um **Perjuro**, sem direito a julgamento por pares nem resgate.
+
+---
+
+### 11.7 Etiqueta de Corte, Documentos Reais e Ascensão de PJs
+- **Audiências & Protocolo**: entrar armado na presença de um Grande Lorde ou da Regente sem licença explícita exige teste de **Etiqueta & Corte CD 18** apenas para evitar prisão imediata; vestir-se abaixo do seu **`Status`** impõe `-2` em testes sociais na corte *(enquanto manter Padrão de Vida **Abastado** ou **Aristocrático** abre portas sem suborno)*.
+- **Documentos que Movem Campanhas**:
+  - *Salvo-Conduto Real*: pergaminho lacrado em cera vermelha garantindo passagem livre em pontes, pedágios e portões *(como o prometido por Sabina de Pontáuria em Merlinport)*.
+  - *Carta de Patente*: autorização temporária da Coroa ou de um Preboste para prender criminosos, investigar feudos ou navegar armado contra corsários.
+  - *Decreto de Legitimação*: documento raríssimo assinado pelo Alto Rei que apaga o sobrenome `Cinza` de um bastardo e o insere na linha sucessória da Casa.
+- **Ascensão de Exploradores em Campanha**: personagens sem berço nobre podem subir degraus reais por meio de **Feitos** — primeiro conquistando uma *Carta de Patente* (`Status 1`), depois a **Consagração como Cavaleiro** (`Status 2`) e, em patamar *Lenda*, recebendo a guarda de uma torre arruinada ou castelania de fronteira (`Status 3`, como a própria *Torre de Specula* reconstruída!) pelos serviços prestados à Coroa.
+
+---
+
+## 12. Guia Operacional de Viagens, Distâncias e Estações
 
 ### Tabela de Viagens Principais *(Marcha normal: 30 km/dia; Navio mercante: 120 km/dia)*
 | Trajeto | Meio | Tempo Médio | Abastecimento / Pedágio | Risco Principal |
@@ -269,7 +404,7 @@ Em Alenia, **Fé Verdadeira não pertence a uma única igreja**: ela floresce em
 
 ---
 
-## 12. Atlas Regional Detalhado (5 Mapas Aproximados)
+## 13. Atlas Regional Detalhado (5 Mapas Aproximados)
 
 Todos os 5 mapas regionais em alta resolução estão prontos para o **RRPG Firecast** em `mapas/regionais/`:
 1. **[Mapa Regional de Aurora](file:///c:/Users/Cliente/OneDrive/Documentos/alenia/mapas/regionais/mapa_regional_aurora.png)** — *Estrada do Adamante, Via do Estuário, Estrada da Bruma, Trilha das Copas, Minas de Ferraur, Pontáuria, Vila de Silvaria, Torre de Specula, Ruínas de Vetarx, Santuário de Derwlyn e Passo de Rubecina*.
