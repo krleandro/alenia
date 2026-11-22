@@ -108,7 +108,10 @@ def main():
     for group in GROUPS:
         md.append('\n## '+group+'\n')
         for p in [x for x in profiles if x['sphere']==group]:
+            portrait_rel = f'ilustracoes/npc_{p["code"]}.jpg'
+            portrait_md = [f'![Retrato {p["code"]}]({portrait_rel})\n'] if (REPO_ROOT / portrait_rel).exists() else []
             md.extend([f'<a id="{p["code"].lower()}"></a>\n',f'### {p["code"]} — {p["name"]}\n',
+                       *portrait_md,
                        f'**Registro:** {p["kind"]}. **Época:** {p["period"]}.\n'])
             for key,label in LABELS:md.append(f'**{label}:** {p[key]}\n')
             refs=[f'[{e["file"]}]({e["file"]})'+(f' (linhas {", ".join(map(str,e["lines"][:8]))})' if e['lines'] else ' (papel antes anônimo)') for e in p['evidence']]

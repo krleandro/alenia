@@ -168,6 +168,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N001 — Severor I Valerion
 
+![Retrato N001](ilustracoes/npc_N001.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Histórico; reinou 356–384; morto em 384.
 
 **Origem e presença:** Aurora; ramo secundário empobrecido dos Valerion, elevado em Altavanne
@@ -189,6 +191,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n002"></a>
 
 ### N002 — Severor II Valerion
+
+![Retrato N002](ilustracoes/npc_N002.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Histórico; reinou 384–405.
 
@@ -212,6 +216,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N003 — Severor III Valerion
 
+![Retrato N003](ilustracoes/npc_N003.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo e gravemente enfermo em 418; reina desde 405.
 
 **Origem e presença:** Altavanne; campanhas e fronteiras de Aurora
@@ -233,6 +239,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n004"></a>
 
 ### N004 — Valora Valerion
+
+![Retrato N004](ilustracoes/npc_N004.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Viva; regente real em 418.
 
@@ -256,6 +264,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N005 — Aemilius IV Valerion
 
+![Retrato N005](ilustracoes/npc_N005.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Histórico; deposto em 356; morte posterior sem data fixada.
 
 **Origem e presença:** Altavanne
@@ -277,6 +287,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n006"></a>
 
 ### N006 — Lucian Leonastis
+
+![Retrato N006](ilustracoes/npc_N006.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
@@ -300,6 +312,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N007 — Octavian Leonastis
 
+![Retrato N007](ilustracoes/npc_N007.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Histórico; morto em 356.
 
 **Origem e presença:** Vaarsa e fronteira de Rubecina
@@ -321,6 +335,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n008"></a>
 
 ### N008 — Darian d'Altrax
+
+![Retrato N008](ilustracoes/npc_N008.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Histórico; ativo em 355–356; destino posterior aberto.
 
@@ -344,6 +360,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N009 — Vespera Scutauria
 
+![Retrato N009](ilustracoes/npc_N009.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Histórica; sobreviveu à caçada de 356; destino posterior aberto.
 
 **Origem e presença:** Merlinport e navegação fluvial
@@ -365,6 +383,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n010"></a>
 
 ### N010 — Orlan Ferraris
+
+![Retrato N010](ilustracoes/npc_N010.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Histórico; ativo em 356; morte sem data fixada.
 
@@ -388,6 +408,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N011 — Corvus Montavalle
 
+![Retrato N011](ilustracoes/npc_N011.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Histórico; ativo em 356.
 
 **Origem e presença:** Dahrma
@@ -409,6 +431,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n012"></a>
 
 ### N012 — Lorian Montavalle
+
+![Retrato N012](ilustracoes/npc_N012.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
@@ -432,6 +456,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N013 — Serina Scutauria
 
+![Retrato N013](ilustracoes/npc_N013.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Viva em 418.
 
 **Origem e presença:** Merlinport; residência de ofício em Altavanne
@@ -453,6 +479,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n014"></a>
 
 ### N014 — Marcus Scutauria
+
+![Retrato N014](ilustracoes/npc_N014.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
@@ -476,6 +504,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N015 — Aurelian Ferraris
 
+![Retrato N015](ilustracoes/npc_N015.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
 **Origem e presença:** Aeraneas
@@ -497,6 +527,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n016"></a>
 
 ### N016 — Aurelia d'Altrax
+
+![Retrato N016](ilustracoes/npc_N016.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Viva em 418.
 
@@ -520,6 +552,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N017 — Cassian d'Altrax
 
+![Retrato N017](ilustracoes/npc_N017.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
 **Origem e presença:** Altrax; serviço em Altavanne
@@ -542,6 +576,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N018 — Valen de Pontáuria
 
+![Retrato N018](ilustracoes/npc_N018.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
 **Origem e presença:** Pontáuria e tribunais reais
@@ -563,6 +599,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n036"></a>
 
 ### N036 — Marcus Ferraris
+
+![Retrato N036](ilustracoes/npc_N036.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Histórico; ativo no Ano 14.
 
