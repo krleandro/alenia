@@ -163,7 +163,7 @@ end;
             <layout left="0" top="0" width="424" height="790">
                 <!-- CABECALHO -->
                 <rectangle left="6" top="6" width="412" height="122" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
-                    <label left="12" top="8" width="388" height="22" text="ALENIA TOKEN STUDIO v1.0" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center"/>
+                    <label left="12" top="8" width="388" height="22" text="ALENIA TOKEN STUDIO v1.1" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center"/>
                     <label left="12" top="30" width="388" height="32" text="12 molduras HD, zoom/pan/rotacao, faixa de nome e exportacao PNG transparente (512px / 1024px)." fontColor="#A6AEBF" fontSize="11" horzTextAlign="center" wordWrap="true"/>
                     <button left="12" top="68" width="256" height="40" text="Abrir Estudio de Tokens" fontSize="13">
                         <event name="onClick"><![CDATA[abrirEstudioWeb();]]></event>

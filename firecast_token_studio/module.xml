@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module sdkVersion="3.7b">
     <id>br.com.alenia.token_studio</id>
-    <version>1.0</version>
+    <version>1.1</version>
     <info lang="pt-BR">
         <name>Alenia &amp; Universal — Gerador de Tokens (TablesDock)</name>
         <description>Painel acoplável (TablesDock) e comando /tokens para qualquer mesa e sistema no Firecast: abre o Estúdio de Tokens HTML5 (12 molduras em alta definição, zoom/pan/rotação, faixa de nome e exportação PNG transparente 512x512 e 1024x1024) e mantém uma Galeria de Tokens da Mesa sincronizada no FireDrive com envio direto ao chat e cópia rápida de URL.</description>

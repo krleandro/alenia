@@ -229,7 +229,7 @@ end;
     obj.label1:setTop(8);
     obj.label1:setWidth(388);
     obj.label1:setHeight(22);
-    obj.label1:setText("ALENIA TOKEN STUDIO v1.0");
+    obj.label1:setText("ALENIA TOKEN STUDIO v1.1");
     obj.label1:setFontColor("#D9B96A");
     obj.label1:setFontSize(15);
     lfm_setPropAsString(obj.label1, "fontStyle", "bold");
