@@ -2,7 +2,7 @@
 
 ## Pratos, ingredientes e animais das terras e dos mares
 
-Uma mesa de Alenia revela quem controla a água, quais barcos chegaram ao porto, que caminhos a neve fechou e quem conseguiu guardar grão para o inverno. Este guia reúne 32 pratos de oito tradições regionais, 22 animais de pesca, criação, apicultura ou caça e uma despensa ligada ao Herbário de Seleni. Inclui comida de trabalhadores, refeições de hospitalidade, doces, pratos cerimoniais e provisões de expedição.
+Uma mesa de Alenia revela quem controla a água, quais barcos chegaram ao porto, que caminhos a neve fechou e quem conseguiu guardar grão para o inverno. Este guia reúne 44 pratos em oito tradições regionais e três cadernos temáticos, 26 animais de pesca, criação, apicultura ou caça e uma despensa ligada ao Herbário de Seleni. Inclui comida de trabalhadores, refeições de hospitalidade, doces, pratos cerimoniais e provisões de expedição.
 
 Aurora, Corallis, Gaddra e Kalis recebem cozinhas próprias. As matas silvanas, Yõketsu e as ilhas aparecem como tradições distintas dentro da geografia atual. Syleth e Lystra têm alimentação insular; Incognito e Thanatos recebem somente uma seção de provisões de visitantes. Não há uma população atual de Incognito à qual atribuir uma cozinha nacional.
 
@@ -20,7 +20,7 @@ Cada receita rende quatro porções em termos de jogo. Os ingredientes são indi
 
 O preço é por porção pronta no local de origem, sem bebida nem hospedagem. São referências novas: uma refeição simples pode custar 2 PC, enquanto banquetes usam ingredientes raros, serviço e margem de prestígio. Valores podem subir com estação, cerco e transporte. O tempo indicado inclui o trabalho de cozinha, mas não caça, cultivo, pesca ou deslocamento.
 
-As ilustrações são organizadas em oito pranchas de quatro pratos. A edição HTML mostra o detalhe de cada prato; o Markdown preserva as pranchas completas com a ordem das imagens. Aparência e apresentação variam entre casas e cozinheiros, mantendo os ingredientes centrais descritos.
+As ilustrações são organizadas em onze pranchas de quatro pratos. A edição HTML mostra o detalhe de cada prato; o Markdown preserva as pranchas completas com a ordem das imagens. Aparência e apresentação variam entre casas e cozinheiros, mantendo os ingredientes centrais descritos.
 
 ## Aurora e o vale do Aurélio
 
@@ -678,6 +678,246 @@ Ordem da prancha: superior esquerda, superior direita, inferior esquerda, inferi
 
 **Situação de jogo:** Um integrante guarda mel escondido enquanto os demais racionam; o conflito revela medo, egoísmo ou uma promessa particular.
 
+## Iguarias incomuns dos portos e das matas
+
+O que um visitante chama de exótico pode ser a comida habitual de um bairro. Nas feiras de Corallis, insetos de criação disputam espaço com pescado; em Yõketsu, uma porção diminuta pode custar mais que uma panela de quartel. Estes pratos pertencem às regiões indicadas em suas fichas e não criam novos territórios. Suas espécies e costumes ampliam as propostas deste volume.
+
+![Prancha 9: Vespas fritas; Bojo-de-porcelana; Polvo de Ravena; Caracóis de Vergod](ilustracoes/culinaria_prancha_09.jpg)
+
+Ordem da prancha: superior esquerda, superior direita, inferior esquerda, inferior direita.
+
+### C33 — Vespas fritas de Portocala
+
+**Mesa:** Feira de Corallis. **Rendimento:** quatro porções pequenas. **Preço por porção:** 3 PC. **Tempo:** 25 minutos, com lote alimentar já preparado.
+
+**Fauna:** A23. **Herbário:** H27. **Imagem:** prancha 9, superior esquerda.
+
+**Ingredientes:** Vespas-de-barro de criação culinária, fornecidas prontas pelo criador; farinha de cereal; gordura de cozinha; flor-de-sal de Portocala em uso alimentar; cítrico-da-costa B02.
+
+**Preparo no mundo:** O vendedor recebe o lote separado para cozinha, envolve os insetos numa cobertura fina e os frita até ficarem dourados. Folhas alimentares picadas e cítrico acompanham a travessa. A ficha começa no fornecimento preparado; retirar ninhos silvestres não faz parte da receita.
+
+**Sabor e textura:** Crocância leve, centro pequeno e sabor de semente tostada. A farinha deve deixar a forma segmentada visível. Por ser petisco, quatro porções não equivalem a quatro rações completas.
+
+**À mesa:** Estivadores compram cones de folha com uma medida do vendedor. Comer a primeira vespa sem hesitação virou brincadeira de recepção entre tripulações; recusar não constitui ofensa religiosa. Em casas ricas, o mesmo alimento aparece escondido sob massa espessa para hóspedes que desejam provar sem olhar.
+
+**Variação:** Uma feira silvana usa farinha de cereal comum e dispensa o condimento costeiro importado. O preço cai perto dos criadouros e sobe durante a estação fria.
+
+**Situação de jogo:** Um fornecedor vende ninhos retirados de um pomar sob proteção comunitária como se fossem de criação. O litígio envolve colheitas futuras e o sustento dos criadores, além do lote apreendido.
+
+### C34 — Bojo-de-porcelana da mesa selada
+
+**Mesa:** Serviço reservado de Yõketsu. **Rendimento:** quatro porções de degustação. **Preço por porção:** 3 PP. **Tempo:** serviço de uma noite, mediante encomenda.
+
+**Fauna:** A24. **Herbário:** Nenhum. **Imagem:** prancha 9, superior direita.
+
+**Ingredientes:** Porções de bojo-de-porcelana entregues por uma casa especializada; caldo claro de vegetais; alho-poró e arroz servido à parte.
+
+**Preparo no mundo:** A cozinha comum recebe somente porções destinadas ao serviço. Sua apresentação é em pequenos medalhões cozidos, com caldo raso. O tratamento do peixe perigoso pertence a um ofício restrito do cenário e não é descrito aqui. Fogo, sal e ervas não funcionam como garantia de segurança. Sem procedência verificável, a casa cancela o prato.
+
+**Sabor e textura:** Carne firme, muito delicada, servida em pequena quantidade para que o caldo não a domine. Dormência, dor ou mal-estar não são características apreciadas do prato nem provas de autenticidade.
+
+**À mesa:** A casa registra vendedor, cozinheiro e compradores num livro de serviço. Um selo responde pela procedência declarada; não detecta veneno nem impede fraude. Mercadores pagam pela reputação do responsável, enquanto certos nobres transformam a encomenda em exibição de coragem. Muitos habitantes de Yõketsu jamais o comem.
+
+**Variação:** A mesa prudente recebe nadadeira-de-jade A09 com a mesma apresentação, anunciada como substituição. O dente-venenoso A02 permanece fora da despensa: são espécies diferentes.
+
+**Situação de jogo:** O selo de um cozinheiro morto aparece numa encomenda recente. Os personagens precisam rastrear o peixe e impedir o serviço; a intriga pode ser falsificação comercial, tentativa de assassinato ou vingança contra a casa.
+
+### C35 — Polvo das cordas de Ravena
+
+**Mesa:** Refeição de pescadores de Ravena. **Rendimento:** quatro porções. **Preço por porção:** 5 PC. **Tempo:** 2 horas.
+
+**Fauna:** A25. **Herbário:** H55. **Imagem:** prancha 9, inferior esquerda.
+
+**Ingredientes:** Polvo-de-corda em quantidade para quatro pessoas; cebola; gordura culinária; erva-de-enseada alimentar e pão.
+
+**Preparo no mundo:** O polvo fornecido limpo recebe cocção até a textura desejada. A cozinha termina as porções sobre a chapa e serve com cebolas assadas e o condimento da enseada. Os braços se curvam e guardam marcas tostadas, formando a figura que dá fama à travessa.
+
+**Sabor e textura:** Superfície tostada e interior firme e macio. O prato mal executado fica borrachudo; isso não aumenta sua duração como provisão.
+
+**À mesa:** Tripulações dividem a travessa depois de recolher as armadilhas. Um braço maior não dá ao capitão uma porção automática: quem cozinha reparte a carne antes de servi-la. Nas tavernas, vendedores exageram o tamanho do animal contando braços separados como capturas inteiras.
+
+**Variação:** Em dias de pouco combustível, a etapa de chapa desaparece e o polvo chega numa panela com cebolas. Pão absorve o caldo.
+
+**Situação de jogo:** Armadilhas voltam vazias, mas os pesos trazem marcas recentes de faca. A suspeita de uma fera esconde pescadores expulsos de sua enseada por cobrança ilegal.
+
+### C36 — Caracóis recheados de Vergod
+
+**Mesa:** Cozinha comunitária das matas silvanas. **Rendimento:** quatro porções. **Preço por porção:** 3 PC. **Tempo:** 1 hora, com fornecimento preparado.
+
+**Fauna:** A26. **Herbário:** Nenhum. **Imagem:** prancha 9, inferior direita.
+
+**Ingredientes:** Carne preparada de caracol-de-horta; cevada cozida; cebola; folhas de tempero alimentar; gordura culinária e conchas próprias para apresentação.
+
+**Preparo no mundo:** O criador entrega a carne destinada à cozinha. Ela entra num recheio de cevada e cebola, finalizado ao forno em conchas preparadas ou pequenas cavidades de barro. O guia não transforma caracóis silvestres encontrados pelo caminho em ingredientes equivalentes.
+
+**Sabor e textura:** Recheio úmido, superfície tostada e pequenos pedaços firmes. A concha sustenta a porção, mas não é mastigada.
+
+**À mesa:** As conchas maiores passam de uma estação de festas para a seguinte, guardadas com a louça comunitária. O visitante recebe uma pequena haste de madeira para retirar o recheio. Famílias de criadores se orgulham mais do tamanho regular das porções que de exemplares gigantes.
+
+**Variação:** A versão cotidiana vai numa única travessa; a aristocracia de Altavanne importa conchas para apresentar um prato que considera raro, embora seja modesto na origem.
+
+**Situação de jogo:** Um comerciante compra toda a produção para um banquete distante. A aldeia exige que a parcela prometida à festa local seja respeitada antes do embarque.
+
+## Quartéis e panelas de aproveitamento
+
+Sobras reservadas na cozinha antes do serviço são uma provisão; restos recolhidos dos pratos, comida deteriorada e resíduos de oficina não são. Cada panela consome alimentos já existentes, sem multiplicar rações. Cascas aqui são partes alimentares de vegetais conhecidos: não significam casca de árvore, resina ou qualquer raiz do herbário. Nas fichas abaixo, a escassez aparece nas proporções e nos acompanhamentos, não numa imunidade à doença.
+
+![Prancha 10: Rancho da segunda chamada; Discos da retaguarda; Ensopado das sete cascas; Caldo do fundo de saco](ilustracoes/culinaria_prancha_10.jpg)
+
+Ordem da prancha: superior esquerda, superior direita, inferior esquerda, inferior direita.
+
+### C37 — Rancho da segunda chamada
+
+**Mesa:** Quartéis de Aurora. **Rendimento:** quatro porções. **Preço por porção:** 2 PC. **Tempo:** 45 minutos, com ingredientes reservados.
+
+**Fauna:** A13, quando há galinha. **Herbário:** Nenhum. **Imagem:** prancha 10, superior esquerda.
+
+**Ingredientes:** Cevada e feijão já cozidos, reservados adequadamente; carne de galinha desfiada quando disponível; pão firme próprio para consumo; cebola e caldo do rancho.
+
+**Preparo no mundo:** O cozinheiro reúne as reservas aproveitáveis numa panela espessa e distribui o pão no serviço. A composição muda com o abastecimento. O nome vem dos guardas que comem depois da troca de turno; não significa guardar indefinidamente a mesma panela.
+
+**Sabor e textura:** Espesso, salgado e irregular: algumas colheradas trazem feijão inteiro, outras pão desmanchado. A carne tempera o conjunto em vez de ocupar o centro da tigela.
+
+**À mesa:** A concha do cozinheiro se torna instrumento de política. Favorecer veteranos, oficiais ou companheiros de província pode causar uma briga antes que o inimigo chegue. Cada porção sai da conta de mantimentos já recebidos.
+
+**Variação:** Sem carne, aumenta-se a presença de leguminosas disponíveis; diluir com água produz mais volume, não mais alimento. Em acampamentos pequenos, todos reconhecem a comida do serviço anterior.
+
+**Situação de jogo:** O livro do intendente registra galinhas que ninguém viu. Um soldado guarda uma tigela como prova da fraude, enquanto o cozinheiro teme ser responsabilizado pelo desvio.
+
+### C38 — Discos da retaguarda
+
+**Mesa:** Tropas costeiras de Corallis. **Rendimento:** quatro porções. **Preço por porção:** 2 PC. **Tempo:** 40 minutos.
+
+**Fauna:** A04. **Herbário:** H06. **Imagem:** prancha 10, superior direita.
+
+**Ingredientes:** Grãos cozidos reservados; pescado preparado de maremestre; farinha alimentar de semente-de-celeiro; cebola e gordura culinária.
+
+**Preparo no mundo:** Grãos, peixe e farinha formam discos achatados que recebem cocção na chapa. O cozinheiro divide o pescado entre as unidades antes de fechá-las. A crosta permite comer com a mão, mas o recheio conserva as limitações de uma refeição perecível.
+
+**Sabor e textura:** Borda irregular crocante, centro denso e lascas de peixe. São mais pesados e menos delicados que os bolinhos de bordo C24.
+
+**À mesa:** Surgiram como comida de serviço curto para carregadores e sentinelas próximos ao acampamento. Um disco cabe na mão que não segura a corda; não deve ser confundido com biscoito seco para uma semana de marcha.
+
+**Variação:** Cevada substitui outros grãos conforme o armazém. Quando o peixe falta, o nome precisa mudar no quadro de distribuição para não esconder o corte de provisões.
+
+**Situação de jogo:** Discos destinados a uma patrulha desaparecem e surgem na feira. O roubo pode envolver um oficial, uma família faminta ou um acordo que mantém desertores escondidos.
+
+### C39 — Ensopado das sete cascas
+
+**Mesa:** Cozinhas populares de Dahrma. **Rendimento:** quatro porções. **Preço por porção:** 1 PC. **Tempo:** 1 hora.
+
+**Fauna:** Nenhum. **Herbário:** Nenhum. **Imagem:** prancha 10, inferior esquerda.
+
+**Ingredientes:** Aparas alimentares de cenoura e nabo conhecidos; folhas externas próprias de couve; feijão; cebola; pequena porção de gordura culinária e água.
+
+**Preparo no mundo:** A cozinha separa as partes alimentares durante o preparo dos vegetais, antes que entrem no descarte. Elas cozinham com o feijão e a cebola até formar uma panela macia. Partes endurecidas ou impróprias ficam fora. Sete é um nome de abundância desejada, não uma exigência de sete espécies.
+
+**Sabor e textura:** Levemente adocicado, terroso e espesso pelo feijão. Tiras de casca permanecem reconhecíveis, misturadas às folhas.
+
+**À mesa:** Uma cozinha de auxílio depende dos feirantes e dos sacos de leguminosas que recebe. Cascas sozinhas não sustentam sua distribuição. Em certos bairros, chamar a sopa de esmola é insulto: quem hoje entrega uma cesta pode precisar de uma tigela no inverno seguinte.
+
+**Variação:** Pão pode acompanhar quando sobra farinha na padaria. H11 não substitui automaticamente as aparas, pois a ficha de raiz-de-escarpa não autoriza tratar sua casca como equivalente à de cenoura.
+
+**Situação de jogo:** Um novo pedágio sobre carroças impede que as doações cheguem. O conflito envolve vereadores, feirantes e um cobrador que cumpre uma ordem formalmente válida.
+
+### C40 — Caldo do fundo de saco
+
+**Mesa:** Casas de trabalhadores de Kalis. **Rendimento:** quatro porções leves. **Preço por porção:** 1 PC. **Tempo:** 50 minutos.
+
+**Fauna:** Nenhum. **Herbário:** Nenhum. **Imagem:** prancha 10, inferior direita.
+
+**Ingredientes:** Aparas alimentares de cebola e cenoura; talos próprios de cogumelo-de-palha cultivado B01; pão firme; sal e água. Películas externas usadas apenas para dar cor ao caldo são retiradas antes do serviço.
+
+**Preparo no mundo:** Faz-se um caldo com as aparas selecionadas e coa-se o que não deve ir à mesa. Cogumelos, tiras alimentares de cenoura e pão completam as tigelas. O nome se refere às últimas provisões da despensa, não à sujeira acumulada no fundo de um saco.
+
+**Sabor e textura:** Líquido castanho, cheiro de cogumelo e pão muito macio. É uma refeição leve que precisa de complemento para substituir uma ração de trabalho pesado.
+
+**À mesa:** Nos invernos difíceis, o tamanho do pão revela a situação da casa. Cozinheiros orgulhosos mantêm o caldo límpido mesmo com poucos recursos. Comer junto permite perceber quem está ficando sem provisões sem exigir uma declaração pública de miséria.
+
+**Variação:** Uma casa com reservas acrescenta cevada; uma estalagem de luxo vende o mesmo princípio como caldo rústico e cobra pelo serviço.
+
+**Situação de jogo:** Um comerciante anuncia cogumelos baratos cuja procedência não corresponde aos viveiros locais. Os cozinheiros suspendem a compra e pedem aos personagens que encontrem o fornecedor desaparecido.
+
+## Doces de casca, pão e festa
+
+Doces circulam por rotas diferentes das refeições salgadas. Fruta madura pode baratear uma sobremesa por poucos dias; açúcar, forno disponível e mão de obra tornam outra exclusiva dos salões. Mel aparece onde existe abastecimento de apicultura. Aproveitar casca ou pão não torna gratuito o restante do prato.
+
+![Prancha 11: Fitas de casca e mel; Creme de pera; Pudim do pão e das bagas; Meias-luas de Gaddra](ilustracoes/culinaria_prancha_11.jpg)
+
+Ordem da prancha: superior esquerda, superior direita, inferior esquerda, inferior direita.
+
+### C41 — Fitas de casca e mel
+
+**Mesa:** Docerias dos portos de Corallis. **Rendimento:** quatro porções pequenas. **Preço por porção:** 3 PC. **Tempo:** 2 horas.
+
+**Fauna:** A20. **Herbário:** Nenhum. **Imagem:** prancha 11, superior esquerda.
+
+**Ingredientes:** Cascas alimentares de cítrico-da-costa B02, separadas da fruta destinada à cozinha; mel de pomar; água e pequena quantidade de açúcar nas versões ricas.
+
+**Preparo no mundo:** O doceiro prepara as tiras de cítrico para moderar o amargor e as envolve numa calda de mel até a textura desejada. As fitas chegam à mesa brilhantes e flexíveis, com pouca calda. A receita não estabelece prazo de conservação automática.
+
+**Sabor e textura:** Doçura pegajosa seguida de amargor cítrico; tiras macias que ainda oferecem resistência ao dente.
+
+**À mesa:** Servem de presente pequeno entre famílias que não podem comprar uma torta. A qualidade se mede pela regularidade das fitas e pelo perfume da fruta. O mel costuma custar mais que as cascas, desfazendo a ideia de que todo doce de aproveitamento é comida de pobre.
+
+**Variação:** Tavernas servem a casca com mais calda sobre pão. A versão de salão usa açúcar e cortes muito finos.
+
+**Situação de jogo:** Um carregamento chega anunciado como mel de um pomar prestigiado, mas as marcas dos potes foram raspadas. O doceiro quer descobrir a origem antes da festa de uma casa influente.
+
+### C42 — Creme de pera de Biemont
+
+**Mesa:** Sobremesa de Aurora. **Rendimento:** quatro porções. **Preço por porção:** 6 PC. **Tempo:** 1 hora e meia.
+
+**Fauna:** A13, A16. **Herbário:** Nenhum. **Imagem:** prancha 11, superior direita.
+
+**Ingredientes:** Pera-de-Biemont B03; leite de cabra; ovos de galinha; açúcar e pequena quantidade de farinha culinária.
+
+**Preparo no mundo:** A fruta preparada entra num creme de leite e ovos que recebe cocção em pequenas tigelas. Lâminas de pera assada e pontos de açúcar caramelizado completam a superfície. O serviço depende de cozinha e armazenamento adequados, não sendo provisão de estrada.
+
+**Sabor e textura:** Creme delicado e pouco firme, fruta macia e uma camada fina de caramelo. O leite de cabra deixa um fundo mais marcado que a aparência sugere.
+
+**À mesa:** Uma tigela individual permite demonstrar cuidado com cada convidado. Nas casas nobres, oferecer a sobremesa fora da estação implica fruta preservada e transporte; cozinheiros honestos explicam a diferença.
+
+**Variação:** Famílias sem açúcar usam mel disponível e dispensam o caramelo, alterando o sabor e o custo. A versão de festa coloca as tigelas numa travessa comum para que nenhum hóspede receba a sua antes dos outros.
+
+**Situação de jogo:** Um fornecedor promete peras frescas impossíveis de encontrar naquela estação. O engano é comercial, mas a anfitriã teme que uma rival o transforme em humilhação pública.
+
+### C43 — Pudim do pão e das bagas
+
+**Mesa:** Fornos comunitários de Kalis. **Rendimento:** quatro porções. **Preço por porção:** 3 PC. **Tempo:** 1 hora e meia.
+
+**Fauna:** A13, A16. **Herbário:** H47. **Imagem:** prancha 11, inferior esquerda.
+
+**Ingredientes:** Pão firme próprio para consumo; leite; ovos; bagas-de-Myrkholm de lote alimentar e açúcar na quantidade disponível.
+
+**Preparo no mundo:** Pão, leite e ovos formam a base. As bagas entram em camadas e o conjunto recebe cocção até adquirir estrutura para ser servido em fatias. Usar pão firme é aproveitamento planejado; alimento deteriorado não ganha novo destino pelo forno.
+
+**Sabor e textura:** Miolo úmido, manchas roxas de fruta e borda tostada. A acidez das bagas impede que a doçura domine.
+
+**À mesa:** O pudim aproveita o calor restante do forno depois dos pães, quando a organização do serviço permite. As famílias marcam suas formas com sinais próprios. Disputas sobre o melhor lugar no forno podem revelar rivalidades antigas.
+
+**Variação:** Na estação de poucas bagas, o recheio aparece numa camada fina. O leite e os ovos continuam sendo custos reais mesmo quando o pão veio de uma reserva doméstica.
+
+**Situação de jogo:** Uma marca de família banida reaparece numa forma entregue ao forno. A pessoa que a trouxe pode ser herdeira, receptadora ou alguém tentando provocar uma denúncia.
+
+### C44 — Meias-luas da última caravana
+
+**Mesa:** Festas de partida em Gaddra. **Rendimento:** quatro porções. **Preço por porção:** 4 PC. **Tempo:** 1 hora e meia.
+
+**Fauna:** A20. **Herbário:** H38. **Imagem:** prancha 11, inferior direita.
+
+**Ingredientes:** Massa de cereal; farinha alimentar de semente-do-vento misturada a farinha comum; mel; gordura culinária e água.
+
+**Preparo no mundo:** Pequenas porções de massa recebem um recheio espesso de sementes alimentares e mel, são fechadas em meia-lua e assadas. A borda marcada permite distinguir encomendas. O recheio úmido não recebe a durabilidade presumida de um biscoito seco.
+
+**Sabor e textura:** Casca quebradiça, interior denso, aroma de cereal tostado e mel. Cada doce oferece poucas mordidas e costuma acompanhar uma bebida.
+
+**À mesa:** Uma família entrega uma pequena cesta antes da partida da caravana. O presente é para os primeiros serviços de refeição e para despedidas compartilhadas, não para sustentar toda a travessia. Algumas casas deixam uma meia-lua sem recheio como brincadeira conhecida entre parentes; fazê-lo com um hóspede estranho pode parecer avareza.
+
+**Variação:** O formato muda conforme a família; uma borda trançada exige mais trabalho e encarece a encomenda. H38 sempre chega como farinha alimentar de procedência conhecida.
+
+**Situação de jogo:** As marcas da borda identificam a cozinha que forneceu uma caravana dada como desaparecida. Uma cesta recém-assada contradiz a data oficial de sua última passagem.
+
 ## Animais das cozinhas de Alenia
 
 As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integra as receitas; os demais têm empregos alimentares definidos. Não são fichas de combate nem autorização para caçar em qualquer território. Variedades domésticas podem ser criadas em mais de uma região quando há manejo e condições adequadas.
@@ -712,7 +952,7 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 **Ciclo e obtenção:** Predador de emboscada, baixa densidade; pode aparecer acidentalmente em redes. Não possui temporada comercial de alimento autorizada neste guia.
 
-**Aproveitamento:** Referência de folclore culinário e de investigação; não é ingrediente de nenhuma das 32 receitas.
+**Aproveitamento:** Referência de folclore culinário e de investigação; não é ingrediente de nenhuma das 44 receitas.
 
 **Limites:** O guia não fornece método de desintoxicação. Cor da carne, suco cítrico ou ervas não demonstram que um exemplar perigoso pode ser consumido.
 
@@ -1079,6 +1319,78 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** As festas de retorno da pesca reconhecem quem trabalha na costa tanto quanto quem sai no barco.
 
 
+### A23 — Vespa-de-barro dos pomares
+
+![Prancha Zoológica A23 — Vespa-de-barro dos pomares](ilustracoes/fauna_A23.jpg)
+
+**Classificação:** Inseto social de criação alimentar ficcional.
+
+**Onde vive:** Pomares e encostas abrigadas de Corallis; pequenos criadouros próximos a Portocala. Há populações silvestres nas matas de Aurora.
+
+**Aspecto:** Corpo curto castanho e amarelo-ocre, asas discretamente enfumaçadas e ninhos de barro com câmaras estreitas. O nome não permite identificar uma vespa real comestível.
+
+**Ciclo e obtenção:** Colônias aumentam na estação quente. Criadores mantêm parte da população reprodutora e fornecem lotes preparados para cozinha. A alimentação depende de pequenos invertebrados e recursos do pomar; o criadouro consome trabalho e espaço, sem produzir comida do nada.
+
+**Aproveitamento:** Petisco C33. A espécie não substitui a abelha A20 na produção de mel.
+
+**Limites:** Ninhos silvestres e espécies parecidas não são equivalentes ao fornecimento alimentar. Manejo pertence aos criadores; picadas e reações adversas continuam possíveis no cenário. A ficha não descreve coleta de ninhos nem retirada de estruturas venenosas.
+
+**Vida social:** Agricultores valorizam o papel da espécie no pomar, enquanto compradores querem grandes lotes. A retirada excessiva de colônias cria conflitos entre colheita e mercado.
+
+### A24 — Bojo-de-porcelana
+
+![Prancha Zoológica A24 — Bojo-de-porcelana](ilustracoes/fauna_A24.jpg)
+
+**Classificação:** Peixe marinho tóxico ficcional, equivalente cultural ao baiacu; ingrediente de serviço excepcional.
+
+**Onde vive:** Águas costeiras abrigadas de Yõketsu e recifes quentes do Mar dos Corais. Não vive nos rios frios de Kalis.
+
+**Aspecto:** Corpo arredondado, ventre claro, manchas azul-acinzentadas e capacidade de inflar-se diante de ameaça. A pele lembra cerâmica salpicada. É distinto do predador dentado A02.
+
+**Ciclo e obtenção:** Desova sazonal em áreas rasas; captura limitada por pequenas casas que compram somente de fornecedores identificados. Redes comuns também podem recolhê-lo por acidente. A raridade do serviço resulta sobretudo de responsabilidade, especialização e restrição comercial.
+
+**Aproveitamento:** C34, em porções de degustação. A tradição descrita é própria da ficção, sem procedimento transferível para um animal real.
+
+**Limites:** Pode causar intoxicação grave ou morte. O guia não localiza toxinas, não descreve cortes nem ensina neutralização. Um teste culinário comum, um selo ou uma erva não tornam um exemplar seguro. Na campanha, procedência e sabotagem são investigadas antes do serviço; a refeição não exige uma rolagem secreta e arbitrária de morte.
+
+**Vida social:** Casas de serviço mantêm registros e vínculos de aprendizagem. Essa tradição é uma proposta local, não uma lei de toda Alenia. Falsificadores exploram a distância entre quem conhece o selo e quem conhece o cozinheiro.
+
+### A25 — Polvo-de-corda
+
+![Prancha Zoológica A25 — Polvo-de-corda](ilustracoes/fauna_A25.jpg)
+
+**Classificação:** Molusco marinho de pesca artesanal.
+
+**Onde vive:** Fundos rochosos rasos e enseadas de Ravena; populações menores na Ilha das Safiras.
+
+**Aspecto:** Oito braços robustos, pele castanha mosqueada e corpo compacto. O apelido vem de braços enrolados em cabos de armadilhas, não de parentesco com monstros marinhos.
+
+**Ciclo e obtenção:** Ocupa abrigos individuais; pescadores alternam áreas e deixam locais de reprodução sem armadilhas na estação correspondente. Capturas contínuas nos mesmos refúgios empobrecem a enseada.
+
+**Aproveitamento:** C35; carne para panelas e chapas costeiras. O tamanho útil varia e um exemplar pequeno não rende automaticamente quatro refeições.
+
+**Limites:** Alimento perecível, dependente de mercado próximo ou preservação pelo ofício. Não fornece tinta de escriba ou componente mágico por consequência desta ficha.
+
+**Vida social:** Os direitos de instalar armadilhas junto a um rochedo podem pertencer a famílias de pescadores, criando disputas com donos de ancoradouros.
+
+### A26 — Caracol-de-horta de Vergod
+
+![Prancha Zoológica A26 — Caracol-de-horta de Vergod](ilustracoes/fauna_A26.jpg)
+
+**Classificação:** Molusco terrestre de criação alimentar ficcional.
+
+**Onde vive:** Canteiros úmidos cercados das comunidades silvanas de Vergod; pequenos cultivos autorizados em hortas de Aurora.
+
+**Aspecto:** Concha castanha larga com faixas claras, corpo escuro e crescimento regular em criadouros. Cor e forma não bastam para escolher animais silvestres para alimentação.
+
+**Ciclo e obtenção:** Atividade maior em períodos úmidos. Criadores mantêm matrizes e protegem canteiros do sol e de predadores. O consumo de folhas cultivadas liga a produção ao trabalho da horta.
+
+**Aproveitamento:** Carne preparada para C36 e conchas destinadas à apresentação após tratamento de ofício.
+
+**Limites:** Compra de criação conhecida; nenhum protocolo de coleta, purga ou tratamento de caracóis reais é estabelecido. Introduzir a espécie em uma nova horta depende de controle local, pois pode prejudicar cultivos.
+
+**Vida social:** Conchas grandes são objetos de mesa reutilizados. O comércio de conchas pode valer mais que a carne e estimular falsos relatos de animais gigantes.
+
 ## A despensa e o herbário
 
 Os códigos H preservam o significado do Tomo X. A mesma planta pode ter mais de um uso, mas um produto de tinturaria, laboratório ou medicina não vira alimento por compartilhar o nome de um ingrediente culinário.
@@ -1145,6 +1457,14 @@ Pesca e caça usam o Tomo IX: resultados em rações dependem de habitat e equip
 | Ilhas | Pesca e cultivos possíveis em cada ilha | Importação de grão, combustível e qualidade da água de coleta. |
 | Yõketsu | Hortas, arroz irrigado, aves e pescado local | Água dos cultivos e custo de ingredientes vindos de rotas longas. |
 | Norte habitado e expedições | Pescado, provisões de cereal, criação de ilhas e algas alimentares | Gelo, combustível, estado da carga e janela de navegação. |
+
+## Pratos incomuns em jogo
+
+O espanto pertence ao personagem, não a uma escala universal de civilização. Uma vespa pode ser petisco cotidiano; um creme de pera pode ser o luxo mais estranho que um soldado já viu. Cada comunidade tem comedores entusiasmados, indiferentes e avessos a certas texturas.
+
+Não há bônus automático por coragem à mesa. C33 e C34 são degustações; C40 é refeição leve. C37 e C38 aproveitam recursos já contabilizados. Transformar quatro rações em oito tigelas reduz a quantidade de alimento por pessoa. Os demais custos seguem as regras existentes de provisão e descanso.
+
+Para C34, o mestre apresenta sinais investigáveis de irregularidade e permite recusa ou substituição. Havendo sabotagem estabelecida na ficção, emprega as regras existentes de venenos; não cria uma segunda tabela letal só para este prato. O interesse é decidir em quem confiar e descobrir quem falsificou a encomenda.
 
 ## Mesas para cenas de campanha
 
@@ -1225,3 +1545,15 @@ O documento de origem é preservado sem alterações. Os antigos ingredientes qu
 | C30 — Panela de Lystra com carneiro e raízes | Syleth, Lystra e as provisões do norte | A17 | H11 |
 | C31 — Pão de vigia com caldo de alga | Syleth, Lystra e as provisões do norte | Nenhum | H06, H57 |
 | C32 — Mingau da última brasa | Syleth, Lystra e as provisões do norte | A20 | H47 |
+| C33 — Vespas fritas de Portocala | Corallis | A23 | H27 |
+| C34 — Bojo-de-porcelana da mesa selada | Yõketsu | A24 | Nenhum |
+| C35 — Polvo das cordas de Ravena | Ravena | A25 | H55 |
+| C36 — Caracóis recheados de Vergod | Matas silvanas | A26 | Nenhum |
+| C37 — Rancho da segunda chamada | Aurora | A13 | Nenhum |
+| C38 — Discos da retaguarda | Corallis | A04 | H06 |
+| C39 — Ensopado das sete cascas | Dahrma | Nenhum | Nenhum |
+| C40 — Caldo do fundo de saco | Kalis | Nenhum | Nenhum |
+| C41 — Fitas de casca e mel | Corallis | A20 | Nenhum |
+| C42 — Creme de pera de Biemont | Aurora | A13, A16 | Nenhum |
+| C43 — Pudim do pão e das bagas | Kalis | A13, A16 | H47 |
+| C44 — Meias-luas da última caravana | Gaddra | A20 | H38 |

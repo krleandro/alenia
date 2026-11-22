@@ -523,7 +523,7 @@ CULINARIA_JS = r"""
             regEl.classList.toggle('is-hidden', regShown === 0);
         });
 
-        if (countEl) countEl.textContent = `Exibindo ${shown} de 32 pratos`;
+        if (countEl) countEl.textContent = `Exibindo ${shown} de ${root.querySelectorAll('.cul-recipe').length} pratos`;
         if (emptyEl) emptyEl.classList.toggle('visible', shown === 0);
     }
 
@@ -592,6 +592,10 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
         "Ravena e a Ilha das Safiras": ("ilhas", "Ravena & Safiras"),
         "Yõketsu e a costa oriental de Aurora": ("yoketsu", "Yõketsu"),
         "Syleth, Lystra e as provisões do norte": ("norte", "Syleth & Norte"),
+        "Iguarias incomuns dos portos e das matas": ("iguarias", "Iguarias Incomuns"),
+        "Quartéis e panelas de aproveitamento": ("quarteis", "Quartéis & Aproveitamento"),
+        "Doces de casca, pão e festa": ("doces", "Sobremesas"),
+        "Doces de casca pão e festa": ("doces", "Sobremesas"),
     }
 
     for sec in sections:
@@ -613,7 +617,10 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
             appendix_mds.append(sec)
 
     toc_items = []
-    region_pills = ['<button class="cul-pill active" data-region="ALL" type="button">Todas as Regiões (32)</button>']
+    recipe_count = len(re.findall(r"^### C\d{2} ", md_content, re.M))
+    animal_codes = re.findall(r"^### (A\d{2}) ", md_content, re.M)
+    animal_range = f"{animal_codes[0]}–{animal_codes[-1]}" if animal_codes else ""
+    region_pills = [f'<button class="cul-pill active" data-region="ALL" type="button">Todos os pratos ({recipe_count})</button>']
     region_blocks_html = []
 
     for r_idx, (r_title, raw_sec) in enumerate(region_secs, 1):
@@ -714,7 +721,7 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
         <section class="cul-region" id="{r_id}" data-region="{r_slug}">
             <header class="cul-region-header">
                 <div>
-                    <div class="cul-region-kicker">TRADIÇÃO {r_idx} DE 8 • PRANCHA {r_idx}</div>
+                    <div class="cul-region-kicker">{"TRADIÇÃO " + str(r_idx) + " DE 8" if r_idx <= 8 else "CADERNO TEMÁTICO " + str(r_idx - 8)} • PRANCHA {r_idx}</div>
                     <h2 class="cul-region-title">{html.escape(r_title)}</h2>
                 </div>
                 {plate_btn}
@@ -737,7 +744,7 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
     animals_html = ""
     if animals_sec:
         an_id = "animais-das-cozinhas"
-        toc_items.append((2, "Animais das cozinhas de Alenia (A01–A22)", an_id))
+        toc_items.append((2, f"Animais das cozinhas de Alenia ({animal_range})", an_id))
         an_parts = re.split(r"(?=^###\s+A\d{2}\s)", animals_sec, flags=re.M)
         an_intro = "".join(
             f"<p>{inline_md(ln.strip())}</p>"
@@ -778,7 +785,7 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
             )
         animals_html = f"""
         <section class="cul-animals-section" id="{an_id}">
-            <h2>Animais das Cozinhas de Alenia (A01–A22)</h2>
+            <h2>Animais das Cozinhas de Alenia ({animal_range})</h2>
             {an_intro}
             <div class="cul-animal-grid">{"".join(an_cards)}</div>
         </section>
@@ -809,14 +816,14 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
         <div>
             <div class="cul-kicker">ALENIA RPG • {html.escape(bk['num'])} • GUIA CULINÁRIO ILUSTRADO</div>
             <h1 class="cul-title">{html.escape(bk['title'])}</h1>
-            <p class="cul-sub">Pratos, ingredientes e animais das terras e dos mares — 32 receitas em 8 tradições regionais.</p>
+            <p class="cul-sub">Pratos, ingredientes e animais das terras e dos mares — {recipe_count} receitas em 8 tradições regionais e {max(0, len(region_secs) - 8)} cadernos temáticos.</p>
             <blockquote class="cul-epigraph">
                 “Uma mesa de Alenia revela quem controla a água, quais barcos chegaram ao porto, que caminhos a neve fechou e quem conseguiu guardar grão para o inverno.”
             </blockquote>
             <div class="cul-stats">
-                <span class="cul-stat-pill">🍲 32 Pratos Ilustrados (C01–C32)</span>
-                <span class="cul-stat-pill">✦ 8 Tradições Regionais</span>
-                <span class="cul-stat-pill teal">🐟 22 Animais Ilustrados (A01–A22)</span>
+                <span class="cul-stat-pill">🍲 {recipe_count} Pratos Ilustrados (C01–C{recipe_count:02d})</span>
+                <span class="cul-stat-pill">✦ 8 Regiões + {max(0, len(region_secs) - 8)} Cadernos</span>
+                <span class="cul-stat-pill teal">🐟 {len(animal_codes)} Animais Ilustrados ({animal_range})</span>
                 <span class="cul-stat-pill teal">🌿 Integrado ao Herbário (H)</span>
             </div>
         </div>
@@ -826,10 +833,10 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
         <div class="cul-region-pills">{"".join(region_pills)}</div>
         <div class="cul-search-row">
             <input id="cul-search" class="cul-search" type="search" placeholder="Buscar prato, ingrediente, animal (A01), espécie do Herbário (H24) ou região..." aria-label="Buscar receitas"/>
-            <span id="cul-count" class="cul-count">Exibindo 32 de 32 pratos</span>
+            <span id="cul-count" class="cul-count">Exibindo {recipe_count} de {recipe_count} pratos</span>
         </div>
     </div>
-    <div id="cul-empty" class="cul-empty">Nenhum prato encontrado para os filtros atuais. Limpe a busca ou selecione “Todas as Regiões”.</div>
+    <div id="cul-empty" class="cul-empty">Nenhum prato encontrado para os filtros atuais. Limpe a busca ou selecione “Todos os pratos”.</div>
     """
 
     full_body = (

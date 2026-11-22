@@ -1,0 +1,20 @@
+[
+  {
+    "prompt": "Create a landscape 1536x1024 illustrated medieval fantasy cookbook plate for Alenia. Exact 2 by 2 grid of four equal rectangular panels, thin parchment gutters precisely at center, one complete different dish centered per panel. Naturalist watercolor and fine ink, warm parchment, appetizing realistic food, earthenware and dark wood, restrained muted colors. No text, labels, letters, modern objects or magical effects. Food fills each quadrant with edges contained. TOP LEFT: shallow rustic bowl of small crisp golden fried wasps, visibly segmented insect bodies and fine legs, green coastal herb and lemon wedge. TOP RIGHT: refined plate of six small opaque white cooked fish medallions in clear broth with thin green onion, tiny elegant serving, no raw fish. BOTTOM LEFT: charred curled octopus tentacles with olive oil and roasted onion on clay platter. BOTTOM RIGHT: brown barley stuffed snail shells on bed of coarse salt, herbs, rustic clay dish.",
+    "method": "image_gen integrado",
+    "image": "assets/culinaria_prancha_09.png",
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-07e48749-36be-434a-a93a-7d4a1b364679.png"
+  },
+  {
+    "prompt": "Create a landscape 1536x1024 illustrated medieval fantasy cookbook plate for Alenia. Exact 2 by 2 grid of four equal rectangular panels, thin parchment gutters precisely at center, one complete different dish centered per panel. Naturalist watercolor and fine ink, warm parchment, appetizing realistic food, earthenware and dark wood, restrained muted colors. No text, labels, letters, modern objects or magical effects. Food fills each quadrant with edges contained. TOP LEFT: thick soldiers' stew of barley, beans, shredded cooked chicken and bread chunks in dented iron bowl, wooden spoon. TOP RIGHT: dense golden fried leftover grain patties with cooked flaked fish, ragged cracked edges on wooden trench plate. BOTTOM LEFT: humble golden stew of broad curling edible carrot and turnip peels, cabbage outer leaves and beans in chipped earthenware bowl. BOTTOM RIGHT: dark mushroom broth with onion skins absent after straining, pale bread pieces and cooked carrot peel strips, humble clay bowl.",
+    "method": "image_gen integrado",
+    "image": "assets/culinaria_prancha_10.png",
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-670c6f76-0f9e-4cd3-b115-ce0ae3d59dba.png"
+  },
+  {
+    "prompt": "Create a landscape 1536x1024 illustrated medieval fantasy cookbook plate for Alenia. Exact 2 by 2 grid of four equal rectangular panels, thin parchment gutters precisely at center, one complete different dish centered per panel. Naturalist watercolor and fine ink, warm parchment, appetizing realistic food, earthenware and dark wood, restrained muted colors. No text, labels, letters, modern objects or magical effects. Food fills each quadrant with edges contained. TOP LEFT: golden candied citrus peel ribbons and amber honey on small ceramic plate, slightly irregular translucent strips. TOP RIGHT: pale pear custard set in clay cup topped with sliced baked pear and caramel spots. BOTTOM LEFT: sliced rustic dark berry and bread pudding, purple-red swirls and creamy interior on wooden platter. BOTTOM RIGHT: crescent shaped baked pastries filled with seed flour and honey, broken one showing dense golden filling, on desert woven cloth.",
+    "method": "image_gen integrado",
+    "image": "assets/culinaria_prancha_11.png",
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-bd335080-687c-41cb-bd13-ee610bd007bd.png"
+  }
+]
