@@ -12,6 +12,10 @@ import json
 import os
 import re
 import shutil
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from token_studio import TOKEN_STUDIO_CSS, TOKEN_STUDIO_HTML, TOKEN_STUDIO_JS
 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -2616,6 +2620,7 @@ def build_sidebar(active_file: str, toc_items, has_toc: bool) -> str:
 
     home_act = " active" if active_file == "index.html" else ""
     comp_act = " active" if active_file == "Alenia_Compendio_Completo.html" else ""
+    tok_act = " active" if active_file == "gerador_tokens.html" else ""
     lib_html = (
         '<div class="lib-group-label">Início</div>'
         '<ul class="lib-list">'
@@ -2625,6 +2630,10 @@ def build_sidebar(active_file: str, toc_items, has_toc: bool) -> str:
         f'<ul class="lib-list">{"".join(public_items)}</ul>'
         '<div class="lib-group-label">Área Restrita do Mestre</div>'
         f'<ul class="lib-list">{"".join(gm_items)}</ul>'
+        '<div class="lib-group-label">Ferramentas &amp; VTT</div>'
+        '<ul class="lib-list">'
+        f'<li><a class="lib-link{tok_act}" href="gerador_tokens.html"><span class="lib-num">⚔</span><span>Gerador de Tokens</span></a></li>'
+        '</ul>'
         '<div class="lib-group-label">Volume Único</div>'
         '<ul class="lib-list">'
         f'<li><a class="lib-link{comp_act}" href="Alenia_Compendio_Completo.html"><span class="lib-num">★</span><span>Compêndio Completo</span></a></li>'
@@ -4193,6 +4202,15 @@ def main():
         </a>
         """)
     cards.append("""
+        <a class="portal-card" href="gerador_tokens.html" style="border-top-color:#1f5156; background:#ece7da;">
+            <img class="portal-cover" src="assets/mesa_firecast_alenia.jpg" alt="Gerador de Tokens — Alenia RPG &amp; Firecast" loading="lazy"/>
+            <div class="portal-kicker" style="color:#1f5156;">FERRAMENTA VTT • 12 MOLDURAS</div>
+            <div class="portal-title">Gerador de Tokens</div>
+            <p class="portal-desc">Estúdio interativo para criar tokens PNG transparentes (512×512 e 1024×1024): arraste sua imagem, enquadre, escolha entre 12 molduras temáticas e baixe na hora para o Firecast.</p>
+            <div class="portal-cta" style="color:#1f5156;">⚔ Abrir Estúdio de Tokens →</div>
+        </a>
+    """)
+    cards.append("""
         <a class="portal-card" href="Alenia_Compendio_Completo.html" style="border-top-color:#9a7b3b; background:#efe5cf;">
             <img class="portal-cover" src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Capa — Compêndio Completo" loading="lazy"/>
             <div class="portal-kicker">EDIÇÃO INTEGRAL (PDF MESTRE)</div>
@@ -4207,10 +4225,12 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">11 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Empório • Herbário • Linha do Tempo • Firecast v2.4</div>
+        <div class="cover-subtitle">11 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Herbário • Linha do Tempo • Estúdio de Tokens • Firecast v2.5</div>
         <div class="cover-rule"></div>
-        <div style="margin: 8px 0 4px;">
-            <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 18px; border-radius:3px; font-weight:700;">⬇ Baixar Plugin da Ficha Firecast (v2.4)</a>
+        <div style="margin: 8px 0 4px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+            <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⬇ Ficha Firecast (v2.5 .rpk)</a>
+            <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_Token_Studio.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#1f5156; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⬇ Plugin Token Studio (.rpk)</a>
+            <a href="gerador_tokens.html" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#2b231b; color:#e6cc8a; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⚔ Abrir Gerador de Tokens</a>
         </div>
         <figure class="atlas-plate" style="margin:14px 0 0; width:100%;">
             <img src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Mapa-Múndi de Alenia"/>
@@ -4235,6 +4255,21 @@ def main():
     with open(os.path.join(OUT_DIR, "index.html"), "w", encoding="utf-8") as f:
         f.write(idx_html)
     print("[OK] index.html atualizado.")
+
+    tok_html = wrap_html_doc(
+        "Gerador de Tokens",
+        "gerador_tokens.html",
+        TOKEN_STUDIO_HTML,
+        toc_items=None,
+        force_sidebar=False,
+        enable_book_reader=False,
+        extra_css=TOKEN_STUDIO_CSS,
+        extra_js=TOKEN_STUDIO_JS,
+        body_extra_class="token-studio-mode sidebar-hidden",
+    )
+    with open(os.path.join(OUT_DIR, "gerador_tokens.html"), "w", encoding="utf-8") as f:
+        f.write(tok_html)
+    print("[OK] gerador_tokens.html               (ESTUDIO HTML5 CANVAS • 12 MOLDURAS)")
 
 
 if __name__ == "__main__":
