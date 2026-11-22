@@ -355,13 +355,43 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "2.5";
+local PLUGIN_VERSION = "2.6";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
 
 local _formRef = nil;
 local _ultimaCatEmporio = nil;
 local _ultimaCatTalento = nil;
+
+-- Catalogo Oficial de Armaduras, Escudos e Materiais (Livro de Regras Secao 9.6 — Zero RD em armaduras comuns)
+local ARMADURAS_DB = {
+    nenhuma = { nome = "Sem Armadura", def = 0, pen = 0, peso = 0.0, forMin = 0, pesada = false, nota = "Traje comum — sem penalidades." },
+    gibao = { nome = "Gibao Reforcado", def = 1, pen = 0, peso = 4.0, forMin = 0, pesada = false, nota = "12 PP | Discreta para viagem | Zero RD." },
+    peles = { nome = "Peles Reforcadas", def = 1, pen = 0, peso = 4.0, forMin = 0, pesada = false, nota = "Protecao contra frio | Zero RD." },
+    couro = { nome = "Couro Batido", def = 2, pen = 0, peso = 6.0, forMin = 0, pesada = false, nota = "25 PP | Padrao de exploradores | Zero RD." },
+    avental = { nome = "Avental de Couro Pesado", def = 2, pen = 0, peso = 5.0, forMin = 0, pesada = false, nota = "Resiste a fagulhas e cortes de forja | Zero RD." },
+    malha = { nome = "Cota de Malha", def = 3, pen = -2, peso = 12.0, forMin = 0, pesada = true, nota = "75 PP | Boa protecao contra cortes | Zero RD." },
+    brigantina = { nome = "Brigantina / Meia-Placa", def = 4, pen = -3, peso = 16.0, forMin = 0, pesada = true, nota = "180 PP | Favorita de mercenarios veteranos | Zero RD." },
+    placas = { nome = "Placas Completas", def = 5, pen = -5, peso = 24.0, forMin = 13, pesada = true, nota = "450 PP | Exige FOR 13+ | Zero RD." },
+    custom = { nome = "Armadura Personalizada", def = 0, pen = 0, peso = 0.0, forMin = 0, pesada = false, nota = "Personalizada — edite Def, Penalidade e Peso." }
+};
+
+local ESCUDOS_DB = {
+    nenhum = { nome = "Sem Escudo", def = 0, pen = 0, peso = 0.0, protBonus = 0, nota = "Maos livres." },
+    broquel = { nome = "Broquel", def = 1, pen = 0, peso = 1.5, protBonus = 0, nota = "10 PP | Leve e agil." },
+    medio = { nome = "Escudo Medio", def = 2, pen = -1, peso = 3.5, protBonus = 0, nota = "20 PP | Protecao equilibrada." },
+    torre = { nome = "Escudo Torre", def = 3, pen = -3, peso = 8.0, protBonus = 2, nota = "45 PP | +2 extra em Proteger Aliado." },
+    custom = { nome = "Escudo Personalizado", def = 0, pen = 0, peso = 0.0, protBonus = 0, nota = "Personalizado — edite Def, Penalidade e Peso." }
+};
+
+local MATERIAIS_ARM_DB = {
+    comum = { nome = "Comum (Zero RD)", rd = 0, redPen = 0 },
+    obraprima = { nome = "Ajustada / Obra-Prima (Pen -1 | Zero RD)", rd = 0, redPen = 1 },
+    adamante2 = { nome = "Adamante Puro — Parcial (RD 2)", rd = 2, redPen = 0 },
+    adamante3 = { nome = "Adamante Puro — Peitoral (RD 3)", rd = 3, redPen = 0 },
+    adamante4 = { nome = "Adamante Puro — Completo (RD 4)", rd = 4, redPen = 0 },
+    adamante5 = { nome = "Adamante / Reliquia Lendaria (RD 5)", rd = 5, redPen = 0 }
+};
 
 -- Catalogo Oficial de Doencas de Alenia (7 campos + automacao de estagios e Exaustao)
 local DOENCAS_CATALOGO = {
@@ -531,6 +561,8 @@ local atualizarPaginaInventario;
 local recalcularPesoInventario;
 local adicionarOuEmpilharNoInventario;
 local atualizarPaginaTalentos;
+local parsePesoNum;
+local fmtPesoNum;
 
 local function num(v, def)
     local n = tonumber(v);
@@ -688,6 +720,215 @@ local function rolarD20(titulo, modTotal, detalheExtra, cdFixa)
     else
         executarRolagemD20(titulo, modTotal, detalheExtra, num(sheet.cdTeste, 0));
     end;
+end;
+
+local function getEstadoArmaduraEscudo()
+    if sheet == nil then
+        return { armDef = 0, escDef = 0, penArm = 0, penEsc = 0, penTotal = 0, pesoArm = 0, pesoEsc = 0, pesada = false, faltaFor = false, temTorre = false, armVestida = false, escEmpunhado = false };
+    end;
+    local armTipo = tostring(sheet.armaduraTipo or "nenhuma");
+    local escTipo = tostring(sheet.escudoTipo or "nenhum");
+    local matId = tostring(sheet.armaduraMaterial or "comum");
+    local mat = MATERIAIS_ARM_DB[matId] or MATERIAIS_ARM_DB.comum;
+    local armDb = ARMADURAS_DB[armTipo] or ARMADURAS_DB.nenhuma;
+
+    local armVestida = (sheet.armaduraEquipada ~= false);
+    local escEmpunhado = (sheet.escudoEquipado ~= false);
+
+    local rawArmDef = num(sheet.armaduraDef, 0);
+    local rawEscDef = num(sheet.escudoDef, 0);
+    local rawArmPen = num(sheet.armaduraPen, 0);
+    local rawEscPen = num(sheet.escudoPen, 0);
+    if rawArmPen > 0 then rawArmPen = -rawArmPen; end;
+    if rawEscPen > 0 then rawEscPen = -rawEscPen; end;
+
+    local penArmEf = 0;
+    local armDefEf = 0;
+    local pesoArmEf = 0;
+    local pesadaAtiva = false;
+    local faltaFor13 = false;
+    if armVestida and (armTipo ~= "nenhuma" or rawArmDef > 0) then
+        armDefEf = rawArmDef;
+        penArmEf = rawArmPen;
+        if (mat.redPen or 0) > 0 and penArmEf < 0 then
+            penArmEf = math.min(0, penArmEf + mat.redPen);
+        end;
+        pesoArmEf = parsePesoNum(sheet.armaduraPeso);
+        pesadaAtiva = (armDb.pesada == true) or (rawArmDef >= 3);
+        if (armTipo == "placas" or (armDb.forMin or 0) >= 13) and num(sheet.forca, 10) < 13 then
+            faltaFor13 = true;
+        end;
+    end;
+
+    local penEscEf = 0;
+    local escDefEf = 0;
+    local pesoEscEf = 0;
+    local temTorre = false;
+    if escEmpunhado and (escTipo ~= "nenhum" or rawEscDef > 0) then
+        escDefEf = rawEscDef;
+        penEscEf = rawEscPen;
+        pesoEscEf = parsePesoNum(sheet.escudoPeso);
+        temTorre = (escTipo == "torre");
+    end;
+
+    return {
+        armDef = armDefEf,
+        escDef = escDefEf,
+        penArm = penArmEf,
+        penEsc = penEscEf,
+        penTotal = penArmEf + penEscEf,
+        pesoArm = pesoArmEf,
+        pesoEsc = pesoEscEf,
+        pesada = pesadaAtiva,
+        faltaFor = faltaFor13,
+        temTorre = temTorre,
+        armVestida = armVestida,
+        escEmpunhado = escEmpunhado
+    };
+end;
+
+local function aoMudarArmaduraCatalogo()
+    if sheet == nil or sheet._updatingArmor then return; end;
+    sheet._updatingArmor = true;
+    local tipo = tostring(sheet.armaduraTipo or "nenhuma");
+    local matId = tostring(sheet.armaduraMaterial or "comum");
+    local db = ARMADURAS_DB[tipo];
+    local mat = MATERIAIS_ARM_DB[matId] or MATERIAIS_ARM_DB.comum;
+
+    if db ~= nil and tipo ~= "custom" then
+        sheet.armaduraNome = db.nome;
+        sheet.armaduraDef = tostring(db.def);
+        sheet.armaduraPen = tostring(db.pen);
+        sheet.armaduraPeso = fmtPesoNum(db.peso);
+        sheet.armaduraEquipada = (tipo ~= "nenhuma");
+    end;
+    if tipo == "nenhuma" then
+        sheet.rdEspecial = "0";
+    else
+        sheet.rdEspecial = tostring(mat.rd or 0);
+    end;
+    sheet._updatingArmor = false;
+    recalcularFicha();
+end;
+
+local function aoMudarEscudoCatalogo()
+    if sheet == nil or sheet._updatingArmor then return; end;
+    sheet._updatingArmor = true;
+    local tipo = tostring(sheet.escudoTipo or "nenhum");
+    local db = ESCUDOS_DB[tipo];
+    if db ~= nil and tipo ~= "custom" then
+        sheet.escudoNome = db.nome;
+        sheet.escudoDef = tostring(db.def);
+        sheet.escudoPen = tostring(db.pen);
+        sheet.escudoPeso = fmtPesoNum(db.peso);
+        sheet.escudoEquipado = (tipo ~= "nenhum");
+    end;
+    sheet._updatingArmor = false;
+    recalcularFicha();
+end;
+
+local function alternarTrajeCombate()
+    if sheet == nil then return; end;
+    local nomeChar = sheet.nome or "Explorador";
+    local armTipo = tostring(sheet.armaduraTipo or "nenhuma");
+    local escTipo = tostring(sheet.escudoTipo or "nenhum");
+    local temArm = (armTipo ~= "nenhuma") or (num(sheet.armaduraDef, 0) > 0);
+    local temEsc = (escTipo ~= "nenhum") or (num(sheet.escudoDef, 0) > 0);
+    if not temArm and not temEsc then
+        showMessage("Selecione primeiro uma Armadura ou um Escudo no catalogo antes de vestir/retirar.");
+        return;
+    end;
+    local vestindoAgora = not (sheet.armaduraEquipada == true or sheet.escudoEquipado == true);
+    if temArm then sheet.armaduraEquipada = vestindoAgora; end;
+    if temEsc then sheet.escudoEquipado = vestindoAgora; end;
+    recalcularFicha();
+    if vestindoAgora then
+        enviarChatOuMsg("[PROTECAO — " .. nomeChar .. "] Vestiu seu traje de combate (" .. tostring(sheet.armaduraNome or "Sem Armadura") .. " / " .. tostring(sheet.escudoNome or "Sem Escudo") .. ") | Def Aparar: " .. tostring(sheet.defAparar or "10") .. " | Def Esquiva: " .. tostring(sheet.defEsquiva or "10"));
+    else
+        enviarChatOuMsg("[PROTECAO — " .. nomeChar .. "] Retirou armadura e escudo (traje civil/descanso) | Def Aparar: " .. tostring(sheet.defAparar or "10") .. " | Def Esquiva: " .. tostring(sheet.defEsquiva or "10") .. " | Penalidades removidas.");
+    end;
+end;
+
+local function anunciarArmaduraNoChat()
+    if sheet == nil then return; end;
+    local nomeChar = sheet.nome or "Explorador";
+    local st = getEstadoArmaduraEscudo();
+    local mat = MATERIAIS_ARM_DB[tostring(sheet.armaduraMaterial or "comum")] or MATERIAIS_ARM_DB.comum;
+    local armLbl = st.armVestida and (tostring(sheet.armaduraNome or "Armadura") .. " (+" .. tostring(st.armDef) .. " Def, " .. mat.nome .. ")") or "Nenhuma / Retirada";
+    local escLbl = st.escEmpunhado and (tostring(sheet.escudoNome or "Escudo") .. " (+" .. tostring(st.escDef) .. " Def)") or "Nenhum / Guardado";
+    local rd = math.max(0, math.floor(num(sheet.rdEspecial, 0)));
+    local extraTorre = st.temTorre and " | Escudo Torre: +2 Proteger Aliado" or "";
+    enviarChatOuMsg(
+        "[ARMADURA & DEFESA — " .. nomeChar .. "]\n" ..
+        "• Armadura: " .. armLbl .. " | Escudo: " .. escLbl .. "\n" ..
+        "• Defesas: Aparar " .. tostring(sheet.defAparar or "10") .. " | Esquiva " .. tostring(sheet.defEsquiva or "10") .. " | Desprevenido " .. tostring(sheet.defDesprevenido or "10") .. " | vs Acido " .. tostring(sheet.defVsAcido or "10") .. "\n" ..
+        "• RD Especial: " .. tostring(rd) .. " | Penalidade Furt./Acrob.: " .. tostring(st.penTotal) .. extraTorre
+    );
+end;
+
+local function detectarIdProtecao(nomeItem)
+    local low = tostring(nomeItem or ""):lower();
+    if low:find("torre") then return "escudo", "torre";
+    elseif low:find("broquel") then return "escudo", "broquel";
+    elseif low:find("escudo") then return "escudo", "medio";
+    elseif low:find("placa") and not low:find("meia") then return "armadura", "placas";
+    elseif low:find("brigantina") or low:find("meia") then return "armadura", "brigantina";
+    elseif low:find("malha") then return "armadura", "malha";
+    elseif low:find("avental") then return "armadura", "avental";
+    elseif low:find("couro") then return "armadura", "couro";
+    elseif low:find("pele") then return "armadura", "peles";
+    elseif low:find("gibao") then return "armadura", "gibao";
+    end;
+    return nil, nil;
+end;
+
+local function equiparProtecaoDoNome(nomeItem, silencioso)
+    if sheet == nil then return false; end;
+    local cat, id = detectarIdProtecao(nomeItem);
+    if cat == "armadura" and ARMADURAS_DB[id] ~= nil then
+        local db = ARMADURAS_DB[id];
+        sheet._updatingArmor = true;
+        sheet.armaduraTipo = id;
+        sheet.armaduraNome = (tostring(nomeItem or "") ~= "" and tostring(nomeItem)) or db.nome;
+        sheet.armaduraDef = tostring(db.def);
+        sheet.armaduraPen = tostring(db.pen);
+        sheet.armaduraPeso = fmtPesoNum(db.peso);
+        sheet.armaduraEquipada = true;
+        sheet._updatingArmor = false;
+        if not silencioso then
+            recalcularFicha();
+            enviarChatOuMsg("[" .. (sheet.nome or "Explorador") .. "] Equipou Armadura: " .. tostring(sheet.armaduraNome) .. " (Def +" .. tostring(db.def) .. " | Pen " .. tostring(db.pen) .. " | " .. fmtPesoNum(db.peso) .. " kg)");
+        end;
+        return true;
+    elseif cat == "escudo" and ESCUDOS_DB[id] ~= nil then
+        local db = ESCUDOS_DB[id];
+        sheet._updatingArmor = true;
+        sheet.escudoTipo = id;
+        sheet.escudoNome = (tostring(nomeItem or "") ~= "" and tostring(nomeItem)) or db.nome;
+        sheet.escudoDef = tostring(db.def);
+        sheet.escudoPen = tostring(db.pen);
+        sheet.escudoPeso = fmtPesoNum(db.peso);
+        sheet.escudoEquipado = true;
+        sheet._updatingArmor = false;
+        if not silencioso then
+            recalcularFicha();
+            enviarChatOuMsg("[" .. (sheet.nome or "Explorador") .. "] Empunhou Escudo: " .. tostring(sheet.escudoNome) .. " (Def +" .. tostring(db.def) .. " | Pen " .. tostring(db.pen) .. " | " .. fmtPesoNum(db.peso) .. " kg)");
+        end;
+        return true;
+    end;
+    return false;
+end;
+
+local function temCinzaPeleGrave()
+    if sheet == nil then return false; end;
+    for idx = 1, 3 do
+        local did = tostring(sheet["doenca" .. idx .. "_id"] or "");
+        local est = math.floor(num(sheet["doenca" .. idx .. "_est"], 0));
+        if did == "cinza_pele" and est >= 2 then
+            return true;
+        end;
+    end;
+    return false;
 end;
 
 local function temFebreCisternasGrave()
@@ -1040,6 +1281,8 @@ recalcularFicha = function()
     local kitGratis = {};
     for i = 1, #kit.pericias do kitGratis[kit.pericias[i]] = true; end;
 
+    local armSt = getEstadoArmaduraEscudo();
+
     local ajustadas = {};
     local acimaTeto = {};
     local acimaBonusExt = {};
@@ -1062,7 +1305,8 @@ recalcularFicha = function()
         if outros > 6 then
             table.insert(acimaBonusExt, sk.nome .. " (+" .. tostring(outros) .. ")");
         end;
-        local tot = getMod(sk.attr) + gEf + outros + penExPer;
+        local penArmSk = (sk.field == "per_furtividade" or sk.field == "per_acrobacia") and armSt.penTotal or 0;
+        local tot = getMod(sk.attr) + gEf + outros + penExPer + penArmSk;
         sheet[sk.field .. "_total"] = fmtMod(tot);
         sheet[sk.field .. "_rank"] = nomeGrau(gRaw, nivel);
         local c = custoGrau(gEf);
@@ -1114,8 +1358,8 @@ recalcularFicha = function()
         atualizarPaginaTalentos();
     end;
 
-    local armDef = num(sheet.armaduraDef, 0);
-    local escDef = num(sheet.escudoDef, 0);
+    local armDef = armSt.armDef;
+    local escDef = armSt.escDef;
     local defOutros = num(sheet.defesaOutros, 0) + penExComb + penDoencaDef;
     local trAparar = grauEfetivo(sheet.per_aparar_grau, nivel) + num(sheet.per_aparar_outros, 0);
     local trEsquiva = grauEfetivo(sheet.per_esquiva_grau, nivel) + num(sheet.per_esquiva_outros, 0);
@@ -1123,6 +1367,28 @@ recalcularFicha = function()
     sheet.defAparar = tostring(10 + mDes + armDef + escDef + trAparar + defOutros);
     sheet.defEsquiva = tostring(10 + mDes + armDef + escDef + trEsquiva + defOutros);
     sheet.defDesprevenido = tostring(10 + armDef + escDef + defOutros);
+    local rdEspNum = math.max(0, math.floor(num(sheet.rdEspecial, 0)));
+    local defAcido = (rdEspNum > 0) and (10 + mDes + armDef + escDef + trEsquiva + defOutros) or (10 + mDes + escDef + trEsquiva + defOutros);
+    sheet.defVsAcido = tostring(defAcido);
+
+    local alertasArm = {};
+    if armSt.faltaFor then
+        table.insert(alertasArm, "ALERTA FOR 13+: Placas Completas exige FOR 13+ (atual: " .. tostring(math.floor(num(sheet.forca, 10))) .. ")!");
+    end;
+    if armSt.pesada and temCinzaPeleGrave() then
+        table.insert(alertasArm, "BLOQUEIO CINZA DA PELE: estagio Incapacitante/Critico impede armadura pesada!");
+    end;
+    if armSt.penTotal < 0 then
+        table.insert(alertasArm, "Penalidade Furt./Acrob.: " .. tostring(armSt.penTotal) .. " (aplicada auto)");
+    else
+        table.insert(alertasArm, "Penalidade Furt./Acrob.: 0");
+    end;
+    if armSt.temTorre then
+        table.insert(alertasArm, "Escudo Torre: +2 Proteger Aliado");
+    end;
+    table.insert(alertasArm, "vs Acido: Def " .. tostring(defAcido));
+    table.insert(alertasArm, "Peso equip.: " .. fmtPesoNum(armSt.pesoArm + armSt.pesoEsc) .. " kg");
+    sheet.avisoArmadura = table.concat(alertasArm, "  |  ");
 
     local trPerc = grauEfetivo(sheet.per_percepcao_grau, nivel);
     sheet.iniciativaTotal = fmtMod(mDes + math.floor(trPerc / 3) + num(sheet.iniciativaOutros, 0));
@@ -1226,12 +1492,46 @@ local function aplicarKitSelecionado()
             sheet.moedasPrata = tostring(kit.pp);
             sheet.moedasCobre = "0";
         end;
-        -- Armadura & Escudo iniciais na Aba Combate
-        if kit.armDef ~= nil then
-            sheet.armaduraDef = tostring(kit.armDef);
+        -- Armadura & Escudo iniciais na Aba Combate (catalogo automatizado)
+        sheet._updatingArmor = true;
+        sheet.armaduraTipo = "nenhuma";
+        sheet.armaduraMaterial = "comum";
+        sheet.armaduraNome = "Sem Armadura";
+        sheet.armaduraDef = "0";
+        sheet.armaduraPen = "0";
+        sheet.armaduraPeso = "0";
+        sheet.armaduraEquipada = false;
+        sheet.rdEspecial = "0";
+        sheet.escudoTipo = "nenhum";
+        sheet.escudoNome = "Sem Escudo";
+        sheet.escudoDef = "0";
+        sheet.escudoPen = "0";
+        sheet.escudoPeso = "0";
+        sheet.escudoEquipado = false;
+        sheet._updatingArmor = false;
+        local equipouArm = false;
+        local equipouEsc = false;
+        if kit.itens ~= nil then
+            for j = 1, #kit.itens do
+                local it = kit.itens[j];
+                if it.tipo == "armadura" then
+                    local catP, _ = detectarIdProtecao(it.nome);
+                    if equiparProtecaoDoNome(it.nome, true) then
+                        if catP == "armadura" then equipouArm = true; end;
+                        if catP == "escudo" then equipouEsc = true; end;
+                    end;
+                end;
+            end;
         end;
-        if kit.escDef ~= nil then
+        if (not equipouArm) and kit.armDef ~= nil and kit.armDef > 0 then
+            sheet.armaduraTipo = "custom";
+            sheet.armaduraDef = tostring(kit.armDef);
+            sheet.armaduraEquipada = true;
+        end;
+        if (not equipouEsc) and kit.escDef ~= nil and kit.escDef > 0 then
+            sheet.escudoTipo = "custom";
             sheet.escudoDef = tostring(kit.escDef);
+            sheet.escudoEquipado = true;
         end;
         -- Arma 1 e Arma 2 iniciais na Aba Combate
         local function gravarArma(slotNum, aObj)
@@ -1358,10 +1658,13 @@ local function rolarPericia(fieldId, nomePer, attrField)
     local g = grauEfetivo(sheet[fieldId .. "_grau"], sheet.nivel);
     local exNiv = math.max(0, math.min(5, math.floor(num(sheet.exaustaoNivel, 0))));
     local penEx = (exNiv >= 1) and -2 or 0;
-    local tot = getMod(attrField) + g + num(sheet[fieldId .. "_outros"], 0) + penEx;
+    local armSt = getEstadoArmaduraEscudo();
+    local penArm = (fieldId == "per_furtividade" or fieldId == "per_acrobacia") and armSt.penTotal or 0;
+    local tot = getMod(attrField) + g + num(sheet[fieldId .. "_outros"], 0) + penEx + penArm;
     local rk = nomeGrau(g, sheet.nivel);
     local notaEx = (penEx < 0) and (" [Exaustao Niv." .. tostring(exNiv) .. ": -2]") or "";
-    rolarD20("Pericia: " .. nomePer .. " (+" .. tostring(g) .. " — " .. rk .. ")" .. notaEx, tot, "");
+    local notaArm = (penArm < 0) and (" [Armadura/Escudo: " .. tostring(penArm) .. "]") or "";
+    rolarD20("Pericia: " .. nomePer .. " (+" .. tostring(g) .. " — " .. rk .. ")" .. notaEx .. notaArm, tot, "");
 end;
 
 local function maxAcoesPorGrau(grau)
@@ -1511,10 +1814,14 @@ local function acaoDefensiva(modo)
     if maxTreino >= 12 then bonus = 8;
     elseif maxTreino >= 8 then bonus = 6; end;
 
+    local armSt = getEstadoArmaduraEscudo();
     if modo == "propria" then
         enviarChatOuMsg("[ACAO DEFENSIVA — " .. nomeChar .. "] Sacrifica seu ataque para DEFESA TOTAL: recebe +" .. tostring(bonus) .. " na Defesa ate o proximo turno e impoe -2 nos ataques corpo a corpo contra si!");
     else
-        enviarChatOuMsg("[PROTEGER ALIADO — " .. nomeChar .. "] Sacrifica seu ataque para defender um aliado adjacente: atacantes sofrem -" .. tostring(bonus) .. " no ataque contra o aliado (e " .. nomeChar .. " pode interceptar o golpe)!");
+        local bonusTorre = armSt.temTorre and 2 or 0;
+        local bonusTot = bonus + bonusTorre;
+        local notaTorre = (bonusTorre > 0) and " (inclui +2 do Escudo Torre!)" or "";
+        enviarChatOuMsg("[PROTEGER ALIADO — " .. nomeChar .. "] Sacrifica seu ataque para defender um aliado adjacente: atacantes sofrem -" .. tostring(bonusTot) .. " no ataque contra o aliado" .. notaTorre .. " (e " .. nomeChar .. " pode interceptar o golpe)!");
     end;
 end;
 
@@ -1919,14 +2226,14 @@ local function formatarPrecoPc(pc)
     end;
 end;
 
-local function parsePesoNum(val)
+parsePesoNum = function(val)
     local raw = tostring(val or "0"):gsub(",", ".");
     local n = tonumber(raw:match("%-?%d+%.?%d*"));
     if n == nil or n < 0 then return 0; end;
     return n;
 end;
 
-local function fmtPesoNum(v)
+fmtPesoNum = function(v)
     local n = tonumber(v) or 0;
     if n <= 0 then return "0"; end;
     if n < 0.1 then
@@ -1956,6 +2263,7 @@ recalcularPesoInventario = function(atualizarCarga)
     if sheet == nil then return 0, 0; end;
     local totalKg = 0;
     local ocupados = 0;
+    local temArmNoInv = false;
     if sheet.invSlots ~= nil then
         local filhos = NDB.getChildNodes(sheet.invSlots);
         for i = 1, #filhos do
@@ -1963,18 +2271,23 @@ recalcularPesoInventario = function(atualizarCarga)
             local nm = tostring(nd.nome or ""):gsub("^%s+", ""):gsub("%s+$", "");
             if nm ~= "" then
                 ocupados = ocupados + 1;
+                if tostring(nd.tipo or "") == "armadura" then temArmNoInv = true; end;
                 local q = math.max(0, math.floor(num(nd.qtd, 0)));
                 local p = parsePesoNum(nd.peso);
                 totalKg = totalKg + (q * p);
             end;
         end;
     end;
-    sheet.invPesoTotal = string.format("%.1f kg (%d itens)", totalKg, ocupados);
-    if (atualizarCarga == true) or (ocupados > 0) then
-        local fmt = string.format("%.1f", totalKg):gsub("%.0$", "");
+    local armSt = getEstadoArmaduraEscudo();
+    local pesoProtExtra = (not temArmNoInv) and (armSt.pesoArm + armSt.pesoEsc) or 0;
+    local totalFinal = totalKg + pesoProtExtra;
+    local sufixoArm = (pesoProtExtra > 0) and (" [+" .. fmtPesoNum(pesoProtExtra) .. " kg arm.]") or "";
+    sheet.invPesoTotal = string.format("%.1f kg (%d itens)%s", totalFinal, ocupados, sufixoArm);
+    if (atualizarCarga == true) or (ocupados > 0) or (pesoProtExtra > 0) then
+        local fmt = string.format("%.1f", totalFinal):gsub("%.0$", "");
         sheet.cargaAtual = fmt;
     end;
-    return totalKg, ocupados;
+    return totalFinal, ocupados;
 end;
 
 atualizarPaginaInventario = function()
@@ -2160,8 +2473,12 @@ local function usarSlotInventario(slotIdx)
                 showMessage("Kit de Calafetagem (offline): Reparou " .. tostring(math.random(1, 6) + math.random(1, 6)) .. " pontos de casco.");
             end;
         end;
+    elseif tipo == "armadura" then
+        if not equiparProtecaoDoNome(nome, false) then
+            enviarChatOuMsg("[" .. nomeChar .. "] Equipou protecao personalizada: " .. nome .. det);
+        end;
     else
-        local tipoLbl = (tipo == "arma" and "arma") or (tipo == "armadura" and "armadura/escudo") or "equipamento";
+        local tipoLbl = (tipo == "arma" and "arma") or "equipamento";
         enviarChatOuMsg("[" .. nomeChar .. "] Utilizou " .. tipoLbl .. ": " .. nome .. " (x" .. tostring(math.max(1, qtd)) .. ")" .. det);
     end;
 end;
@@ -2842,7 +3159,7 @@ end;
     <rectangle align="client" color="#121419">
         <!-- CABECALHO FIXO AMPLIADO + BARRA RAPIDA DE CD & DESCANSO -->
         <rectangle align="top" height="148" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" margins="{left=6, right=6, top=6, bottom=4}" xradius="6" yradius="6">
-            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.5" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
+            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.6" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
             <label left="278" top="6" width="170" height="24" field="patamarTexto" fontColor="#E5736E" fontSize="14" fontStyle="bold"/>
             <label left="452" top="6" width="320" height="24" field="kitNomeAtual" fontColor="#A6AEBF" fontSize="14"/>
             <label left="780" top="6" width="250" height="24" text="Golpe Devastador (&gt;2/3 PV):" fontColor="#E5736E" fontSize="13" horzTextAlign="trailing"/>
@@ -3134,7 +3451,7 @@ end;
             <!-- ABA 2: COMBATE & FERIMENTOS -->
             <tab title="Combate &amp; Ferimentos">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="1210">
+                    <layout left="0" top="0" width="1056" height="1438">
                         <rectangle left="6" top="6" width="1036" height="204" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="1012" height="24" text="DEFESA SITUACIONAL (10 + DES + Armadura + Escudo + Pericia | Armaduras comuns JAMAIS dao RD)" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
 
@@ -3182,7 +3499,71 @@ end;
                             </button>
                         </rectangle>
 
-                        <rectangle left="6" top="218" width="1036" height="320" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                        <!-- PAINEL AUTOMATIZADO DE ARMADURAS, ESCUDOS & PROTECAO (v2.6) -->
+                        <rectangle left="6" top="218" width="1036" height="218" color="#1B1E26" strokeColor="#9A7E42" strokeSize="2" xradius="6" yradius="6">
+                            <label left="12" top="8" width="600" height="24" text="ARMADURAS, ESCUDOS &amp; PROTECAO (AUTOMATIZADO — PENALIDADE AUTO EM FURT./ACROB.)" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                            <button left="632" top="6" width="186" height="28" text="Vestir / Tirar Tudo" fontSize="12">
+                                <event name="onClick"><![CDATA[alternarTrajeCombate();]]></event>
+                            </button>
+                            <button left="826" top="6" width="198" height="28" text="Anunciar Protecao no Chat" fontSize="12">
+                                <event name="onClick"><![CDATA[anunciarArmaduraNoChat();]]></event>
+                            </button>
+
+                            <!-- Linha 1: Armadura Corporal -->
+                            <checkBox left="12" top="44" width="84" height="32" field="armaduraEquipada" text="Vestida" fontColor="#7FC48C" fontSize="12" fontStyle="bold"/>
+                            <label left="100" top="36" width="250" height="14" text="ARMADURA (CATALOGO OFICIAL)" fontColor="#A6AEBF" fontSize="10" fontStyle="bold"/>
+                            <comboBox left="100" top="51" width="256" height="32" field="armaduraTipo" fontSize="12"
+                                      items="{'Sem Armadura (Def +0 | Pen 0 | 0 kg)', 'Gibao Reforcado (Def +1 | Pen 0 | 4 kg)', 'Peles Reforcadas (Def +1 | Pen 0 | 4 kg)', 'Couro Batido (Def +2 | Pen 0 | 6 kg)', 'Avental Couro Pesado (Def +2 | Pen 0 | 5 kg)', 'Cota de Malha (Def +3 | Pen -2 | 12 kg)', 'Brigantina / Meia-Placa (Def +4 | Pen -3 | 16 kg)', 'Placas Completas (Def +5 | Pen -5 | FOR 13+)', 'Personalizada / Reliquia (Editar valores)'}"
+                                      values="{'nenhuma', 'gibao', 'peles', 'couro', 'avental', 'malha', 'brigantina', 'placas', 'custom'}"/>
+
+                            <label left="364" top="36" width="236" height="14" text="MATERIAL / QUALIDADE (RD ESPECIAL)" fontColor="#A6AEBF" fontSize="10" fontStyle="bold"/>
+                            <comboBox left="364" top="51" width="242" height="32" field="armaduraMaterial" fontSize="12"
+                                      items="{'Comum (Zero RD)', 'Ajustada / Obra-Prima (Pen -1 | Zero RD)', 'Adamante Parcial (RD Especial 2)', 'Adamante Peitoral (RD Especial 3)', 'Adamante Completo (RD Especial 4)', 'Adamante / Reliquia Lendaria (RD 5)'}"
+                                      values="{'comum', 'obraprima', 'adamante2', 'adamante3', 'adamante4', 'adamante5'}"/>
+
+                            <label left="614" top="36" width="196" height="14" text="NOME DA PECA" fontColor="#A6AEBF" fontSize="10" fontStyle="bold"/>
+                            <edit left="614" top="51" width="200" height="32" field="armaduraNome" fontSize="12"/>
+
+                            <label left="822" top="36" width="58" height="14" text="PENAL." fontColor="#E5736E" fontSize="10" fontStyle="bold" horzTextAlign="center"/>
+                            <edit left="822" top="51" width="58" height="32" field="armaduraPen" type="number" horzTextAlign="center" fontColor="#E5736E" fontSize="14" fontStyle="bold"/>
+
+                            <label left="888" top="36" width="60" height="14" text="PESO kg" fontColor="#A6AEBF" fontSize="10" fontStyle="bold" horzTextAlign="center"/>
+                            <edit left="888" top="51" width="60" height="32" field="armaduraPeso" horzTextAlign="center" fontSize="13"/>
+
+                            <label left="956" top="36" width="66" height="14" text="vs ACIDO" fontColor="#D9B96A" fontSize="10" fontStyle="bold" horzTextAlign="center"/>
+                            <rectangle left="956" top="51" width="66" height="32" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                                <label align="client" field="defVsAcido" fontColor="#D9B96A" fontSize="15" fontStyle="bold" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+
+                            <!-- Linha 2: Escudo -->
+                            <checkBox left="12" top="106" width="88" height="32" field="escudoEquipado" text="Empunh." fontColor="#7FC48C" fontSize="12" fontStyle="bold"/>
+                            <label left="100" top="96" width="256" height="14" text="ESCUDO (CATALOGO OFICIAL)" fontColor="#A6AEBF" fontSize="10" fontStyle="bold"/>
+                            <comboBox left="100" top="111" width="256" height="32" field="escudoTipo" fontSize="12"
+                                      items="{'Sem Escudo (Def +0 | Pen 0 | 0 kg)', 'Broquel (Def +1 | Pen 0 | 1.5 kg | 10 PP)', 'Escudo Medio (Def +2 | Pen -1 | 3.5 kg | 20 PP)', 'Escudo Torre (Def +3 | Pen -3 | +2 Prot. Aliado)', 'Personalizado / Reliquia'}"
+                                      values="{'nenhum', 'broquel', 'medio', 'torre', 'custom'}"/>
+
+                            <label left="364" top="96" width="446" height="14" text="NOME / BRASAO DO ESCUDO" fontColor="#A6AEBF" fontSize="10" fontStyle="bold"/>
+                            <edit left="364" top="111" width="450" height="32" field="escudoNome" fontSize="12"/>
+
+                            <label left="822" top="96" width="58" height="14" text="PENAL." fontColor="#E5736E" fontSize="10" fontStyle="bold" horzTextAlign="center"/>
+                            <edit left="822" top="111" width="58" height="32" field="escudoPen" type="number" horzTextAlign="center" fontColor="#E5736E" fontSize="14" fontStyle="bold"/>
+
+                            <label left="888" top="96" width="60" height="14" text="PESO kg" fontColor="#A6AEBF" fontSize="10" fontStyle="bold" horzTextAlign="center"/>
+                            <edit left="888" top="111" width="60" height="32" field="escudoPeso" horzTextAlign="center" fontSize="13"/>
+
+                            <label left="956" top="96" width="66" height="14" text="DICA" fontColor="#A6AEBF" fontSize="10" fontStyle="bold" horzTextAlign="center"/>
+                            <rectangle left="956" top="111" width="66" height="32" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="3" yradius="3">
+                                <label align="client" text="Zero RD" fontColor="#A6AEBF" fontSize="11" horzTextAlign="center" vertTextAlign="center"/>
+                            </rectangle>
+
+                            <!-- Linha 3: Barra de Diagnostico & Alertas de Regras -->
+                            <rectangle left="12" top="154" width="1012" height="52" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                                <label left="10" top="4" width="992" height="22" field="avisoArmadura" fontColor="#D9B96A" fontSize="12" fontStyle="bold" vertTextAlign="center"/>
+                                <label left="10" top="26" width="992" height="20" text="Automacao ativa: penalidades somam-se em Furtividade/Acrobacia (ficha e chat); Escudo Torre soma +2 em Proteger Aliado; clique [Usar] em armaduras nos Slots para equipar!" fontColor="#A6AEBF" fontSize="11" vertTextAlign="center"/>
+                            </rectangle>
+                        </rectangle>
+
+                        <rectangle left="6" top="444" width="1036" height="320" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="12" width="446" height="26" text="ARSENAL (Corpo a Corpo soma FOR no dano | Trava: 1/2/3/4)" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
                             <label left="464" top="12" width="74" height="26" text="Def. Alvo:" fontColor="#E5736E" fontSize="13" fontStyle="bold" horzTextAlign="trailing" vertTextAlign="center"/>
                             <edit left="542" top="8" width="52" height="34" field="defesaAlvo" type="number" textPrompt="0" fontColor="#E5736E" fontSize="15" fontStyle="bold" horzTextAlign="center"/>
@@ -3284,7 +3665,7 @@ end;
                         </rectangle>
 
                         <!-- PAINEL AUTOMATIZADO DE EXAUSTAO & DOENCAS DE ALENIA (v2.3) -->
-                        <rectangle left="6" top="546" width="1036" height="398" color="#1B1E26" strokeColor="#8A2B28" strokeSize="2" xradius="6" yradius="6">
+                        <rectangle left="6" top="772" width="1036" height="398" color="#1B1E26" strokeColor="#8A2B28" strokeSize="2" xradius="6" yradius="6">
                             <label left="12" top="10" width="520" height="24" text="EXAUSTAO (0-5) &amp; DOENCAS DE ALENIA (SISTEMA ENXUTO)" fontColor="#E5736E" fontSize="15" fontStyle="bold"/>
                             <label left="540" top="12" width="122" height="22" text="Nivel de Exaustao:" fontColor="#D9B96A" fontSize="12" fontStyle="bold" horzTextAlign="trailing" vertTextAlign="center"/>
                             <comboBox left="668" top="8" width="356" height="30" field="exaustaoNivel" fontSize="12"
@@ -3367,7 +3748,7 @@ end;
             </rectangle>
                         </rectangle>
 
-                        <rectangle left="6" top="954" width="1036" height="242" color="#1B1E26" strokeColor="#8A2B28" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="1178" width="1036" height="242" color="#1B1E26" strokeColor="#8A2B28" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="1010" height="24" text="FERIMENTOS GRAVES &amp; CICATRIZES PERMANENTES (Arbitragem Livre do Mestre)" fontColor="#E5736E" fontSize="15" fontStyle="bold"/>
 
                             <label left="12" top="38" width="500" height="20" text="FERIMENTOS ATIVOS / CONDICOES" fontColor="#A6AEBF" fontSize="13"/>
@@ -4515,10 +4896,10 @@ end;
                         <!-- CARD DE NOVIDADES -->
                         <rectangle left="6" top="450" width="1036" height="240" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v2.5 — Retrato do Explorador corrigido (editable/autoFit nativos + Colar URL/Limpar) e atalho [Token] para abrir o Estudio Gerador de Tokens (12 molduras HD)." fontColor="#EAE4D6" fontSize="13"/>
-                            <label left="20" top="74" width="996" height="24" text="• v2.3 — Automacao de Exaustao (0-5) e das 6 Doencas de Alenia (3 slots, colaboracao Medico+Herbalista+Alquimista ate +6, rolagem de resistencia e evolucao automatica)." fontColor="#EAE4D6" fontSize="13"/>
-                            <label left="20" top="102" width="996" height="24" text="• v2.2 — Botao Receber Dano (RD + alerta Golpe Devastador), rolagem auto em consumiveis, Catalogo 44 Talentos, Aplicar Kit completo e aviso OUT +6." fontColor="#A6AEBF" fontSize="13"/>
-                            <label left="20" top="130" width="996" height="24" text="• v2.1 — Inventario em Slots Ilimitados com botao [Usar] em todos os consumiveis (desconta uso, atualiza carga e anuncia no chat) + desempacote automatico dos 5 Pacotes." fontColor="#A6AEBF" fontSize="13"/>
+                            <label left="20" top="46" width="996" height="24" text="• v2.6 — Area completa de Armaduras &amp; Escudos automatizada (catalogo, Obra-Prima/Adamante RD, Vestir/Tirar, penalidade auto Furt./Acrob., FOR 13+, Escudo Torre +2, vs Acido e equipar nos Slots)." fontColor="#EAE4D6" fontSize="13"/>
+                            <label left="20" top="74" width="996" height="24" text="• v2.5 — Retrato do Explorador corrigido (editable/autoFit nativos + Colar URL/Limpar) e atalho [Token] para abrir o Estudio Gerador de Tokens (18 molduras HD)." fontColor="#EAE4D6" fontSize="13"/>
+                            <label left="20" top="102" width="996" height="24" text="• v2.3 — Automacao de Exaustao (0-5) e das 6 Doencas de Alenia (3 slots, colaboracao Medico+Herbalista+Alquimista ate +6, rolagem de resistencia e evolucao automatica)." fontColor="#A6AEBF" fontSize="13"/>
+                            <label left="20" top="130" width="996" height="24" text="• v2.1-v2.2 — Receber Dano (RD + Golpe Devastador), Catalogo 44 Talentos, Aplicar Kit completo, Inventario em Slots com [Usar] e rolagens auto em consumiveis." fontColor="#A6AEBF" fontSize="13"/>
                             <label left="20" top="158" width="996" height="24" text="• v1.5-v2.0 — Emporio Automatico (155 itens), Teto de Graduacao (+4..+16), Sistema Monetario Padrao Prata, Cartas de Credito, XP (Niv. 1-30), CD e dano +FOR." fontColor="#A6AEBF" fontSize="13"/>
                             <label left="20" top="192" width="996" height="38" text="Nota: Apos uma atualizacao, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="#7FC48C" fontSize="13" wordWrap="true"/>
                         </rectangle>
@@ -4529,10 +4910,16 @@ end;
     </rectangle>
 
     <!-- DATALINKS NA RAIZ DO FORM (REGRA 2 DO SDK 3.7b) -->
-    <dataLink fields="{'nivel', 'kitSelecionado', 'kitNomeAtual', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'pvAtual', 'pvMax', 'armaduraDef', 'escudoDef', 'rdEspecial', 'defesaOutros', 'iniciativaOutros', 'multiAcoes', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'customSkillPage', 'invPage', 'invMaxIdx', 'invPageLabel', 'invPesoTotal', 'talentosPage', 'talentosPageLabel', 'talentoCat', 'talentoItem', 'talentoPreview', 'avisoBonusExt', 'exaustaoNivel', 'exaustaoResumo', 'doencaSelecionada', 'cuidadosResumo', 'doenca1_est', 'doenca1_attr', 'doenca1_cd', 'doenca1_suc', 'doenca1_efeito', 'doenca2_est', 'doenca2_attr', 'doenca2_cd', 'doenca2_suc', 'doenca2_efeito', 'doenca3_est', 'doenca3_attr', 'doenca3_cd', 'doenca3_suc', 'doenca3_efeito', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'bancoOrigem', 'padraoVida', 'emporioCat', 'emporioItem', 'emporioQtd', 'emporioPreview', 'cdTeste', 'defesaAlvo', 'xpAtual', 'pluginVersaoAtual', 'statusAtualizacao', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma1_danoExtra', 'arma1_margem', 'arma1_mult', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma2_danoExtra', 'arma2_margem', 'arma2_mult', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma3_danoExtra', 'arma3_margem', 'arma3_mult', 'arma4_attr', 'arma4_per', 'arma4_extra', 'arma4_danoExtra', 'arma4_margem', 'arma4_mult', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros'}" defaultValues="{'1', 'sem_kit', '00 - Sem Kit (Livre / Media Padrao)', '8', '1', '0.75', '18', '18', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '1', '1', '30', 'Pag. 1 (1-10)', '0.0 kg (0 itens)', '1', 'Pag. 1 (1-6)', 'marciais', 'marciais_1', 'Selecione uma categoria e um dos 44 Talentos oficiais de Alenia.', 'Bonus externos (OUT) dentro da regra oficial: apenas maior equipamento aplica | teto combinado +6 (excecao: Rituais +8).', '0', 'Sem Exaustao (0)', 'febre_cisternas', 'Bonus Cuidados (3 Oficios): +0 (teto +6)', '0', 'constituicao', '14', '0', 'Slot livre (selecione uma doenca acima e clique em + Contrair).', '0', 'constituicao', '14', '0', 'Slot livre (selecione uma doenca acima e clique em + Contrair).', '0', 'constituicao', '14', '0', 'Slot livre (selecione uma doenca acima e clique em + Contrair).', '0', '25', '0', '0', 'corallis', 'modesto', 'pacotes', 'pacotes_1', '1', 'Selecione uma categoria e um item para comprar direto para os Slots de Inventario.', '0', '0', '0', 'v2.5', 'Clique no botao acima para checar e instalar atualizacoes automaticamente.', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}"/>
+    <dataLink fields="{'nivel', 'kitSelecionado', 'kitNomeAtual', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'pvAtual', 'pvMax', 'armaduraDef', 'escudoDef', 'armaduraTipo', 'armaduraMaterial', 'armaduraNome', 'armaduraPen', 'armaduraPeso', 'escudoTipo', 'escudoNome', 'escudoPen', 'escudoPeso', 'defVsAcido', 'avisoArmadura', 'rdEspecial', 'defesaOutros', 'iniciativaOutros', 'multiAcoes', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'customSkillPage', 'invPage', 'invMaxIdx', 'invPageLabel', 'invPesoTotal', 'talentosPage', 'talentosPageLabel', 'talentoCat', 'talentoItem', 'talentoPreview', 'avisoBonusExt', 'exaustaoNivel', 'exaustaoResumo', 'doencaSelecionada', 'cuidadosResumo', 'doenca1_est', 'doenca1_attr', 'doenca1_cd', 'doenca1_suc', 'doenca1_efeito', 'doenca2_est', 'doenca2_attr', 'doenca2_cd', 'doenca2_suc', 'doenca2_efeito', 'doenca3_est', 'doenca3_attr', 'doenca3_cd', 'doenca3_suc', 'doenca3_efeito', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'bancoOrigem', 'padraoVida', 'emporioCat', 'emporioItem', 'emporioQtd', 'emporioPreview', 'cdTeste', 'defesaAlvo', 'xpAtual', 'pluginVersaoAtual', 'statusAtualizacao', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma1_danoExtra', 'arma1_margem', 'arma1_mult', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma2_danoExtra', 'arma2_margem', 'arma2_mult', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma3_danoExtra', 'arma3_margem', 'arma3_mult', 'arma4_attr', 'arma4_per', 'arma4_extra', 'arma4_danoExtra', 'arma4_margem', 'arma4_mult', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros'}" defaultValues="{'1', 'sem_kit', '00 - Sem Kit (Livre / Media Padrao)', '8', '1', '0.75', '18', '18', '0', '0', 'nenhuma', 'comum', 'Sem Armadura', '0', '0', 'nenhum', 'Sem Escudo', '0', '0', '10', 'Penalidade Furt./Acrob.: 0  |  vs Acido: Def 10  |  Peso equip.: 0 kg', '0', '0', '0', '1', '0', '0', '0', '0', '0', '1', '1', '30', 'Pag. 1 (1-10)', '0.0 kg (0 itens)', '1', 'Pag. 1 (1-6)', 'marciais', 'marciais_1', 'Selecione uma categoria e um dos 44 Talentos oficiais de Alenia.', 'Bonus externos (OUT) dentro da regra oficial: apenas maior equipamento aplica | teto combinado +6 (excecao: Rituais +8).', '0', 'Sem Exaustao (0)', 'febre_cisternas', 'Bonus Cuidados (3 Oficios): +0 (teto +6)', '0', 'constituicao', '14', '0', 'Slot livre (selecione uma doenca acima e clique em + Contrair).', '0', 'constituicao', '14', '0', 'Slot livre (selecione uma doenca acima e clique em + Contrair).', '0', 'constituicao', '14', '0', 'Slot livre (selecione uma doenca acima e clique em + Contrair).', '0', '25', '0', '0', 'corallis', 'modesto', 'pacotes', 'pacotes_1', '1', 'Selecione uma categoria e um item para comprar direto para os Slots de Inventario.', '0', '0', '0', 'v2.6', 'Clique no botao acima para checar e instalar atualizacoes automaticamente.', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', 'forca', 'per_armas_brancas', '0', '0', '20', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}"/>
 
-    <dataLink fields="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'nivel', 'xpAtual', 'pvMax', 'kitSelecionado', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'armaduraDef', 'escudoDef', 'defesaOutros', 'iniciativaOutros', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'padraoVida', 'exaustaoNivel', 'cuidadoMedico', 'cuidadoHerbalista', 'cuidadoAlquimista', 'doenca1_id', 'doenca1_nome', 'doenca1_est', 'doenca2_id', 'doenca2_nome', 'doenca2_est', 'doenca3_id', 'doenca3_nome', 'doenca3_est', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma4_attr', 'arma4_per', 'arma4_extra'}">
+    <dataLink fields="{'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'nivel', 'xpAtual', 'pvMax', 'kitSelecionado', 'kitDvFaces', 'kitPerBase', 'kitMultInt', 'armaduraDef', 'escudoDef', 'defesaOutros', 'iniciativaOutros', 'rdEspecial', 'armaduraPen', 'armaduraPeso', 'armaduraEquipada', 'armaduraMaterial', 'escudoPen', 'escudoPeso', 'escudoEquipado', 'esp_status', 'esp_fe', 'esp_submundo', 'esp_dom', 'esp_livre', 'moedasOuro', 'moedasPrata', 'moedasCobre', 'cartasCredito', 'padraoVida', 'exaustaoNivel', 'cuidadoMedico', 'cuidadoHerbalista', 'cuidadoAlquimista', 'doenca1_id', 'doenca1_nome', 'doenca1_est', 'doenca2_id', 'doenca2_nome', 'doenca2_est', 'doenca3_id', 'doenca3_nome', 'doenca3_est', 'per_armas_brancas_grau', 'per_armas_brancas_outros', 'per_armas_dist_grau', 'per_armas_dist_outros', 'per_luta_desarm_grau', 'per_luta_desarm_outros', 'per_aparar_grau', 'per_aparar_outros', 'per_esquiva_grau', 'per_esquiva_outros', 'per_escudos_grau', 'per_escudos_outros', 'per_atletismo_grau', 'per_atletismo_outros', 'per_acrobacia_grau', 'per_acrobacia_outros', 'per_furtividade_grau', 'per_furtividade_outros', 'per_escalada_grau', 'per_escalada_outros', 'per_natacao_grau', 'per_natacao_outros', 'per_cavalgar_grau', 'per_cavalgar_outros', 'per_sobrevivencia_grau', 'per_sobrevivencia_outros', 'per_navegacao_grau', 'per_navegacao_outros', 'per_percepcao_grau', 'per_percepcao_outros', 'per_investigacao_grau', 'per_investigacao_outros', 'per_disfarce_grau', 'per_disfarce_outros', 'per_ladinagem_grau', 'per_ladinagem_outros', 'per_prestidig_grau', 'per_prestidig_outros', 'per_persuasao_grau', 'per_persuasao_outros', 'per_enganacao_grau', 'per_enganacao_outros', 'per_intimidacao_grau', 'per_intimidacao_outros', 'per_intuicao_grau', 'per_intuicao_outros', 'per_etiqueta_grau', 'per_etiqueta_outros', 'per_barganha_grau', 'per_barganha_outros', 'per_medicina_grau', 'per_medicina_outros', 'per_alquimia_grau', 'per_alquimia_outros', 'per_forja_grau', 'per_forja_outros', 'per_engenharia_grau', 'per_engenharia_outros', 'per_herbalismo_grau', 'per_herbalismo_outros', 'per_historia_grau', 'per_historia_outros', 'per_geografia_grau', 'per_geografia_outros', 'per_idiomas_grau', 'per_idiomas_outros', 'per_religiao_grau', 'per_religiao_outros', 'arma1_attr', 'arma1_per', 'arma1_extra', 'arma2_attr', 'arma2_per', 'arma2_extra', 'arma3_attr', 'arma3_per', 'arma3_extra', 'arma4_attr', 'arma4_per', 'arma4_extra'}">
         <event name="onChange"><![CDATA[recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{'armaduraTipo', 'armaduraMaterial'}">
+        <event name="onChange"><![CDATA[aoMudarArmaduraCatalogo();]]></event>
+    </dataLink>
+    <dataLink fields="{'escudoTipo'}">
+        <event name="onChange"><![CDATA[aoMudarEscudoCatalogo();]]></event>
     </dataLink>
     <dataLink fields="{'retratoPersonagem'}">
         <event name="onChange"><![CDATA[atualizarVisibilidadeRetrato();]]></event>

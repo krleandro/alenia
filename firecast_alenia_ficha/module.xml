@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module sdkVersion="3.7b">
     <id>br.com.alenia.rpg_oficial</id>
-    <version>2.5</version>
+    <version>2.6</version>
     <info lang="pt-BR">
-        <name>Alenia RPG — Ficha Oficial (d20 v2.5)</name>
-        <description>Ficha oficial automatizada do sistema Alenia RPG (Edição Revisada v2.0), desenvolvida por Mestre Carlos: Automação completa de Exaustão (0–5) e das 6 Doenças de Alenia (3 slots ativos, Ficha de 7 Campos, colaboração Médico + Herbalista + Alquimista até +6, teste de resistência com progressão/cura automática no chat e integração com Descanso Curto/Longo), Botão Receber Dano (RD + Golpe Devastador), Retrato clicável, Catálogo dos 44 Talentos, Aplicar Kit completo, Inventário em Slots Ilimitados com botão [Usar] e rolagens automáticas em consumíveis, Empório Automático (155 itens + 5 Pacotes), aviso de teto externo (+6) e Sistema Monetário Padrão Prata.</description>
+        <name>Alenia RPG — Ficha Oficial (d20 v2.6)</name>
+        <description>Ficha oficial automatizada do sistema Alenia RPG (Edição Revisada v2.0), desenvolvida por Mestre Carlos: Área Completa e Automatizada de Armaduras &amp; Escudos (catálogo oficial, material Comum/Obra-Prima/Adamante RD Especial, botão Vestir/Tirar, penalidade automática em Furtividade e Acrobacia, alerta FOR 13+ em Placas Completas, +2 Escudo Torre em Proteger Aliado, Defesa vs Ácido e equipar direto dos Slots), Automação de Exaustão (0–5) e 6 Doenças, Receber Dano (RD + Golpe Devastador), Retrato clicável + botão Token, Catálogo dos 44 Talentos, Aplicar Kit completo, Inventário em Slots Ilimitados com [Usar] e Empório Automático (155 itens + 5 Pacotes).</description>
         <author>Mestre Carlos</author>
         <site>https://alenia-rpg.onrender.com</site>
         <contact>Mestre Carlos</contact>
