@@ -584,7 +584,7 @@ TOKEN_STUDIO_HTML = r"""
                     <input id="ts-shadow" type="range" min="0" max="100" value="45" step="1"/>
                 </div>
                 <div class="ts-field">
-                    <label for="ts-thickness">Espessura (Clássicas) <strong id="ts-thickness-val">100%</strong></label>
+                    <label for="ts-thickness"><span id="ts-thickness-lbl">Escala da Moldura</span> <strong id="ts-thickness-val">100%</strong></label>
                     <input id="ts-thickness" type="range" min="70" max="140" value="100" step="2"/>
                 </div>
                 <div class="ts-field full">
@@ -1020,7 +1020,12 @@ TOKEN_STUDIO_JS = (
         c.drawImage(tintBuf, 0, 0, sz, sz);
     }
 
-    function drawNameBanner(c, text, color, sz, frame) {
+    function getImageFrameScale(cfg) {
+        const t = (cfg && cfg.thickness !== undefined) ? cfg.thickness : 1.0;
+        return 1.0 + (t - 1.0) * 0.55;
+    }
+
+    function drawNameBanner(c, text, color, sz, frame, cfg) {
         const clean = (text || '').trim();
         if (!clean) return;
         const sc = sz / 1024;
@@ -1028,12 +1033,13 @@ TOKEN_STUDIO_JS = (
 
         // Special mode: write calligraphy directly onto the unfurled parchment scroll banner!
         if (frame && frame.isScrollBanner) {
-            const y = sz * 0.706;
-            const maxW = sz * 0.50;
+            const fScale = getImageFrameScale(cfg);
+            const y = sz / 2 + (0.706 - 0.5) * sz * fScale;
+            const maxW = sz * 0.50 * fScale;
             c.save();
-            let fontSize = Math.round(44 * sc);
+            let fontSize = Math.round(44 * sc * fScale);
             c.font = `700 ${fontSize}px Cinzel, Georgia, serif`;
-            while (c.measureText(clean).width > maxW && fontSize > 18 * sc) {
+            while (c.measureText(clean).width > maxW && fontSize > 16 * sc) {
                 fontSize -= 2;
                 c.font = `700 ${fontSize}px Cinzel, Georgia, serif`;
             }
@@ -1101,11 +1107,12 @@ TOKEN_STUDIO_JS = (
         let cy = sz / 2;
         let clipR = sz * 0.44;
         let innerVigR = sz * 0.43;
+        const fScale = (frame.kind === 'image') ? getImageFrameScale(cfg) : 1.0;
 
         if (frame.kind === 'image') {
-            cx = (frame.cx || 0.5) * sz;
-            cy = (frame.cy || 0.5) * sz;
-            clipR = (frame.clipR || 0.31) * sz;
+            cx = sz / 2 + ((frame.cx || 0.5) - 0.5) * sz * fScale;
+            cy = sz / 2 + ((frame.cy || 0.5) - 0.5) * sz * fScale;
+            clipR = (frame.clipR || 0.31) * sz * fScale;
             innerVigR = clipR * 0.96;
         } else {
             const outerR = (frame.id === 'chama_solar' || frame.id === 'chefe_ameaca') ? 470 * sc : 494 * sc;
@@ -1163,14 +1170,19 @@ TOKEN_STUDIO_JS = (
 
         // 5. Render Frame Overlay (Sculpted HD PNG/WebP OR Procedural)
         if (frame.kind === 'image') {
+            c.save();
+            c.translate(sz / 2, sz / 2);
+            c.scale(fScale, fScale);
+            c.translate(-sz / 2, -sz / 2);
             drawSculptedImageFrame(c, frame, sz, cfg);
+            c.restore();
         } else {
             drawProceduralFrame(c, frame, sz, cfg);
         }
 
         // 6. Optional Name Banner (or Parchment Calligraphy)
         if (cfg.bannerText) {
-            drawNameBanner(c, cfg.bannerText, cfg.bannerColor || '#5e1715', sz, frame);
+            drawNameBanner(c, cfg.bannerText, cfg.bannerColor || '#5e1715', sz, frame, cfg);
         }
     }
 
@@ -1230,6 +1242,7 @@ TOKEN_STUDIO_JS = (
             btn.addEventListener('click', () => {
                 state.frameId = fr.id;
                 grid.querySelectorAll('.ts-frame-btn').forEach(b => b.classList.toggle('active', b === btn));
+                syncControls();
                 renderMain();
             });
             grid.appendChild(btn);
@@ -1356,6 +1369,9 @@ TOKEN_STUDIO_JS = (
 
         const t = document.getElementById('ts-thickness');
         const tv = document.getElementById('ts-thickness-val');
+        const tlbl = document.getElementById('ts-thickness-lbl');
+        const curFr = getFrameObj(state.frameId);
+        if (tlbl) tlbl.textContent = (curFr.kind === 'image') ? 'Escala da Moldura' : 'Espessura da Moldura';
         if (t) t.value = Math.round(state.thickness * 100);
         if (tv) tv.textContent = Math.round(state.thickness * 100) + '%';
 
