@@ -684,6 +684,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A01 — Lumeça do Aurélio
 
+![Prancha Zoológica A01 — Lumeça do Aurélio](ilustracoes/fauna_A01.jpg)
+
 **Classificação:** Peixe fluvial, releitura da Lumeça Mágica.
 
 **Onde vive:** Braços de corrente lenta do Aurélio, entre áreas rurais e o estuário de Merlinport; não nos canais de despejo.
@@ -699,6 +701,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Peixeiros explicam que a antiga sopa recebeu seu nome da luz sobre o pescado exposto ao amanhecer.
 
 ### A02 — Dente-venenoso
+
+![Prancha Zoológica A02 — Dente-venenoso](ilustracoes/fauna_A02.jpg)
 
 **Classificação:** Peixe perigoso do caderno antigo, fora da despensa.
 
@@ -716,6 +720,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A03 — Escama-terrestre
 
+![Prancha Zoológica A03 — Escama-terrestre](ilustracoes/fauna_A03.jpg)
+
 **Classificação:** Peixe de várzea, adaptado do original.
 
 **Onde vive:** Margens alagadas do Aurélio e canais periféricos de Voernock com água renovada.
@@ -731,6 +737,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Lavradores usam o nome para separar o peixe escuro de fundo dos cardumes prateados de superfície.
 
 ### A04 — Maremestre
+
+![Prancha Zoológica A04 — Maremestre](ilustracoes/fauna_A04.jpg)
 
 **Classificação:** Grande peixe pelágico do caderno antigo.
 
@@ -748,6 +756,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A05 — Peixe-meteorito
 
+![Prancha Zoológica A05 — Peixe-meteorito](ilustracoes/fauna_A05.jpg)
+
 **Classificação:** Pequeno peixe marinho do original.
 
 **Onde vive:** Baías claras e canais costeiros próximos a Biemont e Pelagosa.
@@ -763,6 +773,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Em casamentos de marinheiros, uma travessa pode simbolizar o desejo de regressar sob as mesmas estrelas.
 
 ### A06 — Vento-ágil
+
+![Prancha Zoológica A06 — Vento-ágil](ilustracoes/fauna_A06.jpg)
 
 **Classificação:** Peixe costeiro veloz do original.
 
@@ -780,6 +792,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A07 — Cavernário de Pedramar
 
+![Prancha Zoológica A07 — Cavernário de Pedramar](ilustracoes/fauna_A07.jpg)
+
 **Classificação:** Peixe de nascente e caverna do original.
 
 **Onde vive:** Trechos acessíveis de nascentes calcárias dos Montes Pedramar; pequenas criações alimentadas por água adequada perto de Stoneforge.
@@ -795,6 +809,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Viveiristas e pesquisadores disputam crédito por manter a espécie disponível sem esvaziar as cavernas.
 
 ### A08 — Peixe-corvo
+
+![Prancha Zoológica A08 — Peixe-corvo](ilustracoes/fauna_A08.jpg)
 
 **Classificação:** Peixe de lago e rio do original.
 
@@ -812,6 +828,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A09 — Nadadeira-de-jade
 
+![Prancha Zoológica A09 — Nadadeira-de-jade](ilustracoes/fauna_A09.jpg)
+
 **Classificação:** Peixe de lago e criação, antigo Jade-Fin.
 
 **Onde vive:** Lagos e tanques de água doce bem mantidos em Aurora; produção limitada próxima a Altavanne e Yõketsu.
@@ -827,6 +845,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Um tanque de criação demonstra riqueza porque ocupa terreno, água e trabalho durante todo o ano.
 
 ### A10 — Serpentoso de enseada
+
+![Prancha Zoológica A10 — Serpentoso de enseada](ilustracoes/fauna_A10.jpg)
 
 **Classificação:** Peixe alongado do original.
 
@@ -844,6 +864,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A11 — Dente-claro de recife
 
+![Prancha Zoológica A11 — Dente-claro de recife](ilustracoes/fauna_A11.jpg)
+
 **Classificação:** Novo peixe alimentar, substituto do perigoso.
 
 **Onde vive:** Baixios e recifes com pesca regular próximos a Corallis e Ravena.
@@ -859,6 +881,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Tavernas mantêm a receita de festa e abandonam o risco que o caderno antigo romantizava.
 
 ### A12 — Truta-de-pedra
+
+![Prancha Zoológica A12 — Truta-de-pedra](ilustracoes/fauna_A12.jpg)
 
 **Classificação:** Novo peixe de água corrente.
 
@@ -876,6 +900,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A13 — Galinha-dourada de Dahrma
 
+![Prancha Zoológica A13 — Galinha-dourada de Dahrma](ilustracoes/fauna_A13.jpg)
+
 **Classificação:** Nova raça doméstica de ave.
 
 **Onde vive:** Quintais e pequenas propriedades de Dahrma; criada também no vale do Aurélio.
@@ -891,6 +917,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Vender a última poedeira é uma decisão de necessidade, perceptível aos vizinhos e a cobradores de dívida.
 
 ### A14 — Coelho-de-sebe
+
+![Prancha Zoológica A14 — Coelho-de-sebe](ilustracoes/fauna_A14.jpg)
 
 **Classificação:** Novo mamífero de pequena caça e criação.
 
@@ -908,6 +936,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A15 — Javali-de-lombo negro
 
+![Prancha Zoológica A15 — Javali-de-lombo negro](ilustracoes/fauna_A15.jpg)
+
 **Classificação:** Novo mamífero de caça, releitura do javali de obsidiana.
 
 **Onde vive:** Bosques e bordas da Floresta Negra, longe das áreas de criação doméstica.
@@ -923,6 +953,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Uma licença de caça pode ser mais difícil de obter que o próprio animal, sobretudo em terras senhoriais.
 
 ### A16 — Cabra-de-escarpa
+
+![Prancha Zoológica A16 — Cabra-de-escarpa](ilustracoes/fauna_A16.jpg)
 
 **Classificação:** Nova variedade doméstica de pequeno rebanho.
 
@@ -940,6 +972,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A17 — Carneiro-das-rotas
 
+![Prancha Zoológica A17 — Carneiro-das-rotas](ilustracoes/fauna_A17.jpg)
+
 **Classificação:** Novo conjunto de variedades domésticas ovinas.
 
 **Onde vive:** Rebanhos em Aurora e Gaddra; variedade de lã mais densa criada em Lystra.
@@ -955,6 +989,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Uma mesma espécie doméstica pode gerar cozinhas muito diferentes conforme pasto, combustível e acesso a sal.
 
 ### A18 — Pombo-de-celeiro
+
+![Prancha Zoológica A18 — Pombo-de-celeiro](ilustracoes/fauna_A18.jpg)
 
 **Classificação:** Nova ave doméstica.
 
@@ -972,6 +1008,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A19 — Pato-de-canal
 
+![Prancha Zoológica A19 — Pato-de-canal](ilustracoes/fauna_A19.jpg)
+
 **Classificação:** Nova ave doméstica de água.
 
 **Onde vive:** Áreas manejadas de Aurora, canais apropriados de Kalis e pequenas criações de Yõketsu.
@@ -987,6 +1025,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Regras de criação podem colocar criadores em conflito com autoridades de abastecimento urbano.
 
 ### A20 — Abelha-dos-pomares
+
+![Prancha Zoológica A20 — Abelha-dos-pomares](ilustracoes/fauna_A20.jpg)
 
 **Classificação:** Nova variedade de abelha manejada.
 
@@ -1004,6 +1044,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 
 ### A21 — Mexilhão-de-corda
 
+![Prancha Zoológica A21 — Mexilhão-de-corda](ilustracoes/fauna_A21.jpg)
+
 **Classificação:** Novo molusco alimentar.
 
 **Onde vive:** Enseadas adequadas de Corallis e Ravena, com criação em suportes de fibra e madeira.
@@ -1019,6 +1061,8 @@ As fichas descrevem ecologia, abastecimento e uso. A02 é perigoso e não integr
 **Vida social:** Uma mancha de água alterada pode fechar a renda de uma enseada inteira e revelar despejo clandestino.
 
 ### A22 — Prateiro-de-Syleth
+
+![Prancha Zoológica A22 — Prateiro-de-Syleth](ilustracoes/fauna_A22.jpg)
 
 **Classificação:** Novo peixe de água fria.
 

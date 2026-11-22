@@ -380,6 +380,17 @@ body.culinaria-mode .book-page::before {
     border-color: rgba(31, 81, 86, 0.34);
     color: #1a4347;
 }
+.cul-tag a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 2px;
+    font-weight: 700;
+}
+.cul-tag a:hover {
+    color: var(--crimson);
+    text-decoration-style: solid;
+}
 .cul-recipe p {
     margin: 0 0 11px;
     font-size: 16.2px;
@@ -416,9 +427,31 @@ body.culinaria-mode .book-page::before {
     font-family: 'Cinzel', Georgia, serif !important;
     font-size: 17px !important;
     color: #1d3c40 !important;
-    margin: 0 0 10px !important;
+    margin: 0 0 12px !important;
     padding-bottom: 6px;
     border-bottom: 1px dotted rgba(154, 123, 59, 0.45);
+}
+.cul-animal-plate {
+    margin: 0 0 14px !important;
+    padding: 5px !important;
+    background: #efe3c8 !important;
+    border: 1px solid rgba(154, 123, 59, 0.62) !important;
+    border-radius: 2px;
+    box-shadow: 0 4px 12px rgba(42, 26, 12, 0.12);
+    overflow: hidden;
+}
+.cul-animal-plate img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    display: block;
+    cursor: zoom-in;
+    transition: transform 0.24s ease, filter 0.24s ease;
+}
+.cul-animal-plate:hover img {
+    transform: scale(1.015);
+    filter: contrast(1.03);
 }
 .cul-animal-card p {
     font-size: 15px;
@@ -629,11 +662,19 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
                         if k_clean == "Imagem":
                             continue
                         cls = "cul-tag"
+                        val_html = html.escape(v_clean)
                         if "Preço" in k_clean:
                             cls += " price"
-                        elif k_clean in ("Fauna", "Herbário"):
+                        elif k_clean == "Fauna":
                             cls += " herb"
-                        tags.append(f'<span class="{cls}">{html.escape(k_clean)}: {html.escape(v_clean)}</span>')
+                            val_html = re.sub(
+                                r"\b(A\d{2})\b",
+                                lambda m: f'<a href="#{m.group(1).lower()}" title="Ver prancha zoológica {m.group(1)}">{m.group(1)}</a>',
+                                val_html,
+                            )
+                        elif k_clean == "Herbário":
+                            cls += " herb"
+                        tags.append(f'<span class="{cls}">{html.escape(k_clean)}: {val_html}</span>')
                 else:
                     body_paras.append(f"<p>{inline_md(bl)}</p>")
 
@@ -711,10 +752,27 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
             if not m_ah:
                 continue
             acode, aname = m_ah.group(1), m_ah.group(2).strip()
-            aparas = "".join(f"<p>{inline_md(ln)}</p>" for ln in alines[1:])
+            aplate_html = ""
+            aparas_list = []
+            for ln in alines[1:]:
+                m_aimg = re.match(r"^!\[([^\]]*)\]\(([^)]+)\)$", ln)
+                if m_aimg:
+                    asrc = "assets/" + os.path.basename(m_aimg.group(2).strip())
+                    aalt = m_aimg.group(1).strip() or f"{acode} — {aname}"
+                    aplate_html = (
+                        f'<figure class="atlas-plate cul-animal-plate" '
+                        f'title="Clique para ampliar a prancha zoológica de {html.escape(aname, quote=True)}">'
+                        f'<img src="{html.escape(asrc, quote=True)}" alt="{html.escape(aalt, quote=True)}"'
+                        f'{img_dim_attrs(asrc)} loading="lazy"/>'
+                        f'</figure>'
+                    )
+                else:
+                    aparas_list.append(f"<p>{inline_md(ln)}</p>")
+            aparas = "".join(aparas_list)
             an_cards.append(
                 f'<article class="cul-animal-card" id="{acode.lower()}">'
                 f'<h3>{html.escape(acode)} — {html.escape(aname)}</h3>'
+                f'{aplate_html}'
                 f'{aparas}'
                 f'</article>'
             )
@@ -728,8 +786,18 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
 
     # Render remaining sections (Despensa, Viagem, Mesas de Campanha, Caderno Antigo, Fontes, Índice Rápido)
     appendix_md = "\n\n".join(appendix_mds)
-    # Enhance quick index table dish codes (C01..C32) into clickable anchor links (#c01..#c32)
-    appendix_md = re.sub(r"^\|\s*(C\d{2})\s*\|", lambda m: f"| [{m.group(1)}](#{m.group(1).lower()}) |", appendix_md, flags=re.M)
+    # Enhance quick index table dish codes (C01..C32) and animal codes (A01..A22) into clickable anchor links
+    appendix_md = re.sub(
+        r"^\|\s*(C\d{2})\s*—",
+        lambda m: f"| [{m.group(1)}](#{m.group(1).lower()}) —",
+        appendix_md,
+        flags=re.M,
+    )
+    appendix_md = re.sub(
+        r"\b(A\d{2})\b(?=(?:,\s*A\d{2})*\s*\|)",
+        lambda m: f"[{m.group(1)}](#{m.group(1).lower()})",
+        appendix_md,
+    )
     appendix_html, appendix_toc = md_to_html(appendix_md, id_prefix="cul-", card_h3=False, inject_maps=False)
     toc_items.extend(appendix_toc)
 
@@ -748,7 +816,7 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
             <div class="cul-stats">
                 <span class="cul-stat-pill">🍲 32 Pratos Ilustrados (C01–C32)</span>
                 <span class="cul-stat-pill">✦ 8 Tradições Regionais</span>
-                <span class="cul-stat-pill teal">🐟 22 Animais (A01–A22)</span>
+                <span class="cul-stat-pill teal">🐟 22 Animais Ilustrados (A01–A22)</span>
                 <span class="cul-stat-pill teal">🌿 Integrado ao Herbário (H)</span>
             </div>
         </div>
