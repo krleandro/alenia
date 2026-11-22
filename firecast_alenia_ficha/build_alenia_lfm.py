@@ -1104,7 +1104,7 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "2.3";
+local PLUGIN_VERSION = "2.4";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
 
@@ -1885,11 +1885,10 @@ recalcularFicha = function()
         sheet["arma" .. idx .. "_atk"] = fmtMod(atkTot);
     end;
 
-    if self ~= nil and self.imgRetrato ~= nil and not sheet._retratoInit then
-        sheet._retratoInit = true;
+    if self ~= nil and self.lblRetratoHint ~= nil then
+        local urlRet = tostring(sheet.retratoPersonagem or "");
         pcall(function()
-            self.imgRetrato:setEditable(true);
-            self.imgRetrato:setCenter(true);
+            self.lblRetratoHint:setVisible(urlRet == "");
         end);
     end;
 
@@ -1897,6 +1896,43 @@ recalcularFicha = function()
     if sheet.statusAtualizacao == nil or tostring(sheet.statusAtualizacao) == "" then
         sheet.statusAtualizacao = "Clique no botao acima para checar e instalar atualizacoes automaticamente.";
     end;
+end;
+
+local function atualizarVisibilidadeRetrato()
+    if sheet == nil then return; end;
+    if self ~= nil and self.lblRetratoHint ~= nil then
+        local urlRet = tostring(sheet.retratoPersonagem or "");
+        pcall(function()
+            self.lblRetratoHint:setVisible(urlRet == "");
+        end);
+    end;
+end;
+
+local function definirRetratoPorURL()
+    if sheet == nil then return; end;
+    if DialogsMod == nil or type(DialogsMod.inputQuery) ~= "function" then
+        showMessage("Clique diretamente dentro da moldura do retrato para carregar uma imagem pelo Firecast.");
+        return;
+    end;
+    local atual = tostring(sheet.retratoPersonagem or "");
+    DialogsMod.inputQuery(
+        "Retrato do Explorador",
+        "Cole o link direto (URL https://...) da imagem do personagem ou deixe vazio para remover:",
+        atual,
+        function(valor)
+            local limpo = tostring(valor or ""):gsub("^%s+", ""):gsub("%s+$", "");
+            sheet.retratoPersonagem = limpo;
+            atualizarVisibilidadeRetrato();
+        end,
+        nil,
+        true
+    );
+end;
+
+local function limparRetrato()
+    if sheet == nil then return; end;
+    sheet.retratoPersonagem = "";
+    atualizarVisibilidadeRetrato();
 end;
 
 local function aplicarKitSelecionado()
@@ -3848,7 +3884,7 @@ def build_lfm() -> str:
         "0", "corallis", "modesto",
         "pacotes", init_item_id, "1", "Selecione uma categoria e um item para comprar direto para os Slots de Inventario.",
         "0", "0", "0",
-        "v2.3", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "v2.4", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -3890,7 +3926,7 @@ def build_lfm() -> str:
     <rectangle align="client" color="{BG_MAIN}">
         <!-- CABECALHO FIXO AMPLIADO + BARRA RAPIDA DE CD & DESCANSO -->
         <rectangle align="top" height="148" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" margins="{{left=6, right=6, top=6, bottom=4}}" xradius="6" yradius="6">
-            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.3" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
+            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.4" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
             <label left="278" top="6" width="170" height="24" field="patamarTexto" fontColor="{TEXT_CRIMSON}" fontSize="14" fontStyle="bold"/>
             <label left="452" top="6" width="320" height="24" field="kitNomeAtual" fontColor="{TEXT_MUTED}" fontSize="14"/>
             <label left="780" top="6" width="250" height="24" text="Golpe Devastador (&gt;2/3 PV):" fontColor="{TEXT_CRIMSON}" fontSize="13" horzTextAlign="trailing"/>
@@ -3975,11 +4011,16 @@ def build_lfm() -> str:
                         <!-- RETRATO DO EXPLORADOR (CLICAVEL / EDITAVEL) -->
                         <rectangle left="6" top="380" width="214" height="296" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <label left="8" top="8" width="198" height="20" text="RETRATO DO EXPLORADOR" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
-                            <rectangle left="10" top="32" width="194" height="234" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
-                                <label align="client" text="Clique aqui para carregar retrato" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="center" vertTextAlign="center" wordWrap="true"/>
-                                <image name="imgRetrato" align="client" field="retratoPersonagem" editable="true" style="proportional" center="true"/>
+                            <rectangle left="10" top="32" width="194" height="226" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
+                                <label name="lblRetratoHint" left="8" top="86" width="178" height="52" text="Clique aqui para carregar retrato" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="center" vertTextAlign="center" wordWrap="true" hitTest="false"/>
+                                <image name="imgRetrato" align="client" field="retratoPersonagem" editable="true" style="autoFit" center="true" showProgress="true" margins="{{left=2, right=2, top=2, bottom=2}}" cursor="handPoint" hint="Clique na imagem para enviar arquivo ou escolher no FireDrive"/>
                             </rectangle>
-                            <label left="8" top="270" width="198" height="18" text="Clique na moldura para trocar" fontColor="{TEXT_MUTED}" fontSize="11" horzTextAlign="center"/>
+                            <button left="10" top="264" width="128" height="24" text="Colar URL" fontSize="11" hint="Colar link direto de uma imagem (https://...)">
+                                <event name="onClick"><![CDATA[definirRetratoPorURL();]]></event>
+                            </button>
+                            <button left="142" top="264" width="62" height="24" text="Limpar" fontSize="11" hint="Remover a imagem do retrato">
+                                <event name="onClick"><![CDATA[limparRetrato();]]></event>
+                            </button>
                         </rectangle>
 
                         <!-- SELETOR & AUTOMACAO DE KITS UNIVERSAIS -->
@@ -4528,13 +4569,14 @@ def build_lfm() -> str:
                         </rectangle>
 
                         <!-- CARD DE NOVIDADES -->
-                        <rectangle left="6" top="450" width="1036" height="224" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="450" width="1036" height="240" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v2.3 — Automacao de Exaustao (0-5) e das 6 Doencas de Alenia (3 slots, colaboracao Medico+Herbalista+Alquimista ate +6, rolagem de resistencia e evolucao automatica)." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="74" width="996" height="24" text="• v2.2 — Botao Receber Dano (RD + alerta Golpe Devastador), rolagem auto em consumiveis, Catalogo 44 Talentos, Aplicar Kit completo, Retrato clicavel e aviso OUT +6." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="102" width="996" height="24" text="• v2.1 — Inventario em Slots Ilimitados com botao [Usar] em todos os consumiveis (desconta uso, atualiza carga e anuncia no chat) + desempacote automatico dos 5 Pacotes." fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <label left="20" top="130" width="996" height="24" text="• v1.5-v2.0 — Emporio Automatico (155 itens), Teto de Graduacao (+4..+16), Sistema Monetario Padrao Prata, Cartas de Credito, XP (Niv. 1-30), CD e dano +FOR." fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <label left="20" top="168" width="996" height="38" text="Nota: Apos uma atualizacao, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
+                            <label left="20" top="46" width="996" height="24" text="• v2.4 — Correcao definitiva do Retrato do Explorador (compilacao nativa de editable/center/autoFit, sem conflito de layout, mais botoes Colar URL e Limpar)." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="74" width="996" height="24" text="• v2.3 — Automacao de Exaustao (0-5) e das 6 Doencas de Alenia (3 slots, colaboracao Medico+Herbalista+Alquimista ate +6, rolagem de resistencia e evolucao automatica)." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="102" width="996" height="24" text="• v2.2 — Botao Receber Dano (RD + alerta Golpe Devastador), rolagem auto em consumiveis, Catalogo 44 Talentos, Aplicar Kit completo e aviso OUT +6." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="130" width="996" height="24" text="• v2.1 — Inventario em Slots Ilimitados com botao [Usar] em todos os consumiveis (desconta uso, atualiza carga e anuncia no chat) + desempacote automatico dos 5 Pacotes." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="158" width="996" height="24" text="• v1.5-v2.0 — Emporio Automatico (155 itens), Teto de Graduacao (+4..+16), Sistema Monetario Padrao Prata, Cartas de Credito, XP (Niv. 1-30), CD e dano +FOR." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="192" width="996" height="38" text="Nota: Apos uma atualizacao, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
                 </scrollBox>
@@ -4547,6 +4589,9 @@ def build_lfm() -> str:
 
     <dataLink fields="{xml_attr(recalc_fields_lua)}">
         <event name="onChange"><![CDATA[recalcularFicha();]]></event>
+    </dataLink>
+    <dataLink fields="{{'retratoPersonagem'}}">
+        <event name="onChange"><![CDATA[atualizarVisibilidadeRetrato();]]></event>
     </dataLink>
     <dataLink fields="{{'emporioCat', 'emporioItem', 'emporioQtd'}}">
         <event name="onChange"><![CDATA[atualizarItensEmporio(self, false);]]></event>
@@ -4564,7 +4609,7 @@ def build_lfm() -> str:
     total_emp = sum(len(v) for v in emporio_items.values())
     total_cons = sum(1 for v in emporio_items.values() for it in v if it["tipo"] == "cons")
     total_tal = sum(len(v) for v in talentos_items.values())
-    print(f"[OK] AleniaFicha.lfm v2.3 gerado ({len(lfm)} bytes, {total_emp} itens Emporio / {total_cons} consumiveis / {total_tal} talentos / 6 doencas + Exaustao).")
+    print(f"[OK] AleniaFicha.lfm v2.4 gerado ({len(lfm)} bytes, {total_emp} itens Emporio / {total_cons} consumiveis / {total_tal} talentos / 6 doencas + Exaustao).")
 
 
 if __name__ == "__main__":
