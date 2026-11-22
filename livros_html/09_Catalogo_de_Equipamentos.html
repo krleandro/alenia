@@ -873,6 +873,133 @@ tr { break-inside: avoid; }
     a { color: var(--crimson-dark); text-decoration: none; }
     .atlas-plate img { max-height: 160mm; object-fit: contain; }
 }
+
+/* =====================================================
+   HIPERLINKS DO CÓDICE DE ALENIA (H / C / A / B / T / TOMOS)
+   ===================================================== */
+.codex-anchor {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    vertical-align: top;
+    scroll-margin-top: 78px;
+}
+a.codex-ref {
+    display: inline-block;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.84em;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.25;
+    padding: 0 5px;
+    border-radius: 2px;
+    text-decoration: none !important;
+    border: 1px solid transparent;
+    transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.12s ease;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+a.codex-ref:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(42, 26, 12, 0.16);
+}
+a.codex-ref.codex-h {
+    background: rgba(31, 81, 86, 0.11);
+    border-color: rgba(31, 81, 86, 0.34);
+    color: #164044;
+}
+a.codex-ref.codex-h:hover {
+    background: #1f5156;
+    border-color: #163b3f;
+    color: #f7f1e3;
+}
+a.codex-ref.codex-c {
+    background: rgba(122, 31, 29, 0.10);
+    border-color: rgba(122, 31, 29, 0.34);
+    color: #6b1b19;
+}
+a.codex-ref.codex-c:hover {
+    background: #7a1f1d;
+    border-color: #531312;
+    color: #fff6e0;
+}
+a.codex-ref.codex-a {
+    background: rgba(138, 92, 38, 0.12);
+    border-color: rgba(138, 92, 38, 0.38);
+    color: #5b3a15;
+}
+a.codex-ref.codex-a:hover {
+    background: #7a4f1f;
+    border-color: #533412;
+    color: #fff6e0;
+}
+a.codex-ref.codex-b {
+    background: rgba(94, 108, 38, 0.12);
+    border-color: rgba(94, 108, 38, 0.38);
+    color: #3d4816;
+}
+a.codex-ref.codex-b:hover {
+    background: #53621f;
+    border-color: #384214;
+    color: #fff6e0;
+}
+a.codex-ref.codex-t {
+    background: rgba(154, 123, 59, 0.15);
+    border-color: rgba(154, 123, 59, 0.46);
+    color: #563f14;
+}
+a.codex-ref.codex-t:hover {
+    background: #8a6c2f;
+    border-color: #624b1d;
+    color: #fff6e0;
+}
+a.codex-ref.codex-tome {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    letter-spacing: normal;
+    padding: 0 2px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dotted rgba(122, 31, 29, 0.55);
+    border-radius: 0;
+    color: #6b1b19;
+}
+a.codex-ref.codex-tome:hover {
+    transform: none;
+    box-shadow: none;
+    border-bottom-style: solid;
+    background: rgba(154, 123, 59, 0.14);
+    color: #4f1110;
+}
+
+/* Inside culinary tag pills keep links crisp and compact */
+.cul-tag a.codex-ref {
+    font-size: 1em;
+    padding: 0 4px;
+    margin: 0 1px;
+}
+
+/* Destaque temporário ao saltar para uma ficha / planta / prato / animal */
+@keyframes codexTargetPulse {
+    0%   { background-color: rgba(205, 162, 74, 0.42); box-shadow: 0 0 0 4px rgba(154, 123, 59, 0.32); }
+    65%  { background-color: rgba(205, 162, 74, 0.22); box-shadow: 0 0 0 2px rgba(154, 123, 59, 0.18); }
+    100% { background-color: transparent; box-shadow: none; }
+}
+.codex-target-flash {
+    animation: codexTargetPulse 2.1s ease-out;
+    border-radius: 3px;
+}
+tr[id] { scroll-margin-top: 84px; }
+@media print {
+    a.codex-ref {
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        color: inherit !important;
+    }
+}
 </style>
 </head>
 <body class="book-mode sidebar-hidden" data-book-title="Empório &amp; Ofícios">
@@ -925,10 +1052,10 @@ tr { break-inside: avoid; }
 <h2 id="como-usar-este-empório-peso-carga-preços-e-ofícios-0">Como Usar Este Empório <em>(Peso, Carga, Preços e Ofícios)</em></h2>
 <p>Este tomo reúne o catálogo completo de <strong>equipamentos de aventura, acampamento, sobrevivência, pesca, caça, forja, engenharia sem pólvora, medicina, náutica, subterfúgio e vestuário</strong> de Alenia — todos calibrados ao <strong>Padrão Prata</strong> e às regras de carga da Edição Revisada v2.0.</p>
 <ul>
-<li><strong>Padrão Monetário <em>(Tomo I, Seção 9)</strong></em>: <strong><code>1 Áureo (PO)</code> = <code>10 Escudos/Pratas (PP)</code> = <code>100 Vinténs/Cobres (PC)</code></strong>. Moedas físicas pesam <strong><code>100 moedas = 1 kg</code></strong>.</li>
+<li><strong>Padrão Monetário <em>(<a class="codex-ref codex-tome" href="01_Livro_de_Regras.html" title="Abrir Tomo I — Livro de Regras">Tomo I</a>, Seção 9)</strong></em>: <strong><code>1 Áureo (PO)</code> = <code>10 Escudos/Pratas (PP)</code> = <code>100 Vinténs/Cobres (PC)</code></strong>. Moedas físicas pesam <strong><code>100 moedas = 1 kg</code></strong>.</li>
 <li><strong>Capacidade de Carga (<code>FOR × 5 kg</code>)</strong>:<ul><li><strong>Até <code>75%</code> da Capacidade</strong>: carga normal, sem penalidades.</li><li><strong>De <code>76%</code> a <code>100%</code> <em>(Carga Pesada)</strong></em>: <code>-1</code> em <em>Acrobacia</em>, <em>Escalada</em>, <em>Natação</em> e <em>Furtividade</em>.</li><li><strong>Acima de <code>100%</code> <em>(Sobrecarga — máx. <code>150%</code>)</strong></em>: deslocamento reduzido à metade (<code>4,5m</code>), <code>-3</code> em testes físicos e exige CON CD 13 a cada 2 horas de marcha para evitar <code>+1</code> nível de Exaustão.</li></ul></li>
 <li><strong>Qualidade das Ferramentas</strong>:<ul><li><strong>Sem Ferramentas Adequadas</strong>: tentar um ofício especializado <em>(forja, cirurgia, fechaduras, alquimia, cartografia)</em> impõe <strong><code>-3</code></strong> no teste ou torna a tarefa impossível.</li><li><strong>Ferramenta Comum <em>(preço de tabela)</strong></em>: permite realizar o ofício normalmente.</li><li><strong>Obra-Prima <em>(+<code>150 PP</code> sobre o valor base)</strong></em>: acabamento excepcional de <em>Aeraneas</em>, <em>Stoneforge</em> ou <em>Baldbella</em> — concede <strong><code>+1</code></strong> permanente nos testes usando aquele conjunto.</li></ul></li>
-<li><strong>Regra de Acúmulo de Bônus Externos <em>(Ferramentas, Kits e Talentos)</strong></em>:<ul><li><strong>Equipamento / Instrumentos <em>(Não Acumulam Entre Si)</strong></em>: aplica-se sempre <strong>apenas o maior bônus de equipamento</strong> pertinente ao teste <em>(ex.: uma ferramenta <code>Obra-Prima +1</code> <strong>não</strong> soma por cima de <code>Instrumentos Cirúrgicos de Baldbella +2</code> — prevalece <code>+2</code>)</em>.</li><li><strong>Teto Combinado de Modificadores Externos (<code>+6</code>)</strong>: somando Equipamento + Habilidade de Kit + Talentos + Ajudar + bônus circunstanciais no mesmo teste, o acréscimo fixo total <strong>nunca pode ultrapassar <code>+6</code></strong> <em>(exceto Preparação Ritualística na Seção 10 do Tomo I, que possui teto próprio de <code>+8</code>)</em>. Isso garante que o <em>Teto de Graduação por Nível</em> continue protegendo o equilíbrio das CDs (<code>10</code> a <code>30</code>).</li></ul></li>
+<li><strong>Regra de Acúmulo de Bônus Externos <em>(Ferramentas, Kits e Talentos)</strong></em>:<ul><li><strong>Equipamento / Instrumentos <em>(Não Acumulam Entre Si)</strong></em>: aplica-se sempre <strong>apenas o maior bônus de equipamento</strong> pertinente ao teste <em>(ex.: uma ferramenta <code>Obra-Prima +1</code> <strong>não</strong> soma por cima de <code>Instrumentos Cirúrgicos de Baldbella +2</code> — prevalece <code>+2</code>)</em>.</li><li><strong>Teto Combinado de Modificadores Externos (<code>+6</code>)</strong>: somando Equipamento + Habilidade de Kit + Talentos + Ajudar + bônus circunstanciais no mesmo teste, o acréscimo fixo total <strong>nunca pode ultrapassar <code>+6</code></strong> <em>(exceto Preparação Ritualística na Seção 10 do <a class="codex-ref codex-tome" href="01_Livro_de_Regras.html" title="Abrir Tomo I — Livro de Regras">Tomo I</a>, que possui teto próprio de <code>+8</code>)</em>. Isso garante que o <em>Teto de Graduação por Nível</em> continue protegendo o equilíbrio das CDs (<code>10</code> a <code>30</code>).</li></ul></li>
 <li><strong>Armas e Armaduras de Combate</strong>: tabelas completas de armas (<code>Adaga 4 PP</code> até <code>Besta Pesada 75 PP</code>), armaduras (<code>Gibão 12 PP</code> até <code>Placas Completas 450 PP</code> — zero RD passiva) e <em>Adamante</em> estão no <strong><a href="01_Livro_de_Regras.html">Livro de Regras — Seção 9.6</a></strong>.</li>
 </ul>
 <hr/>
@@ -1058,6 +1185,12 @@ tr { break-inside: avoid; }
             this.bindControls();
             this.applyMode(this.mode, false);
 
+            // Jump directly to URL hash anchor (e.g. 10_Herbario_de_Seleni.html#h24)
+            this.lockedHash = (window.location.hash || '').slice(1);
+            if (this.lockedHash) {
+                this.jumpToAnchor(this.lockedHash, false);
+            }
+
             // Re-paginate cleanly if any map image finishes loading after initial paint
             const source = document.querySelector('.book-page');
             if (source) {
@@ -1070,7 +1203,11 @@ tr { break-inside: avoid; }
                                 if (this.mode !== 'scroll') {
                                     const prev = this.currentIdx;
                                     this.paginate();
-                                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    if (this.lockedHash && this.anchorMap[this.lockedHash] !== undefined) {
+                                        this.goToPage(this.anchorMap[this.lockedHash], false);
+                                    } else {
+                                        this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    }
                                 }
                             }, 120);
                         }, { once: true });
@@ -1778,6 +1915,44 @@ tr { break-inside: avoid; }
             }
         },
 
+        flashAnchorTarget(id) {
+            const run = () => {
+                const scope = (this.mode !== 'scroll' && document.getElementById('book-spread'))
+                    ? document.getElementById('book-spread')
+                    : document;
+                const el = scope.querySelector(`[id="${CSS.escape(id)}"]`) || document.getElementById(id);
+                if (!el) return;
+                const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el.parentElement) : el;
+                if (!target) return;
+                target.classList.remove('codex-target-flash');
+                void target.offsetWidth;
+                target.classList.add('codex-target-flash');
+            };
+            setTimeout(run, this.mode !== 'scroll' ? 600 : 80);
+            setTimeout(run, 60);
+        },
+
+        jumpToAnchor(rawId, animate = true) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (this.mode !== 'scroll') {
+                const pageIdx = this.anchorMap[id];
+                if (pageIdx === undefined) return false;
+                this.lockedHash = '';
+                this.goToPage(pageIdx, animate);
+                document.body.classList.add('sidebar-hidden');
+                document.body.classList.remove('sidebar-open-mobile');
+                this.flashAnchorTarget(id);
+                return true;
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const scrollEl = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            scrollEl.scrollIntoView({ behavior: animate ? 'smooth' : 'auto', block: 'start' });
+            this.flashAnchorTarget(id);
+            return true;
+        },
+
         bindControls() {
             document.querySelectorAll('.btn-prev-page').forEach(b => b.addEventListener('click', () => this.step(-1)));
             document.querySelectorAll('.btn-next-page').forEach(b => b.addEventListener('click', () => this.step(1)));
@@ -1821,23 +1996,60 @@ tr { break-inside: avoid; }
                 else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.step(-1); }
             });
 
-            // Intercept TOC anchor clicks to jump directly to the exact book page!
-            const sidebar = document.querySelector('.sidebar');
-            if (sidebar) {
-                sidebar.addEventListener('click', (e) => {
-                    const a = e.target.closest('a[href^="#"]');
-                    if (!a || this.mode === 'scroll') return;
-                    const id = a.getAttribute('href').slice(1);
-                    if (this.anchorMap[id] !== undefined) {
-                        e.preventDefault();
-                        this.goToPage(this.anchorMap[id], true);
-                        document.body.classList.add('sidebar-hidden');
-                        document.body.classList.remove('sidebar-open-mobile');
-                    }
-                });
-            }
+            // Intercept ALL in-page anchor clicks (sidebar TOC + codex links inside book pages!)
+            document.addEventListener('click', (e) => {
+                const a = e.target.closest('a[href^="#"]');
+                if (!a) return;
+                const id = a.getAttribute('href').slice(1);
+                if (!id) return;
+                if (this.jumpToAnchor(id, true)) {
+                    e.preventDefault();
+                    try { history.replaceState(null, '', '#' + id); } catch (_) {}
+                }
+            });
+
+            window.addEventListener('hashchange', () => {
+                const id = (window.location.hash || '').slice(1);
+                if (id) this.jumpToAnchor(id, true);
+            });
         }
     };
+
+    /* =====================================================
+       CODEX ANCHOR CONTROLLER (NON-BOOK PAGES: CULINÁRIA / CRÔNICA)
+       ===================================================== */
+    (function initScrollCodexNav() {
+        if (document.body.classList.contains('has-book-reader')) return;
+        function focusCodexHash(rawId, smooth) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (typeof window.aleniaRevealAnchor === 'function') {
+                window.aleniaRevealAnchor(id);
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+            target.classList.remove('codex-target-flash');
+            void target.offsetWidth;
+            target.classList.add('codex-target-flash');
+            return true;
+        }
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            const id = a.getAttribute('href').slice(1);
+            if (!id) return;
+            if (focusCodexHash(id, true)) {
+                e.preventDefault();
+                try { history.replaceState(null, '', '#' + id); } catch (_) {}
+            }
+        });
+        window.addEventListener('hashchange', () => focusCodexHash(window.location.hash, true));
+        if (window.location.hash) {
+            setTimeout(() => focusCodexHash(window.location.hash, false), 120);
+        }
+    })();
 
     /* =====================================================
        GLOBAL SIDEBAR NAVIGATION CONTROLLER (ALL PAGES)

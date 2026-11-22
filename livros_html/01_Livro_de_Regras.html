@@ -873,6 +873,133 @@ tr { break-inside: avoid; }
     a { color: var(--crimson-dark); text-decoration: none; }
     .atlas-plate img { max-height: 160mm; object-fit: contain; }
 }
+
+/* =====================================================
+   HIPERLINKS DO CÓDICE DE ALENIA (H / C / A / B / T / TOMOS)
+   ===================================================== */
+.codex-anchor {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    vertical-align: top;
+    scroll-margin-top: 78px;
+}
+a.codex-ref {
+    display: inline-block;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.84em;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.25;
+    padding: 0 5px;
+    border-radius: 2px;
+    text-decoration: none !important;
+    border: 1px solid transparent;
+    transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.12s ease;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+a.codex-ref:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(42, 26, 12, 0.16);
+}
+a.codex-ref.codex-h {
+    background: rgba(31, 81, 86, 0.11);
+    border-color: rgba(31, 81, 86, 0.34);
+    color: #164044;
+}
+a.codex-ref.codex-h:hover {
+    background: #1f5156;
+    border-color: #163b3f;
+    color: #f7f1e3;
+}
+a.codex-ref.codex-c {
+    background: rgba(122, 31, 29, 0.10);
+    border-color: rgba(122, 31, 29, 0.34);
+    color: #6b1b19;
+}
+a.codex-ref.codex-c:hover {
+    background: #7a1f1d;
+    border-color: #531312;
+    color: #fff6e0;
+}
+a.codex-ref.codex-a {
+    background: rgba(138, 92, 38, 0.12);
+    border-color: rgba(138, 92, 38, 0.38);
+    color: #5b3a15;
+}
+a.codex-ref.codex-a:hover {
+    background: #7a4f1f;
+    border-color: #533412;
+    color: #fff6e0;
+}
+a.codex-ref.codex-b {
+    background: rgba(94, 108, 38, 0.12);
+    border-color: rgba(94, 108, 38, 0.38);
+    color: #3d4816;
+}
+a.codex-ref.codex-b:hover {
+    background: #53621f;
+    border-color: #384214;
+    color: #fff6e0;
+}
+a.codex-ref.codex-t {
+    background: rgba(154, 123, 59, 0.15);
+    border-color: rgba(154, 123, 59, 0.46);
+    color: #563f14;
+}
+a.codex-ref.codex-t:hover {
+    background: #8a6c2f;
+    border-color: #624b1d;
+    color: #fff6e0;
+}
+a.codex-ref.codex-tome {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    letter-spacing: normal;
+    padding: 0 2px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dotted rgba(122, 31, 29, 0.55);
+    border-radius: 0;
+    color: #6b1b19;
+}
+a.codex-ref.codex-tome:hover {
+    transform: none;
+    box-shadow: none;
+    border-bottom-style: solid;
+    background: rgba(154, 123, 59, 0.14);
+    color: #4f1110;
+}
+
+/* Inside culinary tag pills keep links crisp and compact */
+.cul-tag a.codex-ref {
+    font-size: 1em;
+    padding: 0 4px;
+    margin: 0 1px;
+}
+
+/* Destaque temporário ao saltar para uma ficha / planta / prato / animal */
+@keyframes codexTargetPulse {
+    0%   { background-color: rgba(205, 162, 74, 0.42); box-shadow: 0 0 0 4px rgba(154, 123, 59, 0.32); }
+    65%  { background-color: rgba(205, 162, 74, 0.22); box-shadow: 0 0 0 2px rgba(154, 123, 59, 0.18); }
+    100% { background-color: transparent; box-shadow: none; }
+}
+.codex-target-flash {
+    animation: codexTargetPulse 2.1s ease-out;
+    border-radius: 3px;
+}
+tr[id] { scroll-margin-top: 84px; }
+@media print {
+    a.codex-ref {
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        color: inherit !important;
+    }
+}
 </style>
 </head>
 <body class="book-mode sidebar-hidden" data-book-title="Livro de Regras">
@@ -1189,7 +1316,7 @@ tr { break-inside: avoid; }
 </ul>
 
     <div class="gm-vault" data-locked="true">
-        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"DCFIzjCMqaCRsA6vBz+Ncw==","i":"ukT3niiy/61ZLXjg","c":"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"}</script>
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"qcxUAZJ5LD9quduZSGUQlw==","i":"x/OQCfr41wkgiOKj","c":"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"}</script>
         <div class="gm-gate-box">
             <div class="gm-seal-icon">🔒</div>
             <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
@@ -1297,6 +1424,12 @@ tr { break-inside: avoid; }
             this.bindControls();
             this.applyMode(this.mode, false);
 
+            // Jump directly to URL hash anchor (e.g. 10_Herbario_de_Seleni.html#h24)
+            this.lockedHash = (window.location.hash || '').slice(1);
+            if (this.lockedHash) {
+                this.jumpToAnchor(this.lockedHash, false);
+            }
+
             // Re-paginate cleanly if any map image finishes loading after initial paint
             const source = document.querySelector('.book-page');
             if (source) {
@@ -1309,7 +1442,11 @@ tr { break-inside: avoid; }
                                 if (this.mode !== 'scroll') {
                                     const prev = this.currentIdx;
                                     this.paginate();
-                                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    if (this.lockedHash && this.anchorMap[this.lockedHash] !== undefined) {
+                                        this.goToPage(this.anchorMap[this.lockedHash], false);
+                                    } else {
+                                        this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    }
                                 }
                             }, 120);
                         }, { once: true });
@@ -2017,6 +2154,44 @@ tr { break-inside: avoid; }
             }
         },
 
+        flashAnchorTarget(id) {
+            const run = () => {
+                const scope = (this.mode !== 'scroll' && document.getElementById('book-spread'))
+                    ? document.getElementById('book-spread')
+                    : document;
+                const el = scope.querySelector(`[id="${CSS.escape(id)}"]`) || document.getElementById(id);
+                if (!el) return;
+                const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el.parentElement) : el;
+                if (!target) return;
+                target.classList.remove('codex-target-flash');
+                void target.offsetWidth;
+                target.classList.add('codex-target-flash');
+            };
+            setTimeout(run, this.mode !== 'scroll' ? 600 : 80);
+            setTimeout(run, 60);
+        },
+
+        jumpToAnchor(rawId, animate = true) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (this.mode !== 'scroll') {
+                const pageIdx = this.anchorMap[id];
+                if (pageIdx === undefined) return false;
+                this.lockedHash = '';
+                this.goToPage(pageIdx, animate);
+                document.body.classList.add('sidebar-hidden');
+                document.body.classList.remove('sidebar-open-mobile');
+                this.flashAnchorTarget(id);
+                return true;
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const scrollEl = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            scrollEl.scrollIntoView({ behavior: animate ? 'smooth' : 'auto', block: 'start' });
+            this.flashAnchorTarget(id);
+            return true;
+        },
+
         bindControls() {
             document.querySelectorAll('.btn-prev-page').forEach(b => b.addEventListener('click', () => this.step(-1)));
             document.querySelectorAll('.btn-next-page').forEach(b => b.addEventListener('click', () => this.step(1)));
@@ -2060,23 +2235,60 @@ tr { break-inside: avoid; }
                 else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.step(-1); }
             });
 
-            // Intercept TOC anchor clicks to jump directly to the exact book page!
-            const sidebar = document.querySelector('.sidebar');
-            if (sidebar) {
-                sidebar.addEventListener('click', (e) => {
-                    const a = e.target.closest('a[href^="#"]');
-                    if (!a || this.mode === 'scroll') return;
-                    const id = a.getAttribute('href').slice(1);
-                    if (this.anchorMap[id] !== undefined) {
-                        e.preventDefault();
-                        this.goToPage(this.anchorMap[id], true);
-                        document.body.classList.add('sidebar-hidden');
-                        document.body.classList.remove('sidebar-open-mobile');
-                    }
-                });
-            }
+            // Intercept ALL in-page anchor clicks (sidebar TOC + codex links inside book pages!)
+            document.addEventListener('click', (e) => {
+                const a = e.target.closest('a[href^="#"]');
+                if (!a) return;
+                const id = a.getAttribute('href').slice(1);
+                if (!id) return;
+                if (this.jumpToAnchor(id, true)) {
+                    e.preventDefault();
+                    try { history.replaceState(null, '', '#' + id); } catch (_) {}
+                }
+            });
+
+            window.addEventListener('hashchange', () => {
+                const id = (window.location.hash || '').slice(1);
+                if (id) this.jumpToAnchor(id, true);
+            });
         }
     };
+
+    /* =====================================================
+       CODEX ANCHOR CONTROLLER (NON-BOOK PAGES: CULINÁRIA / CRÔNICA)
+       ===================================================== */
+    (function initScrollCodexNav() {
+        if (document.body.classList.contains('has-book-reader')) return;
+        function focusCodexHash(rawId, smooth) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (typeof window.aleniaRevealAnchor === 'function') {
+                window.aleniaRevealAnchor(id);
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+            target.classList.remove('codex-target-flash');
+            void target.offsetWidth;
+            target.classList.add('codex-target-flash');
+            return true;
+        }
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            const id = a.getAttribute('href').slice(1);
+            if (!id) return;
+            if (focusCodexHash(id, true)) {
+                e.preventDefault();
+                try { history.replaceState(null, '', '#' + id); } catch (_) {}
+            }
+        });
+        window.addEventListener('hashchange', () => focusCodexHash(window.location.hash, true));
+        if (window.location.hash) {
+            setTimeout(() => focusCodexHash(window.location.hash, false), 120);
+        }
+    })();
 
     /* =====================================================
        GLOBAL SIDEBAR NAVIGATION CONTROLLER (ALL PAGES)

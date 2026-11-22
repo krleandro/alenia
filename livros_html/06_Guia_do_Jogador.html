@@ -873,6 +873,133 @@ tr { break-inside: avoid; }
     a { color: var(--crimson-dark); text-decoration: none; }
     .atlas-plate img { max-height: 160mm; object-fit: contain; }
 }
+
+/* =====================================================
+   HIPERLINKS DO CÓDICE DE ALENIA (H / C / A / B / T / TOMOS)
+   ===================================================== */
+.codex-anchor {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    vertical-align: top;
+    scroll-margin-top: 78px;
+}
+a.codex-ref {
+    display: inline-block;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.84em;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.25;
+    padding: 0 5px;
+    border-radius: 2px;
+    text-decoration: none !important;
+    border: 1px solid transparent;
+    transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.12s ease;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+a.codex-ref:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(42, 26, 12, 0.16);
+}
+a.codex-ref.codex-h {
+    background: rgba(31, 81, 86, 0.11);
+    border-color: rgba(31, 81, 86, 0.34);
+    color: #164044;
+}
+a.codex-ref.codex-h:hover {
+    background: #1f5156;
+    border-color: #163b3f;
+    color: #f7f1e3;
+}
+a.codex-ref.codex-c {
+    background: rgba(122, 31, 29, 0.10);
+    border-color: rgba(122, 31, 29, 0.34);
+    color: #6b1b19;
+}
+a.codex-ref.codex-c:hover {
+    background: #7a1f1d;
+    border-color: #531312;
+    color: #fff6e0;
+}
+a.codex-ref.codex-a {
+    background: rgba(138, 92, 38, 0.12);
+    border-color: rgba(138, 92, 38, 0.38);
+    color: #5b3a15;
+}
+a.codex-ref.codex-a:hover {
+    background: #7a4f1f;
+    border-color: #533412;
+    color: #fff6e0;
+}
+a.codex-ref.codex-b {
+    background: rgba(94, 108, 38, 0.12);
+    border-color: rgba(94, 108, 38, 0.38);
+    color: #3d4816;
+}
+a.codex-ref.codex-b:hover {
+    background: #53621f;
+    border-color: #384214;
+    color: #fff6e0;
+}
+a.codex-ref.codex-t {
+    background: rgba(154, 123, 59, 0.15);
+    border-color: rgba(154, 123, 59, 0.46);
+    color: #563f14;
+}
+a.codex-ref.codex-t:hover {
+    background: #8a6c2f;
+    border-color: #624b1d;
+    color: #fff6e0;
+}
+a.codex-ref.codex-tome {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    letter-spacing: normal;
+    padding: 0 2px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dotted rgba(122, 31, 29, 0.55);
+    border-radius: 0;
+    color: #6b1b19;
+}
+a.codex-ref.codex-tome:hover {
+    transform: none;
+    box-shadow: none;
+    border-bottom-style: solid;
+    background: rgba(154, 123, 59, 0.14);
+    color: #4f1110;
+}
+
+/* Inside culinary tag pills keep links crisp and compact */
+.cul-tag a.codex-ref {
+    font-size: 1em;
+    padding: 0 4px;
+    margin: 0 1px;
+}
+
+/* Destaque temporário ao saltar para uma ficha / planta / prato / animal */
+@keyframes codexTargetPulse {
+    0%   { background-color: rgba(205, 162, 74, 0.42); box-shadow: 0 0 0 4px rgba(154, 123, 59, 0.32); }
+    65%  { background-color: rgba(205, 162, 74, 0.22); box-shadow: 0 0 0 2px rgba(154, 123, 59, 0.18); }
+    100% { background-color: transparent; box-shadow: none; }
+}
+.codex-target-flash {
+    animation: codexTargetPulse 2.1s ease-out;
+    border-radius: 3px;
+}
+tr[id] { scroll-margin-top: 84px; }
+@media print {
+    a.codex-ref {
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        color: inherit !important;
+    }
+}
 </style>
 </head>
 <body class="book-mode sidebar-hidden" data-book-title="Guia do Jogador &amp; Escudo">
@@ -954,8 +1081,8 @@ tr { break-inside: avoid; }
 <li><strong>Defesa Desprevenido / Surpreso</strong>: <code>10 + Armadura + Escudo</code> <em>(sem DES nem perícia até o início do seu 1º turno)</em>.</li>
 <li><strong>Condição Caído / Derrubado</strong>: <code>-4</code> na Defesa corpo a corpo e <code>+2</code> contra projéteis à distância até gastar <code>4,5m</code> (metade do Movimento) para levantar.</li>
 <li><strong>Turno</strong>: <code>1 Ação Principal</code> + <code>1 Movimento (9m)</code> + <code>1 Reação/rodada</code> + <code>Ações Livres</code>.</li>
-<li><strong>Evolução &amp; XP (Níveis 1 a 30)</strong>: ganha-se XP por <strong>5 pilares</strong> (<em>Exploração/Viagem, Armadilhas/Mistérios, Vitórias Sociais, Combates Superados sem exigir matar e Contratos/Interpretação</em> — tabela completa no Tomo I; <code>Nív. 2 = 300 XP</code>, <code>Nív. 5 = 2.500 XP</code>, <code>Nív. 11 Lenda = 17.000 XP</code>, <code>Nív. 21 Épico = 92.000 XP</code>).</li>
-<li><strong>Subir de Nível</strong>: role <strong><code>1dX + Mod(CON)</code></strong> (mín. <code>1 PV</code>) + ganhe pontos de perícia conforme o Patamar (<strong>Recruta 1–10</strong>: <code>1×</code>, teto Atrib. <code>18</code>, teto Grad. <code>+4</code> a <code>+11</code>; <strong>Lenda 11–20</strong>: <code>1,5×</code>, teto Atrib. <code>20</code>, teto Grad. <code>+12</code> a <code>+14</code>, <code>+1</code> dado individual de dano; <strong>Épico 21–30</strong>: <code>2×</code>, teto Atrib. <code>22</code>, teto Grad. <code>+15</code> a <code>+16</code>, <code>+2</code> dados individuais — ex.: <em>Montante <code>2d6</code> → <code>3d6</code> Lenda → <code>4d6</code> Épico</em>) + <code>+1</code> Atributo a cada <strong>3 níveis</strong> + <code>1</code> Talento nos <strong>níveis pares</strong> <em>(44 Talentos em 4 categorias no Tomo I)</em>.</li>
+<li><strong>Evolução &amp; XP (Níveis 1 a 30)</strong>: ganha-se XP por <strong>5 pilares</strong> (<em>Exploração/Viagem, Armadilhas/Mistérios, Vitórias Sociais, Combates Superados sem exigir matar e Contratos/Interpretação</em> — tabela completa no <a class="codex-ref codex-tome" href="01_Livro_de_Regras.html" title="Abrir Tomo I — Livro de Regras">Tomo I</a>; <code>Nív. 2 = 300 XP</code>, <code>Nív. 5 = 2.500 XP</code>, <code>Nív. 11 Lenda = 17.000 XP</code>, <code>Nív. 21 Épico = 92.000 XP</code>).</li>
+<li><strong>Subir de Nível</strong>: role <strong><code>1dX + Mod(CON)</code></strong> (mín. <code>1 PV</code>) + ganhe pontos de perícia conforme o Patamar (<strong>Recruta 1–10</strong>: <code>1×</code>, teto Atrib. <code>18</code>, teto Grad. <code>+4</code> a <code>+11</code>; <strong>Lenda 11–20</strong>: <code>1,5×</code>, teto Atrib. <code>20</code>, teto Grad. <code>+12</code> a <code>+14</code>, <code>+1</code> dado individual de dano; <strong>Épico 21–30</strong>: <code>2×</code>, teto Atrib. <code>22</code>, teto Grad. <code>+15</code> a <code>+16</code>, <code>+2</code> dados individuais — ex.: <em>Montante <code>2d6</code> → <code>3d6</code> Lenda → <code>4d6</code> Épico</em>) + <code>+1</code> Atributo a cada <strong>3 níveis</strong> + <code>1</code> Talento nos <strong>níveis pares</strong> <em>(44 Talentos em 4 categorias no <a class="codex-ref codex-tome" href="01_Livro_de_Regras.html" title="Abrir Tomo I — Livro de Regras">Tomo I</a>)</em>.</li>
 </ul>
 <h3 id="combate-especial-e-manobras-6">Combate Especial e Manobras</h3>
 <div class="table-wrap"><table><thead><tr><th style="text-align:left">Regra</th><th style="text-align:left">Mecânica Exata</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Múltiplas Ações <em>(Storyteller)</strong></em></td><td style="text-align:left">Divida o Bônus Total por <code>N</code> e subtraia <code>N</code>: <code>⌊Bônus / N⌋ - N</code>. <strong>Limites</strong>: Destr. <code>1</code>, Trein. <code>2</code>, Espec. <code>3</code>, Mestre <code>4</code>; só válido se o bônus final for <strong><code>≥ 0</code></strong>.</td></tr><tr><td style="text-align:left"><strong>Defesa Total</strong></td><td style="text-align:left">Sacrifica Ação Principal: <strong><code>+4</code> Defesa</strong> (<code>+6</code> Espec. / <code>+8</code> Mestre) e <code>-2</code> nos ataques corpo a corpo contra você.</td></tr><tr><td style="text-align:left"><strong>Proteger Aliado</strong></td><td style="text-align:left">Sacrifica Ação Principal: atacantes contra aliado adjacente sofrem <strong><code>-4</code></strong> (<code>-6</code> Espec. / <code>-8</code> Mestre) e você pode interceptar o golpe.</td></tr><tr><td style="text-align:left"><strong>Ataque de Oportunidade / Desengajar</strong></td><td style="text-align:left">Sair voluntariamente do alcance corpo a corpo (<code>1,5m</code> / <code>3m</code> pique) ou baixar a guarda adjacente provoca <code>1</code> ataque único de <strong>Reação</strong>. <strong>Desengajar (Ação Principal)</strong> evita isso; empurrões nunca provocam.</td></tr><tr><td style="text-align:left"><strong>Ajudar / Flanquear</strong></td><td style="text-align:left"><strong>Ajudar (Ação Principal, adj. <code>1,5m</code>)</strong>: <code>+2</code> no próximo teste/ataque de um aliado <em>(máx. 1 ajudante em combate; até 2 fora)</em>. <strong>Flanquear</strong>: <code>+2</code> no ataque.</td></tr><tr><td style="text-align:left"><strong>Acerto Crítico</strong></td><td style="text-align:left">Dado natural ≥ Margem da arma (e acerta): multiplica <strong><code>(Dados da Arma + Maestria Lenda/Épico + Mod. Atributo + Bônus Fixo) × Mult</code></strong>. Dados externos (veneno/Oportunista) somam depois.</td></tr><tr><td style="text-align:left"><strong>Golpe Devastador (<code>&gt; 2/3 PV</code>)</strong></td><td style="text-align:left">Dano em 1 golpe &gt; <code>2/3</code> do PV Máx. exige <strong>CON CD <code>15 + ⌊excedente/2⌋</code></strong> → falha = <strong>Morte Instantânea</strong>; sucesso = sobrevive com <strong>Ferimento Grave</strong>.</td></tr></tbody></table></div>
@@ -1062,6 +1189,12 @@ tr { break-inside: avoid; }
             this.bindControls();
             this.applyMode(this.mode, false);
 
+            // Jump directly to URL hash anchor (e.g. 10_Herbario_de_Seleni.html#h24)
+            this.lockedHash = (window.location.hash || '').slice(1);
+            if (this.lockedHash) {
+                this.jumpToAnchor(this.lockedHash, false);
+            }
+
             // Re-paginate cleanly if any map image finishes loading after initial paint
             const source = document.querySelector('.book-page');
             if (source) {
@@ -1074,7 +1207,11 @@ tr { break-inside: avoid; }
                                 if (this.mode !== 'scroll') {
                                     const prev = this.currentIdx;
                                     this.paginate();
-                                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    if (this.lockedHash && this.anchorMap[this.lockedHash] !== undefined) {
+                                        this.goToPage(this.anchorMap[this.lockedHash], false);
+                                    } else {
+                                        this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    }
                                 }
                             }, 120);
                         }, { once: true });
@@ -1782,6 +1919,44 @@ tr { break-inside: avoid; }
             }
         },
 
+        flashAnchorTarget(id) {
+            const run = () => {
+                const scope = (this.mode !== 'scroll' && document.getElementById('book-spread'))
+                    ? document.getElementById('book-spread')
+                    : document;
+                const el = scope.querySelector(`[id="${CSS.escape(id)}"]`) || document.getElementById(id);
+                if (!el) return;
+                const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el.parentElement) : el;
+                if (!target) return;
+                target.classList.remove('codex-target-flash');
+                void target.offsetWidth;
+                target.classList.add('codex-target-flash');
+            };
+            setTimeout(run, this.mode !== 'scroll' ? 600 : 80);
+            setTimeout(run, 60);
+        },
+
+        jumpToAnchor(rawId, animate = true) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (this.mode !== 'scroll') {
+                const pageIdx = this.anchorMap[id];
+                if (pageIdx === undefined) return false;
+                this.lockedHash = '';
+                this.goToPage(pageIdx, animate);
+                document.body.classList.add('sidebar-hidden');
+                document.body.classList.remove('sidebar-open-mobile');
+                this.flashAnchorTarget(id);
+                return true;
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const scrollEl = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            scrollEl.scrollIntoView({ behavior: animate ? 'smooth' : 'auto', block: 'start' });
+            this.flashAnchorTarget(id);
+            return true;
+        },
+
         bindControls() {
             document.querySelectorAll('.btn-prev-page').forEach(b => b.addEventListener('click', () => this.step(-1)));
             document.querySelectorAll('.btn-next-page').forEach(b => b.addEventListener('click', () => this.step(1)));
@@ -1825,23 +2000,60 @@ tr { break-inside: avoid; }
                 else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.step(-1); }
             });
 
-            // Intercept TOC anchor clicks to jump directly to the exact book page!
-            const sidebar = document.querySelector('.sidebar');
-            if (sidebar) {
-                sidebar.addEventListener('click', (e) => {
-                    const a = e.target.closest('a[href^="#"]');
-                    if (!a || this.mode === 'scroll') return;
-                    const id = a.getAttribute('href').slice(1);
-                    if (this.anchorMap[id] !== undefined) {
-                        e.preventDefault();
-                        this.goToPage(this.anchorMap[id], true);
-                        document.body.classList.add('sidebar-hidden');
-                        document.body.classList.remove('sidebar-open-mobile');
-                    }
-                });
-            }
+            // Intercept ALL in-page anchor clicks (sidebar TOC + codex links inside book pages!)
+            document.addEventListener('click', (e) => {
+                const a = e.target.closest('a[href^="#"]');
+                if (!a) return;
+                const id = a.getAttribute('href').slice(1);
+                if (!id) return;
+                if (this.jumpToAnchor(id, true)) {
+                    e.preventDefault();
+                    try { history.replaceState(null, '', '#' + id); } catch (_) {}
+                }
+            });
+
+            window.addEventListener('hashchange', () => {
+                const id = (window.location.hash || '').slice(1);
+                if (id) this.jumpToAnchor(id, true);
+            });
         }
     };
+
+    /* =====================================================
+       CODEX ANCHOR CONTROLLER (NON-BOOK PAGES: CULINÁRIA / CRÔNICA)
+       ===================================================== */
+    (function initScrollCodexNav() {
+        if (document.body.classList.contains('has-book-reader')) return;
+        function focusCodexHash(rawId, smooth) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (typeof window.aleniaRevealAnchor === 'function') {
+                window.aleniaRevealAnchor(id);
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+            target.classList.remove('codex-target-flash');
+            void target.offsetWidth;
+            target.classList.add('codex-target-flash');
+            return true;
+        }
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            const id = a.getAttribute('href').slice(1);
+            if (!id) return;
+            if (focusCodexHash(id, true)) {
+                e.preventDefault();
+                try { history.replaceState(null, '', '#' + id); } catch (_) {}
+            }
+        });
+        window.addEventListener('hashchange', () => focusCodexHash(window.location.hash, true));
+        if (window.location.hash) {
+            setTimeout(() => focusCodexHash(window.location.hash, false), 120);
+        }
+    })();
 
     /* =====================================================
        GLOBAL SIDEBAR NAVIGATION CONTROLLER (ALL PAGES)

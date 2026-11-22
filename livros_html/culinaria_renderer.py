@@ -541,6 +541,19 @@ CULINARIA_JS = r"""
 
     if (searchEl) searchEl.addEventListener('input', applyFilter);
 
+    // Reveal a filtered-out dish automatically when jumping via a #cXX anchor link
+    window.aleniaRevealAnchor = function(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const hiddenRecipe = el.closest('.cul-recipe.is-hidden') || el.closest('.cul-region.is-hidden');
+        if (hiddenRecipe) {
+            activeRegion = 'ALL';
+            pills.forEach(x => x.classList.toggle('active', x.dataset.region === 'ALL'));
+            if (searchEl) searchEl.value = '';
+            applyFilter();
+        }
+    };
+
     // Open full high-res 4-dish plate in Alenia's built-in lightbox when clicking any dish photo or plate button
     function openPlateLightbox(src) {
         const lb = document.getElementById('atlas-lightbox');
@@ -669,19 +682,11 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
                         if k_clean == "Imagem":
                             continue
                         cls = "cul-tag"
-                        val_html = html.escape(v_clean)
                         if "Preço" in k_clean:
                             cls += " price"
-                        elif k_clean == "Fauna":
+                        elif k_clean in ("Fauna", "Herbário"):
                             cls += " herb"
-                            val_html = re.sub(
-                                r"\b(A\d{2})\b",
-                                lambda m: f'<a href="#{m.group(1).lower()}" title="Ver prancha zoológica {m.group(1)}">{m.group(1)}</a>',
-                                val_html,
-                            )
-                        elif k_clean == "Herbário":
-                            cls += " herb"
-                        tags.append(f'<span class="{cls}">{html.escape(k_clean)}: {val_html}</span>')
+                        tags.append(f'<span class="{cls}">{html.escape(k_clean)}: {html.escape(v_clean)}</span>')
                 else:
                     body_paras.append(f"<p>{inline_md(bl)}</p>")
 
@@ -793,18 +798,6 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
 
     # Render remaining sections (Despensa, Viagem, Mesas de Campanha, Caderno Antigo, Fontes, Índice Rápido)
     appendix_md = "\n\n".join(appendix_mds)
-    # Enhance quick index table dish codes (C01..C32) and animal codes (A01..A22) into clickable anchor links
-    appendix_md = re.sub(
-        r"^\|\s*(C\d{2})\s*—",
-        lambda m: f"| [{m.group(1)}](#{m.group(1).lower()}) —",
-        appendix_md,
-        flags=re.M,
-    )
-    appendix_md = re.sub(
-        r"\b(A\d{2})\b(?=(?:,\s*A\d{2})*\s*\|)",
-        lambda m: f"[{m.group(1)}](#{m.group(1).lower()})",
-        appendix_md,
-    )
     appendix_html, appendix_toc = md_to_html(appendix_md, id_prefix="cul-", card_h3=False, inject_maps=False)
     toc_items.extend(appendix_toc)
 

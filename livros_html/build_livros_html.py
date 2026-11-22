@@ -17,6 +17,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from token_studio import TOKEN_STUDIO_CSS, TOKEN_STUDIO_HTML, TOKEN_STUDIO_JS
 from culinaria_renderer import CULINARIA_CSS, CULINARIA_JS, render_culinaria_page
+from codex_linker import CODEX_CSS, build_codex_registry, link_codex_html
 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -257,7 +258,19 @@ def encrypt_payload(plaintext: str, password: str) -> str:
     }, separators=(",", ":"))
 
 
-def make_gm_gate_block(label: str, subtitle: str, encrypted_body_html: str, encrypted_toc_html: str = "") -> str:
+CODEX_REGISTRY = None
+
+
+def get_codex_registry():
+    global CODEX_REGISTRY
+    if CODEX_REGISTRY is None:
+        CODEX_REGISTRY = build_codex_registry(ROOT_DIR)
+    return CODEX_REGISTRY
+
+
+def make_gm_gate_block(label: str, subtitle: str, encrypted_body_html: str, encrypted_toc_html: str = "", codex_file: str = "", compendium_mode: bool = False) -> str:
+    if codex_file:
+        encrypted_body_html = link_codex_html(encrypted_body_html, codex_file, get_codex_registry(), compendium_mode=compendium_mode)
     if not GM_PASSWORD:
         return encrypted_body_html
     payload_obj = {"html": encrypted_body_html, "toc": encrypted_toc_html}
@@ -1241,6 +1254,12 @@ SHARED_JS = r"""
             this.bindControls();
             this.applyMode(this.mode, false);
 
+            // Jump directly to URL hash anchor (e.g. 10_Herbario_de_Seleni.html#h24)
+            this.lockedHash = (window.location.hash || '').slice(1);
+            if (this.lockedHash) {
+                this.jumpToAnchor(this.lockedHash, false);
+            }
+
             // Re-paginate cleanly if any map image finishes loading after initial paint
             const source = document.querySelector('.book-page');
             if (source) {
@@ -1253,7 +1272,11 @@ SHARED_JS = r"""
                                 if (this.mode !== 'scroll') {
                                     const prev = this.currentIdx;
                                     this.paginate();
-                                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    if (this.lockedHash && this.anchorMap[this.lockedHash] !== undefined) {
+                                        this.goToPage(this.anchorMap[this.lockedHash], false);
+                                    } else {
+                                        this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    }
                                 }
                             }, 120);
                         }, { once: true });
@@ -1961,6 +1984,44 @@ SHARED_JS = r"""
             }
         },
 
+        flashAnchorTarget(id) {
+            const run = () => {
+                const scope = (this.mode !== 'scroll' && document.getElementById('book-spread'))
+                    ? document.getElementById('book-spread')
+                    : document;
+                const el = scope.querySelector(`[id="${CSS.escape(id)}"]`) || document.getElementById(id);
+                if (!el) return;
+                const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el.parentElement) : el;
+                if (!target) return;
+                target.classList.remove('codex-target-flash');
+                void target.offsetWidth;
+                target.classList.add('codex-target-flash');
+            };
+            setTimeout(run, this.mode !== 'scroll' ? 600 : 80);
+            setTimeout(run, 60);
+        },
+
+        jumpToAnchor(rawId, animate = true) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (this.mode !== 'scroll') {
+                const pageIdx = this.anchorMap[id];
+                if (pageIdx === undefined) return false;
+                this.lockedHash = '';
+                this.goToPage(pageIdx, animate);
+                document.body.classList.add('sidebar-hidden');
+                document.body.classList.remove('sidebar-open-mobile');
+                this.flashAnchorTarget(id);
+                return true;
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const scrollEl = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            scrollEl.scrollIntoView({ behavior: animate ? 'smooth' : 'auto', block: 'start' });
+            this.flashAnchorTarget(id);
+            return true;
+        },
+
         bindControls() {
             document.querySelectorAll('.btn-prev-page').forEach(b => b.addEventListener('click', () => this.step(-1)));
             document.querySelectorAll('.btn-next-page').forEach(b => b.addEventListener('click', () => this.step(1)));
@@ -2004,23 +2065,60 @@ SHARED_JS = r"""
                 else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.step(-1); }
             });
 
-            // Intercept TOC anchor clicks to jump directly to the exact book page!
-            const sidebar = document.querySelector('.sidebar');
-            if (sidebar) {
-                sidebar.addEventListener('click', (e) => {
-                    const a = e.target.closest('a[href^="#"]');
-                    if (!a || this.mode === 'scroll') return;
-                    const id = a.getAttribute('href').slice(1);
-                    if (this.anchorMap[id] !== undefined) {
-                        e.preventDefault();
-                        this.goToPage(this.anchorMap[id], true);
-                        document.body.classList.add('sidebar-hidden');
-                        document.body.classList.remove('sidebar-open-mobile');
-                    }
-                });
-            }
+            // Intercept ALL in-page anchor clicks (sidebar TOC + codex links inside book pages!)
+            document.addEventListener('click', (e) => {
+                const a = e.target.closest('a[href^="#"]');
+                if (!a) return;
+                const id = a.getAttribute('href').slice(1);
+                if (!id) return;
+                if (this.jumpToAnchor(id, true)) {
+                    e.preventDefault();
+                    try { history.replaceState(null, '', '#' + id); } catch (_) {}
+                }
+            });
+
+            window.addEventListener('hashchange', () => {
+                const id = (window.location.hash || '').slice(1);
+                if (id) this.jumpToAnchor(id, true);
+            });
         }
     };
+
+    /* =====================================================
+       CODEX ANCHOR CONTROLLER (NON-BOOK PAGES: CULINÁRIA / CRÔNICA)
+       ===================================================== */
+    (function initScrollCodexNav() {
+        if (document.body.classList.contains('has-book-reader')) return;
+        function focusCodexHash(rawId, smooth) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (typeof window.aleniaRevealAnchor === 'function') {
+                window.aleniaRevealAnchor(id);
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+            target.classList.remove('codex-target-flash');
+            void target.offsetWidth;
+            target.classList.add('codex-target-flash');
+            return true;
+        }
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            const id = a.getAttribute('href').slice(1);
+            if (!id) return;
+            if (focusCodexHash(id, true)) {
+                e.preventDefault();
+                try { history.replaceState(null, '', '#' + id); } catch (_) {}
+            }
+        });
+        window.addEventListener('hashchange', () => focusCodexHash(window.location.hash, true));
+        if (window.location.hash) {
+            setTimeout(() => focusCodexHash(window.location.hash, false), 120);
+        }
+    })();
 
     /* =====================================================
        GLOBAL SIDEBAR NAVIGATION CONTROLLER (ALL PAGES)
@@ -2408,10 +2506,17 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
                 out.append('<div class="entry-card">')
                 in_card = True
 
+            codex_span = ""
+            if level == 3:
+                m_codex = re.match(r"^((?:H\d{2}|C\d{2}|A\d{2}|T\d{3}))\s+[—–-]\s+", plain_title)
+                if m_codex:
+                    short_id = f"{id_prefix}{m_codex.group(1).lower()}"
+                    codex_span = f'<span id="{short_id}" class="codex-anchor" aria-hidden="true"></span>'
+
             if level == 1:
                 out.append(f'<h1 id="{hid}" class="book-h1">{inline_md(raw_title)}</h1>')
             else:
-                out.append(f'<h{level} id="{hid}">{inline_md(raw_title)}</h{level}>')
+                out.append(f'<h{level} id="{hid}">{codex_span}{inline_md(raw_title)}</h{level}>')
 
             if level in (2, 3):
                 toc.append((level, plain_title, hid))
@@ -2512,8 +2617,14 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
                 al = aligns[idx_c] if idx_c < len(aligns) else "left"
                 t_html.append(f'<th style="text-align:{al}">{inline_md(hcell)}</th>')
             t_html.append("</tr></thead><tbody>")
+            row_prefix = "" if id_prefix == "cul-" else id_prefix
             for r in rows:
-                t_html.append("<tr>")
+                row_id_attr = ""
+                if r:
+                    m_bcode = re.match(r"^(B0[1-6])$", r[0].strip())
+                    if m_bcode:
+                        row_id_attr = f' id="{row_prefix}{m_bcode.group(1).lower()}"'
+                t_html.append(f"<tr{row_id_attr}>")
                 for idx_c, cell in enumerate(r):
                     al = aligns[idx_c] if idx_c < len(aligns) else "left"
                     t_html.append(f'<td style="text-align:{al}">{inline_md(cell)}</td>')
@@ -2563,7 +2674,7 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
     return "\n".join(out), toc
 
 
-def render_public_doc_with_sealed_sections(md_content: str, id_prefix: str, card_h3: bool, inject_maps: bool):
+def render_public_doc_with_sealed_sections(md_content: str, id_prefix: str, card_h3: bool, inject_maps: bool, codex_file: str = "", compendium_mode: bool = False):
     chunks = split_md_with_gm_sections(md_content)
     html_parts = []
     public_toc = []
@@ -2579,6 +2690,8 @@ def render_public_doc_with_sealed_sections(md_content: str, id_prefix: str, card
                     "Esta seção contém segredos de campanha reservados ao Mestre. Insira a senha para revelar.",
                     rendered,
                     toc_html,
+                    codex_file=codex_file,
+                    compendium_mode=compendium_mode,
                 )
             )
         else:
@@ -4053,6 +4166,12 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
     body_cls = f' class="{" ".join(classes)}"' if classes else ""
     extra_style_tag = f"\n    <style>{extra_css}</style>" if extra_css else ""
     extra_script_tag = f"\n    <script>{extra_js}</script>" if extra_js else ""
+    body_html = link_codex_html(
+        body_html,
+        active_file,
+        get_codex_registry(),
+        compendium_mode=(active_file == "Alenia_Compendio_Completo.html"),
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="pt-BR">
@@ -4060,7 +4179,7 @@ def wrap_html_doc(page_title: str, active_file: str, body_html: str, toc_items=N
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{html.escape(page_title)} — Alenia RPG</title>
-    <style>{SHARED_CSS}</style>{extra_style_tag}
+    <style>{SHARED_CSS}{CODEX_CSS}</style>{extra_style_tag}
 </head>
 <body{body_cls} data-book-title="{html.escape(page_title)}">
     {build_topbar(active_file, page_title, has_toc)}
@@ -4121,6 +4240,8 @@ def main():
                 "Conteúdo restrito ao Mestre (fichas, segredos e bastidores). Digite a senha para descriptografar.",
                 secret_html,
                 render_toc_items(secret_toc),
+                codex_file=bk["out"],
+                compendium_mode=False,
             )
             full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + gated, toc_items=[], force_sidebar=True, enable_book_reader=True)
             with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
@@ -4136,6 +4257,8 @@ def main():
                 "Volume restrito ao Mestre dentro do Compêndio. Insira a senha para revelar.",
                 c_secret_html,
                 render_toc_items(c_toc_only_h2),
+                codex_file="Alenia_Compendio_Completo.html",
+                compendium_mode=True,
             )
             compendium_parts.append(
                 f'<section id="{tome_anchor}" class="tome-divider">'
@@ -4211,13 +4334,13 @@ def main():
                 f'</section>'
             )
         else:
-            body_inner, pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps)
+            body_inner, pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps, codex_file=bk["out"], compendium_mode=False)
             full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + body_inner, pub_toc, enable_book_reader=True)
             with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
                 f.write(full_doc)
             print(f"[OK] {bk['out']:34s} (LIVRO • {len(pub_toc)} secoes publicas)")
 
-            c_inner, c_pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix=f"t{idx+1}-", card_h3=card_h3, inject_maps=inject_maps)
+            c_inner, c_pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix=f"t{idx+1}-", card_h3=card_h3, inject_maps=inject_maps, codex_file="Alenia_Compendio_Completo.html", compendium_mode=True)
             tome_anchor = f"tomo-{idx+1}"
             compendium_toc.append((2, f"{bk['num']} — {bk['title']}", tome_anchor))
             for lvl, lbl, hid in c_pub_toc:

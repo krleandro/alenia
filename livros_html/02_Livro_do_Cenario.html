@@ -873,6 +873,133 @@ tr { break-inside: avoid; }
     a { color: var(--crimson-dark); text-decoration: none; }
     .atlas-plate img { max-height: 160mm; object-fit: contain; }
 }
+
+/* =====================================================
+   HIPERLINKS DO CÓDICE DE ALENIA (H / C / A / B / T / TOMOS)
+   ===================================================== */
+.codex-anchor {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    vertical-align: top;
+    scroll-margin-top: 78px;
+}
+a.codex-ref {
+    display: inline-block;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.84em;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.25;
+    padding: 0 5px;
+    border-radius: 2px;
+    text-decoration: none !important;
+    border: 1px solid transparent;
+    transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.12s ease;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+a.codex-ref:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(42, 26, 12, 0.16);
+}
+a.codex-ref.codex-h {
+    background: rgba(31, 81, 86, 0.11);
+    border-color: rgba(31, 81, 86, 0.34);
+    color: #164044;
+}
+a.codex-ref.codex-h:hover {
+    background: #1f5156;
+    border-color: #163b3f;
+    color: #f7f1e3;
+}
+a.codex-ref.codex-c {
+    background: rgba(122, 31, 29, 0.10);
+    border-color: rgba(122, 31, 29, 0.34);
+    color: #6b1b19;
+}
+a.codex-ref.codex-c:hover {
+    background: #7a1f1d;
+    border-color: #531312;
+    color: #fff6e0;
+}
+a.codex-ref.codex-a {
+    background: rgba(138, 92, 38, 0.12);
+    border-color: rgba(138, 92, 38, 0.38);
+    color: #5b3a15;
+}
+a.codex-ref.codex-a:hover {
+    background: #7a4f1f;
+    border-color: #533412;
+    color: #fff6e0;
+}
+a.codex-ref.codex-b {
+    background: rgba(94, 108, 38, 0.12);
+    border-color: rgba(94, 108, 38, 0.38);
+    color: #3d4816;
+}
+a.codex-ref.codex-b:hover {
+    background: #53621f;
+    border-color: #384214;
+    color: #fff6e0;
+}
+a.codex-ref.codex-t {
+    background: rgba(154, 123, 59, 0.15);
+    border-color: rgba(154, 123, 59, 0.46);
+    color: #563f14;
+}
+a.codex-ref.codex-t:hover {
+    background: #8a6c2f;
+    border-color: #624b1d;
+    color: #fff6e0;
+}
+a.codex-ref.codex-tome {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    letter-spacing: normal;
+    padding: 0 2px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dotted rgba(122, 31, 29, 0.55);
+    border-radius: 0;
+    color: #6b1b19;
+}
+a.codex-ref.codex-tome:hover {
+    transform: none;
+    box-shadow: none;
+    border-bottom-style: solid;
+    background: rgba(154, 123, 59, 0.14);
+    color: #4f1110;
+}
+
+/* Inside culinary tag pills keep links crisp and compact */
+.cul-tag a.codex-ref {
+    font-size: 1em;
+    padding: 0 4px;
+    margin: 0 1px;
+}
+
+/* Destaque temporário ao saltar para uma ficha / planta / prato / animal */
+@keyframes codexTargetPulse {
+    0%   { background-color: rgba(205, 162, 74, 0.42); box-shadow: 0 0 0 4px rgba(154, 123, 59, 0.32); }
+    65%  { background-color: rgba(205, 162, 74, 0.22); box-shadow: 0 0 0 2px rgba(154, 123, 59, 0.18); }
+    100% { background-color: transparent; box-shadow: none; }
+}
+.codex-target-flash {
+    animation: codexTargetPulse 2.1s ease-out;
+    border-radius: 3px;
+}
+tr[id] { scroll-margin-top: 84px; }
+@media print {
+    a.codex-ref {
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        color: inherit !important;
+    }
+}
 </style>
 </head>
 <body class="book-mode sidebar-hidden" data-book-title="Livro do Cenário &amp; Atlas">
@@ -981,7 +1108,7 @@ tr { break-inside: avoid; }
 <hr/>
 
     <div class="gm-vault" data-locked="true">
-        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"uf7gGfPn6aDsckUxMzSTqQ==","i":"Sflm6rKg1NckX9Ei","c":"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"}</script>
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"DtZOtnP9MMADnvnZQ8cMNA==","i":"fZDuRMv0KrRjiKpB","c":"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"}</script>
         <div class="gm-gate-box">
             <div class="gm-seal-icon">🔒</div>
             <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
@@ -1073,7 +1200,7 @@ tr { break-inside: avoid; }
 <ul>
 <li><strong>Devoção Pessoal (para qualquer PJ)</strong>: mesmo sem ser <em>Sacerdote</em> ou <em>Inquisidor</em>, qualquer personagem de Aurora pode escolher um <strong>Aspecto de Devoção</strong> <em>(ex.: um Ferreiro ou Soldado devoto da Forja; um Médico da Noite; um Cavaleiro do Dia)</em> para enriquecer juramentos, preces e relações com paróquias locais.</li>
 <li><strong>Santuário e Direito de Asilo</strong>: sob a lei do <em>Lar</em> e da <em>Noite</em>, um fugitivo desarmado que toque o altar de um templo da Chama Solar tem direito a <strong>1 noite de asilo inviolável</strong> antes de ser entregue à justiça do <em>Dia</em> <em>(respeitado por guardas comuns, mas frequentemente testado por agentes de Kalis ou inquisidores radicais)</em>.</li>
-<li><strong>Fé Verdadeira &amp; Ritos <em>(Tomo I, Seção 10)</strong></em>: realizar vigília ou prece sincera num templo consagrado ao Aspecto pertinente concede o modificador oficial de <strong><code>+2</code> (Local de Poder / Consagração)</strong> em ritos ou bênçãos sutis de <em>Fé Verdadeira</em> — sem criar magias instantâneas de combate.</li>
+<li><strong>Fé Verdadeira &amp; Ritos <em>(<a class="codex-ref codex-tome" href="01_Livro_de_Regras.html" title="Abrir Tomo I — Livro de Regras">Tomo I</a>, Seção 10)</strong></em>: realizar vigília ou prece sincera num templo consagrado ao Aspecto pertinente concede o modificador oficial de <strong><code>+2</code> (Local de Poder / Consagração)</strong> em ritos ou bênçãos sutis de <em>Fé Verdadeira</em> — sem criar magias instantâneas de combate.</li>
 </ul>
 <hr/>
 <h3 id="102-outras-tradições-religiosas-e-fé-verdadeira-convicção-plural-21">10.2 Outras Tradições Religiosas e Fé Verdadeira <em>(Convicção Plural)</em></h3>
@@ -1116,7 +1243,7 @@ tr { break-inside: avoid; }
 <div class="table-wrap"><table><thead><tr><th style="text-align:left">Ofício do Conselho</th><th style="text-align:left">Pasta &amp; Autoridade Real</th><th style="text-align:left">Ocupante Atual <em>(Ano 418)</em></th><th style="text-align:left">Posição na Crise Política</th></tr></thead><tbody><tr><td style="text-align:left"><strong>1. Grão-Chanceler</strong> <em>(O Selo)</em></td><td style="text-align:left">Guarda o Grande Selo da Coroa, redige leis, preside o Conselho na ausência do Rei e conduz a diplomacia com Corallis, Gaddra e Vergod.</td><td style="text-align:left"><strong>Regente Valora Valerion</strong> <em>(acumula o cargo)</em></td><td style="text-align:left">Defende a continuidade da Casa Valerion e soluções diplomáticas para Ferraur e Vergod.</td></tr><tr><td style="text-align:left"><strong>2. Marechal do Reino</strong> <em>(A Espada)</em></td><td style="text-align:left">Comanda as guarnições reais, fortalezas de fronteira e a convocação militar dos estandartes das Grandes Casas.</td><td style="text-align:left"><strong>Marechal Lucian Leonastis</strong></td><td style="text-align:left">Herói dos Picos de Rubecina; quer esmagar a greve em Aeraneas pela força e pressiona por um Grande Concílio.</td></tr><tr><td style="text-align:left"><strong>3. Grão-Lorde do Adamante</strong> <em>(A Bigorna)</em></td><td style="text-align:left">Administra as Minas de Ferraur, cotas de extração, forjas reais em Aeraneas e o combate ao contrabando do metal.</td><td style="text-align:left"><strong>Grão-Lorde Aurelian Ferraris</strong></td><td style="text-align:left">Preso no fogo cruzado: tenta negociar segurança com os mineiros sem perder o apoio da Coroa.</td></tr><tr><td style="text-align:left"><strong>4. Mestre da Balança</strong> <em>(O Cofre)</em></td><td style="text-align:left">Supervisiona o Tesouro Real, a Casa da Moeda, pedágios fluviais e letras de crédito junto aos bancos de Corallis.</td><td style="text-align:left"><strong>Lady Serina Scutauria</strong></td><td style="text-align:left">Aliada pragmática de Valora, mas protege antes de tudo os cofres e portos de Merlinport.</td></tr><tr><td style="text-align:left"><strong>5. Preboste da Coroa</strong> <em>(A Lei)</em></td><td style="text-align:left">Chefe supremo dos juízes reais, patrulhas de estrada e investigações de alta traição — sua autoridade atravessa fronteiras de qualquer feudo.</td><td style="text-align:left"><strong>Preboste Valen de Pontáuria</strong></td><td style="text-align:left">Jurista incorruptível <em>(primo do Alto Luminar e tio de Sabina)</em>; recusa servir a qualquer facção fora da lei.</td></tr><tr><td style="text-align:left"><strong>6. Guardião dos Selos Secretos</strong> <em>(O Véu)</em></td><td style="text-align:left">Controla o correio cifrado do trono, mensageiros reais e contraespionagem frente a Kalis e Corallis.</td><td style="text-align:left"><strong>Cassian d&#x27;Altrax</strong> <em>(interino)</em></td><td style="text-align:left">Figura opaca vinda da fronteira noroeste; tanto Valora quanto Leonastis suspeitam que joga por conta própria.</td></tr></tbody></table></div>
 <hr/>
 <h3 id="113-hierarquia-feudal-títulos-oficiais-e-tratamento-em-corte-26">11.3 Hierarquia Feudal, Títulos Oficiais e Tratamento em Corte</h3>
-<p>Toda a sociedade de Aurora organiza-se em <strong>sete degraus jurídicos claros</strong>, diretamente ligados ao atributo especial <strong><code>Status</code></strong> e ao <strong>Padrão de Vida Mensal</strong> <em>(Tomo I, Seção 9.5)</em>:</p>
+<p>Toda a sociedade de Aurora organiza-se em <strong>sete degraus jurídicos claros</strong>, diretamente ligados ao atributo especial <strong><code>Status</code></strong> e ao <strong>Padrão de Vida Mensal</strong> <em>(<a class="codex-ref codex-tome" href="01_Livro_de_Regras.html" title="Abrir Tomo I — Livro de Regras">Tomo I</a>, Seção 9.5)</em>:</p>
 <div class="table-wrap"><table><thead><tr><th style="text-align:left">Degrau &amp; Título</th><th style="text-align:left">Tratamento em Corte</th><th style="text-align:left">Domínio / Função Típica</th><th style="text-align:center">Tropas Típicas</th><th style="text-align:center"><code>Status</code></th><th style="text-align:left">Padrão de Vida</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Alto Rei / Rainha</strong> <em>(ou Regente Real)</em></td><td style="text-align:left"><em>&quot;Vossa Alteza Solar&quot;</em> / <em>&quot;Majestade&quot;</em></td><td style="text-align:left">Soberano de todos os reinos civilizados dos homens; Coroa em Altavanne e monopólio do adamante</td><td style="text-align:center"><code>3.000+</code> <em>(guarda real)</em></td><td style="text-align:center"><strong><code>5</code></strong></td><td style="text-align:left">Aristocrático <em>(Coroa)</em></td></tr><tr><td style="text-align:left"><strong>Regentes dos Reinos Vassalos</strong> <em>(Corallis, Gaddra, Kalis)</em></td><td style="text-align:left"><em>&quot;Vossa Regência&quot;</em> / <em>&quot;Meu Regente&quot;</em></td><td style="text-align:left">Escolhidos pelo Alto Rei para governar as áreas civilizadas de Corallis, Gaddra ou Kalis em nome da Coroa</td><td style="text-align:center"><code>1.000 – 2.500</code> homens / navios</td><td style="text-align:center"><strong><code>4</code></strong></td><td style="text-align:left">Aristocrático (<code>450+ PP/mês</code>)</td></tr><tr><td style="text-align:left"><strong>Grandes Lordes de Aurora</strong> <em>(Chefes das Grandes Casas)</em></td><td style="text-align:left"><em>&quot;Meu Lorde / Minha Lady&quot;</em> / <em>&quot;Vossa Graça&quot;</em></td><td style="text-align:left">Governam províncias inteiras do Reino Capital; juram diretamente ao Trono</td><td style="text-align:center"><code>600 – 1.500</code> homens</td><td style="text-align:center"><strong><code>4</code></strong></td><td style="text-align:left">Aristocrático (<code>450+ PP/mês</code>)</td></tr><tr><td style="text-align:left"><strong>Castelões &amp; Barões de Terra</strong></td><td style="text-align:left"><em>&quot;Castelão&quot;</em> / <em>&quot;Senhor(a) de [Lugar]&quot;</em></td><td style="text-align:left">Fortalezas estratégicas, pontes, pedreiras ou vilas muradas</td><td style="text-align:center"><code>80 – 250</code> homens</td><td style="text-align:center"><strong><code>3</code></strong></td><td style="text-align:left">Abastado (<code>150 PP/mês</code>)</td></tr><tr><td style="text-align:left"><strong>Prebostes &amp; Magistrados da Coroa</strong></td><td style="text-align:left"><em>&quot;Preboste&quot;</em> / <em>&quot;Magistrado&quot;</em></td><td style="text-align:left">Nobreza togada <em>(não hereditária)</em> nomeada pelo Rei para julgar e fiscalizar</td><td style="text-align:center"><code>20 – 60</code> guardas reais</td><td style="text-align:center"><strong><code>2–3</code></strong></td><td style="text-align:left">Confortável / Abastado</td></tr><tr><td style="text-align:left"><strong>Cavaleiros Juramentados</strong> <em>(de Terra ou Andantes)</em></td><td style="text-align:left"><strong><em>&quot;Sor&quot;</em></strong> <em>(masc.)</em> / <strong><em>&quot;Dama&quot;</em></strong> <em>(fem.)</em></td><td style="text-align:left">Título <strong>não hereditário</strong> ganho por vigília e consagração; comandam lanças ou protegem feudos</td><td style="text-align:center"><code>0 – 20</code> homens-de-armas</td><td style="text-align:center"><strong><code>1–2</code></strong></td><td style="text-align:left">Modesto / Confortável</td></tr><tr><td style="text-align:left"><strong>Escudeiros, Pagens &amp; Filhos Segundos</strong></td><td style="text-align:left"><em>&quot;Escudeiro&quot;</em> / <em>&quot;Jovem [Nome]&quot;</em></td><td style="text-align:left">Aprendizes de cavalaria e herdeiros sem terra servindo a um Senhor ou Cavaleiro</td><td style="text-align:center"><code>—</code></td><td style="text-align:center"><strong><code>1</code></strong></td><td style="text-align:left">Modesto (<code>15 PP/mês</code>)</td></tr><tr><td style="text-align:left"><strong>Povo Livre &amp; Bastardos (<code>Cinza</code>)</strong></td><td style="text-align:left">Pelo nome ou ofício</td><td style="text-align:left">Artesãos, mercadores, lavradores e soldados. Bastardos nobres usam o sobrenome <strong><code>Cinza</code></strong>, não herdam terras e portam o brasão paterno cortado por faixa cinza <em>(salvo Legitimação Real)</em></td><td style="text-align:center"><code>—</code></td><td style="text-align:center"><strong><code>0–1</code></strong></td><td style="text-align:left">Pobre / Modesto</td></tr></tbody></table></div>
 <hr/>
 <h3 id="114-as-grandes-casas-e-praças-fortes-de-aurora-tabuleiro-do-ano-418-27">11.4 As Grandes Casas e Praças-Fortes de Aurora <em>(Tabuleiro do Ano 418)</em></h3>
@@ -1307,7 +1434,7 @@ tr { break-inside: avoid; }
 </ul>
 <hr/>
 <h3 id="136-rumor-nos-hospícios-a-chamada-febre-do-coro-40">13.6 Rumor nos Hospícios: A Chamada <em>&quot;Febre do Coro&quot;</em></h3>
-<p>Nos últimos meses do <strong>Ano 418</strong>, cartas trocadas entre monges da <em>Brasa Velada</em> e cirurgiões portuários mencionam casos desconcertantes apelidados de <strong>&quot;Febre do Coro&quot;</strong>: pacientes com sono alterado, sonhos extraordinariamente vívidos e — o detalhe mais perturbador — relatos de desconhecidos descrevendo em uníssono o mesmo aposento ou repetindo lembranças de pessoas falecidas. Parte dos enfermos apresenta até <strong>melhora emocional e física aparente</strong>, dividindo os médicos sobre se o quadro é de fato uma doença, uma histeria de porto ou algo completamente fora da medicina conhecida. <em>(Para o Mestre: a ficha completa e a verdade oculta por trás da <strong>Febre do Coro</strong> encontram-se seladas no <strong>Tomo VIII — O Acervo Oculto da Academia de Sellene, Dossiê IV</strong>.)</em></p>
+<p>Nos últimos meses do <strong>Ano 418</strong>, cartas trocadas entre monges da <em>Brasa Velada</em> e cirurgiões portuários mencionam casos desconcertantes apelidados de <strong>&quot;Febre do Coro&quot;</strong>: pacientes com sono alterado, sonhos extraordinariamente vívidos e — o detalhe mais perturbador — relatos de desconhecidos descrevendo em uníssono o mesmo aposento ou repetindo lembranças de pessoas falecidas. Parte dos enfermos apresenta até <strong>melhora emocional e física aparente</strong>, dividindo os médicos sobre se o quadro é de fato uma doença, uma histeria de porto ou algo completamente fora da medicina conhecida. <em>(Para o Mestre: a ficha completa e a verdade oculta por trás da <strong>Febre do Coro</strong> encontram-se seladas no <strong><a class="codex-ref codex-tome" href="08_Acervo_Oculto_de_Sellene.html" title="Abrir Tomo VIII — Acervo Oculto de Sellene">Tomo VIII</a> — O Acervo Oculto da Academia de Sellene, Dossiê IV</strong>.)</em></p>
 <hr/>
 <h2 id="14-atlas-regional-detalhado-5-mapas-aproximados-41">14. Atlas Regional Detalhado (5 Mapas Aproximados)</h2>
 <p>Todos os 5 mapas regionais em alta resolução estão prontos para o <strong>RRPG Firecast</strong> em <code>mapas/regionais/</code>:</p>
@@ -1411,6 +1538,12 @@ tr { break-inside: avoid; }
             this.bindControls();
             this.applyMode(this.mode, false);
 
+            // Jump directly to URL hash anchor (e.g. 10_Herbario_de_Seleni.html#h24)
+            this.lockedHash = (window.location.hash || '').slice(1);
+            if (this.lockedHash) {
+                this.jumpToAnchor(this.lockedHash, false);
+            }
+
             // Re-paginate cleanly if any map image finishes loading after initial paint
             const source = document.querySelector('.book-page');
             if (source) {
@@ -1423,7 +1556,11 @@ tr { break-inside: avoid; }
                                 if (this.mode !== 'scroll') {
                                     const prev = this.currentIdx;
                                     this.paginate();
-                                    this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    if (this.lockedHash && this.anchorMap[this.lockedHash] !== undefined) {
+                                        this.goToPage(this.anchorMap[this.lockedHash], false);
+                                    } else {
+                                        this.goToPage(Math.min(prev, Math.max(0, this.pages.length - 1)));
+                                    }
                                 }
                             }, 120);
                         }, { once: true });
@@ -2131,6 +2268,44 @@ tr { break-inside: avoid; }
             }
         },
 
+        flashAnchorTarget(id) {
+            const run = () => {
+                const scope = (this.mode !== 'scroll' && document.getElementById('book-spread'))
+                    ? document.getElementById('book-spread')
+                    : document;
+                const el = scope.querySelector(`[id="${CSS.escape(id)}"]`) || document.getElementById(id);
+                if (!el) return;
+                const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el.parentElement) : el;
+                if (!target) return;
+                target.classList.remove('codex-target-flash');
+                void target.offsetWidth;
+                target.classList.add('codex-target-flash');
+            };
+            setTimeout(run, this.mode !== 'scroll' ? 600 : 80);
+            setTimeout(run, 60);
+        },
+
+        jumpToAnchor(rawId, animate = true) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (this.mode !== 'scroll') {
+                const pageIdx = this.anchorMap[id];
+                if (pageIdx === undefined) return false;
+                this.lockedHash = '';
+                this.goToPage(pageIdx, animate);
+                document.body.classList.add('sidebar-hidden');
+                document.body.classList.remove('sidebar-open-mobile');
+                this.flashAnchorTarget(id);
+                return true;
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const scrollEl = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            scrollEl.scrollIntoView({ behavior: animate ? 'smooth' : 'auto', block: 'start' });
+            this.flashAnchorTarget(id);
+            return true;
+        },
+
         bindControls() {
             document.querySelectorAll('.btn-prev-page').forEach(b => b.addEventListener('click', () => this.step(-1)));
             document.querySelectorAll('.btn-next-page').forEach(b => b.addEventListener('click', () => this.step(1)));
@@ -2174,23 +2349,60 @@ tr { break-inside: avoid; }
                 else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.step(-1); }
             });
 
-            // Intercept TOC anchor clicks to jump directly to the exact book page!
-            const sidebar = document.querySelector('.sidebar');
-            if (sidebar) {
-                sidebar.addEventListener('click', (e) => {
-                    const a = e.target.closest('a[href^="#"]');
-                    if (!a || this.mode === 'scroll') return;
-                    const id = a.getAttribute('href').slice(1);
-                    if (this.anchorMap[id] !== undefined) {
-                        e.preventDefault();
-                        this.goToPage(this.anchorMap[id], true);
-                        document.body.classList.add('sidebar-hidden');
-                        document.body.classList.remove('sidebar-open-mobile');
-                    }
-                });
-            }
+            // Intercept ALL in-page anchor clicks (sidebar TOC + codex links inside book pages!)
+            document.addEventListener('click', (e) => {
+                const a = e.target.closest('a[href^="#"]');
+                if (!a) return;
+                const id = a.getAttribute('href').slice(1);
+                if (!id) return;
+                if (this.jumpToAnchor(id, true)) {
+                    e.preventDefault();
+                    try { history.replaceState(null, '', '#' + id); } catch (_) {}
+                }
+            });
+
+            window.addEventListener('hashchange', () => {
+                const id = (window.location.hash || '').slice(1);
+                if (id) this.jumpToAnchor(id, true);
+            });
         }
     };
+
+    /* =====================================================
+       CODEX ANCHOR CONTROLLER (NON-BOOK PAGES: CULINÁRIA / CRÔNICA)
+       ===================================================== */
+    (function initScrollCodexNav() {
+        if (document.body.classList.contains('has-book-reader')) return;
+        function focusCodexHash(rawId, smooth) {
+            const id = decodeURIComponent((rawId || '').replace(/^#/, ''));
+            if (!id) return false;
+            if (typeof window.aleniaRevealAnchor === 'function') {
+                window.aleniaRevealAnchor(id);
+            }
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const target = el.classList.contains('codex-anchor') ? (el.closest('h1,h2,h3,h4,article,tr,section') || el) : el;
+            target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+            target.classList.remove('codex-target-flash');
+            void target.offsetWidth;
+            target.classList.add('codex-target-flash');
+            return true;
+        }
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            const id = a.getAttribute('href').slice(1);
+            if (!id) return;
+            if (focusCodexHash(id, true)) {
+                e.preventDefault();
+                try { history.replaceState(null, '', '#' + id); } catch (_) {}
+            }
+        });
+        window.addEventListener('hashchange', () => focusCodexHash(window.location.hash, true));
+        if (window.location.hash) {
+            setTimeout(() => focusCodexHash(window.location.hash, false), 120);
+        }
+    })();
 
     /* =====================================================
        GLOBAL SIDEBAR NAVIGATION CONTROLLER (ALL PAGES)
