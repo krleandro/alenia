@@ -4204,9 +4204,9 @@ def main():
     cards.append("""
         <a class="portal-card" href="gerador_tokens.html" style="border-top-color:#1f5156; background:#ece7da;">
             <img class="portal-cover" src="assets/mesa_firecast_alenia.jpg" alt="Gerador de Tokens — Alenia RPG &amp; Firecast" loading="lazy"/>
-            <div class="portal-kicker" style="color:#1f5156;">FERRAMENTA VTT • 12 MOLDURAS</div>
+            <div class="portal-kicker" style="color:#1f5156;">FERRAMENTA VTT • 18 MOLDURAS HD</div>
             <div class="portal-title">Gerador de Tokens</div>
-            <p class="portal-desc">Estúdio interativo para criar tokens PNG transparentes (512×512 e 1024×1024): arraste sua imagem, enquadre, escolha entre 12 molduras temáticas e baixe na hora para o Firecast.</p>
+            <p class="portal-desc">Estúdio interativo para criar tokens PNG transparentes (512×512 e 1024×1024): 12 molduras esculpidas pintadas à mão + 6 clássicas/livres + upload de moldura própria.</p>
             <div class="portal-cta" style="color:#1f5156;">⚔ Abrir Estúdio de Tokens →</div>
         </a>
     """)
