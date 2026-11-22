@@ -16,6 +16,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from token_studio import TOKEN_STUDIO_CSS, TOKEN_STUDIO_HTML, TOKEN_STUDIO_JS
+from culinaria_renderer import CULINARIA_CSS, CULINARIA_JS, render_culinaria_page
 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -161,6 +162,18 @@ BOOKS = [
         "epigraph": "“O rei mandou escrever que fundara a cidade. Debaixo da praça onde ergueram sua estátua encontramos três ruas, dois cemitérios e a soleira de uma casa.”",
         "desc": "Linha do tempo ilustrada em pergaminho medieval com 100 acontecimentos (T001–T100) das terras antigas ao Ano 418 EF, 8 pranchas renascentistas científicas, filtros por época e marcos canônicos, atlas de fundações, hidrografia e caderno do Mestre selado por AES-256.",
         "cover_map": "assets/capa_11_cronica_alenia.jpg",
+        "gm_only": False,
+    },
+    {
+        "src": "12_Cozinhas_de_Alenia.md",
+        "out": "12_Cozinhas_de_Alenia.html",
+        "num": "TOMO XII",
+        "short": "Culinária",
+        "title": "Cozinhas de Alenia",
+        "subtitle": "32 Pratos Ilustrados em 8 Tradições Regionais, 22 Animais & Despensa do Herbário",
+        "epigraph": "“Uma mesa de Alenia revela quem controla a água, quais barcos chegaram ao porto, que caminhos a neve fechou e quem conseguiu guardar grão para o inverno.”",
+        "desc": "Guia culinário ilustrado com 32 pratos fotografados em 8 pranchas (C01–C32), 22 animais de pesca, caça e criação (A01–A22), integração direta aos códigos do Herbário de Seleni, preços no Padrão Prata, sazonalidade e cenas de estalagem e banquete.",
+        "cover_map": "assets/capa_12_cozinhas_alenia.jpg",
         "gm_only": False,
     },
 ]
@@ -2180,6 +2193,7 @@ def sync_assets():
         (os.path.join(ROOT_DIR, "mapas", "regionais", "mapa_regional_incognito.jpg"), "mapa_regional_incognito.jpg"),
         (os.path.join(ROOT_DIR, "capas", "capa_10_herbario_seleni.jpg"), "capa_10_herbario_seleni.jpg"),
         (os.path.join(ROOT_DIR, "capas", "capa_11_cronica_alenia.jpg"), "capa_11_cronica_alenia.jpg"),
+        (os.path.join(ROOT_DIR, "capas", "capa_12_cozinhas_alenia.jpg"), "capa_12_cozinhas_alenia.jpg"),
     ]
     for fn in sorted(os.listdir(os.path.join(ROOT_DIR, "ilustracoes"))) if os.path.isdir(os.path.join(ROOT_DIR, "ilustracoes")) else []:
         if fn.lower().endswith((".jpg", ".jpeg", ".png")):
@@ -2245,6 +2259,7 @@ def rewrite_link(url: str) -> str:
         "09_Catalogo_de_Equipamentos_e_Oficios.md": "09_Catalogo_de_Equipamentos.html",
         "10_Herbario_de_Seleni.md": "10_Herbario_de_Seleni.html",
         "11_Cronica_das_Terras_e_das_Mares.md": "11_Cronica_das_Terras_e_das_Mares.html",
+        "12_Cozinhas_de_Alenia.md": "12_Cozinhas_de_Alenia.html",
     }
     for k, v in mapping.items():
         if k in url:
@@ -2601,7 +2616,7 @@ def build_topbar(active_file: str, page_title: str, has_toc: bool) -> str:
 
 
 def build_sidebar(active_file: str, toc_items, has_toc: bool) -> str:
-    romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"]
+    romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"]
     public_items = []
     gm_items = []
     for idx, b in enumerate(BOOKS):
@@ -4076,7 +4091,7 @@ def main():
         build_cover(
             "COMPÊNDIO INTEGRAL",
             "ALENIA RPG",
-            "Regras, Cenário & Atlas, 36 Kits, Empório, Herbário de Seleni, Crônica & Volumes Selados do Mestre",
+            "Regras, Cenário & Atlas, 36 Kits, Empório, Herbário, Crônica, Cozinhas & Volumes Selados do Mestre",
             "“Cinco terras, um único aço. O volume definitivo para mestres e exploradores de Alenia.”",
             "assets/alenia_mapa_mundi_atualizado.jpg",
         )
@@ -4157,6 +4172,44 @@ def main():
                 f'{c_inner}'
                 f'</section>'
             )
+        elif bk["out"] == "12_Cozinhas_de_Alenia.html":
+            cul_body, cul_toc = render_culinaria_page(
+                bk,
+                md_content,
+                {
+                    "inline_md": inline_md,
+                    "md_to_html": md_to_html,
+                    "slugify": slugify,
+                    "img_dim_attrs": img_dim_attrs,
+                },
+            )
+            full_doc = wrap_html_doc(
+                bk["title"],
+                bk["out"],
+                cul_body,
+                cul_toc,
+                force_sidebar=True,
+                enable_book_reader=False,
+                extra_css=CULINARIA_CSS,
+                extra_js=CULINARIA_JS,
+                body_extra_class="culinaria-mode sidebar-hidden",
+            )
+            with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
+                f.write(full_doc)
+            print(f"[OK] {bk['out']:34s} (GUIA CULINARIO • {len(cul_toc)} secoes)")
+
+            c_inner, c_pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix=f"t{idx+1}-", card_h3=False, inject_maps=False)
+            tome_anchor = f"tomo-{idx+1}"
+            compendium_toc.append((2, f"{bk['num']} — {bk['title']}", tome_anchor))
+            for lvl, lbl, hid in c_pub_toc:
+                if lvl == 2:
+                    compendium_toc.append((3, lbl, hid))
+            compendium_parts.append(
+                f'<section id="{tome_anchor}" class="tome-divider">'
+                f'{build_cover(bk["num"], bk["title"], bk["subtitle"], bk["epigraph"], bk["cover_map"])}'
+                f'{c_inner}'
+                f'</section>'
+            )
         else:
             body_inner, pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps)
             full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + body_inner, pub_toc, enable_book_reader=True)
@@ -4189,6 +4242,8 @@ def main():
             cta = "🔒 Destrancar Livro (Mestre) →"
         elif bk["out"] == "11_Cronica_das_Terras_e_das_Mares.html":
             cta = "📜 Abrir Linha do Tempo →"
+        elif bk["out"] == "12_Cozinhas_de_Alenia.html":
+            cta = "🍲 Abrir Guia de Culinária →"
         else:
             cta = "Abrir Livro →"
         thumb = f'<img class="portal-cover" src="{bk["cover_map"]}" alt="Capa — {html.escape(bk["title"])}" loading="lazy"/>' if bk["cover_map"] else ""
@@ -4225,7 +4280,7 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">11 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • 44 Talentos • Herbário • Linha do Tempo • Estúdio de Tokens • Firecast v2.5</div>
+        <div class="cover-subtitle">12 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • Herbário • Linha do Tempo • Cozinhas • Estúdio de Tokens • Firecast v2.5</div>
         <div class="cover-rule"></div>
         <div style="margin: 8px 0 4px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
             <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⬇ Ficha Firecast (v2.5 .rpk)</a>

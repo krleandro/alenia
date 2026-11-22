@@ -1,0 +1,58 @@
+[
+  {
+    "plate": 1,
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-8514e62c-1616-49f2-96d0-4727481ea37b.png",
+    "destination": "assets/culinaria/prancha_01.png",
+    "prompt": "Create one richly detailed illustrated culinary plate for a fictional low-magic medieval cookbook of Alenia, Aurora region. LANDSCAPE 3:2, high resolution. Four separate food still-life illustrations in a strict equal 2x2 grid with wide pale parchment gutters, each dish fully contained inside its quadrant and clearly distinct. No letters, no numbers, no text, no watermark. Painted naturalist watercolor and fine ink, appetizing realistic food, warm parchment, overhead three-quarter view, earthenware and medieval wood, no modern utensils. TOP LEFT: shallow clay bowl of clear golden fish broth containing small cooked silver fish portions, pale root rounds and leek, no magic glow. TOP RIGHT: real baked pastry pie with open golden flaky lid revealing white fish, mushroom and root filling, on rustic pewter dish. BOTTOM LEFT: two white fish fillets in pale cream sauce with cooked pear wedges, tiny caramel shards on ivory ceramic dish, elegant noble feast. BOTTOM RIGHT: brown barley and grain pottage with a clearly roasted chicken leg, carrots and onions in heavy clay bowl. Four equal quadrants; preserve blank separation. This image will illustrate four distinct recipes; do not mix their ingredients or put dishes across panel boundaries.",
+    "method": "image_gen integrado"
+  },
+  {
+    "plate": 2,
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-ce7c5aa1-d087-43d8-86ba-801acc9f9e3d.png",
+    "destination": "assets/culinaria/prancha_02.png",
+    "prompt": "Use case: historical-scene. Create one richly detailed culinary illustration plate for a fictional low-magic medieval Alenia cookbook. LANDSCAPE 3:2 at high resolution. Strict equal 2x2 grid, FOUR clearly distinct still-life dishes, each fully contained in its quadrant; wide pale parchment gutters at exact midpoint horizontally and vertically. No text, labels, numbers or watermark. Consistent fine ink and naturalist watercolor, warmly lit appetizing realistic food, parchment edges, overhead three-quarter view, rustic medieval materials, no modern utensils. No fantasy glow or gemstones in food. Forest communities of Alenia. TOP LEFT: freshwater trout pieces stewed with pale aquatic root slices in brown earthenware, a wooden spoon. TOP RIGHT: roasted rabbit pieces covered with a glossy blue-purple berry sauce beside rustic bread. BOTTOM LEFT: three small round golden seed and root griddle cakes drizzled with honey on a wooden board. BOTTOM RIGHT: dark brown mushroom and chestnut stew served in a rough clay bowl, mushrooms and chestnuts beside it.",
+    "method": "image_gen integrado"
+  },
+  {
+    "plate": 3,
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-78cae265-b80e-4f4a-8352-c1cba293d154.png",
+    "destination": "assets/culinaria/prancha_03.png",
+    "prompt": "Use case: historical-scene. Create one richly detailed culinary illustration plate for a fictional low-magic medieval Alenia cookbook. LANDSCAPE 3:2 at high resolution. Strict equal 2x2 grid, FOUR clearly distinct still-life dishes, each fully contained in its quadrant; wide pale parchment gutters at exact midpoint horizontally and vertically. No text, labels, numbers or watermark. Consistent fine ink and naturalist watercolor, warmly lit appetizing realistic food, parchment edges, overhead three-quarter view, rustic medieval materials, no modern utensils. No fantasy glow or gemstones in food. Corallis maritime cuisine. TOP LEFT: a thick fully cooked large fish fillet with golden breadcrumb crust and pepper on an iron platter, no pink center. TOP RIGHT: thin slices of cooked white fish with citrus wedges and red onion on pale ceramic. BOTTOM LEFT: five tiny cooked silvery fish glazed with honey and white wine in a shallow shell-shaped ceramic bowl, no magic glow. BOTTOM RIGHT: white fish chunks and leek rings in a creamy goat milk stew in a gray stoneware bowl, no glowing mushrooms.",
+    "method": "image_gen integrado"
+  },
+  {
+    "plate": 4,
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-acbc7f40-a853-4889-b6c3-bf4ee2a36215.png",
+    "destination": "assets/culinaria/prancha_04.png",
+    "prompt": "Use case: historical-scene. Create one richly detailed culinary illustration plate for a fictional low-magic medieval Alenia cookbook. LANDSCAPE 3:2 at high resolution. Strict equal 2x2 grid, FOUR clearly distinct still-life dishes, each fully contained in its quadrant; wide pale parchment gutters at exact midpoint horizontally and vertically. No text, labels, numbers or watermark. Consistent fine ink and naturalist watercolor, warmly lit appetizing realistic food, parchment edges, overhead three-quarter view, rustic medieval materials, no modern utensils. No fantasy glow or gemstones in food. Gaddra desert and oasis cuisine. TOP LEFT: tender goat meat and chickpeas over coarse golden grains in broad clay serving dish. TOP RIGHT: slow cooked lamb pieces with orange succulent cactus fruit wedges in red earthenware, no spines. BOTTOM LEFT: a roasted stuffed pigeon with a few grains spilling out, served on flatbread. BOTTOM RIGHT: diamond-shaped golden seed cake with orange fruit compote and honey, on a simple brass plate. Warm ochre, restrained spice, no modern dishes.",
+    "method": "image_gen integrado"
+  },
+  {
+    "plate": 5,
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-90fde2bd-4b2b-4dcb-a42f-499bd50524c2.png",
+    "destination": "assets/culinaria/prancha_05.png",
+    "prompt": "Use case: historical-scene. Create one richly detailed culinary illustration plate for a fictional low-magic medieval Alenia cookbook. LANDSCAPE 3:2 at high resolution. Strict equal 2x2 grid, FOUR clearly distinct still-life dishes, each fully contained in its quadrant; wide pale parchment gutters at exact midpoint horizontally and vertically. No text, labels, numbers or watermark. Consistent fine ink and naturalist watercolor, warmly lit appetizing realistic food, parchment edges, overhead three-quarter view, rustic medieval materials, no modern utensils. No fantasy glow or gemstones in food. Kalis cold forest cuisine. TOP LEFT: very dark barley and cooked fish stew colored by purple berries, in black ceramic, no blood. TOP RIGHT: roast wild boar slices with brown mushrooms and dark berry gravy on rustic platter. BOTTOM LEFT: a roasted duck leg with braised pale cabbage on iron plate. BOTTOM RIGHT: triangular golden pastry tart filled with white goat cheese and copper-colored forest berries on wooden board.",
+    "method": "image_gen integrado"
+  },
+  {
+    "plate": 6,
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-681b21b8-630e-4df1-8176-911bff8b62be.png",
+    "destination": "assets/culinaria/prancha_06.png",
+    "prompt": "Use case: historical-scene. Create one richly detailed culinary illustration plate for a fictional low-magic medieval Alenia cookbook. LANDSCAPE 3:2 at high resolution. Strict equal 2x2 grid, FOUR clearly distinct still-life dishes, each fully contained in its quadrant; wide pale parchment gutters at exact midpoint horizontally and vertically. No text, labels, numbers or watermark. Consistent fine ink and naturalist watercolor, warmly lit appetizing realistic food, parchment edges, overhead three-quarter view, rustic medieval materials, no modern utensils. No fantasy glow or gemstones in food. Ravena and Safiras island cuisine. TOP LEFT: fully cooked bream-like fish opened on a clay platter with cracked salt crust and citrus wedges, not a pufferfish. TOP RIGHT: three fully cooked eel pieces curled in spirals around dark wooden skewers with orange honey glaze and red pepper, on a board. BOTTOM LEFT: blue-black mussels opened in light broth with green salty coastal leaves in a clay bowl. BOTTOM RIGHT: four golden fish fritters with crisp broken surfaces showing white fish and pale dough, dried coastal herb flecks, on woven tray lined with cloth.",
+    "method": "image_gen integrado"
+  },
+  {
+    "plate": 7,
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-32d2c647-7ccb-456e-a280-8a55690bbf70.png",
+    "destination": "assets/culinaria/prancha_07.png",
+    "prompt": "Use case: historical-scene. Create one richly detailed culinary illustration plate for a fictional low-magic medieval Alenia cookbook. LANDSCAPE 3:2 at high resolution. Strict equal 2x2 grid, FOUR clearly distinct still-life dishes, each fully contained in its quadrant; wide pale parchment gutters at exact midpoint horizontally and vertically. No text, labels, numbers or watermark. Consistent fine ink and naturalist watercolor, warmly lit appetizing realistic food, parchment edges, overhead three-quarter view, rustic medieval materials, no modern utensils. No fantasy glow or gemstones in food. Yoketsu coastal enclave cuisine of Alenia, subtle ancient East Asian maritime influence with medieval hand-made ceramics. TOP LEFT: fully cooked white fish fillet steamed with scallion beside white rice in a dark ceramic bowl. TOP RIGHT: slices of roasted duck on rice with braised leafy greens in a shallow bowl. BOTTOM LEFT: three hand-formed rice balls, one broken to reveal cooked shredded fish filling, on wooden board, no nori wrapper. BOTTOM RIGHT: clear broth with white freshwater trout pieces and dark brown seaweed strips, in a simple ceramic bowl. No chopsticks crossing panel boundaries.",
+    "method": "image_gen integrado"
+  },
+  {
+    "plate": 8,
+    "source": "C:\\Users\\Cliente\\.codex\\generated_images\\01a1f95a-d951-7061-9fbf-c7578d62100b\\exec-702d7103-0ce6-4701-a272-84170d0f23b6.png",
+    "destination": "assets/culinaria/prancha_08.png",
+    "prompt": "Use case: historical-scene. Create one richly detailed culinary illustration plate for a fictional low-magic medieval Alenia cookbook. LANDSCAPE 3:2 at high resolution. Strict equal 2x2 grid, FOUR clearly distinct still-life dishes, each fully contained in its quadrant; wide pale parchment gutters at exact midpoint horizontally and vertically. No text, labels, numbers or watermark. Consistent fine ink and naturalist watercolor, warmly lit appetizing realistic food, parchment edges, overhead three-quarter view, rustic medieval materials, no modern utensils. No fantasy glow or gemstones in food. Syleth and Lystra islands and northern expedition provisions, not a civilization of the uninhabited polar continent. TOP LEFT: cooked salted silver fish pieces with pale root mash in a weathered clay bowl. TOP RIGHT: hearty brown mutton and mountain root stew in small iron pot. BOTTOM LEFT: dry flat hardtack grain biscuits and a bowl of dark dried seaweed broth on a wooden board. BOTTOM RIGHT: rich barley porridge with dried copper berries and a swirl of honey in an earthenware cup. Frost outside implied only, food warm and realistic.",
+    "method": "image_gen integrado"
+  }
+]
