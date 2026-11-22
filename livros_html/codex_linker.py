@@ -94,6 +94,16 @@ a.codex-ref.codex-t:hover {
     border-color: #624b1d;
     color: #fff6e0;
 }
+a.codex-ref.codex-n {
+    background: rgba(88, 36, 72, 0.11);
+    border-color: rgba(88, 36, 72, 0.36);
+    color: #4c1b3d;
+}
+a.codex-ref.codex-n:hover {
+    background: #5c224a;
+    border-color: #3f1532;
+    color: #fff6e0;
+}
 a.codex-ref.codex-tome {
     font-family: inherit;
     font-size: inherit;
@@ -155,6 +165,7 @@ TOMO_ROMAN_MAP = {
     "X": ("10_Herbario_de_Seleni.html", "Tomo X — Herbário de Seleni"),
     "XI": ("11_Cronica_das_Terras_e_das_Mares.html", "Tomo XI — Crônica das Terras e das Marés"),
     "XII": ("12_Cozinhas_de_Alenia.html", "Tomo XII — Cozinhas de Alenia"),
+    "XIII": ("13_Grandes_Nomes_e_Feitos_de_Alenia.html", "Tomo XIII — Grandes Nomes e Feitos de Alenia (Mestre)"),
 }
 
 # Book index prefix inside Alenia_Compendio_Completo.html (matches id_prefix=f"t{idx+1}-")
@@ -164,6 +175,7 @@ COMPENDIUM_PREFIX = {
     "C": "t12-",
     "A": "t12-",
     "B": "t12-",
+    "N": "t13-",
 }
 
 # Target HTML file for each codex family
@@ -173,6 +185,7 @@ FAMILY_FILE = {
     "C": "12_Cozinhas_de_Alenia.html",
     "A": "12_Cozinhas_de_Alenia.html",
     "B": "12_Cozinhas_de_Alenia.html",
+    "N": "13_Grandes_Nomes_e_Feitos_de_Alenia.html",
 }
 
 FAMILY_LABEL = {
@@ -181,12 +194,13 @@ FAMILY_LABEL = {
     "A": "Fauna das Cozinhas",
     "B": "Despensa Agrícola",
     "T": "Crônica de Alenia",
+    "N": "Grandes Nomes (Mestre)",
 }
 
 
 def build_codex_registry(root_dir: str) -> dict:
     """Scan canonical markdown books once to build {code: display_name} lookup tables."""
-    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}}
+    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}}
 
     # 1. Herbário H01–H64
     herb_path = os.path.join(root_dir, "10_Herbario_de_Seleni.md")
@@ -213,6 +227,13 @@ def build_codex_registry(root_dir: str) -> dict:
         for m in re.finditer(r"^###\s+(T\d{3})\s+[—–-]\s+(.+)$", txt, flags=re.M):
             reg["T"][m.group(1)] = m.group(2).strip()
 
+    # 4. Grandes Nomes N001–N100 (GM-only: only resolved inside encrypted vaults!)
+    nom_path = os.path.join(root_dir, "13_Grandes_Nomes_e_Feitos_de_Alenia.md")
+    if os.path.exists(nom_path):
+        txt = open(nom_path, "r", encoding="utf-8").read()
+        for m in re.finditer(r"^###\s+(N\d{3})\s+[—–-]\s+(.+)$", txt, flags=re.M):
+            reg["N"][m.group(1)] = m.group(2).strip()
+
     return reg
 
 
@@ -223,19 +244,24 @@ _TOKEN_RE = re.compile(
     r"|A(?:0[1-9]|1[0-9]|2[0-6])"
     r"|B0[1-6]"
     r"|T(?:0\d{2}|100)"
-    r"|Tomo\s+(?:XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
+    r"|N(?:0\d{2}|100)"
+    r"|Tomo\s+(?:XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
     r")\b"
 )
 
-_SKIP_TAGS = {"a", "h1", "h2", "h3", "h4", "script", "style", "title", "textarea", "code", "button"}
+_SKIP_TAGS = {"a", "h1", "h2", "h3", "h4", "summary", "script", "style", "title", "textarea", "code", "button"}
 _SKIP_CLASSES = {
     "cul-code",
     "tl-code-badge",
     "tl-med-code",
     "cul-stat-pill",
     "chronicle-stat-pill",
+    "names-code-pill",
+    "names-stat-pill",
+    "idx-code",
     "book-kicker",
     "cul-kicker",
+    "names-kicker",
     "cover-num",
 }
 _TAG_SPLIT_RE = re.compile(r"(<[^>]+>)")
@@ -247,8 +273,9 @@ def link_codex_html(
     current_file: str,
     registry: dict,
     compendium_mode: bool = False,
+    allow_gm_names: bool = False,
 ) -> str:
-    """Safely convert canonical codex codes (H/C/A/B/T/Tomo) in HTML text nodes into clickable links."""
+    """Safely convert canonical codex codes (H/C/A/B/T/N/Tomo) in HTML text nodes into clickable links."""
     if not html_str:
         return html_str
 
@@ -262,7 +289,7 @@ def link_codex_html(
     def replace_text(text: str) -> str:
         def repl(m):
             tok = m.group(1)
-            # 1. Tomo I–XII
+            # 1. Tomo I–XIII
             if tok.startswith("Tomo "):
                 roman = tok.split()[1]
                 # Skip Valerius Malakor's fictional old booklet "Tomo I, Preparo de Peixes"
@@ -276,9 +303,8 @@ def link_codex_html(
                 if not compendium_mode and target_file == current_file:
                     return tok
                 if compendium_mode:
-                    # Link to book cover anchor inside Compendium if non-GM, else to standalone file
                     book_idx = list(TOMO_ROMAN_MAP.keys()).index(roman) + 1
-                    href = f"#tomo-{book_idx}" if roman not in ("IV", "VII", "VIII") else target_file
+                    href = f"#tomo-{book_idx}" if roman not in ("IV", "VII", "VIII", "XIII") else target_file
                 else:
                     href = target_file
                 return (
@@ -286,8 +312,10 @@ def link_codex_html(
                     f'title="Abrir {html.escape(label, quote=True)}">{tok}</a>'
                 )
 
-            # 2. H / C / A / B / T codes
+            # 2. H / C / A / B / T / N codes
             fam = tok[0]
+            if fam == "N" and not allow_gm_names:
+                return tok
             if tok not in registry.get(fam, {}):
                 return tok
             if current_row_self_code and tok.lower() == current_row_self_code:

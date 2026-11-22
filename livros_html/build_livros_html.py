@@ -17,6 +17,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from token_studio import TOKEN_STUDIO_CSS, TOKEN_STUDIO_HTML, TOKEN_STUDIO_JS
 from culinaria_renderer import CULINARIA_CSS, CULINARIA_JS, render_culinaria_page
+from grandes_nomes_renderer import GRANDES_NOMES_CSS, GRANDES_NOMES_JS, render_grandes_nomes_secret_payload
 from codex_linker import CODEX_CSS, build_codex_registry, link_codex_html
 
 from cryptography.hazmat.primitives import hashes
@@ -177,6 +178,18 @@ BOOKS = [
         "cover_map": "assets/capa_12_cozinhas_alenia.jpg",
         "gm_only": False,
     },
+    {
+        "src": "13_Grandes_Nomes_e_Feitos_de_Alenia.md",
+        "out": "13_Grandes_Nomes_e_Feitos_de_Alenia.html",
+        "num": "TOMO XIII • MESTRE",
+        "short": "🔒 Grandes Nomes",
+        "title": "Grandes Nomes e Feitos de Alenia",
+        "subtitle": "100 Perfis em 10 Círculos Sociais • Linhagens, Origens, Aparências, Personalidades e Legados",
+        "epigraph": "“Nem todo nome que mudou o mundo foi gravado numa coroa.”",
+        "desc": "Edição secreta do Mestre: 100 perfis biográficos (N001–N100) cruzando os 12 tomos anteriores — 44 personagens desenvolvidos + A Sombra, 19 nomes da onomástica, 36 novas figuras, genealogias, 12 encontros cruzados e segredos da aventura, do Acervo e da Comunhão.",
+        "cover_map": "assets/capa_13_grandes_nomes_alenia.jpg",
+        "gm_only": True,
+    },
 ]
 
 CHAPTER_MAPS = {
@@ -270,7 +283,13 @@ def get_codex_registry():
 
 def make_gm_gate_block(label: str, subtitle: str, encrypted_body_html: str, encrypted_toc_html: str = "", codex_file: str = "", compendium_mode: bool = False) -> str:
     if codex_file:
-        encrypted_body_html = link_codex_html(encrypted_body_html, codex_file, get_codex_registry(), compendium_mode=compendium_mode)
+        encrypted_body_html = link_codex_html(
+            encrypted_body_html,
+            codex_file,
+            get_codex_registry(),
+            compendium_mode=compendium_mode,
+            allow_gm_names=True,
+        )
     if not GM_PASSWORD:
         return encrypted_body_html
     payload_obj = {"html": encrypted_body_html, "toc": encrypted_toc_html}
@@ -2215,6 +2234,7 @@ SHARED_JS = r"""
                 BookReader.paginate();
                 BookReader.goToPage(cur);
             }
+            document.dispatchEvent(new CustomEvent('alenia:gm-unlocked'));
         } else if (failed) {
             if (silent) {
                 sessionStorage.removeItem(SESSION_KEY);
@@ -2292,6 +2312,7 @@ def sync_assets():
         (os.path.join(ROOT_DIR, "capas", "capa_10_herbario_seleni.jpg"), "capa_10_herbario_seleni.jpg"),
         (os.path.join(ROOT_DIR, "capas", "capa_11_cronica_alenia.jpg"), "capa_11_cronica_alenia.jpg"),
         (os.path.join(ROOT_DIR, "capas", "capa_12_cozinhas_alenia.jpg"), "capa_12_cozinhas_alenia.jpg"),
+        (os.path.join(ROOT_DIR, "capas", "capa_13_grandes_nomes_alenia.jpg"), "capa_13_grandes_nomes_alenia.jpg"),
     ]
     for fn in sorted(os.listdir(os.path.join(ROOT_DIR, "ilustracoes"))) if os.path.isdir(os.path.join(ROOT_DIR, "ilustracoes")) else []:
         if fn.lower().endswith((".jpg", ".jpeg", ".png")):
@@ -2358,6 +2379,7 @@ def rewrite_link(url: str) -> str:
         "10_Herbario_de_Seleni.md": "10_Herbario_de_Seleni.html",
         "11_Cronica_das_Terras_e_das_Mares.md": "11_Cronica_das_Terras_e_das_Mares.html",
         "12_Cozinhas_de_Alenia.md": "12_Cozinhas_de_Alenia.html",
+        "13_Grandes_Nomes_e_Feitos_de_Alenia.md": "13_Grandes_Nomes_e_Feitos_de_Alenia.html",
     }
     for k, v in mapping.items():
         if k in url:
@@ -2464,7 +2486,7 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
     while i < n:
         line = lines[i]
         stripped = line.strip()
-        if not stripped:
+        if not stripped or re.match(r'^<a\s+id="[^"]*">\s*</a>$', stripped, re.I):
             i += 1
             continue
 
@@ -2508,7 +2530,7 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
 
             codex_span = ""
             if level == 3:
-                m_codex = re.match(r"^((?:H\d{2}|C\d{2}|A\d{2}|T\d{3}))\s+[—–-]\s+", plain_title)
+                m_codex = re.match(r"^((?:H\d{2}|C\d{2}|A\d{2}|T\d{3}|N\d{3}))\s+[—–-]\s+", plain_title)
                 if m_codex:
                     short_id = f"{id_prefix}{m_codex.group(1).lower()}"
                     codex_span = f'<span id="{short_id}" class="codex-anchor" aria-hidden="true"></span>'
@@ -2729,7 +2751,7 @@ def build_topbar(active_file: str, page_title: str, has_toc: bool) -> str:
 
 
 def build_sidebar(active_file: str, toc_items, has_toc: bool) -> str:
-    romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"]
+    romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII"]
     public_items = []
     gm_items = []
     for idx, b in enumerate(BOOKS):
@@ -4228,25 +4250,60 @@ def main():
         cover_html = build_cover(bk["num"], bk["title"], bk["subtitle"], bk["epigraph"], bk["cover_map"])
 
         if bk["gm_only"] and GM_PASSWORD:
-            secret_html, secret_toc = md_to_html(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps, inject_bestiary_plates=inject_bestiary)
-            if bk["out"] == "07_Aventura_Inicial.html":
-                secret_html = (
-                    '<figure class="atlas-plate"><img src="assets/mapa_regional_aurora.jpg" alt="Mapa Regional de Aurora"/>'
-                    '<figcaption class="atlas-caption">Mapa da Região da Aventura — Oeste de Aurora</figcaption></figure>'
-                    + secret_html
+            if bk["out"] == "13_Grandes_Nomes_e_Feitos_de_Alenia.html":
+                secret_html, secret_toc = render_grandes_nomes_secret_payload(
+                    bk,
+                    md_content,
+                    {
+                        "inline_md": inline_md,
+                        "md_to_html": md_to_html,
+                        "img_dim_attrs": img_dim_attrs,
+                        "rewrite_link": rewrite_link,
+                    },
                 )
-            gated = make_gm_gate_block(
-                bk["title"],
-                "Conteúdo restrito ao Mestre (fichas, segredos e bastidores). Digite a senha para descriptografar.",
-                secret_html,
-                render_toc_items(secret_toc),
-                codex_file=bk["out"],
-                compendium_mode=False,
-            )
-            full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + gated, toc_items=[], force_sidebar=True, enable_book_reader=True)
-            with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
-                f.write(full_doc)
-            print(f"[OK] {bk['out']:34s} (LIVRO + AES-256-GCM)")
+                gated = make_gm_gate_block(
+                    bk["title"],
+                    "Edição secreta do Mestre: 100 perfis biográficos (N001–N100), genealogias, 12 encontros cruzados e segredos da aventura, do Acervo e da Comunhão. Digite a senha para destrancar.",
+                    secret_html,
+                    render_toc_items(secret_toc),
+                    codex_file=bk["out"],
+                    compendium_mode=False,
+                )
+                locked_cover = f'<div class="names-locked-cover">{cover_html}</div>'
+                full_doc = wrap_html_doc(
+                    bk["title"],
+                    bk["out"],
+                    locked_cover + "\n" + gated,
+                    toc_items=[],
+                    force_sidebar=True,
+                    enable_book_reader=False,
+                    extra_css=GRANDES_NOMES_CSS,
+                    extra_js=GRANDES_NOMES_JS,
+                    body_extra_class="names-mode sidebar-hidden",
+                )
+                with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
+                    f.write(full_doc)
+                print(f"[OK] {bk['out']:34s} (PAINEL BIOGRAFICO + AES-256-GCM)")
+            else:
+                secret_html, secret_toc = md_to_html(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps, inject_bestiary_plates=inject_bestiary)
+                if bk["out"] == "07_Aventura_Inicial.html":
+                    secret_html = (
+                        '<figure class="atlas-plate"><img src="assets/mapa_regional_aurora.jpg" alt="Mapa Regional de Aurora"/>'
+                        '<figcaption class="atlas-caption">Mapa da Região da Aventura — Oeste de Aurora</figcaption></figure>'
+                        + secret_html
+                    )
+                gated = make_gm_gate_block(
+                    bk["title"],
+                    "Conteúdo restrito ao Mestre (fichas, segredos e bastidores). Digite a senha para descriptografar.",
+                    secret_html,
+                    render_toc_items(secret_toc),
+                    codex_file=bk["out"],
+                    compendium_mode=False,
+                )
+                full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + gated, toc_items=[], force_sidebar=True, enable_book_reader=True)
+                with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
+                    f.write(full_doc)
+                print(f"[OK] {bk['out']:34s} (LIVRO + AES-256-GCM)")
 
             c_secret_html, c_secret_toc = md_to_html(md_content, id_prefix=f"t{idx+1}-", card_h3=card_h3, inject_maps=inject_maps, inject_bestiary_plates=inject_bestiary)
             tome_anchor = f"tomo-{idx+1}"
@@ -4403,7 +4460,7 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">12 Tomos em Formato de Livro • Atlas Ilustrado • 36 Kits • Herbário • Linha do Tempo • Cozinhas • Estúdio de Tokens • Firecast v2.6</div>
+        <div class="cover-subtitle">13 Tomos Ilustrados • Atlas Regional • 36 Kits • Herbário • Crônica • Cozinhas • Grandes Nomes • Estúdio de Tokens • Firecast v2.6</div>
         <div class="cover-rule"></div>
         <div style="margin: 8px 0 4px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
             <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⬇ Ficha Firecast (v2.6 .rpk)</a>

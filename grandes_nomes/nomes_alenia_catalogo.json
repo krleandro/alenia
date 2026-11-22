@@ -1,0 +1,2752 @@
+{
+  "edition": "418 EF — edição local do Mestre",
+  "counts": {
+    "Anterior desenvolvido": 45,
+    "Nome-modelo desenvolvido": 19,
+    "Nova figura ou papel nomeado": 36
+  },
+  "sources": [
+    {
+      "file": "01_Livro_de_Regras.md",
+      "sha256": "a1b4110bb00ffe0177250d92f7199949854000180ec4b8560d74549fbeffd8d9"
+    },
+    {
+      "file": "02_Guia_de_Cenario_Alenia.md",
+      "sha256": "24bf0a4dc87235425294ec6e846b3ab0d0075b67b7e1d1444c391ae954205d2c"
+    },
+    {
+      "file": "03_Catalogo_de_Kits.md",
+      "sha256": "c45c98bdedb3fef3ba6a86b2d986f070f115d535d899f344646d273c89602d91"
+    },
+    {
+      "file": "04_Bestiario_Alenia.md",
+      "sha256": "e878332b41cfd9cea7a01fc0c22c5afbb8344586ee549e35dd6517f92d0f6f23"
+    },
+    {
+      "file": "05_Onomastica_e_Toponimia_Alenia.md",
+      "sha256": "27d0242f230ba16ae2c0e5ac525734e012cde3bfd7c039a369ed09eda277ca53"
+    },
+    {
+      "file": "06_Guia_do_Jogador_e_Referencia_Rapida.md",
+      "sha256": "af88242ba3a430eca2bedb6b7bc8a0d22a4ae3e70bbb486ddaeabb380774d480"
+    },
+    {
+      "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+      "sha256": "cfe07c983e2a1e82459ae4e083ef1aff0fb487549ce7e75a4e5842dca5f4aa8e"
+    },
+    {
+      "file": "08_Acervo_Oculto_de_Sellene.md",
+      "sha256": "9ce8aa10e36b8ed22999ca107879e1d14eda412fa8a7089efa3583910ed1d2e5"
+    },
+    {
+      "file": "09_Catalogo_de_Equipamentos_e_Oficios.md",
+      "sha256": "01e62096bb613f02ff291822b9943dd110dfd9a31706a702bedfd87111863bbd"
+    },
+    {
+      "file": "10_Herbario_de_Seleni.md",
+      "sha256": "4e991a13238ec38cecb56d30cc2da4f1df480c6d67453e82213b48ffd5e37e3b"
+    },
+    {
+      "file": "11_Cronica_das_Terras_e_das_Mares.md",
+      "sha256": "e6cae016be72f33538de86de9c032a621e1688a62645f77d57d50f23f134b126"
+    },
+    {
+      "file": "12_Cozinhas_de_Alenia.md",
+      "sha256": "80074057dde2c3b054476471c03c4d002e9c96eb228602b81a9d1d029dc3fab2"
+    }
+  ],
+  "profiles": [
+    {
+      "name": "Severor I Valerion",
+      "sphere": "Coroa e memória",
+      "source": "02,08,11",
+      "period": "Histórico; reinou 356–384; morto em 384",
+      "origin": "Aurora; ramo secundário empobrecido dos Valerion, elevado em Altavanne",
+      "lineage": "Pai de Severor II; avô de Severor III e Valora. O vínculo com o ramo de Aemilius IV é dinástico, sem grau de parentesco fixado.",
+      "appearance": "Lado esquerdo do rosto permanentemente queimado; nunca usou máscara. Acrescenta-se cabelo curto, embranquecido cedo, e mãos grandes de articulações deformadas.",
+      "personality": "Coragem paciente, capacidade de escutar especialistas e dificuldade de admitir promessas incompatíveis. Olhava para o trabalhador antes de perguntar pelo senhor.",
+      "deeds": "Reuniu a Faixa Negra; matou A Sombra com Fende-Bruma em 356; obteve a abdicação de Aemilius IV sem guerra nas ruas; reinou até 384. A vitória foi pessoal e coletiva: caçadores, soldados, forjadores e marinheiros a tornaram possível.",
+      "desire": "Legado: a coroa fundada no serviço ao povo também deixou compromissos territoriais contraditórios. Seus herdeiros disputam o significado da coragem.",
+      "scene": "Uma carta autêntica pode desfazer uma versão oficial sem diminuir o golpe que matou o dragão. Sua voz em memórias: “Quem mantém a corda?”",
+      "code": "N001",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            262,
+            353
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            3,
+            42
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Severor II Valerion",
+      "sphere": "Coroa e memória",
+      "source": "02,11",
+      "period": "Histórico; reinou 384–405",
+      "origin": "Altavanne e obras do vale do Aurélio",
+      "lineage": "Filho de Severor I; pai de Severor III. A filiação de Valora ao mesmo pai é adotada nesta expansão, coerente com a irmandade estabelecida.",
+      "appearance": "Retratos propostos mostram ombros estreitos, barba aparada, dedos longos e uma pequena mancha de tinta junto ao punho.",
+      "personality": "Paciente, metódico, avesso a humilhar funcionários; adiava conflitos que não podia resolver por negociação.",
+      "deeds": "Reconstruiu pontes e estradas; seu reinado administrativo preservou a reconstrução posterior à Sombra. Nunca liderou uma guerra. Propõe-se que exigisse medições antes de aprovar a última parcela de uma obra.",
+      "desire": "Legado: demonstrar que manter uma ponte também é governar. Não se fixa causa de morte nem se transforma a transição de 405 em assassinato.",
+      "scene": "Um empreiteiro apresenta uma ordem de pagamento deste rei; o registro de inspeção contradiz a obra que existe. Voz recordada: “Mostre-me onde a água passa.”",
+      "code": "N002",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            19,
+            264,
+            291,
+            336,
+            404,
+            405
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            684,
+            738,
+            746,
+            770,
+            774,
+            846,
+            1095,
+            1097,
+            1119,
+            1120
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Severor III Valerion",
+      "sphere": "Coroa e memória",
+      "source": "02,08,11",
+      "period": "Vivo e gravemente enfermo em 418; reina desde 405",
+      "origin": "Altavanne; campanhas e fronteiras de Aurora",
+      "lineage": "Filho de Severor II, neto de Severor I e irmão de Valora; sem filho vivo e sem herdeiro indiscutível. Não se inventa descendente secreto como fato.",
+      "appearance": "Aparência proposta: alto, rosto estreito, cabelo escuro com fios brancos; veste roupas de campanha mesmo no quarto. A palidez recente acentua o olhar inquieto.",
+      "personality": "Orgulhoso, exigente consigo, corajoso até a imprudência; teme ser lembrado apenas como o neto que falhou.",
+      "deeds": "Assumiu a Coroa em 405, correu riscos excessivos nas fronteiras e ocultou os primeiros sintomas até o colapso de 418. Suas vitórias específicas não recebem nomes retroativos sem documentação.",
+      "desire": "Quer voltar a decidir sem ser tratado como relíquia. A causa da enfermidade permanece escolha do mestre entre as alternativas do Acervo.",
+      "scene": "Pede uma audiência curta e contradiz uma ordem transmitida em seu nome. É preciso distinguir vontade consciente, exaustão e manipulação. “Ainda estou aqui.”",
+      "code": "N003",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            19,
+            264,
+            291,
+            336,
+            405
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            15,
+            76,
+            82,
+            125,
+            129
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            770,
+            774,
+            846,
+            1095,
+            1097,
+            1120
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Valora Valerion",
+      "sphere": "Coroa e memória",
+      "source": "02,07,08,11",
+      "period": "Viva; regente real em 418",
+      "origin": "Paço de Altavanne",
+      "lineage": "Irmã de Severor III e neta de Severor I; a expansão a situa como filha de Severor II. Não se fixa casamento nem herdeiro.",
+      "appearance": "Proposta: cabelo castanho preso baixo, marcas de cansaço, roupas sóbrias de corte; um anel pesado deixa sinal no dedo.",
+      "personality": "Diplomática, persistente, boa ouvinte quando tem tempo; tende a confundir lealdade à família com interesse público.",
+      "deeds": "Acumula Regência e Chancelaria; articula a defesa da continuidade Valerion; emprega Sabina para recuperar correspondência e investigar o desvio da barca. Procura saídas negociadas para Ferraur e Vergod.",
+      "desire": "Evitar a guerra civil sem transformar uma regência em renúncia permanente à autoridade. Precisa de Serina, mas não controla os interesses portuários.",
+      "scene": "Oferece recursos limitados e pede uma prova verificável, não uma confissão conveniente. “Preciso do que aconteceu, não do que me favorece.”",
+      "code": "N004",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            19,
+            118,
+            291,
+            308,
+            336,
+            409
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [
+            22
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            138
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            846
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Aemilius IV Valerion",
+      "sphere": "Coroa e memória",
+      "source": "02,11",
+      "period": "Histórico; deposto em 356; morte posterior sem data fixada",
+      "origin": "Altavanne",
+      "lineage": "Ramo antigo dos Valerion; o grau de parentesco com Severor I permanece aberto. Não é o Alto Luminar Aemilius.",
+      "appearance": "Retrato proposto: rosto arredondado, mãos cuidadas, pescoço rígido sob colarinhos altos; na velhice monástica, roupas grandes demais para o corpo.",
+      "personality": "Cerimonioso, defensivo, capaz de usar linguagem prudente para justificar abandono. Confundia proteger a sede do governo com proteger o reino.",
+      "deeds": "Fechou-se na capital durante a devastação e cobrou o Imposto das Cinzas; abdicou diante da legitimidade conquistada por Severor. Recolheu-se a um mosteiro da Passagem até morrer.",
+      "desire": "Legado: seus partidários chamam o recolhimento de sacrifício; os campos lembram os portões fechados. Nenhuma dessas versões restitui os mortos.",
+      "scene": "Um diário pode mostrar medo humano sem absolver a política. Voz atribuída: “Se a capital cair, nada restará.”",
+      "code": "N005",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            362
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Lucian Leonastis",
+      "sphere": "Coroa e memória",
+      "source": "02,07,08",
+      "period": "Vivo em 418",
+      "origin": "Vaarsa e Picos de Rubecina; atua em Altavanne",
+      "lineage": "Neto de Octavian Leonastis. O pai intermediário não recebe nome nesta edição para evitar inventar uma sucessão já encerrada.",
+      "appearance": "Proposta: corpo compacto, nariz quebrado, cabelos curtos grisalhos; mantém as botas militares mesmo em audiência.",
+      "personality": "Disciplinado, valente, paternal com veteranos e cruel com quem interpreta como insubordinado. Sua convicção não exclui cálculo político.",
+      "deeds": "Herói dos Picos de Rubecina, marechal e adversário da regência de Valora. Pressiona pelo Grande Concílio e pela repressão à greve; o massacre é risco futuro, não feito consumado.",
+      "desire": "Acredita que a Coroa deve provar capacidade militar. A ala que o apoia inclui interesses que ele não domina integralmente.",
+      "scene": "Uma denúncia verdadeira contra seus aliados obriga-o a escolher entre disciplina e conveniência. “Não darei uma ordem que eu mesmo não suportaria.”",
+      "code": "N006",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            19,
+            118,
+            225,
+            291,
+            309,
+            337,
+            380,
+            408
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [
+            14
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            60
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Octavian Leonastis",
+      "sphere": "Coroa e memória",
+      "source": "02,11",
+      "period": "Histórico; morto em 356",
+      "origin": "Vaarsa e fronteira de Rubecina",
+      "lineage": "Avô de Lucian; desobedeceu ao próprio pai para participar da caçada. O nome desse pai permanece aberto.",
+      "appearance": "Proposta: homem de ombros largos, barba ruiva escurecida, cicatriz no queixo; escudo com remendos de campanhas anteriores.",
+      "personality": "Lealdade aos companheiros acima da obediência familiar; obstinação e pouca diplomacia. Aceitava dívida de honra, não desculpas genealógicas.",
+      "deeds": "Levou sessenta infantes à Faixa Negra, sustentou a boca do desfiladeiro e morreu garantindo a retirada dos feridos.",
+      "desire": "Legado: a família reivindica o sangue que permitiu a vitória de Severor. Sua desobediência histórica também pode ser usada contra o militarismo cego do neto.",
+      "scene": "Um rol de sobreviventes mostra quem ele salvou, inclusive alguém de uma casa rival. “Primeiro os feridos; depois os estandartes.”",
+      "code": "N007",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            380
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            670
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Darian d'Altrax",
+      "sphere": "Coroa e memória",
+      "source": "02,11",
+      "period": "Histórico; ativo em 355–356; destino posterior aberto",
+      "origin": "Fronteira noroeste de Aurora",
+      "lineage": "Casa d'Altrax; relação exata com Aurelia e Cassian não está estabelecida. Não se presume que fosse avô de ambos.",
+      "appearance": "Proposta: muito magro, olhos claros protegidos por sobrancelhas espessas, roupas reparadas e andar silencioso; um dedo endurecido por antiga fratura.",
+      "personality": "Paciente, desconfiado de relatos grandiosos, excelente em separar vestígio de desejo. Guardava ressentimentos por muitos anos.",
+      "deeds": "Rastreou os pousos da Sombra durante nove meses e identificou a fenda antiga sob a asa esquerda. Seu trabalho tornou possível escolher onde atingir a criatura.",
+      "desire": "Legado: a promessa de terras florestais feita à sua casa foi recuada para preservar Vergod. Seu mapa vale mais que as versões em canções.",
+      "scene": "Um herdeiro exige terras usando uma carta que omite os moradores das matas. “O rastro não sabe a quem você jurou.”",
+      "code": "N008",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            377
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            662
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Vespera Scutauria",
+      "sphere": "Coroa e memória",
+      "source": "02,11",
+      "period": "Histórica; sobreviveu à caçada de 356; destino posterior aberto",
+      "origin": "Merlinport e navegação fluvial",
+      "lineage": "Casa Scutauria; vínculo preciso com Marcus e Serina não foi fixado. O cargo conquistado beneficiou a casa, não comprova maternidade.",
+      "appearance": "Perdeu uma perna na caçada. Proposta: pele marcada de sol, cabelos presos com cordão de marinheiro e prótese de madeira simples nos retratos posteriores.",
+      "personality": "Prática, espirituosa, feroz na cobrança de soldos; perdia a paciência com quem confundia marinheiros com material de consumo.",
+      "deeds": "Transportou correntes e arpões, financiou suprimentos pelo rio e perdeu metade da tripulação. Garantiu os Forais de Merlinport e o lugar da casa na Balança.",
+      "desire": "Legado: o preço naval da vitória recebe menos versos que o golpe do rei. As famílias dos tripulantes ainda podem cobrar reconhecimento.",
+      "scene": "Uma lista de indenizações revela nomes suprimidos. “Não conte as correntes antes de contar quem as puxou.”",
+      "code": "N009",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            378
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            670
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Orlan Ferraris",
+      "sphere": "Coroa e memória",
+      "source": "02,08,11",
+      "period": "Histórico; ativo em 356; morte sem data fixada",
+      "origin": "Aeraneas e oficinas de Ferraur",
+      "lineage": "Casa Ferraris; elevado ao título hereditário de Grão-Lorde do Adamante. Relação exata com Aurelian e Marcus Ferraris não comprovada.",
+      "appearance": "Proposta: braços grossos, barba curta chamuscada, visão cansada de um olho e pequenas queimaduras nas mãos.",
+      "personality": "Exigente, reservado, solidário com aprendizes e intolerante a encomendas tecnicamente impossíveis. O reconhecimento da oficina importava mais que a etiqueta.",
+      "deeds": "Forjou clandestinamente Fende-Bruma contra o decreto real. Participou com Lorenzo Seleni da autópsia reservada da Sombra e recebeu título de Severor I.",
+      "desire": "Legado: o título nobre nasceu do ofício, enquanto seus sucessores administram trabalhadores que reivindicam essa mesma dignidade.",
+      "scene": "Um caderno de oficina prova a participação de operários sem sobrenome. “A ponta leva meu selo; o trabalho, muitas mãos.”",
+      "code": "N010",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            379
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            43
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            670,
+            1055
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Corvus Montavalle",
+      "sphere": "Coroa e memória",
+      "source": "02,08,11",
+      "period": "Histórico; ativo em 356",
+      "origin": "Dahrma",
+      "lineage": "Casa Montavalle; antecessor de Lorian na memória familiar, sem geração exata estabelecida.",
+      "appearance": "Proposta: rosto largo, barba salpicada de branco, postura de cavaleiro cansado e casaco sempre empoeirado de grão.",
+      "personality": "Generoso no abastecimento, orgulhoso da própria gente, devastado por acusações que não conseguia desmontar publicamente.",
+      "deeds": "Abasteceu a caçada com grãos e cavalos. A retaguarda recuou cedo; o Acervo conserva prova de um falso sinal dado por oficial leal a Aemilius IV, e não de uma ordem covarde de Corvus.",
+      "desire": "Legado: restaurar sua honra afeta a autoridade atual de Dahrma. A inocência no sinal não apaga outras perdas e decisões difíceis.",
+      "scene": "Os descendentes podem aceitar uma verdade que também expõe famílias ainda influentes? “Um exército sem pão só chega ao lugar onde começa a saquear.”",
+      "code": "N011",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            381
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            670
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Lorian Montavalle",
+      "sphere": "Coroa e memória",
+      "source": "02",
+      "period": "Vivo em 418",
+      "origin": "Dahrma",
+      "lineage": "Atual chefe Montavalle; ligação genealógica precisa com Corvus aberta. Família poderosa, mas não proprietária de toda a produção camponesa.",
+      "appearance": "Proposta: alto, rosto aberto, mãos pequenas, cabelo claro; usa tecidos bons sem joias ostensivas.",
+      "personality": "Afável, atento aos preços, evita decidir diante de plateia. A neutralidade às vezes encobre receio de perder os dois lados.",
+      "deeds": "Governa o maior celeiro de Aurora e sua cavalaria ligeira. Contém especuladores com autoridade contestada; acrescenta-se a organização de armazéns de socorro após uma cheia local, sem data canônica.",
+      "desire": "Manter o pão circulando e recuperar prestígio familiar sem apostar toda a colheita num pretendente.",
+      "scene": "Pede escolta para uma carga cuja venda já foi prometida duas vezes por agentes diferentes. “A fome não espera o fim do concílio.”",
+      "code": "N012",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            341
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Serina Scutauria",
+      "sphere": "Coroa e memória",
+      "source": "02",
+      "period": "Viva em 418",
+      "origin": "Merlinport; residência de ofício em Altavanne",
+      "lineage": "Casa Scutauria. Nesta expansão, Marcus é seu irmão mais velho; essa relação é nova, não consequência automática do sobrenome.",
+      "appearance": "Proposta: mulher de meia-idade, cabelo negro com uma mecha branca, unhas curtas, luvas de tecido fino usadas somente no salão.",
+      "personality": "Lúcida, seca no humor, protege gente competente; calcula tão depressa que parece não sentir as perdas que contabiliza.",
+      "deeds": "Mestre da Balança, administra Tesouro, moeda e relações de crédito. Sustenta Valora enquanto o comércio permanece viável. Propõe-se que tenha impedido pagamento duplicado de uma dívida naval.",
+      "desire": "Evitar impostos de guerra que destruam a arrecadação futura. Pode enfrentar o irmão se a alfândega sacrificar o tesouro aos interesses locais.",
+      "scene": "Uma conta correta esconde uma escolha injusta. “Quem paga a diferença entre sua promessa e a minha assinatura?”",
+      "code": "N013",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            311
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Marcus Scutauria",
+      "sphere": "Coroa e memória",
+      "source": "02",
+      "period": "Vivo em 418",
+      "origin": "Merlinport",
+      "lineage": "Chefe Scutauria; irmão de Serina nesta expansão. Descendência exata de Vespera não fixada.",
+      "appearance": "Proposta: robusto, barba curta escura, rosto avermelhado pelo vento e um ouvido com audição reduzida.",
+      "personality": "Hospitalário, territorial, bom negociador frente a frente; detesta admitir que precisa dos bancos estrangeiros.",
+      "deeds": "Controla interesses de frotas fluviais e alfândega. Apoia Valora condicionado à abertura do comércio. Expansão: intermediou uma indenização coletiva após perda de barcaças, preservando o serviço do porto.",
+      "desire": "Conservar autonomia de Merlinport sem ser acusado de comprar a Coroa. Seu compromisso com os trabalhadores termina onde começa sua margem de lucro.",
+      "scene": "Oferece barcos em vez de dinheiro; exige conhecer a carga e quer saber por que Sabina não passou por ele. “No meu cais, promessa precisa flutuar.”",
+      "code": "N014",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            338
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Aurelian Ferraris",
+      "sphere": "Coroa e memória",
+      "source": "02,08,11",
+      "period": "Vivo em 418",
+      "origin": "Aeraneas",
+      "lineage": "Chefe Ferraris e detentor do título originado com Orlan; não se fixa número de gerações.",
+      "appearance": "Proposta: barba castanha muito curta, postura encurvada de quem visita galerias, roupas que misturam corte nobre e avental de inspeção.",
+      "personality": "Competente, cauteloso, tende a guardar notícias ruins até poder oferecer solução. Essa prudência virou cumplicidade aos olhos de trabalhadores.",
+      "deeds": "Administra minas e forjas; tenta negociar após o desabamento de quarenta mortos. Produziu adendo secreto aos registros antigos de Ferraur. O desastre não é reduzido a sabotagem sobrenatural.",
+      "desire": "Evitar repressão e colapso econômico enquanto enfrenta provas do que a mineração encontrou. Precisa ouvir líderes que antes tratava como subordinados.",
+      "scene": "Uma ordem antiga traz seu selo, mas a execução foi alterada por capatazes. “Uma galeria fechada custa prata; uma aberta cedo demais custa nomes.”",
+      "code": "N015",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            310,
+            339
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            56,
+            60
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Aurelia d'Altrax",
+      "sphere": "Coroa e memória",
+      "source": "02",
+      "period": "Viva em 418",
+      "origin": "Forte de Altrax e rotas pantanosas",
+      "lineage": "Castelã da Casa d'Altrax; nesta expansão, Cassian é seu primo, sem parentesco direto fixado com Darian.",
+      "appearance": "Proposta: pele morena marcada de sol, cabelo trançado, nariz forte e andar cuidadoso após lesão antiga no joelho.",
+      "personality": "Cautelosa, direta, fiel a patrulheiros que conhece pelo nome; demora a aceitar interferência de gente da capital.",
+      "deeds": "Mantém patrulhas e batedores da fronteira noroeste. Propõe-se uma retirada organizada de moradores de uma estrada inundada, cuja memória explica a lealdade de guias locais.",
+      "desire": "Proteger a fronteira sem entregar o forte a Leonastis nem permitir que a crise com Vergod se torne guerra.",
+      "scene": "Entrega um mapa com caminhos omitidos por respeito a comunidades locais. “Fronteira é quem mora de cada lado, não a linha do copista.”",
+      "code": "N016",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            340
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Cassian d'Altrax",
+      "sphere": "Coroa e memória",
+      "source": "02",
+      "period": "Vivo em 418",
+      "origin": "Altrax; serviço em Altavanne",
+      "lineage": "Casa d'Altrax; primo de Aurelia nesta expansão. Distinto de Cassian de Lavroga, Cassian Armeiro e Cassian de Pontáuria.",
+      "appearance": "Proposta: discreto, rosto magro, cabelo sempre aparado; roupas de corte um pouco antiquadas, sem marca pessoal vistosa.",
+      "personality": "Observador, cortês, avesso a respostas imediatas. Consegue preservar confidências, mas usa o silêncio para ampliar a própria margem de ação.",
+      "deeds": "Guardião interino dos Selos Secretos; coordena correio cifrado e contraespionagem. Sua lealdade é suspeita para ambos os campos, sem traição definida como fato.",
+      "desire": "Converter o cargo interino em posição legítima sem entregar a rede inteira a uma facção.",
+      "scene": "Reconhece um lacre falso, mas se recusa a explicar como, pois isso revelaria um mensageiro. “Uma carta pode ser verdadeira e chegar pela mão errada.”",
+      "code": "N017",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            313
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Valen de Pontáuria",
+      "sphere": "Coroa e memória",
+      "source": "02",
+      "period": "Vivo em 418",
+      "origin": "Pontáuria e tribunais reais",
+      "lineage": "Primo do Alto Luminar Aemilius; tio de Sabina; neto de Cassian de Pontáuria conforme o Acervo. A geração intermediária não foi nomeada.",
+      "appearance": "Proposta: homem grisalho, expressão severa, mão esquerda pouco móvel e roupas escuras sem ostentação.",
+      "personality": "Incorruptível, obstinado, mais sensível a prova que a eloquência. Pode confundir regularidade processual com acesso real à justiça.",
+      "deeds": "Preboste da Coroa; dirige juízes, patrulhas e investigações de traição. Recusa servir a uma facção fora da lei. Expansão: restituiu bens confiscados por um aliado da própria família.",
+      "desire": "Preservar uma justiça capaz de sobreviver ao próximo soberano. A atividade secreta da sobrinha ameaça seu equilíbrio entre afeto e dever.",
+      "scene": "Pede uma testemunha viva, não apenas o documento que a tornaria descartável. “A lei também precisa limitar quem acredita estar certo.”",
+      "code": "N018",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            312
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Aemilius de Pontáuria",
+      "sphere": "Fé e conhecimento",
+      "source": "02",
+      "period": "Vivo e idoso em 418",
+      "origin": "Pontáuria; Grande Catedral de Altavanne",
+      "lineage": "Primo de Valen, da Casa de Pontáuria; relação com Sabina deriva desse vínculo, sem grau adicional especificado. Não é Aemilius IV.",
+      "appearance": "Proposta: pequeno, mãos trêmulas, olhos vivos e voz baixa que obriga a sala a se calar.",
+      "personality": "Pragmático, paciente, atento a compromissos irreversíveis; teme a violência de seus próprios radicais mais do que admite.",
+      "deeds": "Alto Luminar da Chama Solar, pressionado a abençoar um sucessor. Mantém o assento consultivo junto ao Conselho; não dispõe do voto militar dos seis ofícios.",
+      "desire": "Impedir que a Igreja se torne apenas selo de uma vitória política. Também precisa preservar unidade entre ordens com prioridades incompatíveis.",
+      "scene": "Concede asilo a alguém que Valen tem motivos legais para interrogar. “A bênção não devolve o sangue derramado para consegui-la.”",
+      "code": "N019",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            225
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Sabina de Pontáuria",
+      "sphere": "Intriga e justiça",
+      "source": "02,07,09",
+      "period": "Viva em 418",
+      "origin": "Pontáuria; atua em Merlinport e Altavanne",
+      "lineage": "Sobrinha de Valen; pertence à Casa de Pontáuria. Pais não nomeados; não se presume que seja filha de um conselheiro.",
+      "appearance": "Proposta: estatura mediana, olhos castanhos, sorriso breve, roupas práticas de viajante com um detalhe caro bem conservado.",
+      "personality": "Controlada, rápida na improvisação, protege agentes úteis; evita prometer segurança que não pode fornecer.",
+      "deeds": "Agente de Valora; reúne os exploradores na Âncora de Cinza e oferece contrato para recuperar cartas e esclarecer o desvio da Estrela de Aurélio. O sucesso depende da aventura.",
+      "desire": "Obter prova antes que a facção militar possa recolher testemunhas. Sua ligação familiar com o preboste pode ajudar ou comprometer a operação.",
+      "scene": "Entrega adiantamento e salvo-conduto, mas separa cuidadosamente o que pode assinar do que apenas espera. “Leia a última linha antes de aceitar.”",
+      "code": "N020",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            475
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [
+            22
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "09",
+          "file": "09_Catalogo_de_Equipamentos_e_Oficios.md",
+          "lines": [
+            172
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Corardo della Rocca",
+      "sphere": "Portos e regências",
+      "source": "02",
+      "period": "Vivo em 418",
+      "origin": "Corallis; circuitos políticos da Liga",
+      "lineage": "Casa della Rocca, mercantil; parentes e antecessor no cargo não definidos.",
+      "appearance": "Proposta: rosto comprido, cabelo ondulado grisalho, dedos com anéis de selo discretos; veste tecidos resistentes ao sal nas viagens.",
+      "personality": "Conciliador, vaidoso da própria habilidade, prefere dívidas recíprocas a ordens diretas; subestima rancores de trabalhadores de porto.",
+      "deeds": "Arconte-Regente confirmado pela Coroa; tenta equilibrar quatro grandes cidades e unificar tarifas. A disputa Baldbella–Alineus ameaça demonstrar o limite de seu poder.",
+      "desire": "Ampliar autonomia sem provocar intervenção de Aurora. Financiar investigação de Thanatos é intenção política, não prova de que já controla a ilha.",
+      "scene": "Dois contratos legítimos atribuem o mesmo salvamento a cidades rivais. “Não preciso que concordem; preciso que os navios entrem.”",
+      "code": "N021",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            42,
+            119,
+            296
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Qasir Zaharid",
+      "sphere": "Portos e regências",
+      "source": "02,11",
+      "period": "Vivo em 418",
+      "origin": "Naasar; jurisdição sobre cidades-oásis e pedágios",
+      "lineage": "Clã Zaharid. Não é automaticamente Qasir ibn Tarash, nome-modelo do Tomo V, desenvolvido aqui como outro homem.",
+      "appearance": "Proposta: alto, barba negra com fios prateados, mantos claros e uma marca de queimadura antiga no antebraço.",
+      "personality": "Formalmente hospitaleiro, bom em medir concessões, preocupado com precedentes; interpreta autonomia tribal como problema negociável, às vezes tarde demais.",
+      "deeds": "Regente das Dunas; mantém cisternas e tributos urbanos. Exige solução para o assassinato do Árbitro e tenta preservar a Rota do Sal.",
+      "desire": "Demonstrar que pode proteger a água sem se tornar ocupante estrangeiro aos olhos dos clãs. Não governa livremente Vargheim nem todas as dunas.",
+      "scene": "Recebe representantes inimigos sob a mesma tenda e pede que os personagens verifiquem uma acusação antes do terceiro dia. “O poço não escolhe a sede.”",
+      "code": "N022",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            50,
+            120,
+            297
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            136
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Grimrik Ulscold",
+      "sphere": "Portos e regências",
+      "source": "02",
+      "period": "Vivo em 418",
+      "origin": "Cidadela de Kalgard",
+      "lineage": "Casa Ulscold; depende de von Kragstad e Hrafngard, sem parentesco presumido entre as três.",
+      "appearance": "Proposta: grande, barba escura curta, olho direito ligeiramente semicerrado, vestes de lã pesada sem exuberância.",
+      "personality": "Disciplinado, calculista, valoriza previsibilidade; confunde silêncio social com consentimento. Sabe recompensar competência popular.",
+      "deeds": "Déspota-Regente de Kalis; sustenta autonomia prática e tributo formal. Mobiliza informações sobre Despertos e mantém equilíbrio precário com mercadores e casas rivais.",
+      "desire": "Conhecer Thanatos antes que Aurora use o mistério contra Kalis. Não controla todas as redes criminosas que operam em seu nome.",
+      "scene": "Um agente oferece prova excelente obtida mediante crime politicamente desastroso. “Uma informação só vale o preço de usá-la.”",
+      "code": "N023",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            61,
+            121,
+            298
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Aerwen ferch Taldor",
+      "sphere": "Matas e fronteiras",
+      "source": "02",
+      "period": "Viva em 418",
+      "origin": "Cidade Suspensa e Vergod",
+      "lineage": "Filha de Taldor pela forma do nome; não se identifica esse pai com toda ocorrência isolada de Taldor. Distinta de Aerwen ferch Moriel.",
+      "appearance": "Proposta: cabelo escuro com tranças finas, rosto anguloso, mãos calejadas por cordas; fala de pé, apoiando um pé numa travessa.",
+      "personality": "Firme, paciente com dissenso, irritável diante de tutelas estrangeiras. A conciliação não elimina sua disposição de retaliar.",
+      "deeds": "Guardiã do Conselho das Copas; protege autonomia florestal e procura Cadwyn. Equilibra anciãos isolacionistas e vigias mais combativos.",
+      "desire": "Resgatar o emissário sem sacrificar o comércio de que sua gente depende. Não quer trocar independência por idealização da floresta.",
+      "scene": "Convida um grupo para observar uma reunião que ela não pode simplesmente comandar. “Não confunda minha palavra com a de todas as copas.”",
+      "code": "N024",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            122
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Cadwyn ap Merion",
+      "sphere": "Matas e fronteiras",
+      "source": "02,05,07,11",
+      "period": "Vivo; desaparecido no início da campanha",
+      "origin": "Cidade Suspensa; investigação perto de Altrax",
+      "lineage": "Filho de Merion; o pai não é identificado como Merion Bruma. Não há base para o tornar herdeiro de Aerwen.",
+      "appearance": "Proposta: jovem adulto, cabelo castanho comprido, rosto sardento, dedos sujos de carvão de mapas; ferido durante o cativeiro.",
+      "personality": "Curioso, corajoso, pouco prudente quando acredita ter encontrado prova decisiva. Aprende depressa, mas custa-lhe pedir ajuda.",
+      "deeds": "Mapeou prospecção ilegal, reuniu documentos e foi capturado; a aventura o mantém vivo na Torre de Specula. Libertação e retorno não são feitos já realizados.",
+      "desire": "Levar provas ao Conselho e impedir que a fraude vire guerra. O medo do cativeiro afeta seu comportamento sem anular sua capacidade.",
+      "scene": "Após resgate, corrige um detalhe que enfraquece a versão dos próprios aliados. “Se o mapa mentir por nós, eles venceram.”",
+      "code": "N025",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            22
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            44
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [
+            15,
+            51,
+            65
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            862,
+            1096
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Fioresca Coral",
+      "sphere": "Portos e regências",
+      "source": "02,05",
+      "period": "Viva em 418",
+      "origin": "O Ferro Velho e recifes de Corallis",
+      "lineage": "Sobrenome regional de bastardia; pais nobres não identificados. Sua liderança vem da Irmandade, não de herança de casa mercantil.",
+      "appearance": "Proposta: pele escura curtida pelo sol, tranças curtas, dentes desiguais, uma faixa de tecido colorido no pulso.",
+      "personality": "Inventiva, direta, feroz na defesa de autonomia; tolera ilegalidade com mais facilidade que exploração de companheiros.",
+      "deeds": "Lidera a Irmandade do Ferro Velho e articula práticos, sucateiros e compradores. Disputa salvamentos sem aceitar tributação automática da Liga.",
+      "desire": "Manter unidade entre trabalhadores honestos e corsários que oferecem recursos indispensáveis. Pode perder aliados se combater toda pilhagem.",
+      "scene": "Precisa arbitrar entre uma tripulação faminta e sobreviventes que reivindicam a carga. “Resgatar não dá direito de possuir a pessoa resgatada.”",
+      "code": "N026",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            123
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            62
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Beren do Cais",
+      "sphere": "Intriga e justiça",
+      "source": "02,07",
+      "period": "Vivo como Desperto em 418; morte testemunhada",
+      "origin": "Merlinport; piloto fluvial da Estrela de Aurélio",
+      "lineage": "Família de cais sem linhagem nobre estabelecida; esposa existe no cenário, nomeada como Néria nesta expansão.",
+      "appearance": "Encharcado ao retornar, cicatriz pálida na nuca. Proposta: homem de mãos fortes, cabelo ralo e olhos vermelhos de noites sem descanso.",
+      "personality": "Afetuoso, assustado, atento a vozes familiares; oscila entre relatar tudo e evitar uma lembrança que não reconhece como sua.",
+      "deeds": "Pilotava a barca atacada; foi visto morto e reapareceu vivo, reconhecendo a família e recordando um naufrágio de séculos atrás. Agentes kalitas o levaram à força.",
+      "desire": "Voltar para casa sem ser reduzido a prova, relíquia ou ameaça. Sua condição não prova fidelidade ao Regente.",
+      "scene": "Sabe um caminho que nunca percorreu e pede companhia para verificar uma memória. “Eu lembro, mas não fui eu.”",
+      "code": "N027",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            90
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [
+            16,
+            28,
+            43,
+            67
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Loreo, comprador de Baldbella",
+      "sphere": "Intriga e justiça",
+      "source": "07",
+      "period": "Vivo em 418",
+      "origin": "Baldbella; presente em Merlinport",
+      "lineage": "Família não informada. Distinto de Loreo Seleni, Loreo de Pontáuria e Loreo Cartógrafo; não recebe sobrenome retroativo como fato.",
+      "appearance": "Proposta: baixo, cabelo muito encaracolado, roupas de viagem boas e mãos que mexem em moedas quando se inquieta.",
+      "personality": "Sociável, ansioso, bom em obter boatos pagando bebidas; coragem cresce quando percebe utilidade prática.",
+      "deeds": "Na Âncora de Cinza, procura informações sobre brocas cirúrgicas de adamante. Pode tornar-se aliado ou concorrente; o texto não o estabelece como espião inimigo.",
+      "desire": "Localizar equipamento e preservar a encomenda que sustenta sua reputação profissional.",
+      "scene": "Oferece informações verdadeiras, mas incompletas, porque não entende o valor político da carga. “Eu só perguntei pelas brocas.”",
+      "code": "N028",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [
+            27
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Cassian de Lavroga",
+      "sphere": "Intriga e justiça",
+      "source": "07",
+      "period": "Vivo no início da aventura; destino dependente da mesa",
+      "origin": "Lavroga; guarnição na Torre de Specula",
+      "lineage": "Origem locativa não comprova parentesco com a casa governante da castelania. Distinto dos outros Cassian.",
+      "appearance": "Proposta: robusto, cabelo raspado, barba mal cuidada, marca de correia no pescoço e uniforme sem insígnia ostensiva.",
+      "personality": "Prático, desconfiado, habituado a justificar ordens; a percepção de ter sido descartado rompe sua obediência.",
+      "deeds": "Comanda a força que desviou o adamante e mantém Cadwyn preso. Conhece a traição dos mandantes e pode negociar saída; não se fixa que morrerá em combate.",
+      "desire": "Sobreviver com recursos suficientes para desaparecer, preferindo transferência de culpa à confissão completa.",
+      "scene": "Oferece entregar o prisioneiro por fuga segura e parte da prata. “Vocês querem um culpado ou a pessoa que pagou?”",
+      "code": "N029",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [
+            50
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Tordan Sombra",
+      "sphere": "Intriga e justiça",
+      "source": "05,07",
+      "period": "Vivo em 418",
+      "origin": "Kalis; serviço para redes de Dobalbek",
+      "lineage": "Bastardo kalita, ascendência não revelada. O sobrenome não indica ligação com o dragão nem natureza sobrenatural.",
+      "appearance": "Proposta: rosto fino, cabelo escuro curto, roupas com bolsos muito reparados, marcha sem ruído mesmo sem tentar impressionar.",
+      "personality": "Cauteloso, observador, disposto a negociar; respeita a competência e usa a reputação sinistra de Kalis como ferramenta.",
+      "deeds": "Lidera batedores que rastreiam cartas e Beren. Não trabalha para Leonastis. A aventura permite combate, evasão ou troca de informações.",
+      "desire": "Cumprir a missão sem ser sacrificado quando a disputa entre casas atingir a rede de Dobalbek.",
+      "scene": "Troca um nome verdadeiro por uma rota de saída. “Se eu quisesse seu sangue, não teria feito uma pergunta.”",
+      "code": "N030",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            96
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [
+            42
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Matteo dal Pelago",
+      "sphere": "Fé e conhecimento",
+      "source": "08,11",
+      "period": "Vivo e ancião em 418",
+      "origin": "Academia de Sellene",
+      "lineage": "Casa dal Pelago; parentes imediatos não estabelecidos. Sua posição acadêmica não o torna soberano de Corallis.",
+      "appearance": "Proposta: alto e curvado, cabelo branco ralo, olhos fundos, voz cuidadosa; carrega folhas separadas por fios coloridos.",
+      "personality": "Erudito, reservado, paternal com estudiosos e autoritário sobre riscos. Pode confundir proteção do saber com monopólio.",
+      "deeds": "Arquimestre e guardião da Chave da Maré; responde ao Alto Rei pelo Acervo. Enviou relatório cifrado sobre Despertos e possui poder sobre o protocolo de destruição.",
+      "desire": "Preservar conhecimento sem entregá-lo a quem o usará para dominar o mundo. A clausura dos copistas é parte do custo moral de sua instituição.",
+      "scene": "Uma evacuação permite salvar apenas parte do acervo; ele pede prioridades, não bravatas. “Escolha o livro que não pode ser reescrito.”",
+      "code": "N031",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            16
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Loreo Seleni",
+      "sphere": "Fé e conhecimento",
+      "source": "10,11",
+      "period": "Vivo; cerca de sessenta anos em 418",
+      "origin": "Canais de Baldbella; correspondente de Sellene",
+      "lineage": "Filho de vendedora de ervas e encadernador, ambos sem nome no texto-base. Nenhum parentesco com Lorenzo Seleni é comprovado.",
+      "appearance": "Dedos manchados de tinta e resina. Acrescenta-se barba rala grisalha, roupas com bolsos para amostras e olhar que se detém nas mãos alheias.",
+      "personality": "Reservado diante de autoridades, incansável ao interrogar trabalhadores; disposto a publicar dúvidas e a proteger locais de coleta.",
+      "deeds": "Compilou o herbário de 64 espécies, comparou nomes regionais e métodos de conservação; organizava cadernos em 399. Não descobriu sozinho todas as plantas nem visitou pessoalmente todo o norte.",
+      "desire": "Ampliar acesso de hospitais a cópias confiáveis sem explorar comunidades fornecedoras.",
+      "scene": "Recusa vender uma localização rara, mas oferece ajudar no cultivo. “Quem lhe contou isso viu a planta ou viu a margem de lucro?”",
+      "code": "N032",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "10",
+          "file": "10_Herbario_de_Seleni.md",
+          "lines": [
+            7,
+            13,
+            17,
+            972
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            762,
+            1067
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Lorenzo Seleni",
+      "sphere": "Fé e conhecimento",
+      "source": "08,11",
+      "period": "Histórico; ativo em 356; destino posterior aberto",
+      "origin": "Sellene; participou de trabalhos em Aurora",
+      "lineage": "Sobrenome Seleni sem parentesco demonstrado com Loreo. Distinto de Lorenzo de Sellene.",
+      "appearance": "Retrato proposto: rosto alongado, cabelo branco nas têmporas, mãos delicadas e lente presa por cordão.",
+      "personality": "Minucioso, frio na escrita e impressionável diante de evidência que muda uma hipótese antiga. Separava descrição de explicação.",
+      "deeds": "Coautor com Orlan da autópsia da Sombra em 356. Reconheceu a natureza não humana dos ferimentos antigos sem estabelecer definitivamente o que os causara.",
+      "desire": "Legado: um relatório pode limitar propaganda sem responder ao mistério. Não se lhe atribui a fundação da Academia em 204.",
+      "scene": "Uma nota marginal distingue observação de hipótese, mas uma cópia política apagou essa distinção. “A ferida existe; sua causa ainda não.”",
+      "code": "N033",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            43
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            1055,
+            1067
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Lorenzo de Sellene",
+      "sphere": "Fé e conhecimento",
+      "source": "10,11",
+      "period": "Histórico; época exata não fixada",
+      "origin": "Tradição institucional de Sellene",
+      "lineage": "Conhecido por designação locativa; família desconhecida. Não se funde com Lorenzo Seleni nem com Loreo.",
+      "appearance": "Iconografia proposta: estudioso sem barba, manto curto e tabuletas nas mãos. É imagem comemorativa, não retrato verificado.",
+      "personality": "A tradição o apresenta como agregador e paciente; a personalidade histórica permanece incerta. Em cenas documentais, autores rivais lhe atribuem virtudes diferentes.",
+      "deeds": "Citado no Herbário como fundador histórico. O Tomo XI deixa em aberto sua relação com a fundação de 204; não se inventam datas de vida para eliminar a dúvida.",
+      "desire": "Legado: quem pode reivindicar a origem de uma instituição feita por muitas pessoas?",
+      "scene": "Dois selos fundacionais usam o mesmo nome em épocas diferentes. A aventura investiga se designam pessoa, homenagem ou título. “Uma escola começa quando o conhecimento deixa de morrer com o mestre”, frase apócrifa.",
+      "code": "N034",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "10",
+          "file": "10_Herbario_de_Seleni.md",
+          "lines": [
+            17
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            1067
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Lorenza dei Coralli",
+      "sphere": "Fé e conhecimento",
+      "source": "08,10",
+      "period": "Viva em 417–418; cirurgiã-chefe aposentada",
+      "origin": "Baldbella; pesquisa reservada ligada a Sellene",
+      "lineage": "Família dei Coralli; não há parentesco estabelecido com Vittiora. Nesta edição, continuam sem vínculo biológico definido.",
+      "appearance": "Proposta: idosa, costas retas, cabelos brancos presos, cicatriz fina numa sobrancelha; unhas limpas e curtas.",
+      "personality": "Precisa, compassiva sem sentimentalismo, exige consentimento sempre que a situação permite; irrita-se com autoridades que pedem diagnóstico conveniente.",
+      "deeds": "Escreveu tratado reservado sobre Despertos e larva da Comunhão em 417–418. Não possui cura automática nem diagnóstico infalível a partir de um único sintoma.",
+      "desire": "Distinguir sofrimento, benefício real e perda de autonomia sem fornecer justificativa para perseguição indiscriminada.",
+      "scene": "Protege um paciente lúcido contra estudiosos que o tratam como espécime. “Antes do fenômeno, diga-me o nome da pessoa.”",
+      "code": "N035",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            77
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "10",
+          "file": "10_Herbario_de_Seleni.md",
+          "lines": [
+            899
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Marcus Ferraris",
+      "sphere": "Coroa e memória",
+      "source": "08,11",
+      "period": "Histórico; ativo no Ano 14",
+      "origin": "Primeiras galerias de Ferraur",
+      "lineage": "Ferraris antigo; a continuidade nominal não comprova linha genealógica ininterrupta até Orlan ou Aurelian.",
+      "appearance": "Reconstrução proposta: corpo forte, barba emaranhada, olhos irritados por poeira; aparência inferida de seu trabalho, não documentada.",
+      "personality": "Na leitura dramática proposta, metódico e desconfiado de ordens que ignoram a rocha. Não se apresenta essa caracterização como testemunho antigo.",
+      "deeds": "Autor de relatório sobre galerias artificiais e pilares antigos em torno dos veios de adamante no Ano 14. O registro contradiz a simplificação pública de uma descoberta apenas mineral.",
+      "desire": "Legado: trabalho mineiro e arquivo podem preservar indícios que a corte prefere apagar.",
+      "scene": "Uma cópia de seu relatório usa medidas antigas que precisam ser reconstruídas. “Não escrevi que construímos o túnel. Escrevi que o encontramos.”",
+      "code": "N036",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            56
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            1050
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Sandro Corvella",
+      "sphere": "Mares e exploração",
+      "source": "08,11",
+      "period": "Histórico; sobrevivente da expedição de 312; destino posterior aberto",
+      "origin": "Corallis e Mar das Cinzas",
+      "lineage": "Casa Corvella; posição sucessória e familiares não definidos.",
+      "appearance": "Proposta: rosto queimado de frio, barba irregular, dois dedos rígidos; a descrição refere-se ao retorno, não ao início da carreira.",
+      "personality": "Obstinado, bom comandante antes do desastre, marcado por culpa e desconfiança depois dele.",
+      "deeds": "Único sobrevivente dos três navios enviados secretamente a Incognito em 312; deixou diário incompleto. Sobreviveu à expedição, não necessariamente até 418.",
+      "desire": "Legado: seu relato vale como testemunho limitado, não mapa completo ou prova de todas as hipóteses do norte.",
+      "scene": "Uma página perdida descreve uma decisão humana terrível entre fenômenos que ele não compreendia. “Não desenhe um porto onde eu só consegui não morrer.”",
+      "code": "N037",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            64,
+            66,
+            71
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            1053
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Frei Lucian de Silvaria",
+      "sphere": "Fé e conhecimento",
+      "source": "08,11",
+      "period": "Histórico; texto recolhido no Ano 219",
+      "origin": "Silvaria e círculos teológicos da Chama Solar",
+      "lineage": "Origem locativa; parentes desconhecidos. Sem ligação com a Casa Leonastis.",
+      "appearance": "Iconografia clandestina proposta: homem magro, cabelo escuro, olhos fundos e mãos abertas. Retratos posteriores não comprovam aparência.",
+      "personality": "Interpretação proposta: compassivo, perturbado pelo sofrimento imerecido e inflexível diante de respostas fáceis.",
+      "deeds": "Escreveu o Cântico da Sétima Brasa sobre o Silêncio ou Rosto Desviado. O texto foi condenado, cópias públicas queimadas e original arquivado. O ano da redação pode anteceder o recolhimento.",
+      "desire": "Legado: sua dúvida oferece linguagem a crentes que não abandonaram a fé. Não prova uma sétima divindade real.",
+      "scene": "Uma comunidade quer ler o texto por luto, enquanto um agente o procura como prova de heresia. “Se a luz é justa, por que pedimos aos feridos que expliquem a sombra?”",
+      "code": "N038",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            117
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            462
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Severin da Brasa Velada",
+      "sphere": "Fé e conhecimento",
+      "source": "08,11",
+      "period": "Histórico; cronologia do dossiê exige conciliação",
+      "origin": "Ordem da Brasa Velada; origem civil desconhecida",
+      "lineage": "Nome religioso; família e parentesco não informados.",
+      "appearance": "Reconstrução proposta: rosto estreito, barba branca curta, dedos grossos e hábito remendado; retrato interpretativo.",
+      "personality": "Proposta: disciplinado, atento ao medo de testemunhas, desconfiado de confissões obtidas por violência.",
+      "deeds": "Coautor do dossiê Bellaroc sob juramento. Nesta edição adota-se a conciliação do Tomo XI: participou de compilação posterior de documentos de 274, sem obrigá-lo a viver 144 anos até 418.",
+      "desire": "Legado: proteger a investigação não deveria significar proteger criminosos titulados. A data exata da compilação continua aberta.",
+      "scene": "Uma anotação sua identifica uma testemunha que a versão oficial chama de supersticiosa. “O temor não prova o monstro; tampouco o faz desaparecer.”",
+      "code": "N039",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            146
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Cassian de Pontáuria",
+      "sphere": "Intriga e justiça",
+      "source": "08,11",
+      "period": "Histórico; avô de Valen; compilador posterior adotado nesta edição",
+      "origin": "Pontáuria e antigo ofício de preboste",
+      "lineage": "Avô do atual preboste Valen; não se fixa sua relação exata com Aemilius nem com os pais de Sabina.",
+      "appearance": "Proposta: rosto quadrado, cabelo grisalho penteado para trás, um olho lacrimejante e casaco de viagem gasto.",
+      "personality": "Rigoroso, paciente com documentos, menos paciente com colegas que protegem sobrenomes. Confiava demais em arquivos centralizados.",
+      "deeds": "Assina com Severin o dossiê Bellaroc. Para conciliar parentesco e datas, esta expansão o trata como compilador de uma investigação de 274, não como investigador adulto daquela época.",
+      "desire": "Legado: manter a linhagem confirmada sem criar longevidade inexplicada. A solução é explícita e não modifica silenciosamente o Acervo.",
+      "scene": "Sua revisão contém a fonte anterior; um leitor pode separar testemunho de comentário. “O ano do crime não é o ano em que pude escrever sobre ele.”",
+      "code": "N040",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            146
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            1065
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Marella de Claramar",
+      "sphere": "Memórias e ameaças",
+      "source": "02,04",
+      "period": "Desperta; ativa na campanha de 418",
+      "origin": "Claramar; reconstruída em Thanatos",
+      "lineage": "Família humana anterior não nomeada; tripulação é vínculo central. A Comunhão não substitui genealogia por parentesco biológico.",
+      "appearance": "Aparência proposta: rosto sereno, cabelo escuro com sal grisalho, roupas de navegadora impecavelmente remendadas; o olhar parece reconhecer desconhecidos.",
+      "personality": "Calma, persuasiva, capaz de compaixão sincera e de justificar perda de autonomia como cura do sofrimento.",
+      "deeds": "Primeira Devolvida; navegadora reconstruída com toda a tripulação. Oferece provas de retorno e persuade comunidades a acolher a Comunhão.",
+      "desire": "Expandir a promessa do Regente pela confiança. Não precisa mentir sobre todo benefício para ser perigosa.",
+      "scene": "Sabe o nome de um morto amado e oferece uma lembrança verdadeira. “Você não precisa carregar isso sozinho.”",
+      "code": "N041",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            95
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "04",
+          "file": "04_Bestiario_Alenia.md",
+          "lines": [
+            307
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "O Regente das Cinzas",
+      "sphere": "Memórias e ameaças",
+      "source": "02,04,08",
+      "period": "Consciência ancestral dominante; atividade atual em 418",
+      "origin": "Civilização perdida de Incognito; nome de nascimento desconhecido",
+      "lineage": "Último soberano de uma sociedade antiga; dinastia, pais e descendência não estabelecidos. Não se inventa sociedade viva atual em Incognito.",
+      "appearance": "Avatar austero com aro partido de adamante; voz pode assumir timbre de pessoa amada. Sua aparência não é prova do rosto biológico original.",
+      "personality": "Compassivo na intenção, autoritário na conclusão, incapaz de aceitar solidão e separação como escolhas legítimas.",
+      "deeds": "Ordenou a ligação da população à rede diante de catástrofe; preservou vontade dominante na Comunhão e busca ampliar seu alcance. Nem toda voz na rede concorda com ele.",
+      "desire": "Eliminar abandono e morte solitária submetendo a autonomia coletiva à sua ideia de proteção.",
+      "scene": "Uma voz dissidente usa seu próprio avatar para pedir ajuda por instantes. “Nenhuma mãe voltará a enterrar um filho.”",
+      "code": "N042",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            74,
+            85,
+            94
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "04",
+          "file": "04_Bestiario_Alenia.md",
+          "lines": [
+            295,
+            319
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            81,
+            85,
+            94,
+            120,
+            140
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Valerius Malakor",
+      "sphere": "Artes e cotidiano",
+      "source": "12",
+      "period": "Autor histórico; época e condição atual não fixadas",
+      "origin": "Procedência não demonstrada; assinatura do caderno culinário antigo",
+      "lineage": "Família desconhecida. O sobrenome não basta para atribuí-lo a uma casa atual ou a Kalis.",
+      "appearance": "Retrato editorial proposto: homem de barba curta, mãos manchadas de gordura e tinta, casaco de viajante. Não representa prova iconográfica.",
+      "personality": "Persona literária proposta: curioso, teatral e seduzido por receitas de reputação duvidosa; valoriza uma boa história tanto quanto uma boa mesa.",
+      "deeds": "Assinou o antigo tratado de peixes que inspirou dez adaptações. Localidades e promessas desse documento não são automaticamente válidas no mundo atual.",
+      "desire": "Legado: distinguir memória culinária, bravata e prática alimentar. Não se fixa viagem a lugar abolido para explicar uma receita.",
+      "scene": "Um manuscrito com correções contradiz a edição de um livreiro. “Se todos gostassem de tudo, ninguém contaria histórias à mesa”, frase atribuída nesta expansão.",
+      "code": "N043",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "12",
+          "file": "12_Cozinhas_de_Alenia.md",
+          "lines": [
+            11,
+            13,
+            1506
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Benetta de Litore",
+      "sphere": "Mares e exploração",
+      "source": "11",
+      "period": "Proposta desta edição: viva em 418; idade adulta",
+      "origin": "Cais de Litore; cartografia de Corallis",
+      "lineage": "Família de trabalhadores do cais proposta; parentes sem nome. Sua existência como cartógrafa já aparece na Crônica, não sua biografia completa.",
+      "appearance": "Proposta: pele marcada de sol, cabelo curto preso por lenço, um olho ligeiramente mais fechado, dedos cheios de pequenos cortes de papel.",
+      "personality": "Irônica, cuidadosa com fontes, desconfiada de monumentos que apagam moradores antigos. Escuta barqueiros antes de copiar mapas oficiais.",
+      "deeds": "Recebe atribuição da nota sobre cidades anteriores às estátuas reais. Expansão: comparou três plantas de um mesmo porto e recuperou um antigo acesso público omitido por um armazém.",
+      "desire": "Fazer mapas que registrem também quem paga pelo caminho e quem já vivia ali.",
+      "scene": "Um patrono pede que retire uma aldeia do desenho para facilitar uma concessão. “Uma margem em branco costuma ter dono esperando.”",
+      "code": "N044",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            7
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "A Sombra",
+      "sphere": "Memórias e ameaças",
+      "source": "02,04,08,11",
+      "period": "Criatura histórica; morta em 356",
+      "origin": "Origem desconhecida; devastou Aurora em 348–356",
+      "lineage": "Linhagem biológica e relação com outros dragões desconhecidas. Não é pessoa humana nem ancestral de famílias chamadas Sombra.",
+      "appearance": "Dragão colossal de escamas negras, tão grande que ocultava o sol sobre vilas; asas e couraça marcadas por ferimentos anteriores.",
+      "personality": "Comportamento destrutivo observado; intenção, inteligência e emoções não demonstradas. Não se inventa crueldade humana como diagnóstico.",
+      "deeds": "Devastou campos e fortalezas; resistiu às expedições humanas; morreu atingida por Severor na fenda sob a asa esquerda. Crânio preservado em Altavanne.",
+      "desire": "Legado: evento que reorganizou a política e revelou limites da força humana. O autor de suas feridas permanece hipótese aberta.",
+      "scene": "Um osso ou relatório pode provar a dimensão da criatura sem revelar se vinha atacando ou fugindo. Seu encontro pertence a memórias e vestígios, não a um retorno automático.",
+      "code": "N045",
+      "kind": "Anterior desenvolvido",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [
+            262,
+            351,
+            353,
+            362,
+            365,
+            368,
+            371,
+            393,
+            396,
+            400,
+            405
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "04",
+          "file": "04_Bestiario_Alenia.md",
+          "lines": [
+            12
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [
+            45,
+            49
+          ],
+          "scope": "nome e papel"
+        },
+        {
+          "book": "11",
+          "file": "11_Cronica_das_Terras_e_das_Mares.md",
+          "lines": [
+            38,
+            622,
+            1054
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Cassian Armeiro",
+      "sphere": "Ofícios e trabalho",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Bairro das oficinas de Altavanne",
+      "lineage": "Filho de uma polidora e de um mestre de rebites; sobrenome de ofício, sem parentesco com os outros Cassian.",
+      "appearance": "Baixo, ombros muito fortes, cabelo negro raspado dos lados; usa avental com remendos claros.",
+      "personality": "Perfeccionista, generoso com aprendizes e impaciente com clientes que confundem luxo com segurança.",
+      "deeds": "Adaptou uma armadura para um veterano de mobilidade reduzida; denunciou rebites defeituosos numa encomenda de guarnição e perdeu um contrato importante.",
+      "desire": "Quer uma inspeção de qualidade independente das casas que compram armamentos.",
+      "scene": "Reconhece uma peça falsamente marcada com seu selo e pede que não prendam o aprendiz antes de investigar o comprador. “O aço não lê brasões.”",
+      "code": "N046",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            27
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Loreo de Pontáuria",
+      "sphere": "Ofícios e trabalho",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Pontáuria; conservação de pontes",
+      "lineage": "Filho de carpinteiros de margem; de Pontáuria é origem, não prova de pertencimento à casa nobre.",
+      "appearance": "Alto, muito magro, nariz largo, cabelo preso com cordão; um ombro fica mais baixo quando carrega ferramentas.",
+      "personality": "Minucioso, tímido em salões, eloquente diante de uma estrutura prestes a falhar.",
+      "deeds": "Identificou recalque num encontro de ponte e organizou travessia provisória antes do desabamento; emprega marcas acessíveis a trabalhadores que não leem.",
+      "desire": "Conseguir verba de manutenção antes que uma obra vistosa consuma o tesouro local.",
+      "scene": "Um oficial exige liberar a ponte para uma coluna militar. “Ela aguenta o estandarte. Os cavalos, não.”",
+      "code": "N047",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            27
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Martinho Ferraz",
+      "sphere": "Ofícios e trabalho",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Lavroga; ferragens de pedreira",
+      "lineage": "Família de ferreiros em registro vernáculo auroriano; sem vínculo com Ferraris por semelhança de ofício.",
+      "appearance": "Muito alto, barba entremeada de cinza, pele escura e dedos tortos; sorri com facilidade.",
+      "personality": "Sociável, protetor e ressentido com intermediários que recebem o crédito pelo trabalho alheio.",
+      "deeds": "Construiu grampos de levantamento que reduziram perdas de blocos na pedreira; organizou auxílio às famílias de dois trabalhadores feridos.",
+      "desire": "Manter preços honestos sem falir diante de compradores que atrasam pagamentos.",
+      "scene": "Um grampo rompido leva seu selo, mas a liga não saiu da oficina. “Um homem pode mentir; uma fratura deixa marcas.”",
+      "code": "N048",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            27
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Caelen Cinza",
+      "sphere": "Intriga e justiça",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Estradas entre Dahrma e Vaarsa",
+      "lineage": "Bastardo auroriano; criado por uma tratadora de cavalos. A identidade do pai nobre permanece desconhecida e não é necessária à sua importância.",
+      "appearance": "Jovem adulto de cabelo claro, rosto comprido e uma cicatriz no lábio; mantém sela e botas impecáveis.",
+      "personality": "Leal a compromissos pessoais, desconfiado de instituições, impetuoso quando vê humilhação pública.",
+      "deeds": "Tornou-se mensageiro confiável durante uma interdição do passo; recusou abandonar um cavalo ferido mesmo perdendo parte do pagamento.",
+      "desire": "Fundar serviço de correio que aceite contratos sem exigir proteção de uma casa.",
+      "scene": "Transporta uma ordem legal cujo cumprimento prejudicará quem o abrigou. “Meu nome não precisa de um pai para valer.”",
+      "code": "N049",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            28
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Aurelia Cinza",
+      "sphere": "Artes e cotidiano",
+      "source": "05",
+      "period": "Viva em 418; biografia nova",
+      "origin": "Altavanne; palco e oficinas de máscaras",
+      "lineage": "Bastarda auroriana, filha de uma costureira; sem ligação estabelecida com Aurelia d'Altrax.",
+      "appearance": "Cabelos escuros encaracolados, rosto redondo e voz grave; fora do palco veste cinza sem enfeites.",
+      "personality": "Observadora, espirituosa, sensível a desprezo de classe; brinca quando teme falar seriamente.",
+      "deeds": "Criou uma peça sobre filas de pão cuja popularidade forçou revisão de um pedágio; mantém uma oficina que emprega viúvas e atores envelhecidos.",
+      "desire": "Proteger a companhia sem aceitar que um patrono escolha todas as falas.",
+      "scene": "Um nobre quer comprar a peça e trocar o culpado por um rival. “O público ri primeiro; depois reconhece a própria porta.”",
+      "code": "N050",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            28
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Aerwen ferch Moriel",
+      "sphere": "Matas e fronteiras",
+      "source": "05",
+      "period": "Viva em 418; biografia nova",
+      "origin": "Cidade Suspensa; manutenção de calhas",
+      "lineage": "Filha de Moriel; distinta da guardiã Aerwen ferch Taldor. Sua família transmite ofícios, não um cargo hereditário no Conselho.",
+      "appearance": "Rosto largo, cabelo trançado rente, braços fortes e várias unhas quebradas.",
+      "personality": "Franca, prática, pouco impressionável por visitantes; teme alturas novas, mas confia nas estruturas que conhece.",
+      "deeds": "Reparou calhas durante uma estiagem e convenceu dois ramos rivais a compartilhar reservas; ensina inspeção de cordas às crianças maiores.",
+      "desire": "Conseguir madeira de reposição sem ampliar o corte em área protegida.",
+      "scene": "Uma sabotagem parece falha comum e ameaça sua reputação. “Água não sobe porque um ancião mandou.”",
+      "code": "N051",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            44
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Merion Bruma",
+      "sphere": "Matas e fronteiras",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Vergod e trilhas das matas",
+      "lineage": "Bastardo silvano; não é identificado como o pai de Cadwyn. Criado entre parentes maternos coletores.",
+      "appearance": "Magro, pele muito sardenta, cabelo avermelhado e olhar atento aos pés de quem fala.",
+      "personality": "Sociável entre viajantes, reservado sobre lugares sagrados, propenso a prometer um atalho antes de calcular o custo.",
+      "deeds": "Conduziu famílias por uma rota alternativa durante bloqueio de estrada; conhece casas que acolhem estrangeiros sem notificar coletores de tributos.",
+      "desire": "Viver de guiar sem transformar a floresta em mercadoria de seus clientes.",
+      "scene": "Um explorador quer comprar exclusividade sobre um caminho usado por aldeões. “Posso mostrar a passagem. Não posso vendê-la.”",
+      "code": "N052",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            45
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Lirys Bruma",
+      "sphere": "Fé e conhecimento",
+      "source": "05",
+      "period": "Viva em 418; biografia nova",
+      "origin": "Vergod; intercâmbio entre cuidadores",
+      "lineage": "Bastarda silvana; família materna de trançadores. Bruma compartilhado não indica parentesco com Merion.",
+      "appearance": "Pequena, cabelo branco precoce, olhos escuros e uma bolsa de registros impermeabilizada.",
+      "personality": "Curiosa, paciente, severa diante de promessas de cura; teme perder a confiança dos dois lados da fronteira.",
+      "deeds": "Registrou nomes de plantas com autorização dos coletores e corrigiu uma troca comercial perigosa entre espécies parecidas; corresponde-se com Loreo Seleni.",
+      "desire": "Criar cópias que preservem conhecimento sem publicar localizações protegidas.",
+      "scene": "Um manuscrito roubado contém uma clareira que ela prometeu omitir. “O nome pode circular; a raiz ainda pertence a quem a guarda.”",
+      "code": "N053",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            45
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Loreo Cartógrafo",
+      "sphere": "Mares e exploração",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Alineus e rotas comerciais de Corallis",
+      "lineage": "Sobrenome de ofício; distinto de Benetta e dos outros Loreo. Filho de fabricante de cabos e copista de fretes.",
+      "appearance": "Calvo, barba negra aparada, olhos pequenos, roupas com manchas de água salgada.",
+      "personality": "Ambicioso, organizado, cordial com patronos; aceita simplificar excessivamente um mapa para vendê-lo.",
+      "deeds": "Compilou um atlas de portos de cabotagem e padronizou símbolos de ancoragem usados por pequenos armadores. Depende de informações de pilotos que nem sempre credita bem.",
+      "desire": "Obter contrato da Liga sem admitir quantos dados vieram de navegantes independentes.",
+      "scene": "Benetta contesta uma costa copiada; ele precisa dos personagens para verificar o erro. “Um mapa que ninguém compra não leva ninguém a lugar algum.”",
+      "code": "N054",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            61
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Corardo Seleni",
+      "sphere": "Ofícios e trabalho",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Baldbella; impressão e encadernação",
+      "lineage": "Ramo familiar Seleni de vínculo não demonstrado com Loreo; não é o Arconte della Rocca.",
+      "appearance": "Corpo largo, mãos finas, cabelo liso preso e lentes para trabalho próximo.",
+      "personality": "Paciente com artesãos, duro com devedores, orgulhoso de corrigir erros que leitores jamais notarão.",
+      "deeds": "Produziu uma edição de bolso de instruções portuárias e retirou de circulação cópias com uma unidade de medida errada, assumindo o prejuízo.",
+      "desire": "Tornar livros acessíveis sem deixar a oficina refém de um mecenas.",
+      "scene": "Recebe oferta para editar o Herbário e reduzir custos eliminando advertências. “Papel barato não exige palavra irresponsável.”",
+      "code": "N055",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            61
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Vittiora dei Coralli",
+      "sphere": "Mares e exploração",
+      "source": "05",
+      "period": "Viva em 418; biografia nova",
+      "origin": "Baldbella; Atol das Pérolas",
+      "lineage": "Família de mergulhadores; não se estabelece parentesco com Lorenza apesar do sobrenome.",
+      "appearance": "Pele escura, ombros fortes, cabelo muito curto e uma orelha deformada; fala pausadamente depois de esforço.",
+      "personality": "Corajosa, competitiva, protetora de iniciantes; detesta quando um armador vende sua coragem como garantia de resgate.",
+      "deeds": "Recuperou uma caixa de registros de um casco instável e interrompeu mergulho lucrativo para retirar um aprendiz preso.",
+      "desire": "Garantir participação dos mergulhadores nas decisões de salvamento.",
+      "scene": "Conhece a entrada de um naufrágio, mas recusa missão enquanto uma equipe desaparecida não for procurada. “O casco pode esperar. Um companheiro, não.”",
+      "code": "N056",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            61
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Niccolo Coral",
+      "sphere": "Crime e margens",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Biemont e O Ferro Velho",
+      "lineage": "Bastardo corallino; criado por uma família de remendadores de velas, sem linhagem nobre identificada.",
+      "appearance": "Muito magro, cabelo comprido, dentes perfeitos demais para o resto da roupa; mãos quase sempre limpas.",
+      "personality": "Encantador, oportunista, avesso à violência direta; usa generosidade calculada para criar devedores.",
+      "deeds": "Construiu uma rede de compradores para ferramentas recuperadas; vendeu carga sem título claro e conseguiu compensar a tripulação em vez de entregá-la ao cárcere.",
+      "desire": "Deixar o contrabando e ser aceito como comerciante, sem perder os contatos que o sustentam.",
+      "scene": "Um lote legítimo foi misturado a pertences de pessoas ainda vivas. “Posse e propriedade nem sempre chegam no mesmo barco.”",
+      "code": "N057",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            62
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Qasir ibn Tarash",
+      "sphere": "Portos e regências",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Suq-Ramad e circuitos de caravanas",
+      "lineage": "Filho de Tarash; distinto de Qasir Zaharid e de Tarash Duna. Família de transportadores, sem título régio.",
+      "appearance": "Alto, muito magro, barba longa trançada só na ponta; perdeu parte de uma sobrancelha.",
+      "personality": "Cortês, atento ao silêncio de tratadores, desconfiado de mapas recém-comprados; orgulho profissional exagerado.",
+      "deeds": "Reconduziu uma caravana após falha de abastecimento e negociou empréstimo de montarias entre grupos rivais sem quebrar hospitalidade.",
+      "desire": "Manter uma rota de comércio que não dependa de um único senhor de cisterna.",
+      "scene": "Seu nome é confundido deliberadamente com o do regente numa cobrança. “Meu pai me deu um nome; não me deu os poços de Naasar.”",
+      "code": "N058",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            78
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Nadira bint Malid",
+      "sphere": "Intriga e justiça",
+      "source": "05",
+      "period": "Viva em 418; biografia nova",
+      "origin": "Naasar e tribunais itinerantes",
+      "lineage": "Filha de Malid, escrivão de compensações nesta expansão; não é herdeira de todo um clã por esse patronímico.",
+      "appearance": "Cabelo escuro sob tecido simples, nariz proeminente e voz firme; anda com um leve desvio de quadril.",
+      "personality": "Paciente, incisiva, pouco tolerante a humilhações; tende a trabalhar até exaurir a própria saúde.",
+      "deeds": "Mediou indenização entre criadores e caravaneiros após perda de animais; seu registro de testemunhas impediu que uma família pagasse duas vezes pela mesma dívida.",
+      "desire": "Preservar a autoridade da conciliação depois do assassinato do Árbitro.",
+      "scene": "Uma parte oferece acordo generoso que ocultaria o verdadeiro agressor. “Paz comprada com o nome errado cobra de novo.”",
+      "code": "N059",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            78
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Tarash Duna",
+      "sphere": "Mares e exploração",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Estepes de Gaddra e OX",
+      "lineage": "Bastardo gaddrani; criado por tratadores de montarias. Não é o pai de Qasir ibn Tarash.",
+      "appearance": "Corpo baixo e resistente, cabelos escuros muito curtos, cicatriz de mordida no ombro.",
+      "personality": "Brincalhão, leal aos animais, cético diante de linhagens; reage mal a quem chama prudência de covardia.",
+      "deeds": "Guiou uma escolta perdida de volta a um poço e se tornou conhecido por recusar travessias inviáveis, mesmo sob ameaça de perder o contrato.",
+      "desire": "Formar jovens guias que possam cobrar por decisão técnica, não por submissão.",
+      "scene": "Um nobre exige avançar para salvar o prestígio de uma expedição. “A areia não fica mais curta porque você está com pressa.”",
+      "code": "N060",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            79
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Soraya Duna",
+      "sphere": "Artes e cotidiano",
+      "source": "05",
+      "period": "Viva em 418; biografia nova",
+      "origin": "OX e feiras sazonais",
+      "lineage": "Bastarda gaddrani; mãe cantora, pai não identificado. Não tem parentesco presumido com Tarash.",
+      "appearance": "Pele castanha, cabelo longo com fios de cobre, um dente de ouro discreto e roupas de cores desbotadas.",
+      "personality": "Atenta, bem-humorada, memoriza afrontas sem interromper o canto; evita falar por quem não autorizou sua história.",
+      "deeds": "Transformou um relato de trabalhadores de cisterna em canção popular e organizou coleta para famílias de tratadores feridos nas arenas.",
+      "desire": "Viver de arte sem se tornar instrumento permanente de um patrono.",
+      "scene": "Um chefe quer acrescentar um verso falso sobre a derrota de um rival. “A canção passa adiante; a mentira também.”",
+      "code": "N061",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            79
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Halgar Torson",
+      "sphere": "Ofícios e trabalho",
+      "source": "05",
+      "period": "Vivo em 418; biografia nova",
+      "origin": "Jarnham e estaleiros de Dobalbek",
+      "lineage": "Filho de Tor, carpinteiro de embarcações proposto; sem vínculo necessário com casas do conselho.",
+      "appearance": "Enorme, barba escura com fios brancos, mãos delicadas no entalhe; manca quando está frio.",
+      "personality": "Reservado, meticuloso, generoso com ferramentas e desconfiado de fiscais que nunca entraram num estaleiro.",
+      "deeds": "Projetou uma conexão reparável de quilha para pequenas embarcações; demonstrou adulteração de madeira num contrato e ganhou inimigos entre fornecedores.",
+      "desire": "Abrir uma escola de manutenção para filhos de trabalhadores sem patrocínio militar.",
+      "scene": "Seu modelo aparece num navio clandestino e o governo exige que denuncie os aprendizes. “Uma junta boa pode ser aberta sem destruir a peça.”",
+      "code": "N062",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            95
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Sigrun Grimsen",
+      "sphere": "Intriga e justiça",
+      "source": "05",
+      "period": "Viva em 418; biografia nova",
+      "origin": "Drakenhall",
+      "lineage": "Filha de Grim nesta expansão; o patronímico não a torna filha de Grimrik Ulscold.",
+      "appearance": "Rosto alongado, cabelo louro cortado no queixo, postura muito reta; usa luvas sem adornos.",
+      "personality": "Exata, pouco afável, capaz de reconhecer erro publicamente; perde a paciência com pedidos de exceção pessoal.",
+      "deeds": "Reabriu uma condenação comercial e demonstrou alteração de pesos usados como prova; tornou-se conhecida entre mercadores que antes temiam seus tribunais.",
+      "desire": "Preservar espaço de justiça efetiva dentro do sistema autoritário.",
+      "scene": "Um inocente seria politicamente conveniente como culpado. “A ordem que não suporta uma medida correta já começou a ruir.”",
+      "code": "N063",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            95
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Astrid Sombra",
+      "sphere": "Crime e margens",
+      "source": "05",
+      "period": "Viva em 418; biografia nova",
+      "origin": "Fugong e Ilha das Safiras",
+      "lineage": "Bastarda kalita; família adotiva de carregadores. Não é irmã de Tordan por compartilhar sobrenome regional.",
+      "appearance": "Pele clara sardenta, cabelo preto liso, rosto redondo e unhas com resíduos de pigmento.",
+      "personality": "Inventiva, desconfiada, afetuosa em pequenos gestos; dificuldade de abandonar um plano elegante mesmo depois de exposto.",
+      "deeds": "Organizou passagem de cartas privadas durante apreensão de correios; falsificou recibos para proteger trabalhadores, mas também vendeu documentos para lucro.",
+      "desire": "Sair da dependência de um intermediário que conhece os nomes de sua família.",
+      "scene": "Uma encomenda parece resgate e se revela tráfico de testemunhas. “Eu abro uma passagem; você ainda escolhe quem atravessa.”",
+      "code": "N064",
+      "kind": "Nome-modelo desenvolvido",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [
+            96
+          ],
+          "scope": "nome e papel"
+        }
+      ]
+    },
+    {
+      "name": "Néria do Cais",
+      "sphere": "Artes e cotidiano",
+      "source": "Novo; papel anônimo em 02,07",
+      "period": "Viva em 418",
+      "origin": "Merlinport; lavagem e remendo de velas",
+      "lineage": "Nome proposto para a esposa de Beren, já mencionada no cenário. Filha de trabalhadores fluviais, sem casa nobre.",
+      "appearance": "Mãos grossas marcadas por cordas, cabelo castanho preso alto, rosto anguloso; usa o mesmo casaco remendado nas visitas às autoridades.",
+      "personality": "Persistente, desconfiada de promessas, afetuosa sem aceitar ser tratada como ingênua.",
+      "deeds": "Organizou o reconhecimento dos mortos da barca e reuniu testemunhos do reaparecimento do marido. Seu feito é impedir que uma pessoa desapareça sob a linguagem oficial de um fenômeno.",
+      "desire": "Reaver Beren e decidir com ele o que fazer, sem ceder sua custódia a corte, igreja ou academia.",
+      "scene": "Pede que o grupo repita uma história familiar para verificar se realmente falou com ele. “Não trouxe meu marido ao mundo para entregá-lo a um dossiê.”",
+      "code": "N065",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        },
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Iria das Âncoras",
+      "sphere": "Artes e cotidiano",
+      "source": "Novo; papel anônimo em 07",
+      "period": "Viva em 418",
+      "origin": "Merlinport; estalagem Âncora de Cinza",
+      "lineage": "Nome proposto para a estalajadeira da aventura. Viúva de um cozinheiro de bordo; mantém o negócio com parentes e assalariados.",
+      "appearance": "Baixa e forte, cabelo grisalho, olhos atentos e mangas sempre enroladas.",
+      "personality": "Acolhedora, excelente leitora de tensão, firme ao impor limites; guarda boatos para proteger hóspedes e também o negócio.",
+      "deeds": "Preservou a luva de Beren e informações sobre seu retorno. Como expansão, organizou alojamento para famílias de marinheiros desaparecidos sem cobrar antecipado.",
+      "desire": "Manter uma casa onde as pessoas possam conversar sem torná-la uma central de sequestros e espionagem.",
+      "scene": "Reconhece um agente que voltou com outra roupa; pede discrição para não colocar os empregados em risco. “Aqui eu vendo cama. Pessoas, não.”",
+      "code": "N066",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "07",
+          "file": "07_Aventura_Inicial_Cinzas_no_Estuario.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Aemilio Varres",
+      "sphere": "Fé e conhecimento",
+      "source": "Novo; papel anônimo em 08",
+      "period": "Desaparecido antes do colapso público de 418",
+      "origin": "Altavanne; medicina de corte",
+      "lineage": "Nome proposto para o médico particular desaparecido de Severor III. Filho de um cirurgião de campanha e uma copista; sem parentesco com o Luminar.",
+      "appearance": "Magro, rosto miúdo, cabelo castanho rarefeito; as unhas de uma mão carregam marca de antiga lesão.",
+      "personality": "Metódico, cuidadoso com palavras, excessivamente confiante na força de um registro bem feito.",
+      "deeds": "Enviou o bilhete cifrado sobre a enfermidade e o cofre de amostras. O nome é novo; o papel e o desaparecimento já existem. Não se decide se foi morto, preso ou fugiu.",
+      "desire": "Se vivo, quer preservar o paciente e os registros. Sua ausência não resolve a causa da doença do rei.",
+      "scene": "Um apontamento reconhecível chega sem assinatura e contradiz um remédio prescrito em seu nome. “Não saber ainda também é um resultado.”",
+      "code": "N067",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Malid al-Hajar",
+      "sphere": "Intriga e justiça",
+      "source": "Novo; papel anônimo em 02",
+      "period": "Morto recentemente em 418",
+      "origin": "Naasar e tribunais da água",
+      "lineage": "Nome proposto para o Árbitro do Sangue assassinado. Clã al-Hajar; distinto do pai de Nadira bint Malid.",
+      "appearance": "Retrato recente: homem robusto, barba branca curta, olhos pequenos e um manto gasto nos cotovelos.",
+      "personality": "Paciente, formal, capaz de rir de si mesmo; ignorava sinais de perigo quando acreditava estar protegido pelo ofício.",
+      "deeds": "Arbitrou compensações em água e montarias e reduziu uma antiga vingança a pagamento escalonado. Sua morte ameaça fechar a Rota do Sal; autoria permanece aberta.",
+      "desire": "Legado: acordos sobrevivem porque muitas partes ainda preferem cumpri-los. A identidade do assassino não é fixada pelo compêndio.",
+      "scene": "O último acordo beneficiava clãs e comerciantes de lados opostos; cada beneficiário agora acusa o outro. “A reparação deve terminar a dívida, não criar uma servidão.”",
+      "code": "N068",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "02",
+          "file": "02_Guia_de_Cenario_Alenia.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Corina das Cordas",
+      "sphere": "Ofícios e trabalho",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Merlinport; guindastes e armazéns",
+      "lineage": "Filha de estivadores livres; família extensa inclui pessoas de Corallis sem reivindicação de casa mercantil.",
+      "appearance": "Ombros fortes, cabelo escuro curto, uma mão com dedos parcialmente unidos por antiga queimadura.",
+      "personality": "Franca, solidária, estrategista em assembleias; desconfia de quem oferece ajuda sem dizer o preço.",
+      "deeds": "Organizou rodízio de carga após acidente de guindaste e conquistou pagamento às famílias durante paralisação. Seu prestígio depende de cumprir acordos pequenos e verificáveis.",
+      "desire": "Impedir que impostos de guerra e pressa de armadores destruam segurança e salários.",
+      "scene": "Um carregamento urgente de Sabina precisa passar por um cais paralisado. “Urgência de senhor não cura braço de carregador.”",
+      "code": "N069",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Valen Serrador",
+      "sphere": "Ofícios e trabalho",
+      "source": "Novo",
+      "period": "Vivo em 418",
+      "origin": "Aeraneas; escoramento de galerias",
+      "lineage": "Filho de uma lenhadora e um mineiro; sobrenome de trabalho. Não é Valen de Pontáuria.",
+      "appearance": "Corpo magro, barba curta irregular, tosse recorrente e unhas gastas; segura a caneca com as duas mãos.",
+      "personality": "Bom ouvinte, teimoso, avesso a ser chamado de herói. Aceita risco pessoal e se recusa a impô-lo aos mais jovens.",
+      "deeds": "Ajudou a retirar feridos após o desabamento e organizou uma lista de exigências de escoramento, ventilação e compensação. É um entre vários representantes da greve, não seu dono.",
+      "desire": "Obter mudanças materiais sem entregar o movimento a provocadores nem transformar quarenta mortes em senha para outra matança.",
+      "scene": "Apresenta uma exigência que custa menos que a repressão proposta. “Não pedimos uma mina sem risco. Pedimos que parem de esconder o risco.”",
+      "code": "N070",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Sabina Forneira",
+      "sphere": "Artes e cotidiano",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Dahrma; forno comunitário",
+      "lineage": "Família de padeiros e pequenos agricultores. Sem parentesco com Sabina de Pontáuria.",
+      "appearance": "Baixa, cabelos negros presos, rosto redondo, braços marcados por pequenos acidentes de forno.",
+      "personality": "Risonha, incisiva, muito boa em organizar filas; não perdoa quem faz caridade para humilhar.",
+      "deeds": "Criou uma escala de fornadas que atende famílias com pouco combustível e um fundo de farinha administrado por três vizinhas, reduzindo dependência de um único benfeitor.",
+      "desire": "Manter o pão acessível enquanto especuladores pressionam Lorian Montavalle.",
+      "scene": "Um depósito oferece farinha barata exigindo lista de todas as famílias atendidas. “Se quer ajudar, pese o saco. Não pese a vergonha.”",
+      "code": "N071",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Aerdor Gwaedlyn",
+      "sphere": "Matas e fronteiras",
+      "source": "Novo",
+      "period": "Vivo em 418",
+      "origin": "Cidade Suspensa e clareiras protegidas",
+      "lineage": "Linhagem Gwaedlyn; adotado por parentes após perda dos pais num incêndio local, evento novo sem vínculo obrigatório com a Sombra.",
+      "appearance": "Alto, cabelo castanho trançado, rosto comprido; uma queimadura discreta atravessa o pescoço.",
+      "personality": "Sereno no trabalho, rígido com descuidos, desconfiado de governantes que chamam prevenção de luxo.",
+      "deeds": "Projetou sequência de pontes destacáveis testada num incêndio de oficina e formou equipes de manutenção entre ramos antes rivais.",
+      "desire": "Evitar que a militarização do Conselho consuma o tempo e o material necessários à proteção da cidade.",
+      "scene": "Um corte suspeito pode ser sabotagem ou manutenção negligente; a diferença decidirá se haverá retaliação. “Uma ponte salva porque pode ser solta a tempo.”",
+      "code": "N072",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Gwenlin ferch Nerys",
+      "sphere": "Matas e fronteiras",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Vergod; comércio de fronteira",
+      "lineage": "Filha de Nerys, tecelã; família silvana com parceiros comerciais aurorianos, sem título hereditário.",
+      "appearance": "Cabelo escuro com mechas claras, rosto largo e olhos verdes; usa roupas de ambas as margens.",
+      "personality": "Perspicaz, conciliadora, avessa a discursos de pureza; teme ser considerada estrangeira por todos.",
+      "deeds": "Mantém um registro bilíngue de entregas que solucionou disputas de sal e ferramentas. Financiou a formação de dois intérpretes que não dependem de um só senhor.",
+      "desire": "Preservar Vergod aberto sem aceitar mineração ilegal como preço do comércio.",
+      "scene": "Encontra duas traduções de uma cláusula com obrigações incompatíveis. “A palavra que parece pequena é a que leva a carroça inteira.”",
+      "code": "N073",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Rhianeth Cleddwen",
+      "sphere": "Matas e fronteiras",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Matas a nordeste de Aurora",
+      "lineage": "Linhagem Cleddwen; irmã mais velha de dois vigias, parentes novos sem participação fixada nas crises.",
+      "appearance": "Ágil, cabelo preto curto, nariz achatado por uma fratura, pele escura com pequenas marcas de galhos.",
+      "personality": "Impaciente, franca, leal a colegas; confunde tolerância política com desprezo pelas vítimas.",
+      "deeds": "Localizou marcas recentes de prospecção e retirou uma equipe de coletores de uma área ocupada por homens armados. Ganhou voz entre vigias jovens.",
+      "desire": "Forçar resposta antes que os marcos clandestinos se tornem concessões oficiais. Pode entrar em choque com Aerwen sem desejar sua deposição.",
+      "scene": "Quer interceptar uma caravana cuja carga ainda não foi examinada. “Esperar também é uma decisão. Só não é você quem paga sempre.”",
+      "code": "N074",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Finlas Brancaden",
+      "sphere": "Matas e fronteiras",
+      "source": "Novo",
+      "period": "Vivo em 418",
+      "origin": "Vergod e aldeias de margem",
+      "lineage": "Clã Brancaden; família tradicional de intérpretes, sem direito de falar por todos os silvanos.",
+      "appearance": "Idoso, pele muito clara, cabelo comprido preso, tremor leve ao escrever.",
+      "personality": "Paciente, irônico, extraordinariamente bom em lembrar concessões; usa precedentes para evitar mudanças que também teme.",
+      "deeds": "Reuniu cópias divergentes do Tratado de Vergod e demonstrou que um marco de fronteira havia sido deslocado, obtendo recuo de fiscais.",
+      "desire": "Preparar uma sucessora que possa questionar suas próprias leituras, embora lhe custe perder autoridade.",
+      "scene": "Uma cláusula protege moradores que ele pessoalmente despreza. “Um tratado que vale só para os amigos é uma lista de favores.”",
+      "code": "N075",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Moriel das Calhas",
+      "sphere": "Ofícios e trabalho",
+      "source": "Novo; parente de nome-modelo em 05",
+      "period": "Viva e idosa em 418",
+      "origin": "Cidade Suspensa",
+      "lineage": "Mãe de Aerwen ferch Moriel nesta expansão; não é mãe da guardiã Aerwen ferch Taldor.",
+      "appearance": "Pequena, cabelo branco muito comprido, mãos nodosas e um joelho rígido; examina água pelo som que faz.",
+      "personality": "Afetuosa, exigente, pouco paciente com cerimônia; reconhece melhor seus erros técnicos que os familiares.",
+      "deeds": "Manteve registros de chuvas por décadas e identificou desperdícios numa distribuição que favorecia os ramos mais altos.",
+      "desire": "Transmitir conhecimento sem transformar a filha em simples guardiã de sua memória.",
+      "scene": "Uma correção da filha contradiz a solução pela qual ela ficou célebre. “Se minha medida estava errada, agradeça por descobrir antes da seca.”",
+      "code": "N076",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "05",
+          "file": "05_Onomastica_e_Toponimia_Alenia.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Tsunari Kose",
+      "sphere": "Matas e fronteiras",
+      "source": "Novo",
+      "period": "Vivo em 418",
+      "origin": "Yõketsu; escola costeira de esgrima",
+      "lineage": "Família de instrutores e barqueiros do enclave; grafia proposta dentro da fonética própria de Yõketsu.",
+      "appearance": "Estatura baixa, cabelo negro preso, rosto suave, duas falanges rígidas; movimentos econômicos.",
+      "personality": "Paciente, reservado, competitivo em segredo; recusa confundir talento com licença para humilhar.",
+      "deeds": "Tornou célebre uma escola que ensina a lutar em convés estreito e venceu um duelo encerrando-o sem matar o adversário rendido.",
+      "desire": "Manter alunos independentes de casas que querem comprar exclusividade militar.",
+      "scene": "Um antigo aluno usa a escola para justificar violência contra trabalhadores de porto. “Sua técnica é minha responsabilidade; sua vaidade, ainda é sua.”",
+      "code": "N077",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Aya Tsurin",
+      "sphere": "Mares e exploração",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Yõketsu e travessias orientais",
+      "lineage": "Filha de pilotos costeiros; família preserva nomes antigos sem reivindicar autoridade sobre todo o enclave.",
+      "appearance": "Cabelo preto muito liso, pele curtida, um olho com pequena mancha clara; leva pesos de medição em bolso bordado.",
+      "personality": "Curiosa, cética, alegre em viagem e inquieta em terra; detesta mapas que ocultam quem forneceu os dados.",
+      "deeds": "Comparou registros de vento de várias tripulações e corrigiu uma janela sazonal de travessia, reduzindo partidas inviáveis de pequenos barcos.",
+      "desire": "Reunir cartas familiares sem permitir que um armador monopolize as passagens.",
+      "scene": "Uma carta antiga sugere uma costa fora de Alenia, mas não oferece rota segura. “O horizonte não assina garantia.”",
+      "code": "N078",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Yori Katsun",
+      "sphere": "Artes e cotidiano",
+      "source": "Novo",
+      "period": "Vivo em 418",
+      "origin": "Yõketsu; casa de serviço culinário",
+      "lineage": "Neto de cozinheiros e filho de uma compradora de pescado; linhagem de aprendizagem distinta de linhagem sanguínea.",
+      "appearance": "Rosto redondo, cabelo grisalho preso, mãos pequenas e voz macia; roupas de cozinha sem bordado.",
+      "personality": "Meticuloso, orgulhoso, hospitaleiro; prefere cancelar uma encomenda a arriscar a casa, mas teme admitir que um discípulo falhou.",
+      "deeds": "Consolidou registros de procedência no serviço do bojo-de-porcelana e expôs uso indevido de um selo antigo. É especialista ficcional, não fonte de técnica real.",
+      "desire": "Preservar confiança sem transformar conhecimento em privilégio inacessível a aprendizes pobres.",
+      "scene": "Um selo de mestre morto surge numa encomenda atribuída à sua escola. “Um nome gravado não examina uma carga.”",
+      "code": "N079",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Zayra al-Hajar",
+      "sphere": "Ofícios e trabalho",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Naasar; manutenção de poços",
+      "lineage": "Clã al-Hajar; parentesco exato com Malid não definido. Filha de medidores de água, não herdeira automática de cisterna.",
+      "appearance": "Mulher alta, cabelo preso sob tecido, cicatriz no couro cabeludo e mãos ásperas de corda.",
+      "personality": "Exata, impaciente com ostentação, reservada quanto a vida privada; valoriza quem aceita corrigir uma medida.",
+      "deeds": "Identificou perda de vazão causada por manutenção adiada e coordenou reparo que preservou abastecimento de um bairro durante escassez.",
+      "desire": "Criar inspeção que não dependa do proprietário que será cobrado pelo reparo.",
+      "scene": "O problema técnico está claro, mas expô-lo retirará renda de uma família aliada do regente. “A água não desapareceu. Alguém deixou de olhar.”",
+      "code": "N080",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Rashan Qarsol",
+      "sphere": "Portos e regências",
+      "source": "Novo",
+      "period": "Vivo em 418",
+      "origin": "Clãs livres entre Qal-Zahar e as estepes",
+      "lineage": "Clã Qarsol; escolhido como voz de um grupo de tendas, sem autoridade sobre toda Gaddra.",
+      "appearance": "Grande, barba negra curta, rosto marcado pelo sol e um manto muito remendado mantido por escolha.",
+      "personality": "Hospitaleiro, desconfiado, vaidoso da independência; aprende depressa quando não é corrigido diante de plateia.",
+      "deeds": "Negociou acesso temporário a um poço sem jurar vassalagem e reuniu escoltas de famílias que antes cobravam pedágios rivais.",
+      "desire": "Garantir mobilidade sem entregar as rotas de seu povo ao cadastro da Regência.",
+      "scene": "Qasir oferece proteção em troca de uma lista de poços. “Não venderei amanhã para comprar uma noite tranquila.”",
+      "code": "N081",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Borhild Hrafngard",
+      "sphere": "Portos e regências",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Kalgard e depósitos de madeira naval",
+      "lineage": "Casa Hrafngard; representante de um ramo do conselho, sem substituir um chefe ainda não nomeado pelo cenário.",
+      "appearance": "Alta, cabelos cinza claros, queixo forte e mão direita com tremor quase imperceptível.",
+      "personality": "Calculista, franca em privado, capaz de compromissos duradouros; interpreta dependência econômica como forma legítima de mando.",
+      "deeds": "Reorganizou contratos de madeira durante uma interrupção costeira e impediu que fornecedores pequenos fossem absorvidos por um único comprador rival.",
+      "desire": "Aumentar o peso Hrafngard sem provocar guerra aberta entre casas.",
+      "scene": "Oferece madeira a Grimrik sob condição de auditoria que também expõe seus próprios parentes. “Um acordo que só me favorece não durará o inverno.”",
+      "code": "N082",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Haksten von Kragstad",
+      "sphere": "Portos e regências",
+      "source": "Novo",
+      "period": "Vivo em 418",
+      "origin": "Kragstad e patrulhas costeiras",
+      "lineage": "Casa von Kragstad; oficial de ramo secundário, não novo soberano do conselho.",
+      "appearance": "Corpo largo, cabeça raspada, barba loira curta, olho esquerdo coberto por película de antiga lesão.",
+      "personality": "Disciplinado, honesto em compromissos militares, limitado ao reconhecer abusos praticados sob ordens.",
+      "deeds": "Reorganizou sinais de aviso costeiro e interceptou corsários sem destruir a embarcação civil que usavam como escudo.",
+      "desire": "Demonstrar que defesa pública pode legitimar sua casa sem depender de medo indiscriminado.",
+      "scene": "Recebe ordem para tratar contrabandistas de remédios como invasores. “Uma patrulha existe para que alguém consiga dormir.”",
+      "code": "N083",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Freydis Drakenvorn",
+      "sphere": "Intriga e justiça",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Drakenhall e bancos de Dobalbek",
+      "lineage": "Casa Drakenvorn, já exemplificada na onomástica; ramo ligado a registros e crédito, sem quarto assento inventado no conselho principal.",
+      "appearance": "Rosto pálido, cabelo ruivo escuro, dedos longos, roupas de lã excelente sem joias.",
+      "personality": "Polida, rigorosa, excelente memória, pouca tolerância a improviso; admira coragem que não precisa exibir.",
+      "deeds": "Descobriu uma cadeia de talhas duplicadas e negociou ressarcimento que evitou colapso de três oficinas.",
+      "desire": "Reformar garantias comerciais sem permitir que o governo confisque todo registro privado.",
+      "scene": "Um devedor importante oferece o nome de um dissidente em vez de prata. “Informação não é pagamento quando foi roubada de quem confiou em nós.”",
+      "code": "N084",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Alrun Vidreira",
+      "sphere": "Ofícios e trabalho",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Fugong; oficinas de vidro escuro",
+      "lineage": "Família de artesãos livres; o nome de ofício é tradução vernácula, sem pretensão de casa nobre.",
+      "appearance": "Média estatura, pele morena, cabelo muito curto e pequenas manchas de queimadura nos braços.",
+      "personality": "Inventiva, franca, pouco paciente com segredos industriais que impedem reparos; teme perder o sustento dos aprendizes.",
+      "deeds": "Desenvolveu peças intercambiáveis de uma lanterna de cais e abriu instruções de manutenção, contrariando um fornecedor monopolista.",
+      "desire": "Vender para fora de Kalis sem entregar a oficina a um banqueiro ou agente estatal.",
+      "scene": "Um intermediário exige exclusividade perpétua em troca da primeira licença de exportação. “Se só eu posso consertar, a peça ainda está mal pensada.”",
+      "code": "N085",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Lorenza Falcenzo",
+      "sphere": "Portos e regências",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Biemont e crédito de salvamento",
+      "lineage": "Casa Falcenzo; prima de vários acionistas, sem parentesco com a médica Lorenza dei Coralli.",
+      "appearance": "Rosto comprido, cabelo negro entremeado de branco, postura elegante e óculos pequenos para leitura.",
+      "personality": "Encantadora, paciente, impiedosa com reincidência de fraude; usa linguagem de proteção para vender dependência.",
+      "deeds": "Criou um fundo que permitiu a pequenos armadores dividir perdas, mas concentrou os registros de carga sob supervisão da casa.",
+      "desire": "Tornar-se indispensável à reconstrução dos portos durante a crise dos recifes.",
+      "scene": "Financia o resgate de uma tripulação desde que receba direitos excessivos sobre o próximo navio. “Ninguém é obrigado a aceitar. Apenas veja as outras ofertas.”",
+      "code": "N086",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Sandro Vela",
+      "sphere": "Crime e margens",
+      "source": "Novo",
+      "period": "Vivo em 418",
+      "origin": "Ravena; Enseada do Corvo",
+      "lineage": "Filho de remendadora de velas e marinheiro desconhecido; sem ligação com Sandro Corvella.",
+      "appearance": "Alto, barba curta muito preta, rosto queimado de sol e um dente partido; ri alto demais em lugares fechados.",
+      "personality": "Carismático, ousado, generoso depois de lucrar; racionaliza pilhagem como justiça mesmo contra vítimas pobres.",
+      "deeds": "Organizou uma fuga de embarcações presas por pedágio ilegal e depois usou a reputação para cobrar proteção de barcos menores.",
+      "desire": "Transformar prestígio de corsário em comando estável sem aceitar regras que limitem seus ganhos.",
+      "scene": "Fioresca quer seu apoio contra taxas, mas exige devolução de carga tomada de pescadores. “O mar cobra de todos; eu ao menos aviso.”",
+      "code": "N087",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Corina Marenzi",
+      "sphere": "Fé e conhecimento",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Baldbella; bairros de canais",
+      "lineage": "Filha de parteira e fabricante de cestos; sobrenome familiar sem privilégio mercantil.",
+      "appearance": "Pele escura, cabelo preso, mãos firmes, olhos atentos; carrega um caderno pequeno que cabe na palma.",
+      "personality": "Compassiva, pragmática, excelente em organizar gente; tende a desconfiar de teorias que ainda não mudam o trabalho cotidiano.",
+      "deeds": "Organizou abastecimento e limpeza de uma enfermaria durante surto local, registrando condições de água e casos sem prometer cura milagrosa.",
+      "desire": "Garantir que cuidadores recebam salário e que seus registros sejam creditados nos tratados.",
+      "scene": "Um acadêmico apresenta seu levantamento como descoberta própria; Loreo pode testemunhar a colaboração. “Não basta citar a cidade. Diga quem abriu a porta.”",
+      "code": "N088",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Benetto Pietra",
+      "sphere": "Ofícios e trabalho",
+      "source": "Novo",
+      "period": "Histórico proposto; 327–399",
+      "origin": "Stoneforge; obra dos poços de Naasar",
+      "lineage": "Família de pedreiros, casado com uma medidora de água de Gaddra cujo nome permanece em registros familiares, sem nova dinastia.",
+      "appearance": "Retrato de oficina: homem pequeno, nariz largo, barba curta e mãos muito grandes.",
+      "personality": "Inventivo, insistente, mais disposto a ouvir trabalhadores que administradores; frequentemente estourava prazos para corrigir problemas.",
+      "deeds": "Participou, como novo integrante de uma obra coletiva, das adaptações de instrumentos usadas na perfuração de 380. Não recebe sozinho o crédito pelo aquífero ou pelo projeto de Naasar.",
+      "desire": "Legado: desenhos de peças substituíveis reduziram dependência de importação integral. Seus alunos disputam se conhecimento de oficina pode ser fechado por patente régia.",
+      "scene": "Uma assinatura ausente no desenho mostra contribuição omitida de especialistas gaddrani. “A broca chega de fora; é aqui que aprende a pedra.”",
+      "code": "N089",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Elira dos Remos",
+      "sphere": "Mares e exploração",
+      "source": "Novo",
+      "period": "Histórica proposta; ativa em 147",
+      "origin": "Pelagosa e costa de Claramar",
+      "lineage": "Família de pilotos de pesca; não fundadora exclusiva do porto nem inventora de todas as rotas.",
+      "appearance": "Tradição visual: mulher de braços fortes, rosto curtido, cabelo preso num lenço escuro; retrato sem verificação contemporânea.",
+      "personality": "Nas memórias propostas, paciente na instrução e implacável contra bravatas; valorizava retorno da tripulação mais que recordes.",
+      "deeds": "Participou das observações locais que ajudaram a ajustar sinais do farol de Claramar na época de sua consolidação. Seu nome preserva o trabalho de pilotos eclipsado por financiadores.",
+      "desire": "Legado: sinais úteis nascem de experiência de mar, não apenas de torres elevadas.",
+      "scene": "Uma marca antiga atribuída a ela está deslocada num mapa moderno. “A luz é para quem chega, não para quem olha da varanda.”",
+      "code": "N090",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Vittor Sem-Selo",
+      "sphere": "Crime e margens",
+      "source": "Novo",
+      "period": "Vivo em 418",
+      "origin": "Altavanne, Merlinport e estradas de correio",
+      "lineage": "Origem familiar deliberadamente oculta; o apelido não é sobrenome de bastardia nem prova de ascendência nobre.",
+      "appearance": "Rosto comum, cabelo castanho, barba curta variável, roupas bem ajustadas de tecidos baratos.",
+      "personality": "Paciente, observador, avesso à violência; trata reputações como ferramentas e se apega demais à própria invisibilidade.",
+      "deeds": "Construiu uma rede de intermediários para documentos roubados e ajudou uma família a recuperar prova de propriedade em troca de dívida futura.",
+      "desire": "Obter renda legal e manter influência clandestina; os objetivos entram em conflito quando uma vítima reconhece sua ajuda anterior.",
+      "scene": "Oferece documento autêntico cuja obtenção destruiu outra pessoa. “Falso é o papel que promete mais do que pode provar.”",
+      "code": "N091",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Serena dos Bastidores",
+      "sphere": "Artes e cotidiano",
+      "source": "Novo",
+      "period": "Viva em 418",
+      "origin": "Altavanne; costura e serviço de salão",
+      "lineage": "Filha de lavadeira e alfaiate; sem vínculo com Serina Scutauria. A diferença de nomes deve ser mantida.",
+      "appearance": "Alta, cabelo preto preso, rosto oval, cicatriz pequena no polegar; veste cores discretas.",
+      "personality": "Atenta, espirituosa, leal às trabalhadoras de sua oficina; gosta demais de saber o que os outros escondem.",
+      "deeds": "Organizou cooperativa de costureiras para cumprir encomendas sem dependência de um único salão e reconheceu substituição de um mensageiro por detalhes de uniforme.",
+      "desire": "Usar acesso à corte para proteger a oficina, evitando tornar todas as empregadas informantes.",
+      "scene": "Um vestido de cerimônia chega com carta escondida no forro; o destinatário não é quem o comprou. “Os senhores falam quando esquecem que estamos ajustando a manga.”",
+      "code": "N092",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Rufino do Lacre",
+      "sphere": "Memórias e ameaças",
+      "source": "Novo; papel anônimo em 08",
+      "period": "Vivo em 418; copista juramentado",
+      "origin": "Clausura do Acervo sob Sellene",
+      "lineage": "Nome proposto para um dos quatro copistas; nascido em família de encadernadores de Alineus. Não é um quinto guardião.",
+      "appearance": "Idoso, cabelo branco ralo, dedos tortos, ombros curvados; evita luz intensa.",
+      "personality": "Metódico, paternal, resignado de modo inquietante; confunde sobrevivência institucional com cuidado dos colegas.",
+      "deeds": "Preservou páginas danificadas e identificou um lacre substituído numa transferência interna. Conhece a sequência de acesso como os demais quatro juramentados.",
+      "desire": "Evitar que uma crise leve Matteo a destruir documentos que não poderão ser recuperados.",
+      "scene": "Pode trocar silêncio por uma promessa de salvar um caderno específico. “Uma folha sobrevivente ainda pode contradizer um rei.”",
+      "code": "N093",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Corina da Vigília",
+      "sphere": "Memórias e ameaças",
+      "source": "Novo; papel anônimo em 08",
+      "period": "Viva em 418; copista juramentada",
+      "origin": "Clausura do Acervo; origem em Baldbella",
+      "lineage": "Uma dos quatro copistas, escolhida jovem; família acredita que ingressou em serviço religioso reservado.",
+      "appearance": "Rosto estreito, cabelo castanho preso, olhos sensíveis e passos muito leves.",
+      "personality": "Rigorosa, desconfiada de omissões, compassiva em pequenos atos; teme confessar que deseja sair.",
+      "deeds": "Comparou duas cópias de um laudo e recuperou uma ressalva que fora apagada por erro. Mantém inventário de versões, não apenas títulos.",
+      "desire": "Fazer chegar uma notícia à família sem entregar o acesso ao Acervo a terceiros.",
+      "scene": "Um bilhete inofensivo pode denunciar a existência da clausura. “Não quero levar o segredo. Quero voltar a ter um nome fora daqui.”",
+      "code": "N094",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Neris das Margens",
+      "sphere": "Memórias e ameaças",
+      "source": "Novo; papel anônimo em 08",
+      "period": "Vivo em 418; copista juramentado",
+      "origin": "Clausura do Acervo; nascido em Stoneforge",
+      "lineage": "Um dos quatro copistas; filho de fabricantes de instrumentos, sem parentesco com Néria do Cais.",
+      "appearance": "Magro, pele escura, cabelo curto, uma orelha pouco sensível; postura de quem lê muito perto.",
+      "personality": "Curioso, impaciente, bom em conexões; seu desejo de provar uma hipótese pode superar a prudência.",
+      "deeds": "Reconstituiu sequência de páginas do diário de Sandro a partir de marcas materiais. Não concluiu que toda memória descrita corresponde a fato externo.",
+      "desire": "Comparar registros de Despertos sem transformar coincidências em prova de uma explicação única.",
+      "scene": "Propõe acesso arriscado a um documento fora de sua tarefa. “A margem foi escrita depois. É nela que o autor deixou de fingir certeza.”",
+      "code": "N095",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Aster das Costuras",
+      "sphere": "Memórias e ameaças",
+      "source": "Novo; papel anônimo em 08",
+      "period": "Viva em 418; copista juramentada",
+      "origin": "Clausura do Acervo; origem em Biemont",
+      "lineage": "Quarta copista, de família de restauradores de livros. O grupo continua tendo exatamente quatro integrantes.",
+      "appearance": "Pequena, cabelos escuros com fios brancos, mãos muito estáveis e expressão quase imóvel.",
+      "personality": "Paciente, concreta, afetuosa por atos; considera liberdade mais importante que prestígio intelectual.",
+      "deeds": "Salvou um volume de desmanche e percebeu que uma costura recente unia documentos antes separados, alterando a leitura de uma acusação.",
+      "desire": "Manter os colegas vivos caso a ordem de destruição seja dada, mesmo que livros sejam perdidos.",
+      "scene": "O mestre pode escolhê-la como a copista desaparecida do gancho; isso não ocorre automaticamente nesta cronologia. “Um livro não deve exigir que quatro pessoas nunca vejam o céu.”",
+      "code": "N096",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Aldren Bellaroc",
+      "sphere": "Memórias e ameaças",
+      "source": "Novo; papel anônimo em 08",
+      "period": "Histórico; último lorde na crise de 274",
+      "origin": "Domínio extinto da Casa Bellaroc, localização precisa não fixada",
+      "lineage": "Nome proposto para o último lorde do Acervo. Descendente de Ulvar; as gerações intermediárias ficam abertas.",
+      "appearance": "Retrato interpretativo: homem de rosto pálido, cabelo escuro longo, barba muito aparada e expressão cansada.",
+      "personality": "Obediente ao ancestral, socialmente elegante, incapaz de distinguir devoção familiar de cativeiro.",
+      "deeds": "Administrava a casa recebendo ordens noturnas do tataravô supostamente morto. A extinção de 274 permanece fato; não se inventa sobrevivência atual do lorde.",
+      "desire": "Legado: títulos e riqueza podiam pertencer, na prática, a alguém retirado de toda responsabilidade pública.",
+      "scene": "Um inventário demonstra que Aldren usava decisões antigas como se fossem suas. “Na nossa casa, os mortos ainda sabem o que convém.”",
+      "code": "N097",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Ulvar Bellaroc",
+      "sphere": "Memórias e ameaças",
+      "source": "Novo; papel anônimo em 08",
+      "period": "Vampiro histórico; destino após 274 não estabelecido",
+      "origin": "Calabouços do antigo domínio Bellaroc",
+      "lineage": "Nome proposto para o tataravô de Aldren, oficialmente morto cerca de 120 anos antes do episódio. Não se fixa data de nascimento.",
+      "appearance": "Aparência de cena proposta: pele muito pálida, cabelos brancos longos, corpo seco e roupas cuidadosamente preservadas de outra época.",
+      "personality": "Paciente, possessivo, convencido de que a família é extensão de sua vontade; recorda ofensas com precisão maior que afetos.",
+      "deeds": "Controlava o último lorde por ordens, ouro antigo e informações sobre rivais. Não se afirma que criou todos os vampiros ou governava outras casas.",
+      "desire": "Se tiver sobrevivido, deseja recuperar instrumentos de influência. Sua sobrevivência é opção do mestre, não fato fixado.",
+      "scene": "Um intermediário usa um pagamento de origem antiga; pode servir ao ancestral ou apenas explorar sua lenda. “Eu já paguei pelo nome que vocês gastam.”",
+      "code": "N098",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": [
+        {
+          "book": "08",
+          "file": "08_Acervo_Oculto_de_Sellene.md",
+          "lines": [],
+          "scope": "papel anônimo ou referência contextual"
+        }
+      ]
+    },
+    {
+      "name": "Valerio Sarn",
+      "sphere": "Intriga e justiça",
+      "source": "Novo",
+      "period": "Histórico proposto; investigador em 274",
+      "origin": "Aurora; serviço de investigação régia",
+      "lineage": "Família de escribas sem título; não parente dos Valerion por semelhança do prenome.",
+      "appearance": "Reconstrução proposta: homem de meia-idade, barba curta, nariz torto e casaco sem brasão.",
+      "personality": "Tenaz, desconfiado de versões elegantes, receoso de superiores que mudam a pergunta depois de ouvir a resposta.",
+      "deeds": "É proposto como autor de notas de campo sobre Bellaroc em 274, posteriormente compiladas por Cassian de Pontáuria e Severin. Preenche a lacuna sem alterar a idade do avô de Valen.",
+      "desire": "Legado: distinguir investigador original e compilador torna a cronologia coerente, mas esta autoria é expansão identificada.",
+      "scene": "Um relatório seu preserva o nome de alguém apagado da versão final. “Não posso explicar o que vi. Posso registrar quem tentou impedir que eu visse.”",
+      "code": "N099",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    },
+    {
+      "name": "Saira das Duas Memórias",
+      "sphere": "Memórias e ameaças",
+      "source": "Novo",
+      "period": "Desperta lúcida em 418; identidade em investigação",
+      "origin": "Recordações de Syleth e de uma comunidade antiga não identificada",
+      "lineage": "Nome usado por escolha; parentes da vida recente ainda procurados. Memórias herdadas não estabelecem filiação biológica.",
+      "appearance": "Mulher adulta, cabelo escuro curto, olhos cinzentos, cicatriz discreta na nuca; hesita ao reconhecer o próprio reflexo.",
+      "personality": "Compassiva, assustada, desconfiada de salvadores; procura consentimento mesmo em pequenas decisões.",
+      "deeds": "Recusou conduzir um grupo a um tratamento ligado à Comunhão e ajudou uma pessoa a sair de uma comunidade controlada. Não conhece toda a rede nem cura a si mesma.",
+      "desire": "Descobrir quais lembranças são suas sem apagar as que agora também a constituem. Pode ouvir dissidentes sem ser porta-voz de todos.",
+      "scene": "Reconhece uma canção que ninguém lhe ensinou e pede que o grupo encontre sua origem. “Se eu lembrar por outra pessoa, ainda posso escolher por mim?”",
+      "code": "N100",
+      "kind": "Nova figura ou papel nomeado",
+      "evidence": []
+    }
+  ]
+}
