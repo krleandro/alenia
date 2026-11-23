@@ -1914,6 +1914,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N049 — Caelen Cinza
 
+![Retrato N049](ilustracoes/npc_N049.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
 **Origem e presença:** Estradas entre Dahrma e Vaarsa
@@ -1935,6 +1937,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n059"></a>
 
 ### N059 — Nadira bint Malid
+
+![Retrato N059](ilustracoes/npc_N059.jpg)
 
 **Registro:** Nome-modelo desenvolvido. **Época:** Viva em 418; biografia nova.
 
@@ -1958,6 +1962,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N063 — Sigrun Grimsen
 
+![Retrato N063](ilustracoes/npc_N063.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Viva em 418; biografia nova.
 
 **Origem e presença:** Drakenhall
@@ -1979,6 +1985,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n068"></a>
 
 ### N068 — Malid al-Hajar
+
+![Retrato N068](ilustracoes/npc_N068.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Morto recentemente em 418.
 
@@ -2002,6 +2010,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N084 — Freydis Drakenvorn
 
+![Retrato N084](ilustracoes/npc_N084.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
 **Origem e presença:** Drakenhall e bancos de Dobalbek
@@ -2023,6 +2033,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n099"></a>
 
 ### N099 — Valerio Sarn
+
+![Retrato N099](ilustracoes/npc_N099.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Histórico proposto; investigador em 274.
 
@@ -2049,6 +2061,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N057 — Niccolo Coral
 
+![Retrato N057](ilustracoes/npc_N057.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
 **Origem e presença:** Biemont e O Ferro Velho
@@ -2070,6 +2084,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n064"></a>
 
 ### N064 — Astrid Sombra
+
+![Retrato N064](ilustracoes/npc_N064.jpg)
 
 **Registro:** Nome-modelo desenvolvido. **Época:** Viva em 418; biografia nova.
 
@@ -2093,6 +2109,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N087 — Sandro Vela
 
+![Retrato N087](ilustracoes/npc_N087.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418.
 
 **Origem e presença:** Ravena; Enseada do Corvo
@@ -2114,6 +2132,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n091"></a>
 
 ### N091 — Vittor Sem-Selo
+
+![Retrato N091](ilustracoes/npc_N091.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418.
 
@@ -2164,6 +2184,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N050 — Aurelia Cinza
 
+![Retrato N050](ilustracoes/npc_N050.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Viva em 418; biografia nova.
 
 **Origem e presença:** Altavanne; palco e oficinas de máscaras
@@ -2185,6 +2207,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n061"></a>
 
 ### N061 — Soraya Duna
+
+![Retrato N061](ilustracoes/npc_N061.jpg)
 
 **Registro:** Nome-modelo desenvolvido. **Época:** Viva em 418; biografia nova.
 
@@ -2208,6 +2232,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N065 — Néria do Cais
 
+![Retrato N065](ilustracoes/npc_N065.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
 **Origem e presença:** Merlinport; lavagem e remendo de velas
@@ -2229,6 +2255,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n066"></a>
 
 ### N066 — Iria das Âncoras
+
+![Retrato N066](ilustracoes/npc_N066.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
@@ -2252,6 +2280,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N071 — Sabina Forneira
 
+![Retrato N071](ilustracoes/npc_N071.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
 **Origem e presença:** Dahrma; forno comunitário
@@ -2274,6 +2304,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N079 — Yori Katsun
 
+![Retrato N079](ilustracoes/npc_N079.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418.
 
 **Origem e presença:** Yõketsu; casa de serviço culinário
@@ -2295,6 +2327,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n092"></a>
 
 ### N092 — Serena dos Bastidores
+
+![Retrato N092](ilustracoes/npc_N092.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
@@ -2369,6 +2403,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N045 — A Sombra
 
+![Retrato N045](ilustracoes/npc_N045.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Criatura histórica; morta em 356.
 
 **Origem e presença:** Origem desconhecida; devastou Aurora em 348–356
@@ -2390,6 +2426,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n093"></a>
 
 ### N093 — Rufino do Lacre
+
+![Retrato N093](ilustracoes/npc_N093.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418; copista juramentado.
 
@@ -2413,6 +2451,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N094 — Corina da Vigília
 
+![Retrato N094](ilustracoes/npc_N094.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418; copista juramentada.
 
 **Origem e presença:** Clausura do Acervo; origem em Baldbella
@@ -2434,6 +2474,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n095"></a>
 
 ### N095 — Neris das Margens
+
+![Retrato N095](ilustracoes/npc_N095.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418; copista juramentado.
 
@@ -2457,6 +2499,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N096 — Aster das Costuras
 
+![Retrato N096](ilustracoes/npc_N096.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418; copista juramentada.
 
 **Origem e presença:** Clausura do Acervo; origem em Biemont
@@ -2478,6 +2522,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n097"></a>
 
 ### N097 — Aldren Bellaroc
+
+![Retrato N097](ilustracoes/npc_N097.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Histórico; último lorde na crise de 274.
 
@@ -2501,6 +2547,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N098 — Ulvar Bellaroc
 
+![Retrato N098](ilustracoes/npc_N098.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Vampiro histórico; destino após 274 não estabelecido.
 
 **Origem e presença:** Calabouços do antigo domínio Bellaroc
@@ -2522,6 +2570,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n100"></a>
 
 ### N100 — Saira das Duas Memórias
+
+![Retrato N100](ilustracoes/npc_N100.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Desperta lúcida em 418; identidade em investigação.
 
