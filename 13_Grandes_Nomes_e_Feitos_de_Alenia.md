@@ -627,6 +627,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N021 — Corardo della Rocca
 
+![Retrato N021](ilustracoes/npc_N021.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
 **Origem e presença:** Corallis; circuitos políticos da Liga
@@ -648,6 +650,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n022"></a>
 
 ### N022 — Qasir Zaharid
+
+![Retrato N022](ilustracoes/npc_N022.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
@@ -671,6 +675,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N023 — Grimrik Ulscold
 
+![Retrato N023](ilustracoes/npc_N023.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
 **Origem e presença:** Cidadela de Kalgard
@@ -692,6 +698,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n026"></a>
 
 ### N026 — Fioresca Coral
+
+![Retrato N026](ilustracoes/npc_N026.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Viva em 418.
 
@@ -715,6 +723,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N058 — Qasir ibn Tarash
 
+![Retrato N058](ilustracoes/npc_N058.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
 **Origem e presença:** Suq-Ramad e circuitos de caravanas
@@ -736,6 +746,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n081"></a>
 
 ### N081 — Rashan Qarsol
+
+![Retrato N081](ilustracoes/npc_N081.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418.
 
@@ -759,6 +771,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N082 — Borhild Hrafngard
 
+![Retrato N082](ilustracoes/npc_N082.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
 **Origem e presença:** Kalgard e depósitos de madeira naval
@@ -781,6 +795,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N083 — Haksten von Kragstad
 
+![Retrato N083](ilustracoes/npc_N083.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418.
 
 **Origem e presença:** Kragstad e patrulhas costeiras
@@ -802,6 +818,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n086"></a>
 
 ### N086 — Lorenza Falcenzo
+
+![Retrato N086](ilustracoes/npc_N086.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
@@ -828,6 +846,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N024 — Aerwen ferch Taldor
 
+![Retrato N024](ilustracoes/npc_N024.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Viva em 418.
 
 **Origem e presença:** Cidade Suspensa e Vergod
@@ -849,6 +869,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n025"></a>
 
 ### N025 — Cadwyn ap Merion
+
+![Retrato N025](ilustracoes/npc_N025.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Vivo; desaparecido no início da campanha.
 
@@ -872,6 +894,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N051 — Aerwen ferch Moriel
 
+![Retrato N051](ilustracoes/npc_N051.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Viva em 418; biografia nova.
 
 **Origem e presença:** Cidade Suspensa; manutenção de calhas
@@ -893,6 +917,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n052"></a>
 
 ### N052 — Merion Bruma
+
+![Retrato N052](ilustracoes/npc_N052.jpg)
 
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
@@ -916,6 +942,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N072 — Aerdor Gwaedlyn
 
+![Retrato N072](ilustracoes/npc_N072.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418.
 
 **Origem e presença:** Cidade Suspensa e clareiras protegidas
@@ -937,6 +965,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n073"></a>
 
 ### N073 — Gwenlin ferch Nerys
+
+![Retrato N073](ilustracoes/npc_N073.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
@@ -960,6 +990,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N074 — Rhianeth Cleddwen
 
+![Retrato N074](ilustracoes/npc_N074.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
 **Origem e presença:** Matas a nordeste de Aurora
@@ -982,6 +1014,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N075 — Finlas Brancaden
 
+![Retrato N075](ilustracoes/npc_N075.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418.
 
 **Origem e presença:** Vergod e aldeias de margem
@@ -1003,6 +1037,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n077"></a>
 
 ### N077 — Tsunari Kose
+
+![Retrato N077](ilustracoes/npc_N077.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418.
 
@@ -1029,6 +1065,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N037 — Sandro Corvella
 
+![Retrato N037](ilustracoes/npc_N037.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Histórico; sobrevivente da expedição de 312; destino posterior aberto.
 
 **Origem e presença:** Corallis e Mar das Cinzas
@@ -1050,6 +1088,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n044"></a>
 
 ### N044 — Benetta de Litore
+
+![Retrato N044](ilustracoes/npc_N044.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Proposta desta edição: viva em 418; idade adulta.
 
@@ -1073,6 +1113,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N054 — Loreo Cartógrafo
 
+![Retrato N054](ilustracoes/npc_N054.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
 **Origem e presença:** Alineus e rotas comerciais de Corallis
@@ -1094,6 +1136,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n056"></a>
 
 ### N056 — Vittiora dei Coralli
+
+![Retrato N056](ilustracoes/npc_N056.jpg)
 
 **Registro:** Nome-modelo desenvolvido. **Época:** Viva em 418; biografia nova.
 
@@ -1117,6 +1161,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N060 — Tarash Duna
 
+![Retrato N060](ilustracoes/npc_N060.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
 **Origem e presença:** Estepes de Gaddra e OX
@@ -1139,6 +1185,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N078 — Aya Tsurin
 
+![Retrato N078](ilustracoes/npc_N078.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
 **Origem e presença:** Yõketsu e travessias orientais
@@ -1160,6 +1208,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n090"></a>
 
 ### N090 — Elira dos Remos
+
+![Retrato N090](ilustracoes/npc_N090.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Histórica proposta; ativa em 147.
 
@@ -1186,6 +1236,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N019 — Aemilius de Pontáuria
 
+![Retrato N019](ilustracoes/npc_N019.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo e idoso em 418.
 
 **Origem e presença:** Pontáuria; Grande Catedral de Altavanne
@@ -1207,6 +1259,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n031"></a>
 
 ### N031 — Matteo dal Pelago
+
+![Retrato N031](ilustracoes/npc_N031.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Vivo e ancião em 418.
 
@@ -1230,6 +1284,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N032 — Loreo Seleni
 
+![Retrato N032](ilustracoes/npc_N032.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo; cerca de sessenta anos em 418.
 
 **Origem e presença:** Canais de Baldbella; correspondente de Sellene
@@ -1251,6 +1307,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n033"></a>
 
 ### N033 — Lorenzo Seleni
+
+![Retrato N033](ilustracoes/npc_N033.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Histórico; ativo em 356; destino posterior aberto.
 
@@ -1274,6 +1332,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N034 — Lorenzo de Sellene
 
+![Retrato N034](ilustracoes/npc_N034.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Histórico; época exata não fixada.
 
 **Origem e presença:** Tradição institucional de Sellene
@@ -1295,6 +1355,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n035"></a>
 
 ### N035 — Lorenza dei Coralli
+
+![Retrato N035](ilustracoes/npc_N035.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Viva em 417–418; cirurgiã-chefe aposentada.
 
@@ -1318,6 +1380,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N038 — Frei Lucian de Silvaria
 
+![Retrato N038](ilustracoes/npc_N038.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Histórico; texto recolhido no Ano 219.
 
 **Origem e presença:** Silvaria e círculos teológicos da Chama Solar
@@ -1339,6 +1403,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n039"></a>
 
 ### N039 — Severin da Brasa Velada
+
+![Retrato N039](ilustracoes/npc_N039.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Histórico; cronologia do dossiê exige conciliação.
 
@@ -1362,6 +1428,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N053 — Lirys Bruma
 
+![Retrato N053](ilustracoes/npc_N053.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Viva em 418; biografia nova.
 
 **Origem e presença:** Vergod; intercâmbio entre cuidadores
@@ -1384,6 +1452,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N067 — Aemilio Varres
 
+![Retrato N067](ilustracoes/npc_N067.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Desaparecido antes do colapso público de 418.
 
 **Origem e presença:** Altavanne; medicina de corte
@@ -1405,6 +1475,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n088"></a>
 
 ### N088 — Corina Marenzi
+
+![Retrato N088](ilustracoes/npc_N088.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
@@ -1431,6 +1503,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N046 — Cassian Armeiro
 
+![Retrato N046](ilustracoes/npc_N046.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
 **Origem e presença:** Bairro das oficinas de Altavanne
@@ -1452,6 +1526,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n047"></a>
 
 ### N047 — Loreo de Pontáuria
+
+![Retrato N047](ilustracoes/npc_N047.jpg)
 
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
@@ -1475,6 +1551,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N048 — Martinho Ferraz
 
+![Retrato N048](ilustracoes/npc_N048.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
 **Origem e presença:** Lavroga; ferragens de pedreira
@@ -1496,6 +1574,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n055"></a>
 
 ### N055 — Corardo Seleni
+
+![Retrato N055](ilustracoes/npc_N055.jpg)
 
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
@@ -1519,6 +1599,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N062 — Halgar Torson
 
+![Retrato N062](ilustracoes/npc_N062.jpg)
+
 **Registro:** Nome-modelo desenvolvido. **Época:** Vivo em 418; biografia nova.
 
 **Origem e presença:** Jarnham e estaleiros de Dobalbek
@@ -1540,6 +1622,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n069"></a>
 
 ### N069 — Corina das Cordas
+
+![Retrato N069](ilustracoes/npc_N069.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
@@ -1563,6 +1647,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N070 — Valen Serrador
 
+![Retrato N070](ilustracoes/npc_N070.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Vivo em 418.
 
 **Origem e presença:** Aeraneas; escoramento de galerias
@@ -1584,6 +1670,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n076"></a>
 
 ### N076 — Moriel das Calhas
+
+![Retrato N076](ilustracoes/npc_N076.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva e idosa em 418.
 
@@ -1607,6 +1695,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N080 — Zayra al-Hajar
 
+![Retrato N080](ilustracoes/npc_N080.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
 **Origem e presença:** Naasar; manutenção de poços
@@ -1629,6 +1719,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N085 — Alrun Vidreira
 
+![Retrato N085](ilustracoes/npc_N085.jpg)
+
 **Registro:** Nova figura ou papel nomeado. **Época:** Viva em 418.
 
 **Origem e presença:** Fugong; oficinas de vidro escuro
@@ -1650,6 +1742,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n089"></a>
 
 ### N089 — Benetto Pietra
+
+![Retrato N089](ilustracoes/npc_N089.jpg)
 
 **Registro:** Nova figura ou papel nomeado. **Época:** Histórico proposto; 327–399.
 
@@ -1676,6 +1770,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N020 — Sabina de Pontáuria
 
+![Retrato N020](ilustracoes/npc_N020.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Viva em 418.
 
 **Origem e presença:** Pontáuria; atua em Merlinport e Altavanne
@@ -1697,6 +1793,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n027"></a>
 
 ### N027 — Beren do Cais
+
+![Retrato N027](ilustracoes/npc_N027.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Vivo como Desperto em 418; morte testemunhada.
 
@@ -1720,6 +1818,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N028 — Loreo, comprador de Baldbella
 
+![Retrato N028](ilustracoes/npc_N028.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
 **Origem e presença:** Baldbella; presente em Merlinport
@@ -1741,6 +1841,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n029"></a>
 
 ### N029 — Cassian de Lavroga
+
+![Retrato N029](ilustracoes/npc_N029.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Vivo no início da aventura; destino dependente da mesa.
 
@@ -1764,6 +1866,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N030 — Tordan Sombra
 
+![Retrato N030](ilustracoes/npc_N030.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Vivo em 418.
 
 **Origem e presença:** Kalis; serviço para redes de Dobalbek
@@ -1785,6 +1889,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n040"></a>
 
 ### N040 — Cassian de Pontáuria
+
+![Retrato N040](ilustracoes/npc_N040.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Histórico; avô de Valen; compilador posterior adotado nesta edição.
 
@@ -2034,6 +2140,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N043 — Valerius Malakor
 
+![Retrato N043](ilustracoes/npc_N043.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Autor histórico; época e condição atual não fixadas.
 
 **Origem e presença:** Procedência não demonstrada; assinatura do caderno culinário antigo
@@ -2213,6 +2321,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 
 ### N041 — Marella de Claramar
 
+![Retrato N041](ilustracoes/npc_N041.jpg)
+
 **Registro:** Anterior desenvolvido. **Época:** Desperta; ativa na campanha de 418.
 
 **Origem e presença:** Claramar; reconstruída em Thanatos
@@ -2234,6 +2344,8 @@ Os perfis não substituem fichas de combate. Use os kits e parâmetros existente
 <a id="n042"></a>
 
 ### N042 — O Regente das Cinzas
+
+![Retrato N042](ilustracoes/npc_N042.jpg)
 
 **Registro:** Anterior desenvolvido. **Época:** Consciência ancestral dominante; atividade atual em 418.
 
