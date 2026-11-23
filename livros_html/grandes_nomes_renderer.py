@@ -464,47 +464,99 @@ GRANDES_NOMES_JS = r"""
 (function() {
     let bound = false;
 
-    function initNamesUI() {
+    function getCards() {
         const root = document.getElementById('names-root');
-        if (!root || bound) return;
-        bound = true;
-        document.body.classList.add('vault-unlocked');
+        return root ? Array.from(root.querySelectorAll('.names-card')) : [];
+    }
 
-        const cards = Array.from(root.querySelectorAll('.names-card'));
+    function applyFilter() {
+        const root = document.getElementById('names-root');
+        if (!root) return;
+        const cards = getCards();
         const q = document.getElementById('names-query');
         const sphere = document.getElementById('names-sphere');
         const kind = document.getElementById('names-kind');
         const countEl = document.getElementById('names-count');
         const emptyEl = document.getElementById('names-empty');
         const resetBtn = document.getElementById('names-reset');
-
         const norm = (s) => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-        function applyFilter() {
-            const query = norm(q ? q.value.trim() : '');
-            const sv = sphere ? sphere.value : '';
-            const kv = kind ? kind.value : '';
-            let count = 0;
+        const query = norm(q ? q.value.trim() : '');
+        const sv = sphere ? sphere.value : '';
+        const kv = kind ? kind.value : '';
+        let count = 0;
 
-            cards.forEach(c => {
-                const hide = Boolean(
-                    (sv && c.dataset.sphere !== sv) ||
-                    (kv && c.dataset.kind !== kv) ||
-                    (query && !norm(c.dataset.search).includes(query))
-                );
-                c.hidden = hide;
-                if (!hide) count++;
+        cards.forEach(c => {
+            const hide = Boolean(
+                (sv && c.dataset.sphere !== sv) ||
+                (kv && c.dataset.kind !== kv) ||
+                (query && !norm(c.dataset.search).includes(query))
+            );
+            c.hidden = hide;
+            if (!hide) count++;
+        });
+
+        root.querySelectorAll('.names-group').forEach(g => {
+            const anyVis = Array.from(g.querySelectorAll('.names-card')).some(c => !c.hidden);
+            g.hidden = !anyVis;
+        });
+
+        if (countEl) countEl.textContent = `Exibindo ${count} de ${cards.length} perfis`;
+        if (emptyEl) emptyEl.hidden = (count !== 0);
+        if (resetBtn) resetBtn.hidden = !(query || sv || kv);
+    }
+
+    function bindLightboxOn(scope) {
+        scope.querySelectorAll('.atlas-plate img').forEach(img => {
+            if (img.dataset.lbBound) return;
+            img.dataset.lbBound = '1';
+            img.addEventListener('click', () => {
+                const lb = document.getElementById('atlas-lightbox');
+                const lbImg = document.getElementById('atlas-lightbox-img');
+                if (lb && lbImg) {
+                    lbImg.src = img.src;
+                    lb.classList.add('open');
+                }
             });
+        });
+    }
 
-            root.querySelectorAll('.names-group').forEach(g => {
-                const anyVis = Array.from(g.querySelectorAll('.names-card')).some(c => !c.hidden);
-                g.hidden = !anyVis;
-            });
-
-            if (countEl) countEl.textContent = `Exibindo ${count} de ${cards.length} perfis`;
-            if (emptyEl) emptyEl.hidden = (count !== 0);
-            if (resetBtn) resetBtn.hidden = !(query || sv || kv);
+    function onVaultUnlocked() {
+        const sphere = document.getElementById('names-sphere');
+        if (sphere && !sphere.querySelector('option[value="Memórias e ameaças"]')) {
+            const opt = document.createElement('option');
+            opt.value = 'Memórias e ameaças';
+            opt.textContent = 'Memórias e ameaças (10)';
+            sphere.appendChild(opt);
+            const firstOpt = sphere.querySelector('option[value=""]');
+            if (firstOpt) firstOpt.textContent = 'Todos os círculos (100)';
         }
+        const kind = document.getElementById('names-kind');
+        if (kind) {
+            const firstK = kind.querySelector('option[value=""]');
+            if (firstK) firstK.textContent = 'Todas as origens (100)';
+        }
+        const tpl = document.getElementById('names-full-index-tpl');
+        const idxDiv = document.querySelector('#indice-nomes .names-index');
+        const idxSum = document.querySelector('#indice-nomes > summary');
+        if (tpl && idxDiv) {
+            idxDiv.innerHTML = tpl.innerHTML;
+            if (idxSum) idxSum.textContent = '🔤 Índice Alfabético dos 100 Perfis (N001–N100)';
+        }
+        const unlockedArea = document.querySelector('.gm-unlocked-content');
+        if (unlockedArea) bindLightboxOn(unlockedArea);
+        applyFilter();
+    }
+
+    function initNamesUI() {
+        const root = document.getElementById('names-root');
+        if (!root || bound) return;
+        bound = true;
+
+        const q = document.getElementById('names-query');
+        const sphere = document.getElementById('names-sphere');
+        const kind = document.getElementById('names-kind');
+        const resetBtn = document.getElementById('names-reset');
 
         if (q) q.addEventListener('input', applyFilter);
         if (sphere) sphere.addEventListener('change', applyFilter);
@@ -532,19 +584,6 @@ GRANDES_NOMES_JS = r"""
             if (details && !details.open) details.open = true;
         };
 
-        // Bind newly unlocked images inside .atlas-plate to the global lightbox
-        document.querySelectorAll('.gm-unlocked-content .atlas-plate img').forEach(img => {
-            img.addEventListener('click', () => {
-                const lb = document.getElementById('atlas-lightbox');
-                const lbImg = document.getElementById('atlas-lightbox-img');
-                if (lb && lbImg) {
-                    lbImg.src = img.src;
-                    lb.classList.add('open');
-                }
-            });
-        });
-
-        // Close sidebar drawer when clicking TOC items
         document.querySelectorAll('.toc-list a').forEach(a => {
             a.addEventListener('click', () => {
                 document.body.classList.add('sidebar-hidden');
@@ -570,7 +609,10 @@ GRANDES_NOMES_JS = r"""
         });
     }
 
-    document.addEventListener('alenia:gm-unlocked', initNamesUI);
+    document.addEventListener('alenia:gm-unlocked', () => {
+        initNamesUI();
+        onVaultUnlocked();
+    });
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initNamesUI);
     } else {
@@ -580,15 +622,19 @@ GRANDES_NOMES_JS = r"""
 """
 
 
-def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict):
+LOCKED_SPHERE = "Memórias e ameaças"
+
+
+def render_grandes_nomes_page(bk: dict, md_content: str, helpers: dict):
     """
-    Parse canonical 13_Grandes_Nomes_e_Feitos_de_Alenia.md into the rich interactive
-    Master UI + TOC items (to be sealed inside the AES-256-GCM vault).
+    Build Tomo XIII — Grandes Nomes e Feitos de Alenia as a PUBLIC interactive tome,
+    sealing ONLY Circle 10 ("Memórias e ameaças") inside an AES-256-GCM Master vault.
     """
     inline_md = helpers["inline_md"]
     md_to_html = helpers["md_to_html"]
     img_dim_attrs = helpers["img_dim_attrs"]
-    rewrite_link = helpers["rewrite_link"]
+    make_gm_gate_block = helpers["make_gm_gate_block"]
+    render_toc_items = helpers["render_toc_items"]
 
     # Split into H2 sections
     sections = re.split(r"(?=^##\s+)", md_content, flags=re.M)
@@ -681,29 +727,34 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
                 "base_ref": base_ref,
             })
 
-    # Build exact character-name cross-linker (full names + unambiguous short/regnal aliases)
-    name_to_profile = {p["name"]: p for p in profiles}
-    unambiguous_aliases = {
-        "Severor I": "Severor I Valerion",
-        "Severor II": "Severor II Valerion",
-        "Severor III": "Severor III Valerion",
-        "Aemilius IV": "Aemilius IV Valerion",
-        "Regente das Cinzas": "O Regente das Cinzas",
-    }
-    for alias, target_full in unambiguous_aliases.items():
-        if target_full in name_to_profile:
-            name_to_profile[alias] = name_to_profile[target_full]
+    def build_name_linker(allow_locked: bool):
+        pool = [p for p in profiles if allow_locked or p["sphere"] != LOCKED_SPHERE]
+        nmap = {p["name"]: p for p in pool}
+        unambiguous_aliases = {
+            "Severor I": "Severor I Valerion",
+            "Severor II": "Severor II Valerion",
+            "Severor III": "Severor III Valerion",
+            "Aemilius IV": "Aemilius IV Valerion",
+            "Regente das Cinzas": "O Regente das Cinzas",
+        }
+        for alias, target_full in unambiguous_aliases.items():
+            if target_full in nmap:
+                nmap[alias] = nmap[target_full]
+        first_token_map = {}
+        blocked_first_tokens = {"Frei", "Dona", "Dom", "Lorde", "Dama"}
+        for p in profiles:
+            tok0 = p["name"].split(",")[0].split()[0]
+            if len(tok0) >= 4 and tok0[0].isupper() and tok0 not in blocked_first_tokens:
+                first_token_map.setdefault(tok0, []).append(p)
+        for tok0, plist in first_token_map.items():
+            if len(plist) == 1 and tok0 not in nmap and (allow_locked or plist[0]["sphere"] != LOCKED_SPHERE):
+                nmap[tok0] = plist[0]
+        snames = sorted(nmap.keys(), key=len, reverse=True)
+        nre = re.compile(r"(?<![\wÀ-ÿ])(" + "|".join(re.escape(n) for n in snames) + r")(?![\wÀ-ÿ])") if snames else None
+        return nmap, nre
 
-    # Automatically add any first name (>=4 chars, capitalized, not a common word) unique to exactly 1 profile
-    first_token_map = {}
-    blocked_first_tokens = {"Frei", "Dona", "Dom", "Lorde", "Dama"}
-    for p in profiles:
-        tok0 = p["name"].split(",")[0].split()[0]
-        if len(tok0) >= 4 and tok0[0].isupper() and tok0 not in blocked_first_tokens:
-            first_token_map.setdefault(tok0, []).append(p)
-    for tok0, plist in first_token_map.items():
-        if len(plist) == 1 and tok0 not in name_to_profile:
-            name_to_profile[tok0] = plist[0]
+    pub_nmap, pub_nre = build_name_linker(allow_locked=False)
+    all_nmap, all_nre = build_name_linker(allow_locked=True)
 
     md_file_labels = {
         "01_Livro_de_Regras.md": "Tomo I — Livro de Regras",
@@ -720,15 +771,11 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
         "12_Cozinhas_de_Alenia.md": "Tomo XII — Cozinhas de Alenia",
     }
 
-    sorted_names = sorted(name_to_profile.keys(), key=len, reverse=True)
-    name_re = re.compile(
-        r"(?<![\wÀ-ÿ])(" + "|".join(re.escape(n) for n in sorted_names) + r")(?![\wÀ-ÿ])"
-    ) if sorted_names else None
-
-    def link_person_names(raw_text: str, self_code: str = "") -> str:
+    def link_person_names(raw_text: str, self_code: str = "", allow_locked: bool = False) -> str:
         """Apply inline_md, then safely link character names outside HTML tags & existing <a> tags."""
         rendered = inline_md(raw_text)
-        if not name_re:
+        nmap, nre = (all_nmap, all_nre) if allow_locked else (pub_nmap, pub_nre)
+        if not nre:
             return rendered
         parts = re.split(r"(<[^>]+>)", rendered)
         out = []
@@ -745,46 +792,55 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
             else:
                 def _sub(m):
                     matched = m.group(1)
-                    target = name_to_profile[matched]
+                    target = nmap[matched]
                     if target["code"] == self_code:
                         return matched
                     t_attr = html.escape(f'{target["code"]} — {target["name"]} ({target["sphere"]})', quote=True)
                     return f'<a class="names-person-link" href="#{target["code"].lower()}" title="{t_attr}">{matched}</a>'
-                out.append(name_re.sub(_sub, part))
+                out.append(nre.sub(_sub, part))
         return "".join(out)
 
     # Render collapsible Editorial Intro
     intro_html, _ = md_to_html("\n\n".join(intro_secs), id_prefix="nomes-intro-", card_h3=False, inject_maps=False)
 
-    # Build 3-column Alphabetical Index
-    alpha_links = "".join(
+    pub_profiles = [p for p in profiles if p["sphere"] != LOCKED_SPHERE]
+
+    # Public 3-column Alphabetical Index (90 public profiles) + Full 100 template inside vault
+    pub_alpha_links = "".join(
+        f'<a href="#{p["code"].lower()}"><span class="idx-code">{p["code"]}</span> {html.escape(p["name"])}</a>'
+        for p in sorted(pub_profiles, key=lambda x: x["name"])
+    )
+    full_alpha_links = "".join(
         f'<a href="#{p["code"].lower()}"><span class="idx-code">{p["code"]}</span> {html.escape(p["name"])}</a>'
         for p in sorted(profiles, key=lambda x: x["name"])
     )
 
-    # Counts by sphere & kind for dropdowns
+    # Counts by sphere & kind for public dropdowns
     sphere_counts = {}
-    kind_counts = {}
+    pub_kind_counts = {}
+    all_kind_counts = {}
     for p in profiles:
         sphere_counts[p["sphere"]] = sphere_counts.get(p["sphere"], 0) + 1
         if p["kind"]:
-            kind_counts[p["kind"]] = kind_counts.get(p["kind"], 0) + 1
+            all_kind_counts[p["kind"]] = all_kind_counts.get(p["kind"], 0) + 1
+            if p["sphere"] != LOCKED_SPHERE:
+                pub_kind_counts[p["kind"]] = pub_kind_counts.get(p["kind"], 0) + 1
 
     sphere_opts = "".join(
         f'<option value="{html.escape(g, quote=True)}">{html.escape(g)} ({sphere_counts.get(g, 0)})</option>'
-        for g, _ in group_secs
+        for g, _ in group_secs if g != LOCKED_SPHERE
     )
     kind_opts = "".join(
         f'<option value="{html.escape(k, quote=True)}">{html.escape(k)} ({cnt})</option>'
-        for k, cnt in kind_counts.items()
+        for k, cnt in pub_kind_counts.items()
     )
 
-    toc_items = [(2, "Índice Alfabético (N001–N100)", "indice-nomes")]
+    toc_items = [(2, f"Índice Alfabético ({len(pub_profiles)} públicos)", "indice-nomes")]
     groups_html = []
 
     for g_idx, (g_title, _) in enumerate(group_secs, 1):
         g_id = f"circulo-{g_idx}"
-        toc_items.append((2, f"{g_idx}. {g_title}", g_id))
+        is_locked_group = (g_title == LOCKED_SPHERE)
         g_profiles = [p for p in profiles if p["sphere"] == g_title]
         cards_html = []
 
@@ -806,9 +862,12 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
             f_paras = []
             for lbl, val in p["fields"]:
                 if lbl:
-                    f_paras.append(f'<p><strong>{html.escape(lbl)}:</strong> {link_person_names(val, p["code"])}</p>')
+                    f_paras.append(
+                        f'<p><strong>{html.escape(lbl)}:</strong> '
+                        f'{link_person_names(val, p["code"], allow_locked=is_locked_group)}</p>'
+                    )
                 else:
-                    f_paras.append(f'<p>{link_person_names(val, p["code"])}</p>')
+                    f_paras.append(f'<p>{link_person_names(val, p["code"], allow_locked=is_locked_group)}</p>')
 
             raw_ref = p["base_ref"]
             for md_fn, nice_lbl in md_file_labels.items():
@@ -836,7 +895,7 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
             </article>
             """)
 
-        groups_html.append(f"""
+        sec_html = f"""
         <section class="names-group" id="{g_id}">
             <header class="names-group-header">
                 <div class="names-group-kicker">CÍRCULO SOCIAL {g_idx} DE {len(group_secs)} • {len(g_profiles)} PERFIS</div>
@@ -844,14 +903,34 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
             </header>
             {"".join(cards_html)}
         </section>
-        """)
+        """
 
-    # Render Appendix (Relações, 12 Encontros, Cobertura, Fontes) + cross-link character names in Appendix too!
+        if is_locked_group:
+            secret_payload = (
+                f'<template id="names-full-index-tpl">{full_alpha_links}</template>\n'
+                + sec_html
+            )
+            secret_toc = render_toc_items([(2, f"🔒 {g_idx}. {g_title}", g_id)])
+            groups_html.append(
+                make_gm_gate_block(
+                    f"Círculo {g_idx} — {g_title}",
+                    "Seção restrita ao Mestre: 10 perfis reservados do Acervo, da Comunhão, dos Bellaroc e da Sombra. Insira a senha para revelar.",
+                    secret_payload,
+                    secret_toc,
+                    codex_file=bk["out"],
+                    compendium_mode=False,
+                )
+            )
+        else:
+            toc_items.append((2, f"{g_idx}. {g_title}", g_id))
+            groups_html.append(sec_html)
+
+    # Render Appendix publicly (cross-linking only public profiles)
     ap_md = "\n\n".join(appendix_secs)
     for md_fn, nice_lbl in md_file_labels.items():
         ap_md = ap_md.replace(f"[{md_fn}](", f"[{nice_lbl}](")
     appendix_raw_html, appendix_toc = md_to_html(ap_md, id_prefix="nomes-ap-", card_h3=False, inject_maps=False)
-    if name_re:
+    if pub_nre:
         ap_parts = re.split(r"(<[^>]+>)", appendix_raw_html)
         ap_out = []
         in_skip = 0
@@ -866,10 +945,10 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
                 ap_out.append(part)
             else:
                 ap_out.append(
-                    name_re.sub(
+                    pub_nre.sub(
                         lambda m: (
-                            f'<a class="names-person-link" href="#{name_to_profile[m.group(1)]["code"].lower()}" '
-                            f'title="{html.escape(name_to_profile[m.group(1)]["code"] + " — " + name_to_profile[m.group(1)]["name"], quote=True)}">'
+                            f'<a class="names-person-link" href="#{pub_nmap[m.group(1)]["code"].lower()}" '
+                            f'title="{html.escape(pub_nmap[m.group(1)]["code"] + " — " + pub_nmap[m.group(1)]["name"], quote=True)}">'
                             f'{m.group(1)}</a>'
                         ),
                         part,
@@ -885,16 +964,16 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
             <img src="{bk['cover_map']}" alt="Capa — {html.escape(bk['title'])}"{img_dim_attrs(bk['cover_map'])}/>
         </figure>
         <div>
-            <div class="names-kicker">ALENIA RPG • {html.escape(bk['num'])} • PROSOPOGRAFIA &amp; BASTIDORES</div>
+            <div class="names-kicker">ALENIA RPG • {html.escape(bk['num'])} • GALERIA BIOGRÁFICA ILUSTRADA</div>
             <h1 class="names-title">{html.escape(bk['title'])}</h1>
-            <p class="names-sub">{len(profiles)} perfis em {len(group_secs)} círculos sociais — linhagens, aparências, contradições, legados e entradas em cena (Ano 418 EF).</p>
+            <p class="names-sub">{len(pub_profiles)} perfis públicos em 9 círculos sociais (+ 1 círculo reservado ao Mestre) — linhagens, aparências, contradições, legados e entradas em cena (Ano 418 EF).</p>
             <blockquote class="names-epigraph">
                 “Nem todo nome que mudou o mundo foi gravado numa coroa.”
             </blockquote>
             <div class="names-stats">
-                <span class="names-stat-pill">👑 {kind_counts.get('Anterior desenvolvido', 45)} Anteriores + A Sombra</span>
-                <span class="names-stat-pill">📜 {kind_counts.get('Nome-modelo desenvolvido', 19)} Da Onomástica</span>
-                <span class="names-stat-pill teal">✦ {kind_counts.get('Nova figura ou papel nomeado', 36)} Novas Figuras</span>
+                <span class="names-stat-pill">👑 {len(pub_profiles)} Perfis Públicos Ilustrados</span>
+                <span class="names-stat-pill">✦ 9 Círculos Sociais Abertos</span>
+                <span class="names-stat-pill teal">🔒 Círculo 10 Selado (Mestre)</span>
                 <span class="names-stat-pill teal">🔗 12 Encontros Cruzados</span>
             </div>
         </div>
@@ -904,8 +983,8 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
         <div class="names-editorial-inner">{intro_html}</div>
     </details>
     <details class="names-editorial" id="indice-nomes">
-        <summary>🔤 Índice Alfabético dos {len(profiles)} Perfis (N001–N{len(profiles):03d})</summary>
-        <div class="names-index">{alpha_links}</div>
+        <summary>🔤 Índice Alfabético dos {len(pub_profiles)} Perfis Públicos</summary>
+        <div class="names-index">{pub_alpha_links}</div>
     </details>
     <div class="names-toolbar" role="region" aria-label="Filtros dos Grandes Nomes de Alenia">
         <div class="names-controls">
@@ -914,23 +993,23 @@ def render_grandes_nomes_secret_payload(bk: dict, md_content: str, helpers: dict
             </label>
             <label>Círculo social
                 <select id="names-sphere">
-                    <option value="">Todos os círculos ({len(profiles)})</option>
+                    <option value="">Todos os círculos ({len(pub_profiles)})</option>
                     {sphere_opts}
                 </select>
             </label>
             <label>Origem editorial do perfil
                 <select id="names-kind">
-                    <option value="">Todas as origens ({len(profiles)})</option>
+                    <option value="">Todas as origens ({len(pub_profiles)})</option>
                     {kind_opts}
                 </select>
             </label>
         </div>
         <div class="names-status-bar">
-            <p id="names-count" class="names-count" role="status">Exibindo {len(profiles)} de {len(profiles)} perfis</p>
+            <p id="names-count" class="names-count" role="status">Exibindo {len(pub_profiles)} de {len(pub_profiles)} perfis</p>
             <button id="names-reset" class="names-reset-btn" type="button" hidden>✕ Limpar filtros</button>
         </div>
     </div>
-    <div id="names-empty" class="names-empty" hidden>Nenhum perfil corresponde aos filtros atuais. Clique em “Limpar filtros” para exibir todos os 100 nomes.</div>
+    <div id="names-empty" class="names-empty" hidden>Nenhum perfil corresponde aos filtros atuais. Clique em “Limpar filtros” para exibir todos os perfis.</div>
     <div id="names-root">{"".join(groups_html)}</div>
     <section class="names-appendix">{appendix_raw_html}</section>
     """

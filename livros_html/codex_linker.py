@@ -165,7 +165,7 @@ TOMO_ROMAN_MAP = {
     "X": ("10_Herbario_de_Seleni.html", "Tomo X — Herbário de Seleni"),
     "XI": ("11_Cronica_das_Terras_e_das_Mares.html", "Tomo XI — Crônica das Terras e das Marés"),
     "XII": ("12_Cozinhas_de_Alenia.html", "Tomo XII — Cozinhas de Alenia"),
-    "XIII": ("13_Grandes_Nomes_e_Feitos_de_Alenia.html", "Tomo XIII — Grandes Nomes e Feitos de Alenia (Mestre)"),
+    "XIII": ("13_Grandes_Nomes_e_Feitos_de_Alenia.html", "Tomo XIII — Grandes Nomes e Feitos de Alenia"),
 }
 
 # Book index prefix inside Alenia_Compendio_Completo.html (matches id_prefix=f"t{idx+1}-")
@@ -200,7 +200,7 @@ FAMILY_LABEL = {
 
 def build_codex_registry(root_dir: str) -> dict:
     """Scan canonical markdown books once to build {code: display_name} lookup tables."""
-    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}}
+    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}, "N_GM": set()}
 
     # 1. Herbário H01–H64
     herb_path = os.path.join(root_dir, "10_Herbario_de_Seleni.md")
@@ -227,12 +227,21 @@ def build_codex_registry(root_dir: str) -> dict:
         for m in re.finditer(r"^###\s+(T\d{3})\s+[—–-]\s+(.+)$", txt, flags=re.M):
             reg["T"][m.group(1)] = m.group(2).strip()
 
-    # 4. Grandes Nomes N001–N100 (GM-only: only resolved inside encrypted vaults!)
+    # 4. Grandes Nomes N001–N100 (90 public + 10 GM-only in "Memórias e ameaças")
     nom_path = os.path.join(root_dir, "13_Grandes_Nomes_e_Feitos_de_Alenia.md")
     if os.path.exists(nom_path):
         txt = open(nom_path, "r", encoding="utf-8").read()
-        for m in re.finditer(r"^###\s+(N\d{3})\s+[—–-]\s+(.+)$", txt, flags=re.M):
-            reg["N"][m.group(1)] = m.group(2).strip()
+        cur_h2 = ""
+        for ln in txt.splitlines():
+            m2 = re.match(r"^##\s+(.+)$", ln.strip())
+            if m2:
+                cur_h2 = m2.group(1).strip()
+                continue
+            m3 = re.match(r"^###\s+(N\d{3})\s+[—–-]\s+(.+)$", ln.strip())
+            if m3:
+                reg["N"][m3.group(1)] = m3.group(2).strip()
+                if cur_h2 == "Memórias e ameaças":
+                    reg["N_GM"].add(m3.group(1))
 
     return reg
 
@@ -304,7 +313,7 @@ def link_codex_html(
                     return tok
                 if compendium_mode:
                     book_idx = list(TOMO_ROMAN_MAP.keys()).index(roman) + 1
-                    href = f"#tomo-{book_idx}" if roman not in ("IV", "VII", "VIII", "XIII") else target_file
+                    href = f"#tomo-{book_idx}" if roman not in ("IV", "VII", "VIII") else target_file
                 else:
                     href = target_file
                 return (
@@ -314,7 +323,7 @@ def link_codex_html(
 
             # 2. H / C / A / B / T / N codes
             fam = tok[0]
-            if fam == "N" and not allow_gm_names:
+            if fam == "N" and (tok in registry.get("N_GM", set())) and not allow_gm_names:
                 return tok
             if tok not in registry.get(fam, {}):
                 return tok
