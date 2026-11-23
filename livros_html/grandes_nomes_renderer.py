@@ -444,7 +444,7 @@ a.names-person-link:hover {
 }
 .names-appendix h2 { scroll-margin-top: 68px; }
 
-@media (max-width: 860px) {
+@media screen and (max-width: 860px) {
     body.names-mode .book-page { padding: 22px 18px 42px; }
     .names-hero { grid-template-columns: 1fr; text-align: center; padding: 20px; }
     .names-hero-cover { max-width: 220px; margin: 0 auto !important; }
@@ -454,9 +454,91 @@ a.names-person-link:hover {
     .names-portrait { float: none; width: 100%; max-width: 260px; margin: 0 auto 14px !important; }
 }
 @media print {
-    .names-toolbar, .names-back { display: none !important; }
-    .names-card { break-inside: avoid; page-break-inside: avoid; }
-    .names-index { columns: 2; }
+    .names-toolbar,
+    .names-back,
+    .names-empty,
+    .names-editorial > summary::after {
+        display: none !important;
+    }
+    .names-hero {
+        grid-template-columns: 165px 1fr !important;
+        gap: 18px !important;
+        text-align: left !important;
+        padding: 16px 20px !important;
+        margin-bottom: 14px !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .names-hero-cover { max-width: none !important; margin: 0 !important; }
+    .names-hero-cover img { max-height: 220px !important; object-fit: cover !important; }
+    .names-title { font-size: 20.5pt !important; }
+    .names-sub { font-size: 10.2pt !important; margin-bottom: 8px !important; }
+    .names-epigraph { font-size: 9.6pt !important; padding: 6px 12px !important; margin-bottom: 10px !important; }
+    .names-stats { justify-content: flex-start !important; gap: 6px !important; }
+    .names-stat-pill { font-size: 8pt !important; padding: 3px 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .names-editorial { margin: 0 0 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .names-editorial > summary { padding: 8px 14px !important; font-size: 10pt !important; }
+    .names-editorial-inner { padding: 4px 16px 12px !important; font-size: 9.6pt; }
+    .names-index {
+        columns: 3 !important;
+        column-gap: 14px !important;
+        padding: 10px 14px 12px !important;
+    }
+    .names-index a {
+        font-size: 8.8pt !important;
+        line-height: 1.28 !important;
+        margin: 0 0 3px !important;
+        padding: 1px 2px !important;
+    }
+    .names-index .idx-code { font-size: 8pt !important; }
+    .names-group { margin: 0 0 20px !important; }
+    .names-group-header {
+        padding: 9px 14px !important;
+        margin-bottom: 10px !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        break-after: avoid;
+        page-break-after: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .names-group-title { font-size: 15.5pt !important; }
+    .names-card {
+        padding: 11px 14px !important;
+        margin-bottom: 10px !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .names-card-head { gap: 6px !important; margin-bottom: 4px !important; }
+    .names-code-pill,
+    .names-kind-pill,
+    .names-sphere-pill {
+        font-size: 7.8pt !important;
+        padding: 2px 6px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .names-portrait {
+        float: right !important;
+        width: 134px !important;
+        margin: 0 0 8px 14px !important;
+        padding: 3px !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .names-card h3 { font-size: 13.5pt !important; margin: 2px 0 2px !important; }
+    .names-meta { font-size: 9pt !important; margin: 0 0 6px !important; padding-bottom: 4px !important; }
+    .names-card p { font-size: 9.5pt !important; line-height: 1.37 !important; margin: 0 0 4.5px !important; }
+    .names-card-foot { margin-top: 6px !important; padding-top: 5px !important; font-size: 8.5pt !important; }
+    a.names-person-link { text-decoration: none !important; color: #3d1210 !important; }
+    .names-appendix { margin-top: 22px !important; padding-top: 14px !important; }
 }
 """
 
@@ -600,13 +682,21 @@ GRANDES_NOMES_JS = r"""
             if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 90);
         }
 
-        window.addEventListener('beforeprint', () => {
-            root.querySelectorAll('[hidden]').forEach(e => { e.dataset.printHidden = '1'; e.hidden = false; });
-        });
-        window.addEventListener('afterprint', () => {
+        const revealAllNamesForPrint = () => {
+            root.querySelectorAll('.names-group[hidden], .names-card[hidden]').forEach(e => {
+                e.dataset.printHidden = '1';
+                e.hidden = false;
+            });
+            if (emptyEl) emptyEl.hidden = true;
+        };
+        const restoreNamesAfterPrint = () => {
             root.querySelectorAll('[data-print-hidden]').forEach(e => { delete e.dataset.printHidden; });
             applyFilter();
-        });
+        };
+        window.addEventListener('alenia:prepare-print', revealAllNamesForPrint);
+        window.addEventListener('beforeprint', revealAllNamesForPrint);
+        window.addEventListener('alenia:restore-print', restoreNamesAfterPrint);
+        window.addEventListener('afterprint', restoreNamesAfterPrint);
     }
 
     document.addEventListener('alenia:gm-unlocked', () => {
@@ -855,7 +945,7 @@ def render_grandes_nomes_page(bk: dict, md_content: str, helpers: dict):
                 portrait_html = (
                     f'<figure class="atlas-plate names-portrait" title="Clique para ampliar retrato">'
                     f'<img src="{html.escape(p["portrait_src"], quote=True)}" '
-                    f'alt="{html.escape(p["portrait_alt"], quote=True)}"{img_dim_attrs(p["portrait_src"])} loading="lazy"/>'
+                    f'alt="{html.escape(p["portrait_alt"], quote=True)}"{img_dim_attrs(p["portrait_src"])} decoding="async"/>'
                     f'</figure>'
                 )
 

@@ -1117,9 +1117,29 @@ tr { break-inside: avoid; }
 .entry-card {
     margin: 10px 0 12px; padding: 11px 14px 9px; background: var(--vellum-card);
     border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
-    font-size: 15.2px;
+    font-size: 15.2px; display: flow-root;
 }
 .entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 4px; }
+.atlas-plate.npc-inline-plate {
+    float: right; width: 156px; margin: 0 0 10px 16px; padding: 4px;
+    background: #efe3c8; border: 1px solid rgba(154, 123, 59, 0.65); border-radius: 2px;
+}
+.atlas-plate.npc-inline-plate img {
+    width: 100%; aspect-ratio: 3 / 4; max-height: 208px; object-fit: cover; display: block;
+}
+.atlas-plate.npc-inline-plate .atlas-caption { display: none; }
+.atlas-plate.fauna-inline-plate {
+    max-width: 340px; margin: 8px auto 12px; padding: 5px;
+}
+.atlas-plate.fauna-inline-plate img {
+    width: 100%; aspect-ratio: 3 / 2; max-height: 190px; object-fit: cover;
+}
+.leaf-body .atlas-plate.npc-inline-plate {
+    width: 132px; margin: 0 0 8px 12px; padding: 3px;
+}
+.leaf-body .atlas-plate.npc-inline-plate img {
+    max-height: 176px;
+}
 
 .lightbox {
     display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
@@ -1152,7 +1172,7 @@ tr { break-inside: avoid; }
 .portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
 .tome-divider { page-break-before: always; break-before: page; }
 
-@media (max-width: 1020px) {
+@media screen and (max-width: 1020px) {
     .sidebar { transform: translateX(-100%); }
     body.sidebar-open-mobile .sidebar { transform: translateX(0); box-shadow: 6px 0 30px rgba(0,0,0,0.7); }
     body.sidebar-open-mobile .sidebar-backdrop { display: block; }
@@ -1160,28 +1180,140 @@ tr { break-inside: avoid; }
     .book-page { padding: 28px 22px 42px; }
     .side-turn-btn { display: none; }
 }
-@media (max-width: 640px) {
+@media screen and (max-width: 640px) {
     .topbar-current { display: none; }
     .topbar { padding: 0 10px; }
     .topbar-brand { font-size: 12.5px; letter-spacing: 0.1em; }
     .btn-toc-toggle, .btn-print, .btn-lock { padding: 5px 7px; font-size: 9.5px; }
+    .atlas-plate.npc-inline-plate { float: none; width: 100%; max-width: 220px; margin: 0 auto 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .book-spread, .flip-sheet, .flip-cast-shadow, .flip-face::before { animation: none !important; }
 }
 
-@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@page { size: A4 portrait; margin: 15mm 14mm 16mm 14mm; }
 @media print {
-    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; overflow: visible !important; }
-    .topbar, .sidebar, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar { display: none !important; }
-    body.book-mode .book-shell, .book-shell { display: block !important; margin: 0 !important; padding: 0 !important; }
-    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    html, body {
+        background: #ffffff !important;
+        color: #1c1610 !important;
+        font-size: 10.3pt;
+        line-height: 1.46;
+        overflow: visible !important;
+        height: auto !important;
+        min-height: 0 !important;
+    }
+    .topbar, .sidebar, .sidebar-backdrop, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar {
+        display: none !important;
+    }
+    body.book-mode .book-shell, .book-shell {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .book-page {
+        max-width: none !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        border: none !important;
+    }
     .book-page::before { display: none !important; }
-    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    p, li { orphans: 3; widows: 3; }
+    h1, h2, h3, h4 {
+        break-after: avoid;
+        page-break-after: avoid;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .cover-page:not(.portal-hero) {
+        min-height: 254mm !important;
+        max-height: 263mm !important;
+        margin: 0 !important;
+        padding: 28px 24px !important;
+        background: #fbf8f1 !important;
+        page-break-after: always;
+        break-after: page;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cover-page.portal-hero {
+        min-height: auto !important;
+        margin: 0 0 18px !important;
+        padding: 20px 18px !important;
+        background: #fbf8f1 !important;
+        page-break-after: auto !important;
+        break-after: auto !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cover-thumb { max-height: 112mm !important; }
+    .table-wrap { overflow: visible !important; margin: 8px 0 11px; }
+    table { font-size: 9.2pt; line-height: 1.32; width: 100% !important; }
+    thead { display: table-header-group; }
+    tfoot { display: table-footer-group; }
+    tr { break-inside: avoid; page-break-inside: avoid; }
+    thead th { padding: 5px 6px; font-size: 8.4pt; }
+    tbody td { padding: 4.5px 6px; overflow-wrap: break-word; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, .portal-card, blockquote, tbody tr:nth-child(even) {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .entry-card {
+        padding: 9px 12px 8px;
+        margin: 8px 0 10px;
+        font-size: 9.8pt;
+        line-height: 1.4;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .entry-card p { margin-bottom: 5px; }
+    .entry-card li { margin-bottom: 2.5px; }
+    ul.herb-entry-list {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
     a { color: var(--crimson-dark); text-decoration: none; }
-    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+    .atlas-plate {
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .atlas-plate img { max-height: 145mm; object-fit: contain; }
+    .atlas-plate.creature-plate img { max-height: 68mm; object-fit: cover; }
+    .atlas-plate.npc-inline-plate {
+        float: right !important;
+        width: 124px !important;
+        margin: 0 0 7px 14px !important;
+        padding: 3px !important;
+    }
+    .atlas-plate.npc-inline-plate img {
+        max-height: 165px !important;
+        object-fit: cover !important;
+    }
+    .atlas-plate.fauna-inline-plate {
+        max-width: 280px !important;
+        margin: 6px auto 8px !important;
+    }
+    .atlas-plate.fauna-inline-plate img {
+        max-height: 155px !important;
+        object-fit: cover !important;
+    }
+    .portal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+    .portal-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+    }
 }
 """
 
@@ -2273,6 +2405,87 @@ SHARED_JS = r"""
         }
     });
 
+    /* =====================================================
+       PRINT / PDF PREPARATION (IMAGES + DETAILS + OVERLAYS)
+       ===================================================== */
+    let printPrepActive = false;
+    function prepareForPrint() {
+        if (printPrepActive) return;
+        printPrepActive = true;
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) lb.classList.remove('open');
+        if (!document.body.classList.contains('sidebar-hidden')) {
+            document.body.dataset.aleniaPrintSidebarOpen = '1';
+            document.body.classList.add('sidebar-hidden');
+        }
+        document.body.classList.remove('sidebar-open-mobile');
+
+        const pageRoot = document.querySelector('.book-page') || document;
+        pageRoot.querySelectorAll('details').forEach(d => {
+            if (!d.open) {
+                d.dataset.aleniaPrintOpened = '1';
+                d.open = true;
+            }
+        });
+        pageRoot.querySelectorAll('img').forEach(img => {
+            if (img.loading === 'lazy') img.loading = 'eager';
+        });
+        window.dispatchEvent(new CustomEvent('alenia:prepare-print'));
+    }
+
+    function restoreAfterPrint() {
+        if (!printPrepActive) return;
+        printPrepActive = false;
+        const pageRoot = document.querySelector('.book-page') || document;
+        pageRoot.querySelectorAll('details[data-alenia-print-opened]').forEach(d => {
+            d.open = false;
+            delete d.dataset.aleniaPrintOpened;
+        });
+        if (document.body.dataset.aleniaPrintSidebarOpen === '1') {
+            document.body.classList.remove('sidebar-hidden');
+            delete document.body.dataset.aleniaPrintSidebarOpen;
+        }
+        window.dispatchEvent(new CustomEvent('alenia:restore-print'));
+    }
+
+    window.addEventListener('beforeprint', prepareForPrint);
+    window.addEventListener('afterprint', restoreAfterPrint);
+
+    window.aleniaPrint = async function(btn) {
+        const origLabel = btn ? btn.textContent : '';
+        try {
+            prepareForPrint();
+            const pageRoot = document.querySelector('.book-page') || document;
+            const pendingImgs = Array.from(pageRoot.querySelectorAll('img')).filter(
+                img => !img.complete || img.naturalWidth === 0
+            );
+            if (pendingImgs.length > 0) {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = 'Preparando PDF...';
+                }
+                const waitAll = Promise.all(pendingImgs.map(img => {
+                    img.loading = 'eager';
+                    if (img.decode) {
+                        return img.decode().catch(() => {});
+                    }
+                    return new Promise(res => {
+                        img.addEventListener('load', res, { once: true });
+                        img.addEventListener('error', res, { once: true });
+                    });
+                }));
+                await Promise.race([waitAll, new Promise(res => setTimeout(res, 4000))]);
+            }
+            await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = origLabel || 'Imprimir / PDF';
+            }
+        }
+        window.print();
+    };
+
     document.addEventListener('DOMContentLoaded', async () => {
         const lb = document.getElementById('atlas-lightbox');
         if (lb) {
@@ -2478,6 +2691,7 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
     i = 0
     n = len(lines)
     in_card = False
+    after_herb_h3 = False
 
     def close_card():
         nonlocal in_card
@@ -2525,10 +2739,15 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
 
             if level <= 2:
                 close_card()
-            elif level == 3 and card_h3:
+                after_herb_h3 = False
+            elif level == 3:
                 close_card()
-                out.append('<div class="entry-card">')
-                in_card = True
+                if card_h3:
+                    out.append('<div class="entry-card">')
+                    in_card = True
+                after_herb_h3 = bool(re.match(r"^H\d{2}\s+[—–-]\s+", plain_title))
+            else:
+                after_herb_h3 = False
 
             codex_span = ""
             if level == 3:
@@ -2576,10 +2795,16 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
                 src_web = "assets/" + src_raw.split("/", 1)[1]
             else:
                 src_web = rewrite_link(src_raw)
-            cap_html = f'<figcaption class="atlas-caption">{inline_md(cap)}</figcaption>' if cap else ""
+            base_fn = os.path.basename(src_web).lower()
+            extra_fig_cls = ""
+            if base_fn.startswith("npc_n"):
+                extra_fig_cls = " npc-inline-plate"
+            elif base_fn.startswith("fauna_a"):
+                extra_fig_cls = " fauna-inline-plate"
+            cap_html = f'<figcaption class="atlas-caption">{inline_md(cap)}</figcaption>' if cap and not extra_fig_cls.strip() == "npc-inline-plate" else ""
             out.append(
-                f'<figure class="atlas-plate">'
-                f'<img src="{html.escape(src_web, quote=True)}" alt="{html.escape(cap or "Ilustração de Alenia")}"{img_dim_attrs(src_web)}/>'
+                f'<figure class="atlas-plate{extra_fig_cls}">'
+                f'<img src="{html.escape(src_web, quote=True)}" alt="{html.escape(cap or "Ilustração de Alenia")}"{img_dim_attrs(src_web)} decoding="async"/>'
                 f'{cap_html}'
                 f'</figure>'
             )
@@ -2660,7 +2885,9 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
         if re.match(r"^(\s*)([-*]|\d+\.)\s+", line):
             is_ordered = bool(re.match(r"^\s*\d+\.\s+", line))
             tag = "ol" if is_ordered else "ul"
-            out.append(f"<{tag}>")
+            list_cls = ' class="herb-entry-list"' if (tag == "ul" and after_herb_h3) else ""
+            after_herb_h3 = False
+            out.append(f"<{tag}{list_cls}>")
             while i < n and re.match(r"^(\s*)([-*]|\d+\.)\s+", lines[i]):
                 m_li = re.match(r"^(\s*)([-*]|\d+\.)\s+(.*)$", lines[i])
                 indent = len(m_li.group(1))
@@ -2741,7 +2968,8 @@ def build_topbar(active_file: str, page_title: str, has_toc: bool) -> str:
     if active_file != "index.html":
         right_btns.append('<a href="index.html">Estante</a>')
     right_btns.append('<button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button>')
-    right_btns.append('<button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button>')
+    if active_file != "gerador_tokens.html":
+        right_btns.append('<button class="btn-print" type="button" onclick="window.aleniaPrint && window.aleniaPrint(this)">Imprimir / PDF</button>')
     return (
         '<header class="topbar">'
         f'<div class="topbar-left">{"".join(left_btns)}'
@@ -3584,7 +3812,7 @@ body.chronicle-mode .book-page::before {
 }
 
 /* RESPONSIVE: TABLET & MOBILE VERTICAL PARCHMENT TIMELINE */
-@media (max-width: 1060px) {
+@media screen and (max-width: 1060px) {
     body.chronicle-mode .book-page { padding: 24px 18px 46px; }
     .chronicle-hero { grid-template-columns: 1fr; text-align: center; padding: 20px; }
     .chronicle-hero-cover { max-width: 260px; margin: 0 auto !important; }
@@ -3642,10 +3870,139 @@ body.chronicle-mode .book-page::before {
 }
 
 @media print {
-    .chronicle-toolbar { display: none !important; }
-    .tl-roller { display: none !important; }
-    .tl-scroll-wrap { filter: none !important; break-inside: avoid; page-break-inside: avoid; }
-    .tl-legacy { display: block; }
+    .chronicle-toolbar,
+    .chronicle-empty,
+    .tl-roller,
+    .tl-flow-next,
+    .chronicle-guide > summary::after,
+    .tl-legacy > summary::after {
+        display: none !important;
+    }
+    .chronicle-hero {
+        grid-template-columns: 165px 1fr !important;
+        gap: 18px !important;
+        text-align: left !important;
+        padding: 16px 20px !important;
+        margin-bottom: 14px !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .chronicle-hero-cover { max-width: none !important; margin: 0 !important; }
+    .chronicle-hero-cover img { max-height: 220px !important; object-fit: cover !important; }
+    .chronicle-hero-title { font-size: 21pt !important; }
+    .chronicle-hero-sub { font-size: 10.5pt !important; margin-bottom: 8px !important; }
+    .chronicle-hero-epigraph { font-size: 9.8pt !important; padding: 6px 12px !important; margin-bottom: 10px !important; }
+    .chronicle-stats { justify-content: flex-start !important; gap: 6px !important; }
+    .chronicle-stat-pill { font-size: 8pt !important; padding: 3px 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .chronicle-guide { margin: 0 0 14px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .chronicle-guide-inner { padding: 4px 16px 12px !important; font-size: 9.8pt; }
+    .chronicle-era { margin: 0 0 24px !important; }
+    .era-banner {
+        padding: 10px 16px !important;
+        margin-bottom: 10px !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        break-after: avoid;
+        page-break-after: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .era-banner-title { font-size: 15.5pt !important; }
+    .era-banner-summary { font-size: 9.8pt !important; }
+    .era-period-badge { font-size: 8.8pt !important; padding: 3px 9px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .chronicle-plate {
+        margin: 0 0 12px !important;
+        padding: 8px 10px 6px !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .chronicle-plate img { max-height: 112mm !important; }
+    .chronicle-plate figcaption { font-size: 9pt !important; margin-top: 5px !important; }
+    .tl-scroll-wrap { filter: none !important; margin: 0 0 10px !important; }
+    .tl-strip {
+        padding: 14px 14px 14px 18px !important;
+        border: 1px solid #966a38 !important;
+        border-radius: 3px !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .tl-strip::before { inset: 4px !important; }
+    .tl-grid,
+    .tl-grid.tl-cols-3,
+    .tl-grid.tl-cols-4 {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding-left: 22px !important;
+        border-left: 2px solid #473019 !important;
+    }
+    .tl-slot-axis,
+    .tl-medallion-slot { display: none !important; }
+    .tl-card-slot {
+        padding: 0 !important;
+        grid-column: auto !important;
+        grid-row: auto !important;
+    }
+    .tl-card-slot::before,
+    .tl-card-slot::after { display: none !important; }
+    .tl-card {
+        padding: 9px 11px 8px !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .tl-card::before {
+        content: "";
+        position: absolute;
+        left: -31px;
+        top: 12px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: #1f5156;
+        border: 2px solid #f7ecd2;
+        box-shadow: 0 0 0 1.5px #473019;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .tl-card.is-canon::before {
+        background: var(--crimson);
+        border-color: #e7ca82;
+    }
+    .tl-card::after {
+        content: "";
+        position: absolute;
+        left: -18px;
+        top: 18px;
+        width: 17px;
+        height: 1.5px;
+        background: #473019;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .tl-card-title { font-size: 11pt !important; }
+    .tl-card-meta { font-size: 9pt !important; margin-bottom: 5px !important; padding-bottom: 3px !important; }
+    .tl-card-body { font-size: 9.6pt !important; line-height: 1.38 !important; }
+    .tl-code-badge, .tl-canon-pill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .tl-legacy { display: block; margin-top: 6px !important; padding-top: 4px !important; }
+    .tl-legacy > summary { font-size: 8.5pt !important; }
+    .tl-legacy-body {
+        font-size: 9.2pt !important;
+        line-height: 1.35 !important;
+        padding: 5px 8px !important;
+        margin-top: 4px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
 }
 """
 
@@ -3782,6 +4139,17 @@ CHRONICLE_JS = r"""
             document.body.classList.remove('sidebar-open-mobile');
         });
     });
+
+    const revealAllChronicleForPrint = () => {
+        timelineRoot.querySelectorAll('.chronicle-era.is-hidden, .tl-scroll-wrap.is-hidden, .tl-slot.is-hidden').forEach(el => {
+            el.classList.remove('is-hidden');
+        });
+        if (emptyEl) emptyEl.classList.remove('visible');
+    };
+    window.addEventListener('alenia:prepare-print', revealAllChronicleForPrint);
+    window.addEventListener('beforeprint', revealAllChronicleForPrint);
+    window.addEventListener('alenia:restore-print', applyFilters);
+    window.addEventListener('afterprint', applyFilters);
 })();
 """
 
@@ -4008,7 +4376,7 @@ def render_chronicle_timeline_page(bk: dict, md_content: str):
         if era["plate_src"]:
             plate_html = (
                 f'<figure class="atlas-plate chronicle-plate">'
-                f'<img src="{html.escape(era["plate_src"], quote=True)}" alt="{html.escape(era["plate_alt"])}"{img_dim_attrs(era["plate_src"])} loading="lazy"/>'
+                f'<img src="{html.escape(era["plate_src"], quote=True)}" alt="{html.escape(era["plate_alt"])}"{img_dim_attrs(era["plate_src"])} decoding="async"/>'
                 f'<figcaption>{html.escape(era["plate_alt"])}</figcaption>'
                 f'</figure>'
             )
@@ -4388,10 +4756,25 @@ def main():
                 ln for ln in md_content.splitlines()
                 if "· Memórias e ameaças ·" not in ln
             )
+            for md_fn, nice_lbl in [
+                ("01_Livro_de_Regras.md", "Tomo I — Livro de Regras"),
+                ("02_Guia_de_Cenario_Alenia.md", "Tomo II — Guia de Cenário"),
+                ("03_Catalogo_de_Kits.md", "Tomo III — Catálogo de Kits"),
+                ("04_Bestiario_Alenia.md", "Tomo IV — Bestiário"),
+                ("05_Onomastica_e_Toponimia_Alenia.md", "Tomo V — Onomástica"),
+                ("06_Guia_do_Jogador_e_Referencia_Rapida.md", "Tomo VI — Guia do Jogador"),
+                ("07_Aventura_Inicial_Cinzas_no_Estuario.md", "Tomo VII — Aventura Inicial"),
+                ("08_Acervo_Oculto_de_Sellene.md", "Tomo VIII — Acervo de Sellene"),
+                ("09_Catalogo_de_Equipamentos_e_Oficios.md", "Tomo IX — Equipamentos e Ofícios"),
+                ("10_Herbario_de_Seleni.md", "Tomo X — Herbário de Seleni"),
+                ("11_Cronica_das_Terras_e_das_Mares.md", "Tomo XI — Crônica de Alenia"),
+                ("12_Cozinhas_de_Alenia.md", "Tomo XII — Cozinhas de Alenia"),
+            ]:
+                comp_md = comp_md.replace(f"[{md_fn}](", f"[{nice_lbl}](")
             c_inner, c_pub_toc = render_public_doc_with_sealed_sections(
                 comp_md,
                 id_prefix=f"t{idx+1}-",
-                card_h3=False,
+                card_h3=True,
                 inject_maps=False,
                 codex_file="Alenia_Compendio_Completo.html",
                 compendium_mode=True,
@@ -4445,7 +4828,7 @@ def main():
             cta = "👤 Abrir Grandes Nomes →"
         else:
             cta = "Abrir Livro →"
-        thumb = f'<img class="portal-cover" src="{bk["cover_map"]}" alt="Capa — {html.escape(bk["title"])}" loading="lazy"/>' if bk["cover_map"] else ""
+        thumb = f'<img class="portal-cover" src="{bk["cover_map"]}" alt="Capa — {html.escape(bk["title"])}" decoding="async"/>' if bk["cover_map"] else ""
         cards.append(f"""
         <a class="{cls}" href="{bk['out']}">
             {thumb}
@@ -4457,7 +4840,7 @@ def main():
         """)
     cards.append("""
         <a class="portal-card" href="gerador_tokens.html" style="border-top-color:#1f5156; background:#ece7da;">
-            <img class="portal-cover" src="assets/mesa_firecast_alenia.jpg" alt="Gerador de Tokens — Alenia RPG &amp; Firecast" loading="lazy"/>
+            <img class="portal-cover" src="assets/mesa_firecast_alenia.jpg" alt="Gerador de Tokens — Alenia RPG &amp; Firecast" decoding="async"/>
             <div class="portal-kicker" style="color:#1f5156;">FERRAMENTA VTT • 18 MOLDURAS HD</div>
             <div class="portal-title">Gerador de Tokens</div>
             <p class="portal-desc">Estúdio interativo para criar tokens PNG transparentes (512×512 e 1024×1024): 12 molduras esculpidas pintadas à mão + 6 clássicas/livres + upload de moldura própria.</p>
@@ -4466,7 +4849,7 @@ def main():
     """)
     cards.append("""
         <a class="portal-card" href="Alenia_Compendio_Completo.html" style="border-top-color:#9a7b3b; background:#efe5cf;">
-            <img class="portal-cover" src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Capa — Compêndio Completo" loading="lazy"/>
+            <img class="portal-cover" src="assets/alenia_mapa_mundi_atualizado.jpg" alt="Capa — Compêndio Completo" decoding="async"/>
             <div class="portal-kicker">EDIÇÃO INTEGRAL (PDF MESTRE)</div>
             <div class="portal-title">Compêndio Completo</div>
             <p class="portal-desc">Todos os tomos reunidos em formato de livro folheável com os mapas embutidos — com as áreas do Mestre seladas por senha.</p>
@@ -4475,7 +4858,7 @@ def main():
     """)
 
     index_body = f"""
-    <section class="cover-page" style="min-height:auto; page-break-after:auto; break-after:auto; margin-bottom:32px; padding:34px 30px;">
+    <section class="cover-page portal-hero" style="min-height:auto; page-break-after:auto; break-after:auto; margin-bottom:32px; padding:34px 30px;">
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>

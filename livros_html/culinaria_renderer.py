@@ -480,7 +480,7 @@ body.culinaria-mode .book-page::before {
 }
 .cul-empty.visible { display: block; }
 
-@media (max-width: 860px) {
+@media screen and (max-width: 860px) {
     body.culinaria-mode .book-page { padding: 22px 18px 42px; }
     .cul-hero { grid-template-columns: 1fr; text-align: center; padding: 20px; }
     .cul-hero-cover { max-width: 240px; margin: 0 auto !important; }
@@ -489,9 +489,110 @@ body.culinaria-mode .book-page::before {
     .cul-animal-grid { grid-template-columns: 1fr; }
 }
 @media print {
-    .cul-toolbar, .cul-plate-btn, .cul-photo-badge { display: none !important; }
-    .cul-recipe { break-inside: avoid; page-break-inside: avoid; }
-    .cul-animal-card { break-inside: avoid; page-break-inside: avoid; }
+    .cul-toolbar,
+    .cul-plate-btn,
+    .cul-photo-badge,
+    .cul-empty,
+    .cul-intro-details > summary::after {
+        display: none !important;
+    }
+    .cul-hero {
+        grid-template-columns: 165px 1fr !important;
+        gap: 18px !important;
+        text-align: left !important;
+        padding: 16px 20px !important;
+        margin-bottom: 14px !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cul-hero-cover { max-width: none !important; margin: 0 !important; }
+    .cul-hero-cover img { max-height: 220px !important; object-fit: cover !important; }
+    .cul-title { font-size: 21pt !important; }
+    .cul-sub { font-size: 10.5pt !important; margin-bottom: 8px !important; }
+    .cul-epigraph { font-size: 9.8pt !important; padding: 6px 12px !important; margin-bottom: 10px !important; }
+    .cul-stats { justify-content: flex-start !important; gap: 6px !important; }
+    .cul-stat-pill { font-size: 8pt !important; padding: 3px 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cul-intro-details { margin: 0 0 14px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cul-intro-inner { padding: 4px 16px 12px !important; font-size: 9.8pt; }
+    .cul-region { margin: 0 0 22px !important; }
+    .cul-region-header {
+        padding: 10px 16px !important;
+        margin-bottom: 10px !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        break-after: avoid;
+        page-break-after: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cul-region-title { font-size: 15.5pt !important; }
+    .cul-region-intro { margin: 0 0 10px !important; font-size: 9.8pt !important; }
+    .cul-recipe {
+        padding: 12px 0 10px !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .cul-recipe-head { margin-bottom: 6px !important; gap: 7px !important; }
+    .cul-code { font-size: 8.8pt !important; padding: 2px 6px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cul-recipe-title { font-size: 13.5pt !important; }
+    .cul-food-photo {
+        float: right !important;
+        width: 192px !important;
+        margin: 0 0 8px 16px !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cul-tags { margin-bottom: 7px !important; gap: 4px !important; }
+    .cul-tag {
+        font-size: 8pt !important;
+        padding: 2px 6px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cul-recipe p {
+        font-size: 9.7pt !important;
+        line-height: 1.38 !important;
+        margin: 0 0 5px !important;
+    }
+    .cul-animals-section { margin-top: 24px !important; padding-top: 14px !important; }
+    .cul-animal-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+        margin: 12px 0 18px !important;
+    }
+    .cul-animal-card {
+        padding: 10px 12px !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cul-animal-card h3 {
+        font-size: 11.2pt !important;
+        margin: 0 0 7px !important;
+        padding-bottom: 4px !important;
+    }
+    .cul-animal-plate {
+        margin: 0 0 8px !important;
+        padding: 3px !important;
+        box-shadow: none !important;
+    }
+    .cul-animal-plate img {
+        max-height: 135px !important;
+        object-fit: cover !important;
+    }
+    .cul-animal-card p {
+        font-size: 9.1pt !important;
+        line-height: 1.35 !important;
+        margin: 0 0 4.5px !important;
+    }
+    .cul-appendix { margin-top: 22px !important; padding-top: 14px !important; }
 }
 """
 
@@ -578,6 +679,17 @@ CULINARIA_JS = r"""
             document.body.classList.remove('sidebar-open-mobile');
         });
     });
+
+    const revealAllCulinaryForPrint = () => {
+        root.querySelectorAll('.cul-region.is-hidden, .cul-recipe.is-hidden').forEach(el => {
+            el.classList.remove('is-hidden');
+        });
+        if (emptyEl) emptyEl.classList.remove('visible');
+    };
+    window.addEventListener('alenia:prepare-print', revealAllCulinaryForPrint);
+    window.addEventListener('beforeprint', revealAllCulinaryForPrint);
+    window.addEventListener('alenia:restore-print', applyFilter);
+    window.addEventListener('afterprint', applyFilter);
 })();
 """
 
@@ -699,7 +811,7 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
                 photo_html = (
                     f'<figure class="cul-food-photo q{q_idx % 4}" data-plate-src="{html.escape(plate_src, quote=True)}" '
                     f'title="Clique para ampliar a prancha completa ({html.escape(r_short)})">'
-                    f'<img src="{html.escape(plate_src, quote=True)}" alt="{html.escape(dish_name)}" loading="lazy"/>'
+                    f'<img src="{html.escape(plate_src, quote=True)}" alt="{html.escape(dish_name)}"{img_dim_attrs(plate_src)} decoding="async"/>'
                     f'<span class="cul-photo-badge">🔍 Prancha {r_idx}</span>'
                     f'</figure>'
                 )
@@ -775,7 +887,7 @@ def render_culinaria_page(bk: dict, md_content: str, helpers: dict):
                         f'<figure class="atlas-plate cul-animal-plate" '
                         f'title="Clique para ampliar a prancha zoológica de {html.escape(aname, quote=True)}">'
                         f'<img src="{html.escape(asrc, quote=True)}" alt="{html.escape(aalt, quote=True)}"'
-                        f'{img_dim_attrs(asrc)} loading="lazy"/>'
+                        f'{img_dim_attrs(asrc)} decoding="async"/>'
                         f'</figure>'
                     )
                 else:

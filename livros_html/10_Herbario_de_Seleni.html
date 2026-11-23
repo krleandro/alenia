@@ -807,9 +807,29 @@ tr { break-inside: avoid; }
 .entry-card {
     margin: 10px 0 12px; padding: 11px 14px 9px; background: var(--vellum-card);
     border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
-    font-size: 15.2px;
+    font-size: 15.2px; display: flow-root;
 }
 .entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 4px; }
+.atlas-plate.npc-inline-plate {
+    float: right; width: 156px; margin: 0 0 10px 16px; padding: 4px;
+    background: #efe3c8; border: 1px solid rgba(154, 123, 59, 0.65); border-radius: 2px;
+}
+.atlas-plate.npc-inline-plate img {
+    width: 100%; aspect-ratio: 3 / 4; max-height: 208px; object-fit: cover; display: block;
+}
+.atlas-plate.npc-inline-plate .atlas-caption { display: none; }
+.atlas-plate.fauna-inline-plate {
+    max-width: 340px; margin: 8px auto 12px; padding: 5px;
+}
+.atlas-plate.fauna-inline-plate img {
+    width: 100%; aspect-ratio: 3 / 2; max-height: 190px; object-fit: cover;
+}
+.leaf-body .atlas-plate.npc-inline-plate {
+    width: 132px; margin: 0 0 8px 12px; padding: 3px;
+}
+.leaf-body .atlas-plate.npc-inline-plate img {
+    max-height: 176px;
+}
 
 .lightbox {
     display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
@@ -842,7 +862,7 @@ tr { break-inside: avoid; }
 .portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
 .tome-divider { page-break-before: always; break-before: page; }
 
-@media (max-width: 1020px) {
+@media screen and (max-width: 1020px) {
     .sidebar { transform: translateX(-100%); }
     body.sidebar-open-mobile .sidebar { transform: translateX(0); box-shadow: 6px 0 30px rgba(0,0,0,0.7); }
     body.sidebar-open-mobile .sidebar-backdrop { display: block; }
@@ -850,28 +870,140 @@ tr { break-inside: avoid; }
     .book-page { padding: 28px 22px 42px; }
     .side-turn-btn { display: none; }
 }
-@media (max-width: 640px) {
+@media screen and (max-width: 640px) {
     .topbar-current { display: none; }
     .topbar { padding: 0 10px; }
     .topbar-brand { font-size: 12.5px; letter-spacing: 0.1em; }
     .btn-toc-toggle, .btn-print, .btn-lock { padding: 5px 7px; font-size: 9.5px; }
+    .atlas-plate.npc-inline-plate { float: none; width: 100%; max-width: 220px; margin: 0 auto 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .book-spread, .flip-sheet, .flip-cast-shadow, .flip-face::before { animation: none !important; }
 }
 
-@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@page { size: A4 portrait; margin: 15mm 14mm 16mm 14mm; }
 @media print {
-    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; overflow: visible !important; }
-    .topbar, .sidebar, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar { display: none !important; }
-    body.book-mode .book-shell, .book-shell { display: block !important; margin: 0 !important; padding: 0 !important; }
-    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    html, body {
+        background: #ffffff !important;
+        color: #1c1610 !important;
+        font-size: 10.3pt;
+        line-height: 1.46;
+        overflow: visible !important;
+        height: auto !important;
+        min-height: 0 !important;
+    }
+    .topbar, .sidebar, .sidebar-backdrop, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar {
+        display: none !important;
+    }
+    body.book-mode .book-shell, .book-shell {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .book-page {
+        max-width: none !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        border: none !important;
+    }
     .book-page::before { display: none !important; }
-    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    p, li { orphans: 3; widows: 3; }
+    h1, h2, h3, h4 {
+        break-after: avoid;
+        page-break-after: avoid;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .cover-page:not(.portal-hero) {
+        min-height: 254mm !important;
+        max-height: 263mm !important;
+        margin: 0 !important;
+        padding: 28px 24px !important;
+        background: #fbf8f1 !important;
+        page-break-after: always;
+        break-after: page;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cover-page.portal-hero {
+        min-height: auto !important;
+        margin: 0 0 18px !important;
+        padding: 20px 18px !important;
+        background: #fbf8f1 !important;
+        page-break-after: auto !important;
+        break-after: auto !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cover-thumb { max-height: 112mm !important; }
+    .table-wrap { overflow: visible !important; margin: 8px 0 11px; }
+    table { font-size: 9.2pt; line-height: 1.32; width: 100% !important; }
+    thead { display: table-header-group; }
+    tfoot { display: table-footer-group; }
+    tr { break-inside: avoid; page-break-inside: avoid; }
+    thead th { padding: 5px 6px; font-size: 8.4pt; }
+    tbody td { padding: 4.5px 6px; overflow-wrap: break-word; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, .portal-card, blockquote, tbody tr:nth-child(even) {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .entry-card {
+        padding: 9px 12px 8px;
+        margin: 8px 0 10px;
+        font-size: 9.8pt;
+        line-height: 1.4;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .entry-card p { margin-bottom: 5px; }
+    .entry-card li { margin-bottom: 2.5px; }
+    ul.herb-entry-list {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
     a { color: var(--crimson-dark); text-decoration: none; }
-    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+    .atlas-plate {
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .atlas-plate img { max-height: 145mm; object-fit: contain; }
+    .atlas-plate.creature-plate img { max-height: 68mm; object-fit: cover; }
+    .atlas-plate.npc-inline-plate {
+        float: right !important;
+        width: 124px !important;
+        margin: 0 0 7px 14px !important;
+        padding: 3px !important;
+    }
+    .atlas-plate.npc-inline-plate img {
+        max-height: 165px !important;
+        object-fit: cover !important;
+    }
+    .atlas-plate.fauna-inline-plate {
+        max-width: 280px !important;
+        margin: 6px auto 8px !important;
+    }
+    .atlas-plate.fauna-inline-plate img {
+        max-height: 155px !important;
+        object-fit: cover !important;
+    }
+    .portal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+    .portal-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+    }
 }
 
 /* =====================================================
@@ -1013,7 +1145,7 @@ tr[id] { scroll-margin-top: 84px; }
 </style>
 </head>
 <body class="book-mode sidebar-hidden" data-book-title="Herbário de Seleni">
-    <header class="topbar"><div class="topbar-left"><button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Sumário do Volume">📑 Sumário</button><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><span class="topbar-current">Herbário de Seleni</span></div><nav class="topbar-nav"><a href="index.html">Estante</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <header class="topbar"><div class="topbar-left"><button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Sumário do Volume">📑 Sumário</button><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><span class="topbar-current">Herbário de Seleni</span></div><nav class="topbar-nav"><a href="index.html">Estante</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.aleniaPrint && window.aleniaPrint(this)">Imprimir / PDF</button></nav></header>
     <aside class="sidebar" aria-label="Navegação da Biblioteca e Sumário"><div class="sidebar-tabs"><button class="sidebar-tab active" data-tab="lib" type="button">📚 Livros</button><button class="sidebar-tab" data-tab="toc" type="button">📑 Sumário</button></div><div id="sidebar-pane-lib" class="sidebar-pane active"><div class="lib-group-label">Início</div><ul class="lib-list"><li><a class="lib-link" href="index.html"><span class="lib-num">✦</span><span>Estante Oficial</span></a></li></ul><div class="lib-group-label">Tomos do Jogador</div><ul class="lib-list"><li><a class="lib-link" href="01_Livro_de_Regras.html"><span class="lib-num">I</span><span>Livro de Regras</span></a></li><li><a class="lib-link" href="02_Livro_do_Cenario.html"><span class="lib-num">II</span><span>Livro do Cenário &amp; Atlas</span></a></li><li><a class="lib-link" href="03_Catalogo_de_Kits.html"><span class="lib-num">III</span><span>Catálogo de Kits Universais</span></a></li><li><a class="lib-link" href="05_Onomastica_e_Toponimia.html"><span class="lib-num">V</span><span>Onomástica &amp; Toponímia</span></a></li><li><a class="lib-link" href="06_Guia_do_Jogador.html"><span class="lib-num">VI</span><span>Guia do Jogador &amp; Escudo</span></a></li><li><a class="lib-link" href="09_Catalogo_de_Equipamentos.html"><span class="lib-num">IX</span><span>Empório &amp; Ofícios</span></a></li><li><a class="lib-link active" href="10_Herbario_de_Seleni.html"><span class="lib-num">X</span><span>Herbário de Seleni</span></a></li><li><a class="lib-link" href="11_Cronica_das_Terras_e_das_Mares.html"><span class="lib-num">XI</span><span>Crônica das Terras e das Marés</span></a></li><li><a class="lib-link" href="12_Cozinhas_de_Alenia.html"><span class="lib-num">XII</span><span>Cozinhas de Alenia</span></a></li><li><a class="lib-link" href="13_Grandes_Nomes_e_Feitos_de_Alenia.html"><span class="lib-num">XIII</span><span>Grandes Nomes e Feitos de Alenia</span></a></li></ul><div class="lib-group-label">Área Restrita do Mestre</div><ul class="lib-list"><li><a class="lib-link gm-link" href="04_Bestiario_de_Alenia.html"><span class="lib-num">IV</span><span>🔒 Bestiário &amp; Ameaças</span></a></li><li><a class="lib-link gm-link" href="07_Aventura_Inicial.html"><span class="lib-num">VII</span><span>🔒 Aventura Inicial</span></a></li><li><a class="lib-link gm-link" href="08_Acervo_Oculto_de_Sellene.html"><span class="lib-num">VIII</span><span>🔒 O Acervo Oculto de Sellene</span></a></li></ul><div class="lib-group-label">Ferramentas &amp; VTT</div><ul class="lib-list"><li><a class="lib-link" href="gerador_tokens.html"><span class="lib-num">⚔</span><span>Gerador de Tokens</span></a></li></ul><div class="lib-group-label">Volume Único</div><ul class="lib-list"><li><a class="lib-link" href="Alenia_Compendio_Completo.html"><span class="lib-num">★</span><span>Compêndio Completo</span></a></li></ul></div><div id="sidebar-pane-toc" class="sidebar-pane"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#herbário-de-seleni-0">Herbário de Seleni</a></li><li class="toc-h2"><a href="#o-autor-e-a-circulação-do-livro-1">O autor e a circulação do livro</a></li><li class="toc-h2"><a href="#como-usar-o-compêndio-2">Como usar o compêndio</a></li><li class="toc-h3"><a href="#linguagem-das-fichas-3">Linguagem das fichas</a></li><li class="toc-h3"><a href="#quatro-graus-de-evidência-4">Quatro graus de evidência</a></li><li class="toc-h3"><a href="#efeitos-de-mesa-e-limites-5">Efeitos de mesa e limites</a></li><li class="toc-h2"><a href="#coleta-preparo-e-comércio-6">Coleta, preparo e comércio</a></li><li class="toc-h3"><a href="#unidade-raridade-e-preço-7">Unidade, raridade e preço</a></li><li class="toc-h3"><a href="#equipamento-e-cuidado-com-o-lugar-8">Equipamento e cuidado com o lugar</a></li><li class="toc-h3"><a href="#validade-e-transporte-9">Validade e transporte</a></li><li class="toc-h2"><a href="#i-aurora-campos-rios-e-jardins-10">I — Aurora: campos, rios e jardins</a></li><li class="toc-h3"><a href="#h01-folha-de-lareira-11">H01 — Folha-de-lareira</a></li><li class="toc-h3"><a href="#h02-raiz-de-berço-12">H02 — Raiz-de-berço</a></li><li class="toc-h3"><a href="#h03-flor-do-vigia-13">H03 — Flor-do-Vigia</a></li><li class="toc-h3"><a href="#h04-véu-da-guardiã-14">H04 — Véu-da-Guardiã</a></li><li class="toc-h3"><a href="#h05-junco-de-pontáuria-15">H05 — Junco-de-Pontáuria</a></li><li class="toc-h3"><a href="#h06-semente-de-celeiro-16">H06 — Semente-de-celeiro</a></li><li class="toc-h3"><a href="#h07-baga-do-barqueiro-17">H07 — Baga-do-barqueiro</a></li><li class="toc-h3"><a href="#h08-rosa-de-cera-de-altavanne-18">H08 — Rosa-de-cera de Altavanne</a></li><li class="toc-h2"><a href="#ii-ferraur-rubecina-e-terras-pedregosas-19">II — Ferraur, Rubecina e terras pedregosas</a></li><li class="toc-h3"><a href="#h09-folha-de-fole-20">H09 — Folha-de-fole</a></li><li class="toc-h3"><a href="#h10-musgo-de-curativo-21">H10 — Musgo-de-curativo</a></li><li class="toc-h3"><a href="#h11-raiz-de-escarpa-22">H11 — Raiz-de-escarpa</a></li><li class="toc-h3"><a href="#h12-campânula-de-rubecina-23">H12 — Campânula-de-Rubecina</a></li><li class="toc-h3"><a href="#h13-lágrima-do-artífice-24">H13 — Lágrima-do-Artífice</a></li><li class="toc-h3"><a href="#h14-líquen-de-ferrugem-25">H14 — Líquen-de-ferrugem</a></li><li class="toc-h3"><a href="#h15-espinho-de-sombra-26">H15 — Espinho-de-Sombra</a></li><li class="toc-h3"><a href="#h16-flor-de-pedra-de-lavroga-27">H16 — Flor-de-pedra de Lavroga</a></li><li class="toc-h2"><a href="#iii-matas-silvanas-e-pântanos-de-aurora-28">III — Matas silvanas e pântanos de Aurora</a></li><li class="toc-h3"><a href="#h17-casca-amarga-de-voernock-29">H17 — Casca-amarga de Voernock</a></li><li class="toc-h3"><a href="#h18-salgueiro-das-brumas-30">H18 — Salgueiro-das-brumas</a></li><li class="toc-h3"><a href="#h19-erva-de-rede-31">H19 — Erva-de-rede</a></li><li class="toc-h3"><a href="#h20-samambaia-das-copas-32">H20 — Samambaia-das-copas</a></li><li class="toc-h3"><a href="#h21-orquídea-de-orvalho-33">H21 — Orquídea-de-orvalho</a></li><li class="toc-h3"><a href="#h22-fungo-de-lanterna-34">H22 — Fungo-de-lanterna</a></li><li class="toc-h3"><a href="#h23-cipó-de-atadura-35">H23 — Cipó-de-atadura</a></li><li class="toc-h3"><a href="#h24-flor-da-lama-mansa-36">H24 — Flor-da-lama mansa</a></li><li class="toc-h2"><a href="#iv-corallis-e-o-mar-dos-corais-37">IV — Corallis e o Mar dos Corais</a></li><li class="toc-h3"><a href="#h25-alga-de-sutura-38">H25 — Alga-de-sutura</a></li><li class="toc-h3"><a href="#h26-folha-de-quilha-39">H26 — Folha-de-quilha</a></li><li class="toc-h3"><a href="#h27-flor-de-sal-de-portocala-40">H27 — Flor-de-sal de Portocala</a></li><li class="toc-h3"><a href="#h28-semente-de-vela-41">H28 — Semente-de-vela</a></li><li class="toc-h3"><a href="#h29-líquen-de-lente-42">H29 — Líquen-de-lente</a></li><li class="toc-h3"><a href="#h30-casca-de-maré-43">H30 — Casca-de-maré</a></li><li class="toc-h3"><a href="#h31-erva-de-porão-44">H31 — Erva-de-porão</a></li><li class="toc-h3"><a href="#h32-coralina-de-tinta-45">H32 — Coralina-de-tinta</a></li><li class="toc-h2"><a href="#v-gaddra-dunas-oásis-e-escarpas-46">V — Gaddra: dunas, oásis e escarpas</a></li><li class="toc-h3"><a href="#h33-raiz-de-poço-47">H33 — Raiz-de-poço</a></li><li class="toc-h3"><a href="#h34-palma-de-odre-48">H34 — Palma-de-odre</a></li><li class="toc-h3"><a href="#h35-flor-de-bayd-49">H35 — Flor-de-Bayd</a></li><li class="toc-h3"><a href="#h36-erva-de-sela-50">H36 — Erva-de-sela</a></li><li class="toc-h3"><a href="#h37-resina-de-zahar-51">H37 — Resina-de-Zahar</a></li><li class="toc-h3"><a href="#h38-semente-do-vento-52">H38 — Semente-do-vento</a></li><li class="toc-h3"><a href="#h39-casca-do-punho-53">H39 — Casca-do-Punho</a></li><li class="toc-h3"><a href="#h40-flor-da-última-chuva-54">H40 — Flor-da-última-chuva</a></li><li class="toc-h2"><a href="#vi-kalis-e-a-floresta-negra-55">VI — Kalis e a Floresta Negra</a></li><li class="toc-h3"><a href="#h41-casca-de-tinta-negra-56">H41 — Casca-de-tinta negra</a></li><li class="toc-h3"><a href="#h42-agulha-de-vigília-57">H42 — Agulha-de-vigília</a></li><li class="toc-h3"><a href="#h43-raiz-de-brasa-fria-58">H43 — Raiz-de-brasa fria</a></li><li class="toc-h3"><a href="#h44-fungo-de-pergaminho-59">H44 — Fungo-de-pergaminho</a></li><li class="toc-h3"><a href="#h45-flor-de-geada-negra-60">H45 — Flor-de-geada negra</a></li><li class="toc-h3"><a href="#h46-seiva-de-casco-61">H46 — Seiva-de-casco</a></li><li class="toc-h3"><a href="#h47-baga-de-myrkholm-62">H47 — Baga-de-Myrkholm</a></li><li class="toc-h3"><a href="#h48-folha-sem-voz-63">H48 — Folha-sem-voz</a></li><li class="toc-h2"><a href="#vii-ilha-das-safiras-e-arquipélago-ravena-64">VII — Ilha das Safiras e Arquipélago Ravena</a></li><li class="toc-h3"><a href="#h49-raiz-de-âncora-de-safiras-65">H49 — Raiz-de-âncora de Safiras</a></li><li class="toc-h3"><a href="#h50-folha-de-esmeralda-66">H50 — Folha-de-esmeralda</a></li><li class="toc-h3"><a href="#h51-orquídea-das-duas-marés-67">H51 — Orquídea-das-duas-marés</a></li><li class="toc-h3"><a href="#h52-musgo-de-berçário-68">H52 — Musgo-de-berçário</a></li><li class="toc-h3"><a href="#h53-semente-de-vidro-69">H53 — Semente-de-vidro</a></li><li class="toc-h3"><a href="#h54-resina-de-corvo-70">H54 — Resina-de-corvo</a></li><li class="toc-h3"><a href="#h55-erva-de-enseada-71">H55 — Erva-de-enseada</a></li><li class="toc-h3"><a href="#h56-fungo-de-corda-72">H56 — Fungo-de-corda</a></li><li class="toc-h2"><a href="#viii-ilhas-frias-incognito-e-mar-das-cinzas-73">VIII — Ilhas frias, Incognito e Mar das Cinzas</a></li><li class="toc-h3"><a href="#h57-alga-de-syleth-74">H57 — Alga-de-Syleth</a></li><li class="toc-h3"><a href="#h58-flor-de-faroleiro-75">H58 — Flor-de-faroleiro</a></li><li class="toc-h3"><a href="#h59-líquen-do-silêncio-76">H59 — Líquen-do-silêncio</a></li><li class="toc-h3"><a href="#h60-musgo-de-fenda-quente-77">H60 — Musgo-de-fenda quente</a></li><li class="toc-h3"><a href="#h61-junco-de-cinza-78">H61 — Junco-de-cinza</a></li><li class="toc-h3"><a href="#h62-fungo-de-piche-79">H62 — Fungo-de-piche</a></li><li class="toc-h3"><a href="#h63-flor-da-praia-negra-80">H63 — Flor-da-praia negra</a></li><li class="toc-h3"><a href="#h64-véu-de-sal-negro-81">H64 — Véu-de-sal negro</a></li><li class="toc-h2"><a href="#preparações-e-substituições-82">Preparações e substituições</a></li><li class="toc-h3"><a href="#o-que-pode-substituir-o-quê-83">O que pode substituir o quê</a></li><li class="toc-h3"><a href="#antitoxinas-e-venenos-84">Antitoxinas e venenos</a></li><li class="toc-h2"><a href="#aplicação-às-doenças-do-cenário-85">Aplicação às doenças do cenário</a></li><li class="toc-h2"><a href="#índices-de-consulta-86">Índices de consulta</a></li><li class="toc-h3"><a href="#por-região-de-coleta-87">Por região de coleta</a></li><li class="toc-h3"><a href="#por-parte-aproveitada-88">Por parte aproveitada</a></li><li class="toc-h3"><a href="#por-efeito-e-atividade-89">Por efeito e atividade</a></li><li class="toc-h2"><a href="#cultivo-comércio-e-conflitos-90">Cultivo, comércio e conflitos</a></li><li class="toc-h3"><a href="#um-jardim-de-boticário-que-funciona-em-jogo-91">Um jardim de boticário que funciona em jogo</a></li><li class="toc-h3"><a href="#cadeias-de-abastecimento-92">Cadeias de abastecimento</a></li><li class="toc-h3"><a href="#doze-situações-para-usar-o-herbário-93">Doze situações para usar o herbário</a></li><li class="toc-h3"><a href="#costumes-sem-poderes-obrigatórios-94">Costumes sem poderes obrigatórios</a></li><li class="toc-h2"><a href="#referências-e-precedência-105">Referências e precedência</a></li></ul></div></aside><div id="sidebar-backdrop" class="sidebar-backdrop"></div>
     
     <section id="reader-stage" class="reader-stage" aria-label="Leitor em Formato de Livro">
@@ -1107,10 +1239,10 @@ tr[id] { scroll-margin-top: 84px; }
 <p>Os prazos das fichas pressupõem recipientes adequados, material identificado e ausência de umidade ou calor excessivos. <strong>Não são prazo universal para qualquer preparo.</strong> Infusões comuns duram até o fim do dia; pastas úmidas, até dois dias; produtos prontos usam o prazo de seu catálogo ou fabricante. Material vencido perde eficácia, salvo perigo específico declarado. Mofo, vazamento, troca de rótulo e carga mergulhada em água de porão invalidam o lote.</p>
 <p>Em viagem normal, registrar a validade basta. Em naufrágio, incêndio ou tempestade, um único teste apropriado de logística ou ofício resolve a proteção da carga; não rolar por frasco. A conservação estende o uso de matéria-prima, mas pode eliminar justamente a propriedade que exige material fresco.</p>
 <h2 id="i-aurora-campos-rios-e-jardins-10">I — Aurora: campos, rios e jardins</h2>
-<figure class="atlas-plate"><img src="assets/herbario_01_aurora.jpg" alt="Prancha I — Espécimes de Aurora: Folha-de-lareira (H01), corte anatômico de Raiz-de-berço (H02), Flor-do-Vigia (H03) e Véu-da-Guardiã (H04)" width="1200" height="896"/><figcaption class="atlas-caption">Prancha I — Espécimes de Aurora: Folha-de-lareira (<a class="codex-ref codex-h" href="#h01" title="Herbário de Seleni • H01 — Folha-de-lareira">H01</a>), corte anatômico de Raiz-de-berço (<a class="codex-ref codex-h" href="#h02" title="Herbário de Seleni • H02 — Raiz-de-berço">H02</a>), Flor-do-Vigia (<a class="codex-ref codex-h" href="#h03" title="Herbário de Seleni • H03 — Flor-do-Vigia">H03</a>) e Véu-da-Guardiã (<a class="codex-ref codex-h" href="#h04" title="Herbário de Seleni • H04 — Véu-da-Guardiã">H04</a>)</figcaption></figure>
+<figure class="atlas-plate"><img src="assets/herbario_01_aurora.jpg" alt="Prancha I — Espécimes de Aurora: Folha-de-lareira (H01), corte anatômico de Raiz-de-berço (H02), Flor-do-Vigia (H03) e Véu-da-Guardiã (H04)" width="1200" height="896" decoding="async"/><figcaption class="atlas-caption">Prancha I — Espécimes de Aurora: Folha-de-lareira (<a class="codex-ref codex-h" href="#h01" title="Herbário de Seleni • H01 — Folha-de-lareira">H01</a>), corte anatômico de Raiz-de-berço (<a class="codex-ref codex-h" href="#h02" title="Herbário de Seleni • H02 — Raiz-de-berço">H02</a>), Flor-do-Vigia (<a class="codex-ref codex-h" href="#h03" title="Herbário de Seleni • H03 — Flor-do-Vigia">H03</a>) e Véu-da-Guardiã (<a class="codex-ref codex-h" href="#h04" title="Herbário de Seleni • H04 — Véu-da-Guardiã">H04</a>)</figcaption></figure>
 <p>Campos cultivados, sebes de estrada, jardins murados e margens de rios oferecem o acesso mais regular. A maior ameaça à coleta costuma ser humana: imposto, cerca, desvio de água ou distribuição desigual.</p>
 <h3 id="h01-folha-de-lareira-11"><span id="h01" class="codex-anchor" aria-hidden="true"></span>H01 — Folha-de-lareira</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> erva baixa de folhas arredondadas, verso prateado e nervuras avermelhadas; flores creme em pequenos cachos. As folhas novas têm textura macia, enquanto as velhas endurecem nas bordas.</li>
 <li><strong>Onde cresce:</strong> hortas de <strong>Dahrma</strong>, quintais de <strong>Altavanne</strong> e terrenos revolvidos próximos ao <strong>Rio Aurélio</strong>. Cultivada em casas de acolhimento; rara em solo encharcado.</li>
 <li><strong>Coleta:</strong> folhas maduras na primavera e no verão; cortar a haste acima do broto inferior. <strong>Comum.</strong></li>
@@ -1119,7 +1251,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> folhas cobertas de cinza de forno não são mais potentes. A folha aparece bordada nos aventais de cuidadores ligados à Lareira do Pão; uma cobrança sobre sua venda pode atingir diretamente os pobres.</li>
 </ul>
 <h3 id="h02-raiz-de-berço-12"><span id="h02" class="codex-anchor" aria-hidden="true"></span>H02 — Raiz-de-berço</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> planta de hastes curtas e folhas em leque; raiz ramificada, pálida por fora, com anéis cor de mel no corte. Flores minúsculas ficam escondidas sob a folhagem.</li>
 <li><strong>Onde cresce:</strong> solos fofos das várzeas altas de <strong>Dahrma</strong> e canteiros irrigados de <strong>Pontáuria</strong>, fora das faixas que recebem enchentes frequentes.</li>
 <li><strong>Coleta:</strong> raízes laterais no outono; deixar a coroa para rebrota. <strong>Comum.</strong></li>
@@ -1128,7 +1260,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não torna água contaminada segura nem substitui alimento. Seu nome vem de jardins domésticos, não de segurança universal para crianças. Vendedores fraudulentos pintam raízes de descarte para simular os anéis.</li>
 </ul>
 <h3 id="h03-flor-do-vigia-13"><span id="h03" class="codex-anchor" aria-hidden="true"></span>H03 — Flor-do-Vigia</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> flor dourada de centro quase negro, sustentada por haste rígida; pétalas se abrem com a luz. As folhas têm três pontas desiguais e superfície áspera.</li>
 <li><strong>Onde cresce:</strong> taludes ensolarados de <strong>Altavanne</strong>, campos próximos a <strong>Pontáuria</strong> e jardins de templos da <strong>Chama Solar</strong>.</li>
 <li><strong>Coleta:</strong> pétalas e sementes no verão, preservando parte das flores para reprodução. <strong>Comum.</strong></li>
@@ -1137,7 +1269,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> a alegação de que impede dormir é <strong>Contestada</strong> e não remove Exaustão. Buquês oferecidos a guardas podem significar gratidão ou acusação irônica de vigilância negligente.</li>
 </ul>
 <h3 id="h04-véu-da-guardiã-14"><span id="h04" class="codex-anchor" aria-hidden="true"></span>H04 — Véu-da-Guardiã</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> trepadeira fina, folhas em coração e flores azul-pálidas que se abrem ao anoitecer. O perfume é suave à distância e enjoativo em aposentos fechados.</li>
 <li><strong>Onde cresce:</strong> muros sombreados de <strong>Altavanne</strong>, pátios de hospícios e jardins bem regados de <strong>Merlinport</strong>; não tolera geada forte.</li>
 <li><strong>Coleta:</strong> flores recém-abertas, do fim da primavera ao começo do outono. <strong>Incomum.</strong></li>
@@ -1146,7 +1278,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> concentração imprópria provoca mal-estar. Não induz obediência nem apaga lembranças. Nas casas nobres, oferecer um ramo branco entre as flores azuis significa pedir uma conversa privada após o jantar.</li>
 </ul>
 <h3 id="h05-junco-de-pontáuria-15"><span id="h05" class="codex-anchor" aria-hidden="true"></span>H05 — Junco-de-Pontáuria</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> junco de nós castanhos, folhas estreitas e plumas baixas; fibras internas claras, longas e resistentes quando secas. Forma faixas densas em água rasa corrente.</li>
 <li><strong>Onde cresce:</strong> margens do <strong>Rio Aurélio</strong>, especialmente abaixo de <strong>Pontáuria</strong>, e canais rurais mantidos em Dahrma.</li>
 <li><strong>Coleta:</strong> colmos maduros no fim do verão, sem arrancar o rizoma. <strong>Comum.</strong></li>
@@ -1155,7 +1287,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> leitos perto de despejos não fornecem material aceitável para utensílios de alimento. Uma mudança no curso do rio pode destruir a renda dos tecelões e revelar contrabando escondido dentro dos feixes.</li>
 </ul>
 <h3 id="h06-semente-de-celeiro-16"><span id="h06" class="codex-anchor" aria-hidden="true"></span>H06 — Semente-de-celeiro</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> erva alta de espigas curtas com sementes achatadas, cor de cobre e sulco branco. As folhas cortam a pele quando passadas contra a borda.</li>
 <li><strong>Onde cresce:</strong> bordas de lavouras de <strong>Dahrma</strong>, hortas rurais de <strong>Vila de Silvaria</strong> e campos abandonados sem sombra.</li>
 <li><strong>Coleta:</strong> sementes no fim do verão; a população espontânea acompanha antigas áreas de cultivo. <strong>Comum.</strong></li>
@@ -1164,7 +1296,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> espigas escuras ou mofadas inutilizam o lote. Em tempos de fome, a mistura cresce nos pães de Altavanne; comerciantes discutem se isso representa fraude, adaptação ou necessidade pública.</li>
 </ul>
 <h3 id="h07-baga-do-barqueiro-17"><span id="h07" class="codex-anchor" aria-hidden="true"></span>H07 — Baga-do-barqueiro</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> arbusto ribeirinho com folhas alongadas, pequenas flores brancas e bagas azul-escuras marcadas por um ponto prateado. Frutos maduros soltam cor na água.</li>
 <li><strong>Onde cresce:</strong> barrancos firmes do <strong>Rio Aurélio</strong> e caminhos de travessia entre <strong>Pontáuria</strong> e <strong>Merlinport</strong>; não nasce submerso.</li>
 <li><strong>Coleta:</strong> frutos no outono, deixando os verdes na planta. <strong>Incomum.</strong></li>
@@ -1173,7 +1305,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> bagas verdes causam indisposição ficcional. Levar um ramo a um funeral homenageia o Barqueiro; marcas de tinta iguais em caixotes supostamente distintos podem ligar um armador a uma remessa clandestina.</li>
 </ul>
 <h3 id="h08-rosa-de-cera-de-altavanne-18"><span id="h08" class="codex-anchor" aria-hidden="true"></span>H08 — Rosa-de-cera de Altavanne</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> arbusto de flores marfim, pétalas espessas e folhas lustrosas. A face inferior das pétalas apresenta linhas rosadas; a flor ornamental falsa tem superfície uniforme.</li>
 <li><strong>Onde cresce:</strong> jardins irrigados de <strong>Altavanne</strong> e estufas simples de boticários; populações ferais nos arredores de antigas propriedades.</li>
 <li><strong>Coleta:</strong> pétalas caídas recentemente e película cerosa das flores, na primavera. <strong>Incomum.</strong></li>
@@ -1182,10 +1314,10 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> perfumes e pigmentos misturados podem irritar fissuras. A procura por uma versão sem fragrância denuncia a necessidade de tratamento, mas nunca prova sozinha qual nobre está doente.</li>
 </ul>
 <h2 id="ii-ferraur-rubecina-e-terras-pedregosas-19">II — Ferraur, Rubecina e terras pedregosas</h2>
-<figure class="atlas-plate"><img src="assets/herbario_02_ferraur.jpg" alt="Prancha II — Espécimes de Ferraur e Rubecina: Folha-de-fole (H09), Campânula-de-Rubecina (H12), Lágrima-do-Artífice (H13) e Espinho-de-Sombra (H15)" width="1200" height="896"/><figcaption class="atlas-caption">Prancha II — Espécimes de Ferraur e Rubecina: Folha-de-fole (<a class="codex-ref codex-h" href="#h09" title="Herbário de Seleni • H09 — Folha-de-fole">H09</a>), Campânula-de-Rubecina (<a class="codex-ref codex-h" href="#h12" title="Herbário de Seleni • H12 — Campânula-de-Rubecina">H12</a>), Lágrima-do-Artífice (<a class="codex-ref codex-h" href="#h13" title="Herbário de Seleni • H13 — Lágrima-do-Artífice">H13</a>) e Espinho-de-Sombra (<a class="codex-ref codex-h" href="#h15" title="Herbário de Seleni • H15 — Espinho-de-Sombra">H15</a>)</figcaption></figure>
+<figure class="atlas-plate"><img src="assets/herbario_02_ferraur.jpg" alt="Prancha II — Espécimes de Ferraur e Rubecina: Folha-de-fole (H09), Campânula-de-Rubecina (H12), Lágrima-do-Artífice (H13) e Espinho-de-Sombra (H15)" width="1200" height="896" decoding="async"/><figcaption class="atlas-caption">Prancha II — Espécimes de Ferraur e Rubecina: Folha-de-fole (<a class="codex-ref codex-h" href="#h09" title="Herbário de Seleni • H09 — Folha-de-fole">H09</a>), Campânula-de-Rubecina (<a class="codex-ref codex-h" href="#h12" title="Herbário de Seleni • H12 — Campânula-de-Rubecina">H12</a>), Lágrima-do-Artífice (<a class="codex-ref codex-h" href="#h13" title="Herbário de Seleni • H13 — Lágrima-do-Artífice">H13</a>) e Espinho-de-Sombra (<a class="codex-ref codex-h" href="#h15" title="Herbário de Seleni • H15 — Espinho-de-Sombra">H15</a>)</figcaption></figure>
 <p>A altitude encurta a estação de coleta. Nas montanhas, localização e acesso pesam mais que abundância: uma planta comum pode crescer do outro lado de um desfiladeiro intransponível.</p>
 <h3 id="h09-folha-de-fole-20"><span id="h09" class="codex-anchor" aria-hidden="true"></span>H09 — Folha-de-fole</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> arbusto baixo de folhas estreitas, rugosas e prateadas, com flores violeta. Folhas novas formam pares como pequenas asas abertas.</li>
 <li><strong>Onde cresce:</strong> encostas ventiladas dos <strong>Montes Ferraur</strong>, acima das galerias de <strong>Aeraneas</strong>; também cultivada em pátios mineiros com ar limpo.</li>
 <li><strong>Coleta:</strong> folhas no verão, antes das geadas; evitar exemplares cobertos de poeira de britagem. <strong>Incomum.</strong></li>
@@ -1194,7 +1326,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> queimá-la em aposento fechado piora o problema que se pretendia aliviar. Administradores podem distribuir sachês como propaganda enquanto recusam ventilação; mineiros exigem ambos, assistência e mudança no trabalho.</li>
 </ul>
 <h3 id="h10-musgo-de-curativo-21"><span id="h10" class="codex-anchor" aria-hidden="true"></span>H10 — Musgo-de-curativo</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> almofadas verdes com pontas quase brancas; a base limpa é fibrosa, sem placas negras. Absorve líquido e recupera parte do volume quando seco.</li>
 <li><strong>Onde cresce:</strong> rochas de nascentes frias nos <strong>Montes Ferraur</strong> e nos <strong>Picos de Rubecina</strong>, fora de drenagens de minas.</li>
 <li><strong>Coleta:</strong> pequenas placas no degelo e no verão, preservando a maior parte do tapete. <strong>Incomum.</strong></li>
@@ -1203,7 +1335,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> material de valas de minério pode carregar resíduos nocivos. Exportadores fraudam lotes juntando musgo escuro de túneis. Um selo de procedência de nascente vale mais que a aparência esbranquiçada.</li>
 </ul>
 <h3 id="h11-raiz-de-escarpa-22"><span id="h11" class="codex-anchor" aria-hidden="true"></span>H11 — Raiz-de-escarpa</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> planta quase sem caule, folhas triangulares e raiz grossa que penetra fendas. A casca externa tem cor de pedra, enquanto a polpa é amarela.</li>
 <li><strong>Onde cresce:</strong> terraços abrigados próximos a <strong>Vaarsa</strong> e passagens inferiores de <strong>Rubecina</strong>; não cresce em paredões completamente nus.</li>
 <li><strong>Coleta:</strong> no começo do outono, após a maturação das sementes; retirar apenas plantas adultas de colônias numerosas. <strong>Incomum.</strong></li>
@@ -1212,7 +1344,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> parte verde e raiz imatura são impróprias. A ideia de que permite atravessar montanhas sem dormir é <strong>Contestada</strong>. Guias podem esconder os melhores terraços para impedir a coleta predatória por caravanas reais.</li>
 </ul>
 <h3 id="h12-campânula-de-rubecina-23"><span id="h12" class="codex-anchor" aria-hidden="true"></span>H12 — Campânula-de-Rubecina</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> flores pendentes vermelho-escuro, caule peludo e folhas pequenas em roseta. As flores se fecham antes de chuva fria, mas também ao simples anoitecer.</li>
 <li><strong>Onde cresce:</strong> prados de altitude dos <strong>Picos de Rubecina</strong>, sobretudo áreas protegidas do vento perto do passo.</li>
 <li><strong>Coleta:</strong> flores no curto verão; deixar pelo menos metade dos indivíduos floridos. <strong>Rara.</strong></li>
@@ -1221,7 +1353,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> caminhantes frequentemente confundem altitude e raridade com potência medicinal. Nenhuma cura de ferida foi confirmada. Uma encomenda para o manto de um casamento pode financiar uma expedição antes do fechamento do passo.</li>
 </ul>
 <h3 id="h13-lágrima-do-artífice-24"><span id="h13" class="codex-anchor" aria-hidden="true"></span>H13 — Lágrima-do-Artífice</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> resina âmbar de uma árvore retorcida, casca em placas e folhas duras em leque. Gotas antigas ficam opacas; resina nova conserva centro translúcido.</li>
 <li><strong>Onde cresce:</strong> sopés secos de <strong>Ferraur</strong> e bolsões protegidos dos <strong>Montes Pedramar</strong>; cultivada lentamente perto de oficinas.</li>
 <li><strong>Coleta:</strong> exsudações naturais no verão, sem aprofundar feridas. <strong>Incomum.</strong></li>
@@ -1230,7 +1362,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> fumaça irritante quando mal trabalhada. Oficinas do Malho Sagrado usam gotas polidas como símbolos de aprendizagem; resina diluída demais pode explicar falhas em instrumentos enviados para uma cirurgia importante.</li>
 </ul>
 <h3 id="h14-líquen-de-ferrugem-25"><span id="h14" class="codex-anchor" aria-hidden="true"></span>H14 — Líquen-de-ferrugem</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> manchas alaranjadas aderidas a pedras, com margem cinza e pequenas escamas. A cor persiste em rochas sem minério aproveitável.</li>
 <li><strong>Onde cresce:</strong> paredões expostos de <strong>Aeraneas</strong>, ruínas pedregosas e encostas de <strong>Lavroga</strong> onde a água escorre sazonalmente.</li>
 <li><strong>Coleta:</strong> fragmentos de pedras já desprendidas no verão ou outono; crescimento muito lento. <strong>Comum no habitat, coleta limitada.</strong></li>
@@ -1239,7 +1371,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> pó de rocha misturado à carga prejudica o produto. Falsos prospectores usam sua cor para vender concessões vazias. Um mapa marcado com esse pigmento pode pertencer a trabalhadores locais, sem constituir prova conclusiva de autoria.</li>
 </ul>
 <h3 id="h15-espinho-de-sombra-26"><span id="h15" class="codex-anchor" aria-hidden="true"></span>H15 — Espinho-de-Sombra</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> moita de espinhos negros, folhas estreitas e pequenas flores cor de vinho. Galhos mortos permanecem em pé e parecem queimados.</li>
 <li><strong>Onde cresce:</strong> terrenos secos perto da <strong>Torre de Specula</strong> e áreas antigas de incêndio em Aurora; também ocorre em queimadas sem ligação com dragões.</li>
 <li><strong>Coleta:</strong> galhos de poda no inverno; flores para pigmento no verão. <strong>Incomum.</strong></li>
@@ -1248,7 +1380,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> espinhos deixam feridas difíceis de limpar, sem veneno sobrenatural obrigatório. Nobres disputam ramos “do lugar exato da morte do dragão”; certificados falsos podem alimentar uma intriga sobre relíquias de Severor I.</li>
 </ul>
 <h3 id="h16-flor-de-pedra-de-lavroga-27"><span id="h16" class="codex-anchor" aria-hidden="true"></span>H16 — Flor-de-pedra de Lavroga</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> pequena suculenta de folhas cinzentas sobrepostas e flor branca central. Vista de longe, parece cascalho; de perto, a flor apresenta cinco nervuras verdes.</li>
 <li><strong>Onde cresce:</strong> fendas sombreadas nas pedreiras antigas de <strong>Lavroga</strong> e muros abandonados de pedra clara.</li>
 <li><strong>Coleta:</strong> folhas externas no fim da primavera, preservando a roseta central. <strong>Incomum.</strong></li>
@@ -1257,10 +1389,10 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> exemplares das áreas ativas recebem pó de corte. Pedreiros deixam plantas nas paredes mais antigas como sinal de estabilidade; retirar uma pode ser entendido como mau presságio ou marca de sabotagem.</li>
 </ul>
 <h2 id="iii-matas-silvanas-e-pântanos-de-aurora-28">III — Matas silvanas e pântanos de Aurora</h2>
-<figure class="atlas-plate"><img src="assets/herbario_03_pantanos.jpg" alt="Prancha III — Espécimes das Matas Silvanas e Pântanos: Casca-amarga de Voernock (H17), Salgueiro-das-brumas (H18), Orquídea-de-orvalho (H21) e Fungo-de-lanterna (H22)" width="1200" height="896"/><figcaption class="atlas-caption">Prancha III — Espécimes das Matas Silvanas e Pântanos: Casca-amarga de Voernock (<a class="codex-ref codex-h" href="#h17" title="Herbário de Seleni • H17 — Casca-amarga de Voernock">H17</a>), Salgueiro-das-brumas (<a class="codex-ref codex-h" href="#h18" title="Herbário de Seleni • H18 — Salgueiro-das-brumas">H18</a>), Orquídea-de-orvalho (<a class="codex-ref codex-h" href="#h21" title="Herbário de Seleni • H21 — Orquídea-de-orvalho">H21</a>) e Fungo-de-lanterna (<a class="codex-ref codex-h" href="#h22" title="Herbário de Seleni • H22 — Fungo-de-lanterna">H22</a>)</figcaption></figure>
+<figure class="atlas-plate"><img src="assets/herbario_03_pantanos.jpg" alt="Prancha III — Espécimes das Matas Silvanas e Pântanos: Casca-amarga de Voernock (H17), Salgueiro-das-brumas (H18), Orquídea-de-orvalho (H21) e Fungo-de-lanterna (H22)" width="1200" height="896" decoding="async"/><figcaption class="atlas-caption">Prancha III — Espécimes das Matas Silvanas e Pântanos: Casca-amarga de Voernock (<a class="codex-ref codex-h" href="#h17" title="Herbário de Seleni • H17 — Casca-amarga de Voernock">H17</a>), Salgueiro-das-brumas (<a class="codex-ref codex-h" href="#h18" title="Herbário de Seleni • H18 — Salgueiro-das-brumas">H18</a>), Orquídea-de-orvalho (<a class="codex-ref codex-h" href="#h21" title="Herbário de Seleni • H21 — Orquídea-de-orvalho">H21</a>) e Fungo-de-lanterna (<a class="codex-ref codex-h" href="#h22" title="Herbário de Seleni • H22 — Fungo-de-lanterna">H22</a>)</figcaption></figure>
 <p>“Silvano” designa aqui pessoas e tradições das matas de Alenia. Seu conhecimento não depende de uma espécie fantástica. Os melhores locais são preservados por manejo e memória comunitária, não por abundância infinita.</p>
 <h3 id="h17-casca-amarga-de-voernock-29"><span id="h17" class="codex-anchor" aria-hidden="true"></span>H17 — Casca-amarga de Voernock</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> árvore de tronco estreito, casca cinza fissurada e interior cobre; folhas com nervura central muito clara. A identificação usa casca e folha juntas.</li>
 <li><strong>Onde cresce:</strong> ilhas de terra firme nas bordas do <strong>Pântano de Voernock</strong> e matas úmidas próximas a <strong>Altrax</strong>, nunca no centro permanentemente submerso.</li>
 <li><strong>Coleta:</strong> casca de ramos manejados no fim da primavera; não anelar o tronco. <strong>Incomum.</strong></li>
@@ -1269,7 +1401,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> gosto amargo de outra árvore não comprova equivalência. Famílias ribeirinhas protegem árvores antigas; uma concessão de corte concedida em Altavanne pode ameaçar o abastecimento de vários povoados.</li>
 </ul>
 <h3 id="h18-salgueiro-das-brumas-30"><span id="h18" class="codex-anchor" aria-hidden="true"></span>H18 — Salgueiro-das-brumas</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> árvore de ramos pendentes, folhas longas de verso azul-acinzentado e flores em pequenos filamentos. Folhas doentes apresentam manchas que não fazem parte da identificação.</li>
 <li><strong>Onde cresce:</strong> margens abertas dos <strong>Pântanos Nebulosos</strong>, canais próximos a <strong>Altrax</strong> e cursos lentos do <strong>Rio Aurélio</strong>.</li>
 <li><strong>Coleta:</strong> folhas sadias no verão e pequenos ramos de manejo no inverno. <strong>Comum.</strong></li>
@@ -1278,7 +1410,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> água barrenta de margem não é veículo seguro para tratamento. A melhora entre crises pode ser confundida com cura; Loreo registra recaídas de viajantes que partiram cedo demais.</li>
 </ul>
 <h3 id="h19-erva-de-rede-31"><span id="h19" class="codex-anchor" aria-hidden="true"></span>H19 — Erva-de-rede</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> touceira de folhas finas, bordas ásperas e flores verde-amareladas quase invisíveis. Exala odor resinoso quando manipulada, distinto de aroma floral doce.</li>
 <li><strong>Onde cresce:</strong> terrenos ventilados acima de <strong>Voernock</strong>, bordas secas dos <strong>Pântanos Nebulosos</strong> e clareiras de <strong>Vergod</strong>.</li>
 <li><strong>Coleta:</strong> folhas adultas durante a estação quente. <strong>Comum.</strong></li>
@@ -1287,7 +1419,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não trata uma infecção existente e não protege contra toda criatura do pântano. Fumaça em barraca fechada causa problemas. Um lote ainda verde, mas sem aroma, denuncia armazenamento ruim ou substituição.</li>
 </ul>
 <h3 id="h20-samambaia-das-copas-32"><span id="h20" class="codex-anchor" aria-hidden="true"></span>H20 — Samambaia-das-copas</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> samambaia de frondes largas e nervuras escuras, fixada sobre galhos sem estrangular a árvore. Brotos desenrolam-se em espiral; não produz flores.</li>
 <li><strong>Onde cresce:</strong> árvores maduras próximas à <strong>Cidade Suspensa</strong> e matas contínuas acessadas por <strong>Vergod</strong>. Raramente sobrevive em quintal exposto.</li>
 <li><strong>Coleta:</strong> frondes adultas na estação úmida, com autorização e técnica de subida segura. <strong>Incomum.</strong></li>
@@ -1296,7 +1428,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> arrancar o ponto de fixação mata a planta. Comer seus brotos por imitação de outras samambaias é perigoso. A coleta clandestina pode romper um acordo de comércio entre Vergod e uma comunidade silvana.</li>
 </ul>
 <h3 id="h21-orquídea-de-orvalho-33"><span id="h21" class="codex-anchor" aria-hidden="true"></span>H21 — Orquídea-de-orvalho</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> flor branca de lábio azul, duas folhas espessas e raízes aéreas. Ao amanhecer, gotículas se acumulam na concavidade das pétalas.</li>
 <li><strong>Onde cresce:</strong> ravinas sombreadas próximas ao <strong>Santuário de Derwlyn</strong> e árvores antigas de matas silvanas bem preservadas.</li>
 <li><strong>Coleta:</strong> flores naturalmente caídas no período úmido; transplante tem grande mortalidade. <strong>Rara.</strong></li>
@@ -1305,7 +1437,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> sua raridade aumenta fraude, não eficácia médica. Um presente dessa flor pode revelar acesso a uma região protegida. O escândalo pode estar no furto da planta, não no romance que o presente sugere.</li>
 </ul>
 <h3 id="h22-fungo-de-lanterna-34"><span id="h22" class="codex-anchor" aria-hidden="true"></span>H22 — Fungo-de-lanterna</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> cogumelos pequenos, chapéu translúcido e filamentos que emitem brilho esverdeado fraco em madeira muito úmida. Não possui folhas nem raízes; o micélio permanece no substrato.</li>
 <li><strong>Onde cresce:</strong> troncos em decomposição perto de <strong>Vetarx</strong>, cavernas úmidas de borda de mata e áreas protegidas de <strong>Voernock</strong>.</li>
 <li><strong>Coleta:</strong> pequenos fragmentos de madeira colonizada durante períodos chuvosos. <strong>Incomum.</strong></li>
@@ -1314,7 +1446,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> impróprio para alimento. A luz pode denunciar posição a observadores próximos. Guias usam padrões combinados para indicar rotas; um padrão alterado pode conduzir viajantes a um esconderijo.</li>
 </ul>
 <h3 id="h23-cipó-de-atadura-35"><span id="h23" class="codex-anchor" aria-hidden="true"></span>H23 — Cipó-de-atadura</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> trepadeira de folhas com cinco nervuras paralelas, flores verdes e fibras internas claras que se separam em tiras longas. O caule velho fica rígido e quebra.</li>
 <li><strong>Onde cresce:</strong> bordas de clareiras entre <strong>Vergod</strong> e a <strong>Cidade Suspensa</strong>, aproveitando árvores jovens e áreas de manejo.</li>
 <li><strong>Coleta:</strong> ramos laterais maduros no verão, preservando o caule principal. <strong>Comum.</strong></li>
@@ -1323,7 +1455,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> seiva crua irrita pele sensível. Um lote comprado como “atadura silvana” pode ser somente cipó desfiado, sem limpeza ou trabalho; a diferença importa numa enfermaria sobrecarregada.</li>
 </ul>
 <h3 id="h24-flor-da-lama-mansa-36"><span id="h24" class="codex-anchor" aria-hidden="true"></span>H24 — Flor-da-lama mansa</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> planta aquática de folhas circulares e flores creme acima da água; rizoma grosso preso ao lodo. A face inferior da folha apresenta pontos castanhos regulares.</li>
 <li><strong>Onde cresce:</strong> remansos de <strong>Voernock</strong> com renovação lenta de água e lagoas laterais dos <strong>Pântanos Nebulosos</strong>.</li>
 <li><strong>Coleta:</strong> sementes maduras no verão e parte dos rizomas no outono. <strong>Comum.</strong></li>
@@ -1332,10 +1464,10 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> crescer em água turva não significa purificá-la. Exemplares próximos a despejos devem ser rejeitados. A drenagem de um pântano pode reduzir insetos em um ponto e destruir a principal reserva alimentar de uma vila em outro.</li>
 </ul>
 <h2 id="iv-corallis-e-o-mar-dos-corais-37">IV — Corallis e o Mar dos Corais</h2>
-<figure class="atlas-plate"><img src="assets/herbario_04_corallis.jpg" alt="Prancha IV — Espécimes de Corallis e Mar dos Corais: Alga-de-sutura (H25), Folha-de-quilha (H26), Líquen-de-lente (H29) e Coralina-de-tinta (H32)" width="1200" height="896"/><figcaption class="atlas-caption">Prancha IV — Espécimes de Corallis e Mar dos Corais: Alga-de-sutura (<a class="codex-ref codex-h" href="#h25" title="Herbário de Seleni • H25 — Alga-de-sutura">H25</a>), Folha-de-quilha (<a class="codex-ref codex-h" href="#h26" title="Herbário de Seleni • H26 — Folha-de-quilha">H26</a>), Líquen-de-lente (<a class="codex-ref codex-h" href="#h29" title="Herbário de Seleni • H29 — Líquen-de-lente">H29</a>) e Coralina-de-tinta (<a class="codex-ref codex-h" href="#h32" title="Herbário de Seleni • H32 — Coralina-de-tinta">H32</a>)</figcaption></figure>
+<figure class="atlas-plate"><img src="assets/herbario_04_corallis.jpg" alt="Prancha IV — Espécimes de Corallis e Mar dos Corais: Alga-de-sutura (H25), Folha-de-quilha (H26), Líquen-de-lente (H29) e Coralina-de-tinta (H32)" width="1200" height="896" decoding="async"/><figcaption class="atlas-caption">Prancha IV — Espécimes de Corallis e Mar dos Corais: Alga-de-sutura (<a class="codex-ref codex-h" href="#h25" title="Herbário de Seleni • H25 — Alga-de-sutura">H25</a>), Folha-de-quilha (<a class="codex-ref codex-h" href="#h26" title="Herbário de Seleni • H26 — Folha-de-quilha">H26</a>), Líquen-de-lente (<a class="codex-ref codex-h" href="#h29" title="Herbário de Seleni • H29 — Líquen-de-lente">H29</a>) e Coralina-de-tinta (<a class="codex-ref codex-h" href="#h32" title="Herbário de Seleni • H32 — Coralina-de-tinta">H32</a>)</figcaption></figure>
 <p>Maré, salinidade e conservação dominam a botânica corallina. Uma alga trazida por naufrágio pode estar presente no cais sem ser nativa da baía; a origem da carga é parte da identificação.</p>
 <h3 id="h25-alga-de-sutura-38"><span id="h25" class="codex-anchor" aria-hidden="true"></span>H25 — Alga-de-sutura</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> alga verde-escura de lâminas compridas e nervura central espessa; a borda é lisa, sem bolsas de ar. Presa à rocha por um disco firme.</li>
 <li><strong>Onde cresce:</strong> águas rasas e limpas próximas a <strong>Baldbella</strong>, <strong>Vila de Pelagosa</strong> e <strong>Atol das Pérolas</strong>, fora dos canais de esgoto.</li>
 <li><strong>Coleta:</strong> parte das lâminas em maré baixa, na primavera; preservar a fixação. <strong>Incomum.</strong></li>
@@ -1344,7 +1476,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> colônias contaminadas podem parecer saudáveis. Cirurgiões de Baldbella exigem procedência; mercadores tentam vender alga do próprio porto como se viesse de águas abertas.</li>
 </ul>
 <h3 id="h26-folha-de-quilha-39"><span id="h26" class="codex-anchor" aria-hidden="true"></span>H26 — Folha-de-quilha</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> arbusto costeiro de folhas dobradas ao meio, lembrando um casco, flores pequenas amarelas e ramos flexíveis resistentes à maresia.</li>
 <li><strong>Onde cresce:</strong> falésias baixas entre <strong>Alineus</strong> e <strong>Biemont</strong>, trilhas do <strong>Farol de Claramar</strong> e hortas de pilotos marítimos.</li>
 <li><strong>Coleta:</strong> folhas maduras na primavera e no verão. <strong>Comum.</strong></li>
@@ -1353,7 +1485,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não melhora equilíbrio, Natação ou Navegação, nem permite ignorar tempestades. Pilotos deixam ramos pendurados nas cabines de passageiros; um capitão pode vender esse costume como garantia absurda de travessia segura.</li>
 </ul>
 <h3 id="h27-flor-de-sal-de-portocala-40"><span id="h27" class="codex-anchor" aria-hidden="true"></span>H27 — Flor-de-sal de Portocala</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> planta rasteira de folhas carnudas, pequenas flores rosadas e crosta salina superficial. Cresce em faixas acima da linha de maré comum.</li>
 <li><strong>Onde cresce:</strong> baixios salgados de <strong>Portocala</strong> e enseadas abrigadas voltadas ao <strong>Mar de Zahar</strong>.</li>
 <li><strong>Coleta:</strong> brotos e folhas no fim da estação fresca, antes de endurecerem. <strong>Comum.</strong></li>
@@ -1362,7 +1494,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não torna água do mar bebível. Crescimento vigoroso em um antigo campo doce pode indicar avanço da salinidade. Disputas por canais de irrigação ficam visíveis primeiro nas plantas, antes de aparecerem nos livros de impostos.</li>
 </ul>
 <h3 id="h28-semente-de-vela-41"><span id="h28" class="codex-anchor" aria-hidden="true"></span>H28 — Semente-de-vela</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> erva costeira de caule grosso e cápsulas claras que estalam ao secar; sementes negras, lisas e oleosas. Folhas lembram pequenas pás.</li>
 <li><strong>Onde cresce:</strong> áreas abertas de <strong>Alineus</strong>, terras cultivadas perto de <strong>Biemont</strong> e encostas suaves próximas ao <strong>Cais de Litore</strong>.</li>
 <li><strong>Coleta:</strong> cápsulas maduras no fim do verão, antes que se abram. <strong>Comum.</strong></li>
@@ -1371,7 +1503,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> armazenamento junto a umidade estraga o lote. Adulterações deixam cheiro rançoso e resíduos nas lamparinas; um farol apagado pode resultar de corrupção no abastecimento, sem necessidade de conspiração sobrenatural.</li>
 </ul>
 <h3 id="h29-líquen-de-lente-42"><span id="h29" class="codex-anchor" aria-hidden="true"></span>H29 — Líquen-de-lente</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> colônia cinza-clara com bordas azuladas, sobre pedra porosa, formando rosetas finíssimas. Não brilha nem reage de modo especial ao luar.</li>
 <li><strong>Onde cresce:</strong> faces protegidas dos <strong>Montes Pedramar</strong>, perto do <strong>Observatório Helmer</strong>, longe da fuligem de <strong>Stoneforge</strong>.</li>
 <li><strong>Coleta:</strong> fragmentos de substrato naturalmente desprendido, sobretudo no verão. <strong>Rara</strong>, pelo crescimento lento.</li>
@@ -1380,7 +1512,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> grãos de areia misturados arranham superfícies. Um lote sabotado pode comprometer meses de trabalho do observatório; a evidência está nos resíduos e nos registros de entrega, não apenas na acusação do mestre de oficina.</li>
 </ul>
 <h3 id="h30-casca-de-maré-43"><span id="h30" class="codex-anchor" aria-hidden="true"></span>H30 — Casca-de-maré</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> árvore de raízes arqueadas em solo salobro, folhas grossas e casca castanha com interior avermelhado. Frutos alongados flutuam até encontrar margem.</li>
 <li><strong>Onde cresce:</strong> lagunas abrigadas de <strong>Baldbella</strong> e braços costeiros próximos a <strong>Vila de Pelagosa</strong>, onde há mistura de água doce e salgada.</li>
 <li><strong>Coleta:</strong> casca de ramos podados no começo da estação seca; não cortar as raízes de sustentação. <strong>Incomum.</strong></li>
@@ -1389,7 +1521,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> derrubar a vegetação inteira expõe margens e prejudica criadouros de pesca. Um armador pode contratar coleta barata e deixar aos pescadores o custo da erosão, criando conflito entre duas atividades essenciais da mesma cidade.</li>
 </ul>
 <h3 id="h31-erva-de-porão-44"><span id="h31" class="codex-anchor" aria-hidden="true"></span>H31 — Erva-de-porão</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> erva de folhas estreitas verde-azuladas, flores pálidas em espiga e odor penetrante. Mantém parte do cheiro depois de seca.</li>
 <li><strong>Onde cresce:</strong> terrenos secos perto de <strong>Biemont</strong>, jardins de boticários em <strong>Baldbella</strong> e canteiros ventilados dos estaleiros de <strong>Alineus</strong>.</li>
 <li><strong>Coleta:</strong> folhas e pontas floridas no verão. <strong>Comum.</strong></li>
@@ -1398,7 +1530,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> perfumar um porão não elimina infestação. Inspetores podem encontrar sachês novos sobre palha antiga, prova de aparência de limpeza. Não aplicar diretamente a preparação de tecidos sobre feridas ou alimento.</li>
 </ul>
 <h3 id="h32-coralina-de-tinta-45"><span id="h32" class="codex-anchor" aria-hidden="true"></span>H32 — Coralina-de-tinta</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> alga ramificada cor de vinho, flexível, sem esqueleto calcário; parece coral quando seca, mas não é animal. Produz mancha violeta intensa.</li>
 <li><strong>Onde cresce:</strong> canais claros do <strong>Atol das Pérolas</strong>, recifes próximos à <strong>Vila de Pelagosa</strong> e enseadas protegidas de Corallis.</li>
 <li><strong>Coleta:</strong> fragmentos laterais depois das marés vivas de primavera. <strong>Incomum.</strong></li>
@@ -1407,10 +1539,10 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> misturá-la a sedimento reduz durabilidade. Um contrato supostamente antigo escrito com lote recém-chegado é uma pista verificável; exige comparação ou testemunho de quem produziu a tinta.</li>
 </ul>
 <h2 id="v-gaddra-dunas-oásis-e-escarpas-46">V — Gaddra: dunas, oásis e escarpas</h2>
-<figure class="atlas-plate"><img src="assets/herbario_05_gaddra.jpg" alt="Prancha V — Espécimes de Gaddra: Raiz-de-poço em corte de solo (H33), Palma-de-odre (H34), Resina-de-Zahar (H37) e Flor-da-última-chuva (H40)" width="1200" height="896"/><figcaption class="atlas-caption">Prancha V — Espécimes de Gaddra: Raiz-de-poço em corte de solo (<a class="codex-ref codex-h" href="#h33" title="Herbário de Seleni • H33 — Raiz-de-poço">H33</a>), Palma-de-odre (<a class="codex-ref codex-h" href="#h34" title="Herbário de Seleni • H34 — Palma-de-odre">H34</a>), Resina-de-Zahar (<a class="codex-ref codex-h" href="#h37" title="Herbário de Seleni • H37 — Resina-de-Zahar">H37</a>) e Flor-da-última-chuva (<a class="codex-ref codex-h" href="#h40" title="Herbário de Seleni • H40 — Flor-da-última-chuva">H40</a>)</figcaption></figure>
+<figure class="atlas-plate"><img src="assets/herbario_05_gaddra.jpg" alt="Prancha V — Espécimes de Gaddra: Raiz-de-poço em corte de solo (H33), Palma-de-odre (H34), Resina-de-Zahar (H37) e Flor-da-última-chuva (H40)" width="1200" height="896" decoding="async"/><figcaption class="atlas-caption">Prancha V — Espécimes de Gaddra: Raiz-de-poço em corte de solo (<a class="codex-ref codex-h" href="#h33" title="Herbário de Seleni • H33 — Raiz-de-poço">H33</a>), Palma-de-odre (<a class="codex-ref codex-h" href="#h34" title="Herbário de Seleni • H34 — Palma-de-odre">H34</a>), Resina-de-Zahar (<a class="codex-ref codex-h" href="#h37" title="Herbário de Seleni • H37 — Resina-de-Zahar">H37</a>) e Flor-da-última-chuva (<a class="codex-ref codex-h" href="#h40" title="Herbário de Seleni • H40 — Flor-da-última-chuva">H40</a>)</figcaption></figure>
 <p>A maioria das espécies úteis depende de água subterrânea, chuva breve ou cuidado humano. Dizer que uma planta cresce “no deserto” não significa que exista a cada dia de marcha. Inverno e primavera favorecem as caravanas e a coleta; o verão torna a busca perigosa.</p>
 <h3 id="h33-raiz-de-poço-47"><span id="h33" class="codex-anchor" aria-hidden="true"></span>H33 — Raiz-de-poço</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> arbusto de folhas pequenas e brilhantes, flores amarelo-pálidas e raízes profundas. Sua presença indica umidade acessível à própria planta, não a profundidade exata de um poço.</li>
 <li><strong>Onde cresce:</strong> bordas do <strong>Oásis de Al-May</strong>, jardins irrigados de <strong>Naasar</strong> e trechos antigos da rota do <strong>Poço de Sul</strong>.</li>
 <li><strong>Coleta:</strong> raízes laterais de exemplares cultivados no inverno. <strong>Incomum.</strong></li>
@@ -1419,7 +1551,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não fornece água suficiente para uma caravana e não localiza fontes por magia. Arrancar raízes perto de um poço comunitário pode destruir plantas que estabilizam seu entorno e ser tratado como dano grave.</li>
 </ul>
 <h3 id="h34-palma-de-odre-48"><span id="h34" class="codex-anchor" aria-hidden="true"></span>H34 — Palma-de-odre</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> suculenta baixa de segmentos achatados, pele verde-acinzentada e espinhos curtos junto às junções. Flores alaranjadas antecedem frutos de polpa firme.</li>
 <li><strong>Onde cresce:</strong> pomares de <strong>Dar-Shams</strong>, bordas cultivadas de <strong>Qal-Zahar</strong> e quintais dos postos de caravana; raramente isolada em areia móvel.</li>
 <li><strong>Coleta:</strong> frutos maduros na primavera e segmentos de poda durante a estação fresca. <strong>Comum em cultivo.</strong></li>
@@ -1428,7 +1560,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> espinhos menores se soltam na colheita. Mercadores vendem seu nome como promessa de travessias sem odres; guias experientes desconfiam imediatamente dessa propaganda.</li>
 </ul>
 <h3 id="h35-flor-de-bayd-49"><span id="h35" class="codex-anchor" aria-hidden="true"></span>H35 — Flor-de-Bayd</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> planta de folhas curtas, flores brancas e caule avermelhado; forma ilhas de cor junto a crostas salinas. Tolera sal, mas não cresce dentro da água mais concentrada do lago.</li>
 <li><strong>Onde cresce:</strong> margens adequadas do <strong>Lago de Bayd</strong>, perto de <strong>Naasar</strong>, onde pequenas entradas de água permitem vegetação.</li>
 <li><strong>Coleta:</strong> flores no inverno tardio e sementes na primavera. <strong>Incomum.</strong></li>
@@ -1437,7 +1569,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> crostas colhidas junto da planta podem conter resíduos inadequados. Famílias marcam safras por manchas de floração; um recuo dessas manchas pode antecipar conflito por mudança de nível do lago ou desvio de água.</li>
 </ul>
 <h3 id="h36-erva-de-sela-50"><span id="h36" class="codex-anchor" aria-hidden="true"></span>H36 — Erva-de-sela</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> touceira de folhas grossas, estreitas e flexíveis, com bordas claras; flores discretas nascem junto ao solo após chuva.</li>
 <li><strong>Onde cresce:</strong> planaltos de <strong>OX</strong>, áreas manejadas de criação de montarias e terrenos firmes perto de <strong>Kafar-Hajar</strong>.</li>
 <li><strong>Coleta:</strong> folhas externas no inverno e primavera, sem expor o centro da touceira. <strong>Comum.</strong></li>
@@ -1446,7 +1578,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> material mal seco fere a pele sob a sela. Um tratador pode identificar uma caravana pela mistura de fibras usada nos arreios; isso fornece procedência provável, nunca rastreamento infalível de uma pessoa.</li>
 </ul>
 <h3 id="h37-resina-de-zahar-51"><span id="h37" class="codex-anchor" aria-hidden="true"></span>H37 — Resina-de-Zahar</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> resina dourada de arbusto retorcido com folhas pequenas, casca clara e flores creme. As gotas secam como contas irregulares com linhas internas.</li>
 <li><strong>Onde cresce:</strong> colinas pedregosas próximas a <strong>Qal-Zahar</strong> e vertentes abrigadas voltadas ao <strong>Mar de Zahar</strong>.</li>
 <li><strong>Coleta:</strong> exsudações naturais no fim da estação fresca. <strong>Incomum.</strong></li>
@@ -1455,7 +1587,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> fumaça concentrada irrita e denuncia presença. Um lacre perfumado reconhecível pode revelar a oficina, não necessariamente o remetente. Casas mercantis guardam suas misturas em segredo e processam imitadores por fraude.</li>
 </ul>
 <h3 id="h38-semente-do-vento-52"><span id="h38" class="codex-anchor" aria-hidden="true"></span>H38 — Semente-do-vento</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> erva anual delicada, flores quase transparentes e sementes com asas em cruz. A planta seca inteira se solta e rola após dispersar parte da carga.</li>
 <li><strong>Onde cresce:</strong> bordas das <strong>Estepes Amaldiçoadas</strong>, arredores de <strong>Burj-Qar</strong> e faixas que recebem chuvas breves.</li>
 <li><strong>Coleta:</strong> sementes no início da primavera, antes da dispersão. <strong>Incomum</strong>, abundante apenas em anos favoráveis.</li>
@@ -1464,7 +1596,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> lotes de plantas de anos diferentes variam muito de qualidade. O rumor de que sua direção revela onde alguém morreu é <strong>Relatado</strong>. Caravaneiros usam o movimento das plantas como uma pista simples do vento de superfície.</li>
 </ul>
 <h3 id="h39-casca-do-punho-53"><span id="h39" class="codex-anchor" aria-hidden="true"></span>H39 — Casca-do-Punho</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> arbusto agarrado à rocha, folhas pequenas dentadas e casca espessa com saliências semelhantes a nós de dedos. Flores vermelhas aparecem depois das chuvas.</li>
 <li><strong>Onde cresce:</strong> fendas do <strong>Punho de Pedra</strong> e escarpas próximas a <strong>Vargheim</strong>, em pontos acessíveis apenas por trilhas locais.</li>
 <li><strong>Coleta:</strong> casca de galhos podados durante a estação fresca. <strong>Rara.</strong></li>
@@ -1473,7 +1605,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> arrancar a casca do tronco mata arbustos de crescimento lento. Clãs podem exigir troca por ferramentas em vez de prata. A recusa em vender não é prova de hostilidade à Coroa; pode ser proteção da próxima safra.</li>
 </ul>
 <h3 id="h40-flor-da-última-chuva-54"><span id="h40" class="codex-anchor" aria-hidden="true"></span>H40 — Flor-da-última-chuva</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> flor violeta rente ao chão, folhas quase invisíveis e bulbo envolto em película escura. A floração dura poucos dias depois de chuva suficiente.</li>
 <li><strong>Onde cresce:</strong> depressões pedregosas próximas às <strong>Ruínas de Qadim-Shahr</strong> e caminhos antigos que convergem para <strong>Suq-Ramad</strong>.</li>
 <li><strong>Coleta:</strong> flores no inverno ou primavera chuvosos; não retirar bulbos sem projeto de cultivo. <strong>Rara e sazonal.</strong></li>
@@ -1482,10 +1614,10 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> uma seca pode eliminar o comércio por anos. Um noivado prometido para sua próxima floração pode ficar suspenso; falsificar flores torna-se um problema político quando famílias condicionam um acordo ao sinal da chuva.</li>
 </ul>
 <h2 id="vi-kalis-e-a-floresta-negra-55">VI — Kalis e a Floresta Negra</h2>
-<figure class="atlas-plate"><img src="assets/herbario_06_kalis.jpg" alt="Prancha VI — Espécimes de Kalis e Floresta Negra: Casca-de-tinta negra (H41), Raiz-de-brasa fria (H43), Flor-de-geada negra (H45) e Folha-sem-voz (H48)" width="1200" height="896"/><figcaption class="atlas-caption">Prancha VI — Espécimes de Kalis e Floresta Negra: Casca-de-tinta negra (<a class="codex-ref codex-h" href="#h41" title="Herbário de Seleni • H41 — Casca-de-tinta negra">H41</a>), Raiz-de-brasa fria (<a class="codex-ref codex-h" href="#h43" title="Herbário de Seleni • H43 — Raiz-de-brasa fria">H43</a>), Flor-de-geada negra (<a class="codex-ref codex-h" href="#h45" title="Herbário de Seleni • H45 — Flor-de-geada negra">H45</a>) e Folha-sem-voz (<a class="codex-ref codex-h" href="#h48" title="Herbário de Seleni • H48 — Folha-sem-voz">H48</a>)</figcaption></figure>
+<figure class="atlas-plate"><img src="assets/herbario_06_kalis.jpg" alt="Prancha VI — Espécimes de Kalis e Floresta Negra: Casca-de-tinta negra (H41), Raiz-de-brasa fria (H43), Flor-de-geada negra (H45) e Folha-sem-voz (H48)" width="1200" height="896" decoding="async"/><figcaption class="atlas-caption">Prancha VI — Espécimes de Kalis e Floresta Negra: Casca-de-tinta negra (<a class="codex-ref codex-h" href="#h41" title="Herbário de Seleni • H41 — Casca-de-tinta negra">H41</a>), Raiz-de-brasa fria (<a class="codex-ref codex-h" href="#h43" title="Herbário de Seleni • H43 — Raiz-de-brasa fria">H43</a>), Flor-de-geada negra (<a class="codex-ref codex-h" href="#h45" title="Herbário de Seleni • H45 — Flor-de-geada negra">H45</a>) e Folha-sem-voz (<a class="codex-ref codex-h" href="#h48" title="Herbário de Seleni • H48 — Folha-sem-voz">H48</a>)</figcaption></figure>
 <p>As matas profundas não são reservas abertas aos agentes de Kalgard. Comunidades, lenhadores, comerciantes e regência disputam caminhos, resinas e documentos de origem. A sombra favorece espécies específicas, não todas as ervas do continente.</p>
 <h3 id="h41-casca-de-tinta-negra-56"><span id="h41" class="codex-anchor" aria-hidden="true"></span>H41 — Casca-de-tinta negra</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> árvore de casca quase preta, folhas pequenas e lustrosas, interior castanho e sementes em pares. O pigmento escurece depois do processamento.</li>
 <li><strong>Onde cresce:</strong> áreas manejadas da <strong>Floresta Negra</strong>, rotas de <strong>Jarnham</strong> e viveiros ligados a oficinas de <strong>Kalgard</strong>.</li>
 <li><strong>Coleta:</strong> casca de podas no outono; árvores antigas são reservadas à madeira. <strong>Incomum.</strong></li>
@@ -1494,7 +1626,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> casca de árvores doentes produz manchas que aparecem depois. Um arquivo inteiro pode sofrer deterioração por fraude de fornecedor; a oportunidade de apagar dívidas transforma um defeito material em crise política.</li>
 </ul>
 <h3 id="h42-agulha-de-vigília-57"><span id="h42" class="codex-anchor" aria-hidden="true"></span>H42 — Agulha-de-vigília</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> conífera baixa de agulhas azul-escuras em grupos de três, pequenos cones castanhos e resina de odor fresco.</li>
 <li><strong>Onde cresce:</strong> encostas de <strong>Skans-Kold</strong>, trilhas de <strong>Drakenhall</strong> e jardins expostos ao frio perto de <strong>Kragstad</strong>.</li>
 <li><strong>Coleta:</strong> ramos caídos recentemente e agulhas adultas no verão. <strong>Comum.</strong></li>
@@ -1503,7 +1635,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> excesso de fumaça prejudica ambientes fechados. Guardas escondem o cansaço atrás do cheiro forte do preparo; um comandante que compra mais agulhas em vez de contratar reforços pode estar encobrindo jornadas insustentáveis.</li>
 </ul>
 <h3 id="h43-raiz-de-brasa-fria-58"><span id="h43" class="codex-anchor" aria-hidden="true"></span>H43 — Raiz-de-brasa fria</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> erva de folhas escuras em roseta e raiz avermelhada, que mancha pano úmido. A flor é pequena, branca, com centro vermelho.</li>
 <li><strong>Onde cresce:</strong> bordas de clareiras na <strong>Floresta Negra</strong>, especialmente nos arredores de <strong>Myrkholm</strong> e caminhos de solo bem drenado.</li>
 <li><strong>Coleta:</strong> raízes laterais no começo do outono. <strong>Incomum.</strong></li>
@@ -1512,7 +1644,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> sensação de calor não protege contra hipotermia nem aumenta tolerância ao fogo. Comerciantes a vendem a recrutas como “inverno engarrafado”; as famílias dos soldados podem procurar quem aprovou essa promessa.</li>
 </ul>
 <h3 id="h44-fungo-de-pergaminho-59"><span id="h44" class="codex-anchor" aria-hidden="true"></span>H44 — Fungo-de-pergaminho</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> fungo em prateleiras finas, bege por cima e branco por baixo, que cresce sobre madeira morta. A superfície apresenta anéis delicados, sem brilho.</li>
 <li><strong>Onde cresce:</strong> troncos caídos em áreas úmidas da <strong>Floresta Negra</strong>, depósitos antigos de madeira e arredores de <strong>Ruínas de Eldgard</strong>.</li>
 <li><strong>Coleta:</strong> corpos maduros no outono, preservando o tronco e parte da colônia. <strong>Comum.</strong></li>
@@ -1521,7 +1653,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> material vivo não deve entrar em acervos; pode favorecer deterioração de madeira e papel. Copistas clandestinos o usam para mensagens descartáveis, mas sua fragilidade também pode destruir a prova que desejavam preservar.</li>
 </ul>
 <h3 id="h45-flor-de-geada-negra-60"><span id="h45" class="codex-anchor" aria-hidden="true"></span>H45 — Flor-de-geada negra</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> pétalas violeta tão escuras que parecem negras, centro branco e folhas coriáceas. Não nasce no gelo puro: floresce em solo descongelado e protegido.</li>
 <li><strong>Onde cresce:</strong> encostas abrigadas próximas a <strong>Kragstad</strong> e jardins murados de <strong>Kalgard</strong>, depois do degelo.</li>
 <li><strong>Coleta:</strong> pétalas na primavera curta; cultivo exige paciência. <strong>Rara.</strong></li>
@@ -1530,7 +1662,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> flores comuns tingidas podem denunciar fraude comercial quando examinadas por alguém que conheça a espécie. Um ramo entregue durante luto pode ser homenagem sincera, lembrança de romance ou tentativa de provocar uma família rival.</li>
 </ul>
 <h3 id="h46-seiva-de-casco-61"><span id="h46" class="codex-anchor" aria-hidden="true"></span>H46 — Seiva-de-casco</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> seiva espessa de árvore de folhas largas, casca cinza e pequenos frutos lenhosos. Ao ar, forma película escura e flexível.</li>
 <li><strong>Onde cresce:</strong> florestas manejadas nas rotas de <strong>Dobalbek</strong> e <strong>Fugong</strong>, em solos úmidos sem encharcamento permanente.</li>
 <li><strong>Coleta:</strong> exsudações e manejo limitado no verão; produtores alternam árvores por safra. <strong>Incomum.</strong></li>
@@ -1539,7 +1671,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> seiva diluída demais parece aceitável até enfrentar a primeira travessia. Um naufrágio pode levar a disputa entre carpinteiros, fornecedores e capitães que ordenaram partir antes do reparo terminar.</li>
 </ul>
 <h3 id="h47-baga-de-myrkholm-62"><span id="h47" class="codex-anchor" aria-hidden="true"></span>H47 — Baga-de-Myrkholm</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> arbusto rasteiro de folhas redondas, flores rosas e bagas cor de cobre com leve penugem. Frutos maduros cedem ao toque, sem se desfazer.</li>
 <li><strong>Onde cresce:</strong> clareiras de <strong>Myrkholm</strong>, bordas da <strong>Floresta Negra</strong> e pequenos pomares comunitários.</li>
 <li><strong>Coleta:</strong> frutos no fim do verão e começo do outono. <strong>Comum no habitat.</strong></li>
@@ -1548,7 +1680,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> imitações de cor parecida sem penugem exigem nova identificação. A primeira colheita pode ser reservada a idosos e famílias de caçadores mortos; comprar toda a safra contraria obrigações comunitárias invisíveis ao mercador estrangeiro.</li>
 </ul>
 <h3 id="h48-folha-sem-voz-63"><span id="h48" class="codex-anchor" aria-hidden="true"></span>H48 — Folha-sem-voz</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> erva de folhas estreitas com linha branca central e flores esverdeadas escondidas na base. Quando seca, a nervura fica mais clara que o restante da folha.</li>
 <li><strong>Onde cresce:</strong> vales sombreados próximos a <strong>Kalima</strong> e canteiros especializados de boticários em <strong>Fugong</strong>.</li>
 <li><strong>Coleta:</strong> folhas no começo do verão; identificação exige exemplar completo. <strong>Rara.</strong></li>
@@ -1557,10 +1689,10 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não silencia fala, não extrai verdade e não causa inconsciência automática. Compras suspeitas podem indicar abuso, mas também necessidade legítima de uma enfermaria; a investigação deve procurar contexto e vítimas.</li>
 </ul>
 <h2 id="vii-ilha-das-safiras-e-arquipélago-ravena-64">VII — Ilha das Safiras e Arquipélago Ravena</h2>
-<figure class="atlas-plate"><img src="assets/herbario_07_safiras.jpg" alt="Prancha VII — Espécimes Insulares: Raiz-de-âncora de Safiras (H49), Orquídea-das-duas-marés (H51), Semente-de-vidro (H53) e Resina-de-corvo (H54)" width="1200" height="896"/><figcaption class="atlas-caption">Prancha VII — Espécimes Insulares: Raiz-de-âncora de Safiras (<a class="codex-ref codex-h" href="#h49" title="Herbário de Seleni • H49 — Raiz-de-âncora de Safiras">H49</a>), Orquídea-das-duas-marés (<a class="codex-ref codex-h" href="#h51" title="Herbário de Seleni • H51 — Orquídea-das-duas-marés">H51</a>), Semente-de-vidro (<a class="codex-ref codex-h" href="#h53" title="Herbário de Seleni • H53 — Semente-de-vidro">H53</a>) e Resina-de-corvo (<a class="codex-ref codex-h" href="#h54" title="Herbário de Seleni • H54 — Resina-de-corvo">H54</a>)</figcaption></figure>
+<figure class="atlas-plate"><img src="assets/herbario_07_safiras.jpg" alt="Prancha VII — Espécimes Insulares: Raiz-de-âncora de Safiras (H49), Orquídea-das-duas-marés (H51), Semente-de-vidro (H53) e Resina-de-corvo (H54)" width="1200" height="896" decoding="async"/><figcaption class="atlas-caption">Prancha VII — Espécimes Insulares: Raiz-de-âncora de Safiras (<a class="codex-ref codex-h" href="#h49" title="Herbário de Seleni • H49 — Raiz-de-âncora de Safiras">H49</a>), Orquídea-das-duas-marés (<a class="codex-ref codex-h" href="#h51" title="Herbário de Seleni • H51 — Orquídea-das-duas-marés">H51</a>), Semente-de-vidro (<a class="codex-ref codex-h" href="#h53" title="Herbário de Seleni • H53 — Semente-de-vidro">H53</a>) e Resina-de-corvo (<a class="codex-ref codex-h" href="#h54" title="Herbário de Seleni • H54 — Resina-de-corvo">H54</a>)</figcaption></figure>
 <p>Safiras e Ravena são áreas distintas, reunidas aqui pela coleta insular e pelo comércio marítimo. A Ilha das Safiras fica ao sul de Kalis; o arquipélago possui suas próprias rotas, enseadas e relações políticas. Uma espécie de uma ilha não deve ser presumida na outra.</p>
 <h3 id="h49-raiz-de-âncora-de-safiras-65"><span id="h49" class="codex-anchor" aria-hidden="true"></span>H49 — Raiz-de-âncora de Safiras</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> arbusto de folhas espessas com nervuras azuladas, flores creme e raízes laterais que se bifurcam como pequenas âncoras. A raiz cortada exsuda resina clara que turva ao envelhecer.</li>
 <li><strong>Onde cresce:</strong> encostas úmidas e sombreadas do interior da <strong>Ilha das Safiras</strong>, perto de riachos limpos; negociada discretamente em <strong>Porto Esmeralda</strong>.</li>
 <li><strong>Coleta:</strong> pequena porção lateral na estação úmida, preservando a planta. <strong>Excepcional</strong> no mercado, mesmo onde há populações conhecidas.</li>
@@ -1569,7 +1701,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> procedência, frescor e preservação das plantas são essenciais. “Raiz azul de Safiras” é nome comercial insuficiente; lotes tingidos podem custar vidas.</li>
 </ul>
 <h3 id="h50-folha-de-esmeralda-66"><span id="h50" class="codex-anchor" aria-hidden="true"></span>H50 — Folha-de-esmeralda</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> folhas largas e lustrosas, verde intenso, pequenas flores brancas e nervuras que convergem perto da ponta. A face inferior é mais pálida, sem pelos.</li>
 <li><strong>Onde cresce:</strong> clareiras úmidas da <strong>Ilha das Safiras</strong> e canteiros domésticos de <strong>Porto Esmeralda</strong>.</li>
 <li><strong>Coleta:</strong> folhas maduras ao longo da estação úmida, alternando plantas. <strong>Comum na ilha.</strong></li>
@@ -1578,7 +1710,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> folhas arrancadas de plantas de sombra queimadas pelo sol perdem qualidade. Contrabandistas usam a abundância da espécie para esconder raízes raras em cargas legais; um carregamento misto não implica que todos os coletores conheçam o segredo.</li>
 </ul>
 <h3 id="h51-orquídea-das-duas-marés-67"><span id="h51" class="codex-anchor" aria-hidden="true"></span>H51 — Orquídea-das-duas-marés</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> flores com uma pétala azul e outra quase branca, raízes aéreas e folhas estreitas. A cor varia durante a abertura, sem acompanhar cada maré literalmente.</li>
 <li><strong>Onde cresce:</strong> árvores sobre enseadas protegidas da <strong>Ilha das Safiras</strong>, onde névoa salina e água doce se encontram sem inundar as raízes.</li>
 <li><strong>Coleta:</strong> flores caídas recentemente na primavera local; transplante fora da ilha é difícil. <strong>Rara.</strong></li>
@@ -1587,7 +1719,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não estabelece comunicação mental. Um nobre pode gastar fortunas tentando manter um jardim que exige conhecimentos de jardineiros insulares, criando dependência política muito concreta.</li>
 </ul>
 <h3 id="h52-musgo-de-berçário-68"><span id="h52" class="codex-anchor" aria-hidden="true"></span>H52 — Musgo-de-berçário</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> tapete verde-claro de filamentos curtos, base castanha e pequenas estruturas elevadas após chuva. Retém umidade sem formar lama quando bem manejado.</li>
 <li><strong>Onde cresce:</strong> margens altas de riachos e pedras sombreadas da <strong>Ilha das Safiras</strong>; cultivado em viveiros de <strong>Porto Esmeralda</strong>.</li>
 <li><strong>Coleta:</strong> placas pequenas durante a estação úmida, preferindo cultivo. <strong>Incomum.</strong></li>
@@ -1596,7 +1728,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> musgo encharcado apodrece raízes. O nome vem dos berçários de plantas. Um viveirista pode salvar uma expedição mais que um baú de prata, pois conhece a planta viva necessária ao transplante.</li>
 </ul>
 <h3 id="h53-semente-de-vidro-69"><span id="h53" class="codex-anchor" aria-hidden="true"></span>H53 — Semente-de-vidro</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> trepadeira de cápsulas translúcidas, sementes claras de casca dura e folhas recortadas. As sementes parecem contas polidas, mas não são minerais.</li>
 <li><strong>Onde cresce:</strong> bordas de clareiras e encostas iluminadas da <strong>Ilha das Safiras</strong>, sobretudo áreas de regeneração após queda de árvores.</li>
 <li><strong>Coleta:</strong> cápsulas maduras no fim da estação seca. <strong>Incomum.</strong></li>
@@ -1605,7 +1737,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> impróprias para ingestão. Mercadores vendem sementes como gemas menores a estrangeiros. Um colar pode ser barato em Porto Esmeralda e elegante em Altavanne sem que isso represente fraude, desde que sua natureza seja conhecida.</li>
 </ul>
 <h3 id="h54-resina-de-corvo-70"><span id="h54" class="codex-anchor" aria-hidden="true"></span>H54 — Resina-de-corvo</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> resina castanho-escura de árvore baixa, folhas grossas e tronco inclinado pelo vento. Fragmentos secos têm brilho negro superficial e interior âmbar.</li>
 <li><strong>Onde cresce:</strong> ilhas abrigadas do <strong>Arquipélago Ravena</strong>, acima das enseadas e longe da linha de ressaca.</li>
 <li><strong>Coleta:</strong> exsudações naturais no verão e material de poda. <strong>Incomum.</strong></li>
@@ -1614,7 +1746,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> o odor da mistura aquecida é reconhecido por trabalhadores dos cais. Pode relacionar um esconderijo a uma oficina de Ravena, mas também circula legalmente. Condenar alguém apenas por possuir resina favorece abusos de autoridade.</li>
 </ul>
 <h3 id="h55-erva-de-enseada-71"><span id="h55" class="codex-anchor" aria-hidden="true"></span>H55 — Erva-de-enseada</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> planta rasteira de folhas estreitas e carnosas, flores amarelas e raízes que firmam areia consolidada. Cresce em faixas acima da praia.</li>
 <li><strong>Onde cresce:</strong> enseadas do <strong>Arquipélago Ravena</strong>, inclusive trechos abrigados próximos à <strong>Enseada do Corvo</strong>.</li>
 <li><strong>Coleta:</strong> folhas no fim da primavera; preservar a cobertura da duna. <strong>Comum.</strong></li>
@@ -1623,7 +1755,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não trata envenenamento nem anula embriaguez. Arrancar grandes faixas acelera erosão da praia que protege ancoradouros; capitães rivais podem ser forçados a cooperar para preservar o lugar onde ambos escondem suas embarcações.</li>
 </ul>
 <h3 id="h56-fungo-de-corda-72"><span id="h56" class="codex-anchor" aria-hidden="true"></span>H56 — Fungo-de-corda</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> fungo claro que forma fios longos sobre fibras vegetais úmidas; no estágio maduro, aparecem pequenos discos cor de palha. Não é um tipo de cipó.</li>
 <li><strong>Onde cresce:</strong> depósitos abandonados e madeira morta no <strong>Arquipélago Ravena</strong>; também pode viajar em carga mal seca até outros portos.</li>
 <li><strong>Coleta:</strong> amostras isoladas durante períodos úmidos. <strong>Comum onde há substrato adequado.</strong></li>
@@ -1632,10 +1764,10 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> enfraquece fibras; não remenda cordas. Encontrá-lo perto de um cabo rompido não prova sabotagem, mas pode demonstrar manutenção negligente ou falsificação de inspeção naval.</li>
 </ul>
 <h2 id="viii-ilhas-frias-incognito-e-mar-das-cinzas-73">VIII — Ilhas frias, Incognito e Mar das Cinzas</h2>
-<figure class="atlas-plate"><img src="assets/herbario_08_norte.jpg" alt="Prancha VIII — Espécimes do Norte Frio e Mar das Cinzas: Alga-de-Syleth (H57), Líquen-do-silêncio (H59), Musgo-de-fenda quente (H60) e Flor-da-praia negra (H63)" width="1200" height="896"/><figcaption class="atlas-caption">Prancha VIII — Espécimes do Norte Frio e Mar das Cinzas: Alga-de-Syleth (<a class="codex-ref codex-h" href="#h57" title="Herbário de Seleni • H57 — Alga-de-Syleth">H57</a>), Líquen-do-silêncio (<a class="codex-ref codex-h" href="#h59" title="Herbário de Seleni • H59 — Líquen-do-silêncio">H59</a>), Musgo-de-fenda quente (<a class="codex-ref codex-h" href="#h60" title="Herbário de Seleni • H60 — Musgo-de-fenda quente">H60</a>) e Flor-da-praia negra (<a class="codex-ref codex-h" href="#h63" title="Herbário de Seleni • H63 — Flor-da-praia negra">H63</a>)</figcaption></figure>
+<figure class="atlas-plate"><img src="assets/herbario_08_norte.jpg" alt="Prancha VIII — Espécimes do Norte Frio e Mar das Cinzas: Alga-de-Syleth (H57), Líquen-do-silêncio (H59), Musgo-de-fenda quente (H60) e Flor-da-praia negra (H63)" width="1200" height="896" decoding="async"/><figcaption class="atlas-caption">Prancha VIII — Espécimes do Norte Frio e Mar das Cinzas: Alga-de-Syleth (<a class="codex-ref codex-h" href="#h57" title="Herbário de Seleni • H57 — Alga-de-Syleth">H57</a>), Líquen-do-silêncio (<a class="codex-ref codex-h" href="#h59" title="Herbário de Seleni • H59 — Líquen-do-silêncio">H59</a>), Musgo-de-fenda quente (<a class="codex-ref codex-h" href="#h60" title="Herbário de Seleni • H60 — Musgo-de-fenda quente">H60</a>) e Flor-da-praia negra (<a class="codex-ref codex-h" href="#h63" title="Herbário de Seleni • H63 — Flor-da-praia negra">H63</a>)</figcaption></figure>
 <p>Syleth e Lystra têm circulação marítima e podem fornecer observações repetidas. Incognito e Thanatos exigem expedições, amostras bem documentadas e grande cautela interpretativa. O herbário não presume povoados estáveis onde o cenário não os estabelece.</p>
 <h3 id="h57-alga-de-syleth-74"><span id="h57" class="codex-anchor" aria-hidden="true"></span>H57 — Alga-de-Syleth</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> alga castanha de lâminas largas com pequenas bolsas de ar e nervura clara. Frondes novas são flexíveis; as antigas ficam rasgadas pela ressaca.</li>
 <li><strong>Onde cresce:</strong> costas protegidas das <strong>Ilhas de Syleth e Lystra</strong>, em água fria, com colheita organizada a partir de pontos de desembarque conhecidos.</li>
 <li><strong>Coleta:</strong> frondes no verão, preservando fixação e parte da população. <strong>Comum no habitat.</strong></li>
@@ -1644,7 +1776,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> maré e água gelada são riscos maiores que a dificuldade botânica. A interdição de uma enseada por razões militares pode privar coletores de sua principal renda e levar a desembarques clandestinos.</li>
 </ul>
 <h3 id="h58-flor-de-faroleiro-75"><span id="h58" class="codex-anchor" aria-hidden="true"></span>H58 — Flor-de-faroleiro</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> flor amarela baixa, folhas cobertas de pelos claros e hastes que se curvam sem quebrar ao vento. Cresce em pequenas manchas protegidas por pedras.</li>
 <li><strong>Onde cresce:</strong> encostas próximas à <strong>Vigia de Syleth</strong> e terrenos abrigados de <strong>Lystra</strong>, depois do degelo.</li>
 <li><strong>Coleta:</strong> pétalas no curto verão; sementes no fim da estação. <strong>Incomum.</strong></li>
@@ -1653,7 +1785,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> a tradição de entregar um ramo a quem aguarda um desaparecido dá à planta significado ambíguo: esperança ou despedida. Um ramo fresco fora de estação pode indicar cultivo protegido, não necessariamente milagre.</li>
 </ul>
 <h3 id="h59-líquen-do-silêncio-76"><span id="h59" class="codex-anchor" aria-hidden="true"></span>H59 — Líquen-do-silêncio</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> líquen quase branco, com bordas azuladas e superfície quebradiça, aderido a rochas protegidas da abrasão. Não emite som ou odor reconhecível à distância.</li>
 <li><strong>Onde cresce:</strong> rochas expostas nas margens da <strong>Geleira do Silêncio</strong>, em <strong>Incognito</strong>, onde há degelo sazonal e luz suficiente.</li>
 <li><strong>Coleta:</strong> fragmentos naturais no verão; exemplares crescem muito lentamente. <strong>Excepcional.</strong></li>
@@ -1662,7 +1794,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> uma rocha inteira arrancada pode eliminar crescimento antigo. Expedições usam marcas da colônia para comparar mapas e níveis de gelo; falsificar uma amostra pode inventar uma viagem ao norte que nunca ocorreu.</li>
 </ul>
 <h3 id="h60-musgo-de-fenda-quente-77"><span id="h60" class="codex-anchor" aria-hidden="true"></span>H60 — Musgo-de-fenda quente</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> musgo escuro de pontas douradas, crescendo em faixas estreitas entre rocha morna e ar frio. Não sobrevive sobre lava nem em vapor escaldante.</li>
 <li><strong>Onde cresce:</strong> bordas habitáveis da <strong>Fenda Vulcânica</strong>, em <strong>Incognito</strong>, em microambientes de umidade e temperatura moderadas.</li>
 <li><strong>Coleta:</strong> pequenas placas durante a estação de acesso marítimo. <strong>Excepcional.</strong></li>
@@ -1671,7 +1803,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> gases, crostas frágeis e água quente ameaçam o coletor. A crença de que a planta aquece o corpo é <strong>Contestada</strong>. Uma encomenda científica pode valer menos que o custo de resgatar quem a aceitou.</li>
 </ul>
 <h3 id="h61-junco-de-cinza-78"><span id="h61" class="codex-anchor" aria-hidden="true"></span>H61 — Junco-de-cinza</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> planta de colmos curtos cinzentos, folhas rígidas e espigas escuras; raízes se prendem a bolsões de sedimento entre pedras.</li>
 <li><strong>Onde cresce:</strong> depressões de degelo no <strong>Cabo dos Náufragos</strong> e áreas abrigadas do litoral de <strong>Incognito</strong>, nunca sobre gelo permanente.</li>
 <li><strong>Coleta:</strong> colmos no fim do verão, somente em manchas extensas. <strong>Rara.</strong></li>
@@ -1680,7 +1812,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> colmos molhados congelam e quebram. Um feixe encontrado em embarcação distante pode sugerir uma escala no norte; correntes e comércio secundário impedem transformá-lo em prova absoluta de presença em Incognito.</li>
 </ul>
 <h3 id="h62-fungo-de-piche-79"><span id="h62" class="codex-anchor" aria-hidden="true"></span>H62 — Fungo-de-piche</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> pequenas crostas castanhas sobre madeira soterrada nas bordas de terreno betuminoso; margens creme quando novas. Não cresce no centro de piche líquido.</li>
 <li><strong>Onde cresce:</strong> zonas periféricas dos <strong>Poços de Piche</strong>, em <strong>Incognito</strong>, onde há substrato orgânico e temperatura tolerável.</li>
 <li><strong>Coleta:</strong> fragmentos de substrato durante expedições de verão. <strong>Excepcional.</strong></li>
@@ -1689,7 +1821,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> impróprio para ingestão e fácil de confundir com simples crosta mineral. Um financiador exige “cura negra” que Loreo nunca prometeu, pressionando pesquisadores a transformar uma hipótese em fraude médica.</li>
 </ul>
 <h3 id="h63-flor-da-praia-negra-80"><span id="h63" class="codex-anchor" aria-hidden="true"></span>H63 — Flor-da-praia negra</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> flor pálida de quatro pétalas, folhas baixas cor de cinza e raiz curta em solo com matéria orgânica. O contraste com areia escura a torna visível de longe.</li>
 <li><strong>Onde cresce:</strong> raros bolsões abrigados acima das praias da <strong>Ilha de Thanatos</strong>, próximos a áreas de degelo; presença registrada por navegantes, não por cultivo regular.</li>
 <li><strong>Coleta:</strong> no curto verão, sem entrada em cavernas ser necessária à botânica. <strong>Excepcional.</strong></li>
@@ -1698,7 +1830,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não ressuscita mortos, detecta Despertos ou comprova infecção. Amostras são valiosas pela origem, mas uma procedência falsificada é inteiramente possível. O risco da ilha deve ser tratado pelo cenário, não como propriedade automática da flor.</li>
 </ul>
 <h3 id="h64-véu-de-sal-negro-81"><span id="h64" class="codex-anchor" aria-hidden="true"></span>H64 — Véu-de-sal negro</h3>
-<ul>
+<ul class="herb-entry-list">
 <li><strong>Forma e identificação:</strong> película escura sobre rochas úmidas, com borda verde quando vista sob boa luz. Loreo suspeita de uma associação de organismos; sua classificação permanece aberta.</li>
 <li><strong>Onde cresce:</strong> rochas lavadas pela maré em <strong>Thanatos</strong> e pontos isolados do <strong>Mar das Cinzas</strong>; relatos de colônias em câmaras subterrâneas não foram publicados como fato.</li>
 <li><strong>Coleta:</strong> raspagens mínimas em recipiente separado, apenas para estudo. <strong>Excepcional.</strong></li>
@@ -1707,7 +1839,7 @@ tr[id] { scroll-margin-top: 84px; }
 <li><strong>Perigo e história:</strong> não provar, espalhar ou usar como corante de alimento na ficção. Sua presença pode ser natural, contaminação de carga ou pista; o contexto da cena determina qual hipótese merece investigação.</li>
 </ul>
 <h2 id="preparações-e-substituições-82">Preparações e substituições</h2>
-<figure class="atlas-plate"><img src="assets/herbario_09_vitruviano_boticario.jpg" alt="Prancha IX — O Boticário Vitruviano: estudo anatômico das relações entre órgãos humanos, raízes medicinais, prensa de ervas, almofariz e alambique de Sellene" width="1200" height="896"/><figcaption class="atlas-caption">Prancha IX — O Boticário Vitruviano: estudo anatômico das relações entre órgãos humanos, raízes medicinais, prensa de ervas, almofariz e alambique de Sellene</figcaption></figure>
+<figure class="atlas-plate"><img src="assets/herbario_09_vitruviano_boticario.jpg" alt="Prancha IX — O Boticário Vitruviano: estudo anatômico das relações entre órgãos humanos, raízes medicinais, prensa de ervas, almofariz e alambique de Sellene" width="1200" height="896" decoding="async"/><figcaption class="atlas-caption">Prancha IX — O Boticário Vitruviano: estudo anatômico das relações entre órgãos humanos, raízes medicinais, prensa de ervas, almofariz e alambique de Sellene</figcaption></figure>
 <p>As fórmulas abaixo são <strong>composições narrativas de materiais fictícios</strong>. Uma dose é uma unidade de jogo. Água limpa, recipiente, tecido, veículo e instrumentos apropriados continuam necessários. Cada linha descreve uma preparação; não somar os efeitos de todos os ingredientes individualmente.</p>
 <div class="table-wrap"><table><thead><tr><th style="text-align:left">Preparação</th><th style="text-align:left">Ingredientes botânicos possíveis</th><th style="text-align:left">Trabalho e resultado</th><th style="text-align:left">Limite e substituição</th></tr></thead><tbody><tr><td style="text-align:left">Cataplasma dos caminhos</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h01" title="Herbário de Seleni • H01 — Folha-de-lareira">H01</a> ou <a class="codex-ref codex-h" href="#h50" title="Herbário de Seleni • H50 — Folha-de-esmeralda">H50</a>; suporte de <a class="codex-ref codex-h" href="#h23" title="Herbário de Seleni • H23 — Cipó-de-atadura">H23</a> ou <a class="codex-ref codex-h" href="#h25" title="Herbário de Seleni • H25 — Alga-de-sutura">H25</a></td><td style="text-align:left">Produz o cataplasma por regra de kit/ofício ou item comercial.</td><td style="text-align:left">Efeito do método escolhido; máximo um benefício botânico de cataplasma por descanso.</td></tr><tr><td style="text-align:left">Curativo de nascente</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h10" title="Herbário de Seleni • H10 — Musgo-de-curativo">H10</a> processado e suporte de <a class="codex-ref codex-h" href="#h23" title="Herbário de Seleni • H23 — Cipó-de-atadura">H23</a></td><td style="text-align:left">Absorção e cobertura como componente do estojo médico.</td><td style="text-align:left">Não esteriliza ferida por presença nem aumenta os usos do estojo sem reposição adequada.</td></tr><tr><td style="text-align:left">Cuidado amargo das brumas</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h17" title="Herbário de Seleni • H17 — Casca-amarga de Voernock">H17</a> e/ou <a class="codex-ref codex-h" href="#h18" title="Herbário de Seleni • H18 — Salgueiro-das-brumas">H18</a>, conforme o protocolo local</td><td style="text-align:left">Herbalismo CD 13; usa AMARGO <code>+3</code> na indicação existente.</td><td style="text-align:left">Não exige a soma das duas espécies para fabricar um bônus maior; não previne picadas.</td></tr><tr><td style="text-align:left">Sachê de acampamento</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h19" title="Herbário de Seleni • H19 — Erva-de-rede">H19</a></td><td style="text-align:left">Preparo adequado de repelente; PROTEÇÃO por uma noite.</td><td style="text-align:left">Não trata doença estabelecida e não soma com outro repelente herbal equivalente.</td></tr><tr><td style="text-align:left">Apoio das cisternas</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h02" title="Herbário de Seleni • H02 — Raiz-de-berço">H02</a> ou <a class="codex-ref codex-h" href="#h33" title="Herbário de Seleni • H33 — Raiz-de-poço">H33</a>, água segura e sais adequados</td><td style="text-align:left">CUIDADO <code>+2</code> para o quadro indicado, integrado à hidratação.</td><td style="text-align:left">Não transforma água contaminada em remédio seguro.</td></tr><tr><td style="text-align:left">Cuidado do fole</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h09" title="Herbário de Seleni • H09 — Folha-de-fole">H09</a> e veículo profissional apropriado</td><td style="text-align:left">CUIDADO <code>+2</code> às crises da Tosse de Ferraur.</td><td style="text-align:left">Afastamento da poeira continua indispensável; não reverte sequelas.</td></tr><tr><td style="text-align:left">Bálsamo de luvas</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h08" title="Herbário de Seleni • H08 — Rosa-de-cera de Altavanne">H08</a> ou <a class="codex-ref codex-h" href="#h50" title="Herbário de Seleni • H50 — Folha-de-esmeralda">H50</a>, veículo de unguento</td><td style="text-align:left">SUPORTE à rotina da Cinza da Pele.</td><td style="text-align:left">Não recupera tato, não mascara a necessidade de inspeção diária.</td></tr><tr><td style="text-align:left">Preparo de travessia</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h26" title="Herbário de Seleni • H26 — Folha-de-quilha">H26</a> ou <a class="codex-ref codex-h" href="#h55" title="Herbário de Seleni • H55 — Erva-de-enseada">H55</a></td><td style="text-align:left">PROTEÇÃO <code>+2</code> em um teste de enjoo de uma cena.</td><td style="text-align:left">Sem teste de enjoo na mesa, benefício apenas narrativo; não beneficia Navegação.</td></tr><tr><td style="text-align:left">Produto para alojamentos</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h31" title="Herbário de Seleni • H31 — Erva-de-porão">H31</a> e reagentes do ofício</td><td style="text-align:left">Apoia limpeza e controle de parasitas materiais.</td><td style="text-align:left">Higiene e renovação de roupas determinam o controle do Mal do Porão.</td></tr><tr><td style="text-align:left">Sedativo de boticário</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h04" title="Herbário de Seleni • H04 — Véu-da-Guardiã">H04</a> ou <a class="codex-ref codex-h" href="#h48" title="Herbário de Seleni • H48 — Folha-sem-voz">H48</a> como parte de formulação especializada</td><td style="text-align:left">Uma dose do produto acabado usa CON CD 14, <code>-2</code> Percepção e iniciativa por duas horas.</td><td style="text-align:left">Custo, aplicação e demais quantidades seguem o catálogo; não produz confissão nem controle da vontade.</td></tr><tr><td style="text-align:left">Óleo de lamparina</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h28" title="Herbário de Seleni • H28 — Semente-de-vela">H28</a> ou sementes de <a class="codex-ref codex-h" href="#h03" title="Herbário de Seleni • H03 — Flor-do-Vigia">H03</a></td><td style="text-align:left">OFÍCIO; iluminação normal conforme recipiente e combustível.</td><td style="text-align:left">Não corresponde automaticamente a arma incendiária ou reagente alquímico acabado.</td></tr><tr><td style="text-align:left">Lacre de procedência</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h13" title="Herbário de Seleni • H13 — Lágrima-do-Artífice">H13</a>, <a class="codex-ref codex-h" href="#h37" title="Herbário de Seleni • H37 — Resina-de-Zahar">H37</a> ou <a class="codex-ref codex-h" href="#h54" title="Herbário de Seleni • H54 — Resina-de-corvo">H54</a>, conforme oficina</td><td style="text-align:left">OFÍCIO; fecha recipientes e permite registrar a mistura usada.</td><td style="text-align:left">Um lacre pode ser falsificado; descobrir adulteração exige evidência e perícia.</td></tr><tr><td style="text-align:left">Tinta de arquivo</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h32" title="Herbário de Seleni • H32 — Coralina-de-tinta">H32</a> ou <a class="codex-ref codex-h" href="#h41" title="Herbário de Seleni • H41 — Casca-de-tinta negra">H41</a></td><td style="text-align:left">OFÍCIO; escrita de qualidade quando corretamente preparada.</td><td style="text-align:left">O material não torna o conteúdo verdadeiro nem a assinatura autêntica.</td></tr><tr><td style="text-align:left">Embalagem de muda</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h52" title="Herbário de Seleni • H52 — Musgo-de-berçário">H52</a>, suporte de <a class="codex-ref codex-h" href="#h20" title="Herbário de Seleni • H20 — Samambaia-das-copas">H20</a> e recipiente adequado</td><td style="text-align:left">OFÍCIO; permite tentar transportar uma planta viva.</td><td style="text-align:left">Requer manejo, espaço e água; não preserva indefinidamente uma raiz cortada.</td></tr><tr><td style="text-align:left">Extrato de raiz-de-âncora</td><td style="text-align:left"><a class="codex-ref codex-h" href="#h49" title="Herbário de Seleni • H49 — Raiz-de-âncora de Safiras">H49</a> fresca, reagentes e instrumentos especializados</td><td style="text-align:left">Apenas no caderno reservado: trabalho conjunto de Herbalista, Alquimista e Cirurgião.</td><td style="text-align:left">Não é receita doméstica nem cura portátil e universal.</td></tr></tbody></table></div>
 <h3 id="o-que-pode-substituir-o-quê-83">O que pode substituir o quê</h3>
@@ -1756,7 +1888,7 @@ tr[id] { scroll-margin-top: 84px; }
 <p>Plantas usadas em ritos da Chama Solar não são prova de ortodoxia ou heresia. Ter sete flores num jardim não demonstra culto secreto. Um tribunal, pregador ou rival pode alegar isso, mas a narrativa deve distinguir acusação, tradição e evidência.</p>
 
     <div class="gm-vault" data-locked="true">
-        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"iLeAzs9TSuGTtmWqtWF15w==","i":"GDG0S5l/soO8/3as","c":"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"}</script>
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"6tvFav8IMh/WuxvqH2iyrw==","i":"nc0OsT8NxwXU1LPY","c":"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"}</script>
         <div class="gm-gate-box">
             <div class="gm-seal-icon">🔒</div>
             <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
@@ -2868,6 +3000,87 @@ tr[id] { scroll-margin-top: 84px; }
             lb.classList.add('open');
         }
     });
+
+    /* =====================================================
+       PRINT / PDF PREPARATION (IMAGES + DETAILS + OVERLAYS)
+       ===================================================== */
+    let printPrepActive = false;
+    function prepareForPrint() {
+        if (printPrepActive) return;
+        printPrepActive = true;
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) lb.classList.remove('open');
+        if (!document.body.classList.contains('sidebar-hidden')) {
+            document.body.dataset.aleniaPrintSidebarOpen = '1';
+            document.body.classList.add('sidebar-hidden');
+        }
+        document.body.classList.remove('sidebar-open-mobile');
+
+        const pageRoot = document.querySelector('.book-page') || document;
+        pageRoot.querySelectorAll('details').forEach(d => {
+            if (!d.open) {
+                d.dataset.aleniaPrintOpened = '1';
+                d.open = true;
+            }
+        });
+        pageRoot.querySelectorAll('img').forEach(img => {
+            if (img.loading === 'lazy') img.loading = 'eager';
+        });
+        window.dispatchEvent(new CustomEvent('alenia:prepare-print'));
+    }
+
+    function restoreAfterPrint() {
+        if (!printPrepActive) return;
+        printPrepActive = false;
+        const pageRoot = document.querySelector('.book-page') || document;
+        pageRoot.querySelectorAll('details[data-alenia-print-opened]').forEach(d => {
+            d.open = false;
+            delete d.dataset.aleniaPrintOpened;
+        });
+        if (document.body.dataset.aleniaPrintSidebarOpen === '1') {
+            document.body.classList.remove('sidebar-hidden');
+            delete document.body.dataset.aleniaPrintSidebarOpen;
+        }
+        window.dispatchEvent(new CustomEvent('alenia:restore-print'));
+    }
+
+    window.addEventListener('beforeprint', prepareForPrint);
+    window.addEventListener('afterprint', restoreAfterPrint);
+
+    window.aleniaPrint = async function(btn) {
+        const origLabel = btn ? btn.textContent : '';
+        try {
+            prepareForPrint();
+            const pageRoot = document.querySelector('.book-page') || document;
+            const pendingImgs = Array.from(pageRoot.querySelectorAll('img')).filter(
+                img => !img.complete || img.naturalWidth === 0
+            );
+            if (pendingImgs.length > 0) {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = 'Preparando PDF...';
+                }
+                const waitAll = Promise.all(pendingImgs.map(img => {
+                    img.loading = 'eager';
+                    if (img.decode) {
+                        return img.decode().catch(() => {});
+                    }
+                    return new Promise(res => {
+                        img.addEventListener('load', res, { once: true });
+                        img.addEventListener('error', res, { once: true });
+                    });
+                }));
+                await Promise.race([waitAll, new Promise(res => setTimeout(res, 4000))]);
+            }
+            await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = origLabel || 'Imprimir / PDF';
+            }
+        }
+        window.print();
+    };
 
     document.addEventListener('DOMContentLoaded', async () => {
         const lb = document.getElementById('atlas-lightbox');

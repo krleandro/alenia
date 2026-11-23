@@ -807,9 +807,29 @@ tr { break-inside: avoid; }
 .entry-card {
     margin: 10px 0 12px; padding: 11px 14px 9px; background: var(--vellum-card);
     border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
-    font-size: 15.2px;
+    font-size: 15.2px; display: flow-root;
 }
 .entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 4px; }
+.atlas-plate.npc-inline-plate {
+    float: right; width: 156px; margin: 0 0 10px 16px; padding: 4px;
+    background: #efe3c8; border: 1px solid rgba(154, 123, 59, 0.65); border-radius: 2px;
+}
+.atlas-plate.npc-inline-plate img {
+    width: 100%; aspect-ratio: 3 / 4; max-height: 208px; object-fit: cover; display: block;
+}
+.atlas-plate.npc-inline-plate .atlas-caption { display: none; }
+.atlas-plate.fauna-inline-plate {
+    max-width: 340px; margin: 8px auto 12px; padding: 5px;
+}
+.atlas-plate.fauna-inline-plate img {
+    width: 100%; aspect-ratio: 3 / 2; max-height: 190px; object-fit: cover;
+}
+.leaf-body .atlas-plate.npc-inline-plate {
+    width: 132px; margin: 0 0 8px 12px; padding: 3px;
+}
+.leaf-body .atlas-plate.npc-inline-plate img {
+    max-height: 176px;
+}
 
 .lightbox {
     display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
@@ -842,7 +862,7 @@ tr { break-inside: avoid; }
 .portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
 .tome-divider { page-break-before: always; break-before: page; }
 
-@media (max-width: 1020px) {
+@media screen and (max-width: 1020px) {
     .sidebar { transform: translateX(-100%); }
     body.sidebar-open-mobile .sidebar { transform: translateX(0); box-shadow: 6px 0 30px rgba(0,0,0,0.7); }
     body.sidebar-open-mobile .sidebar-backdrop { display: block; }
@@ -850,28 +870,140 @@ tr { break-inside: avoid; }
     .book-page { padding: 28px 22px 42px; }
     .side-turn-btn { display: none; }
 }
-@media (max-width: 640px) {
+@media screen and (max-width: 640px) {
     .topbar-current { display: none; }
     .topbar { padding: 0 10px; }
     .topbar-brand { font-size: 12.5px; letter-spacing: 0.1em; }
     .btn-toc-toggle, .btn-print, .btn-lock { padding: 5px 7px; font-size: 9.5px; }
+    .atlas-plate.npc-inline-plate { float: none; width: 100%; max-width: 220px; margin: 0 auto 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .book-spread, .flip-sheet, .flip-cast-shadow, .flip-face::before { animation: none !important; }
 }
 
-@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@page { size: A4 portrait; margin: 15mm 14mm 16mm 14mm; }
 @media print {
-    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; overflow: visible !important; }
-    .topbar, .sidebar, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar { display: none !important; }
-    body.book-mode .book-shell, .book-shell { display: block !important; margin: 0 !important; padding: 0 !important; }
-    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    html, body {
+        background: #ffffff !important;
+        color: #1c1610 !important;
+        font-size: 10.3pt;
+        line-height: 1.46;
+        overflow: visible !important;
+        height: auto !important;
+        min-height: 0 !important;
+    }
+    .topbar, .sidebar, .sidebar-backdrop, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar {
+        display: none !important;
+    }
+    body.book-mode .book-shell, .book-shell {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .book-page {
+        max-width: none !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        border: none !important;
+    }
     .book-page::before { display: none !important; }
-    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    p, li { orphans: 3; widows: 3; }
+    h1, h2, h3, h4 {
+        break-after: avoid;
+        page-break-after: avoid;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .cover-page:not(.portal-hero) {
+        min-height: 254mm !important;
+        max-height: 263mm !important;
+        margin: 0 !important;
+        padding: 28px 24px !important;
+        background: #fbf8f1 !important;
+        page-break-after: always;
+        break-after: page;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cover-page.portal-hero {
+        min-height: auto !important;
+        margin: 0 0 18px !important;
+        padding: 20px 18px !important;
+        background: #fbf8f1 !important;
+        page-break-after: auto !important;
+        break-after: auto !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cover-thumb { max-height: 112mm !important; }
+    .table-wrap { overflow: visible !important; margin: 8px 0 11px; }
+    table { font-size: 9.2pt; line-height: 1.32; width: 100% !important; }
+    thead { display: table-header-group; }
+    tfoot { display: table-footer-group; }
+    tr { break-inside: avoid; page-break-inside: avoid; }
+    thead th { padding: 5px 6px; font-size: 8.4pt; }
+    tbody td { padding: 4.5px 6px; overflow-wrap: break-word; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, .portal-card, blockquote, tbody tr:nth-child(even) {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .entry-card {
+        padding: 9px 12px 8px;
+        margin: 8px 0 10px;
+        font-size: 9.8pt;
+        line-height: 1.4;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .entry-card p { margin-bottom: 5px; }
+    .entry-card li { margin-bottom: 2.5px; }
+    ul.herb-entry-list {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
     a { color: var(--crimson-dark); text-decoration: none; }
-    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+    .atlas-plate {
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .atlas-plate img { max-height: 145mm; object-fit: contain; }
+    .atlas-plate.creature-plate img { max-height: 68mm; object-fit: cover; }
+    .atlas-plate.npc-inline-plate {
+        float: right !important;
+        width: 124px !important;
+        margin: 0 0 7px 14px !important;
+        padding: 3px !important;
+    }
+    .atlas-plate.npc-inline-plate img {
+        max-height: 165px !important;
+        object-fit: cover !important;
+    }
+    .atlas-plate.fauna-inline-plate {
+        max-width: 280px !important;
+        margin: 6px auto 8px !important;
+    }
+    .atlas-plate.fauna-inline-plate img {
+        max-height: 155px !important;
+        object-fit: cover !important;
+    }
+    .portal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+    .portal-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+    }
 }
 
 /* =====================================================
@@ -1501,7 +1633,7 @@ body.token-studio-mode strong {
 </style>
 </head>
 <body class="token-studio-mode sidebar-hidden" data-book-title="Gerador de Tokens">
-    <header class="topbar"><div class="topbar-left"><button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><span class="topbar-current">Gerador de Tokens</span></div><nav class="topbar-nav"><a href="index.html">Estante</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <header class="topbar"><div class="topbar-left"><button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><span class="topbar-current">Gerador de Tokens</span></div><nav class="topbar-nav"><a href="index.html">Estante</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button></nav></header>
     <aside class="sidebar" aria-label="Navegação da Biblioteca"><div class="sidebar-title">Biblioteca Oficial</div><div id="sidebar-pane-lib" class="sidebar-pane active"><div class="lib-group-label">Início</div><ul class="lib-list"><li><a class="lib-link" href="index.html"><span class="lib-num">✦</span><span>Estante Oficial</span></a></li></ul><div class="lib-group-label">Tomos do Jogador</div><ul class="lib-list"><li><a class="lib-link" href="01_Livro_de_Regras.html"><span class="lib-num">I</span><span>Livro de Regras</span></a></li><li><a class="lib-link" href="02_Livro_do_Cenario.html"><span class="lib-num">II</span><span>Livro do Cenário &amp; Atlas</span></a></li><li><a class="lib-link" href="03_Catalogo_de_Kits.html"><span class="lib-num">III</span><span>Catálogo de Kits Universais</span></a></li><li><a class="lib-link" href="05_Onomastica_e_Toponimia.html"><span class="lib-num">V</span><span>Onomástica &amp; Toponímia</span></a></li><li><a class="lib-link" href="06_Guia_do_Jogador.html"><span class="lib-num">VI</span><span>Guia do Jogador &amp; Escudo</span></a></li><li><a class="lib-link" href="09_Catalogo_de_Equipamentos.html"><span class="lib-num">IX</span><span>Empório &amp; Ofícios</span></a></li><li><a class="lib-link" href="10_Herbario_de_Seleni.html"><span class="lib-num">X</span><span>Herbário de Seleni</span></a></li><li><a class="lib-link" href="11_Cronica_das_Terras_e_das_Mares.html"><span class="lib-num">XI</span><span>Crônica das Terras e das Marés</span></a></li><li><a class="lib-link" href="12_Cozinhas_de_Alenia.html"><span class="lib-num">XII</span><span>Cozinhas de Alenia</span></a></li><li><a class="lib-link" href="13_Grandes_Nomes_e_Feitos_de_Alenia.html"><span class="lib-num">XIII</span><span>Grandes Nomes e Feitos de Alenia</span></a></li></ul><div class="lib-group-label">Área Restrita do Mestre</div><ul class="lib-list"><li><a class="lib-link gm-link" href="04_Bestiario_de_Alenia.html"><span class="lib-num">IV</span><span>🔒 Bestiário &amp; Ameaças</span></a></li><li><a class="lib-link gm-link" href="07_Aventura_Inicial.html"><span class="lib-num">VII</span><span>🔒 Aventura Inicial</span></a></li><li><a class="lib-link gm-link" href="08_Acervo_Oculto_de_Sellene.html"><span class="lib-num">VIII</span><span>🔒 O Acervo Oculto de Sellene</span></a></li></ul><div class="lib-group-label">Ferramentas &amp; VTT</div><ul class="lib-list"><li><a class="lib-link active" href="gerador_tokens.html"><span class="lib-num">⚔</span><span>Gerador de Tokens</span></a></li></ul><div class="lib-group-label">Volume Único</div><ul class="lib-list"><li><a class="lib-link" href="Alenia_Compendio_Completo.html"><span class="lib-num">★</span><span>Compêndio Completo</span></a></li></ul></div></aside><div id="sidebar-backdrop" class="sidebar-backdrop"></div>
     
     <main class="book-shell">
@@ -2736,6 +2868,87 @@ body.token-studio-mode strong {
             lb.classList.add('open');
         }
     });
+
+    /* =====================================================
+       PRINT / PDF PREPARATION (IMAGES + DETAILS + OVERLAYS)
+       ===================================================== */
+    let printPrepActive = false;
+    function prepareForPrint() {
+        if (printPrepActive) return;
+        printPrepActive = true;
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) lb.classList.remove('open');
+        if (!document.body.classList.contains('sidebar-hidden')) {
+            document.body.dataset.aleniaPrintSidebarOpen = '1';
+            document.body.classList.add('sidebar-hidden');
+        }
+        document.body.classList.remove('sidebar-open-mobile');
+
+        const pageRoot = document.querySelector('.book-page') || document;
+        pageRoot.querySelectorAll('details').forEach(d => {
+            if (!d.open) {
+                d.dataset.aleniaPrintOpened = '1';
+                d.open = true;
+            }
+        });
+        pageRoot.querySelectorAll('img').forEach(img => {
+            if (img.loading === 'lazy') img.loading = 'eager';
+        });
+        window.dispatchEvent(new CustomEvent('alenia:prepare-print'));
+    }
+
+    function restoreAfterPrint() {
+        if (!printPrepActive) return;
+        printPrepActive = false;
+        const pageRoot = document.querySelector('.book-page') || document;
+        pageRoot.querySelectorAll('details[data-alenia-print-opened]').forEach(d => {
+            d.open = false;
+            delete d.dataset.aleniaPrintOpened;
+        });
+        if (document.body.dataset.aleniaPrintSidebarOpen === '1') {
+            document.body.classList.remove('sidebar-hidden');
+            delete document.body.dataset.aleniaPrintSidebarOpen;
+        }
+        window.dispatchEvent(new CustomEvent('alenia:restore-print'));
+    }
+
+    window.addEventListener('beforeprint', prepareForPrint);
+    window.addEventListener('afterprint', restoreAfterPrint);
+
+    window.aleniaPrint = async function(btn) {
+        const origLabel = btn ? btn.textContent : '';
+        try {
+            prepareForPrint();
+            const pageRoot = document.querySelector('.book-page') || document;
+            const pendingImgs = Array.from(pageRoot.querySelectorAll('img')).filter(
+                img => !img.complete || img.naturalWidth === 0
+            );
+            if (pendingImgs.length > 0) {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = 'Preparando PDF...';
+                }
+                const waitAll = Promise.all(pendingImgs.map(img => {
+                    img.loading = 'eager';
+                    if (img.decode) {
+                        return img.decode().catch(() => {});
+                    }
+                    return new Promise(res => {
+                        img.addEventListener('load', res, { once: true });
+                        img.addEventListener('error', res, { once: true });
+                    });
+                }));
+                await Promise.race([waitAll, new Promise(res => setTimeout(res, 4000))]);
+            }
+            await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = origLabel || 'Imprimir / PDF';
+            }
+        }
+        window.print();
+    };
 
     document.addEventListener('DOMContentLoaded', async () => {
         const lb = document.getElementById('atlas-lightbox');

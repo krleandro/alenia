@@ -807,9 +807,29 @@ tr { break-inside: avoid; }
 .entry-card {
     margin: 10px 0 12px; padding: 11px 14px 9px; background: var(--vellum-card);
     border: 1px solid var(--border); border-top: 3px solid var(--crimson); border-radius: 2px; break-inside: avoid;
-    font-size: 15.2px;
+    font-size: 15.2px; display: flow-root;
 }
 .entry-card h3 { margin-top: 0; color: var(--crimson); border-bottom: 1px solid rgba(154, 123, 59, 0.45); padding-bottom: 4px; }
+.atlas-plate.npc-inline-plate {
+    float: right; width: 156px; margin: 0 0 10px 16px; padding: 4px;
+    background: #efe3c8; border: 1px solid rgba(154, 123, 59, 0.65); border-radius: 2px;
+}
+.atlas-plate.npc-inline-plate img {
+    width: 100%; aspect-ratio: 3 / 4; max-height: 208px; object-fit: cover; display: block;
+}
+.atlas-plate.npc-inline-plate .atlas-caption { display: none; }
+.atlas-plate.fauna-inline-plate {
+    max-width: 340px; margin: 8px auto 12px; padding: 5px;
+}
+.atlas-plate.fauna-inline-plate img {
+    width: 100%; aspect-ratio: 3 / 2; max-height: 190px; object-fit: cover;
+}
+.leaf-body .atlas-plate.npc-inline-plate {
+    width: 132px; margin: 0 0 8px 12px; padding: 3px;
+}
+.leaf-body .atlas-plate.npc-inline-plate img {
+    max-height: 176px;
+}
 
 .lightbox {
     display: none; position: fixed; inset: 0; background: rgba(10, 9, 8, 0.92);
@@ -842,7 +862,7 @@ tr { break-inside: avoid; }
 .portal-cta { margin-top: auto; padding-top: 12px; font-family: 'Cinzel', Georgia, serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
 .tome-divider { page-break-before: always; break-before: page; }
 
-@media (max-width: 1020px) {
+@media screen and (max-width: 1020px) {
     .sidebar { transform: translateX(-100%); }
     body.sidebar-open-mobile .sidebar { transform: translateX(0); box-shadow: 6px 0 30px rgba(0,0,0,0.7); }
     body.sidebar-open-mobile .sidebar-backdrop { display: block; }
@@ -850,28 +870,140 @@ tr { break-inside: avoid; }
     .book-page { padding: 28px 22px 42px; }
     .side-turn-btn { display: none; }
 }
-@media (max-width: 640px) {
+@media screen and (max-width: 640px) {
     .topbar-current { display: none; }
     .topbar { padding: 0 10px; }
     .topbar-brand { font-size: 12.5px; letter-spacing: 0.1em; }
     .btn-toc-toggle, .btn-print, .btn-lock { padding: 5px 7px; font-size: 9.5px; }
+    .atlas-plate.npc-inline-plate { float: none; width: 100%; max-width: 220px; margin: 0 auto 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .book-spread, .flip-sheet, .flip-cast-shadow, .flip-face::before { animation: none !important; }
 }
 
-@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+@page { size: A4 portrait; margin: 15mm 14mm 16mm 14mm; }
 @media print {
-    html, body { background: #ffffff !important; font-size: 10.8pt; line-height: 1.5; overflow: visible !important; }
-    .topbar, .sidebar, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar { display: none !important; }
-    body.book-mode .book-shell, .book-shell { display: block !important; margin: 0 !important; padding: 0 !important; }
-    .book-page { max-width: none !important; box-shadow: none !important; background: #ffffff !important; padding: 0 !important; border: none !important; }
+    html, body {
+        background: #ffffff !important;
+        color: #1c1610 !important;
+        font-size: 10.3pt;
+        line-height: 1.46;
+        overflow: visible !important;
+        height: auto !important;
+        min-height: 0 !important;
+    }
+    .topbar, .sidebar, .sidebar-backdrop, .lightbox, .gm-gate-box, .reader-stage, .reader-footer-bar {
+        display: none !important;
+    }
+    body.book-mode .book-shell, .book-shell {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .book-page {
+        max-width: none !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        border: none !important;
+    }
     .book-page::before { display: none !important; }
-    .cover-page { min-height: 245mm; margin: 0; background: #fbf8f1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    thead th, .callout, .formula-box, .entry-card, .atlas-plate, tbody tr:nth-child(even) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    p, li { orphans: 3; widows: 3; }
+    h1, h2, h3, h4 {
+        break-after: avoid;
+        page-break-after: avoid;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .cover-page:not(.portal-hero) {
+        min-height: 254mm !important;
+        max-height: 263mm !important;
+        margin: 0 !important;
+        padding: 28px 24px !important;
+        background: #fbf8f1 !important;
+        page-break-after: always;
+        break-after: page;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cover-page.portal-hero {
+        min-height: auto !important;
+        margin: 0 0 18px !important;
+        padding: 20px 18px !important;
+        background: #fbf8f1 !important;
+        page-break-after: auto !important;
+        break-after: auto !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cover-thumb { max-height: 112mm !important; }
+    .table-wrap { overflow: visible !important; margin: 8px 0 11px; }
+    table { font-size: 9.2pt; line-height: 1.32; width: 100% !important; }
+    thead { display: table-header-group; }
+    tfoot { display: table-footer-group; }
+    tr { break-inside: avoid; page-break-inside: avoid; }
+    thead th { padding: 5px 6px; font-size: 8.4pt; }
+    tbody td { padding: 4.5px 6px; overflow-wrap: break-word; }
+    thead th, .callout, .formula-box, .entry-card, .atlas-plate, .portal-card, blockquote, tbody tr:nth-child(even) {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .entry-card {
+        padding: 9px 12px 8px;
+        margin: 8px 0 10px;
+        font-size: 9.8pt;
+        line-height: 1.4;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .entry-card p { margin-bottom: 5px; }
+    .entry-card li { margin-bottom: 2.5px; }
+    ul.herb-entry-list {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
     a { color: var(--crimson-dark); text-decoration: none; }
-    .atlas-plate img { max-height: 160mm; object-fit: contain; }
+    .atlas-plate {
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .atlas-plate img { max-height: 145mm; object-fit: contain; }
+    .atlas-plate.creature-plate img { max-height: 68mm; object-fit: cover; }
+    .atlas-plate.npc-inline-plate {
+        float: right !important;
+        width: 124px !important;
+        margin: 0 0 7px 14px !important;
+        padding: 3px !important;
+    }
+    .atlas-plate.npc-inline-plate img {
+        max-height: 165px !important;
+        object-fit: cover !important;
+    }
+    .atlas-plate.fauna-inline-plate {
+        max-width: 280px !important;
+        margin: 6px auto 8px !important;
+    }
+    .atlas-plate.fauna-inline-plate img {
+        max-height: 155px !important;
+        object-fit: cover !important;
+    }
+    .portal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+    .portal-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+    }
 }
 
 /* =====================================================
@@ -1013,7 +1145,7 @@ tr[id] { scroll-margin-top: 84px; }
 </style>
 </head>
 <body class="book-mode sidebar-hidden" data-book-title="Livro de Regras">
-    <header class="topbar"><div class="topbar-left"><button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Sumário do Volume">📑 Sumário</button><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><span class="topbar-current">Livro de Regras</span></div><nav class="topbar-nav"><a href="index.html">Estante</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.print()">Imprimir / PDF</button></nav></header>
+    <header class="topbar"><div class="topbar-left"><button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Sumário do Volume">📑 Sumário</button><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><span class="topbar-current">Livro de Regras</span></div><nav class="topbar-nav"><a href="index.html">Estante</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.aleniaPrint && window.aleniaPrint(this)">Imprimir / PDF</button></nav></header>
     <aside class="sidebar" aria-label="Navegação da Biblioteca e Sumário"><div class="sidebar-tabs"><button class="sidebar-tab active" data-tab="lib" type="button">📚 Livros</button><button class="sidebar-tab" data-tab="toc" type="button">📑 Sumário</button></div><div id="sidebar-pane-lib" class="sidebar-pane active"><div class="lib-group-label">Início</div><ul class="lib-list"><li><a class="lib-link" href="index.html"><span class="lib-num">✦</span><span>Estante Oficial</span></a></li></ul><div class="lib-group-label">Tomos do Jogador</div><ul class="lib-list"><li><a class="lib-link active" href="01_Livro_de_Regras.html"><span class="lib-num">I</span><span>Livro de Regras</span></a></li><li><a class="lib-link" href="02_Livro_do_Cenario.html"><span class="lib-num">II</span><span>Livro do Cenário &amp; Atlas</span></a></li><li><a class="lib-link" href="03_Catalogo_de_Kits.html"><span class="lib-num">III</span><span>Catálogo de Kits Universais</span></a></li><li><a class="lib-link" href="05_Onomastica_e_Toponimia.html"><span class="lib-num">V</span><span>Onomástica &amp; Toponímia</span></a></li><li><a class="lib-link" href="06_Guia_do_Jogador.html"><span class="lib-num">VI</span><span>Guia do Jogador &amp; Escudo</span></a></li><li><a class="lib-link" href="09_Catalogo_de_Equipamentos.html"><span class="lib-num">IX</span><span>Empório &amp; Ofícios</span></a></li><li><a class="lib-link" href="10_Herbario_de_Seleni.html"><span class="lib-num">X</span><span>Herbário de Seleni</span></a></li><li><a class="lib-link" href="11_Cronica_das_Terras_e_das_Mares.html"><span class="lib-num">XI</span><span>Crônica das Terras e das Marés</span></a></li><li><a class="lib-link" href="12_Cozinhas_de_Alenia.html"><span class="lib-num">XII</span><span>Cozinhas de Alenia</span></a></li><li><a class="lib-link" href="13_Grandes_Nomes_e_Feitos_de_Alenia.html"><span class="lib-num">XIII</span><span>Grandes Nomes e Feitos de Alenia</span></a></li></ul><div class="lib-group-label">Área Restrita do Mestre</div><ul class="lib-list"><li><a class="lib-link gm-link" href="04_Bestiario_de_Alenia.html"><span class="lib-num">IV</span><span>🔒 Bestiário &amp; Ameaças</span></a></li><li><a class="lib-link gm-link" href="07_Aventura_Inicial.html"><span class="lib-num">VII</span><span>🔒 Aventura Inicial</span></a></li><li><a class="lib-link gm-link" href="08_Acervo_Oculto_de_Sellene.html"><span class="lib-num">VIII</span><span>🔒 O Acervo Oculto de Sellene</span></a></li></ul><div class="lib-group-label">Ferramentas &amp; VTT</div><ul class="lib-list"><li><a class="lib-link" href="gerador_tokens.html"><span class="lib-num">⚔</span><span>Gerador de Tokens</span></a></li></ul><div class="lib-group-label">Volume Único</div><ul class="lib-list"><li><a class="lib-link" href="Alenia_Compendio_Completo.html"><span class="lib-num">★</span><span>Compêndio Completo</span></a></li></ul></div><div id="sidebar-pane-toc" class="sidebar-pane"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#1-visão-geral-e-proposta-do-sistema-0">1. Visão Geral e Proposta do Sistema</a></li><li class="toc-h3"><a href="#pilares-fundamentais-1">Pilares Fundamentais</a></li><li class="toc-h2"><a href="#2-atributos-base-e-geração-de-personagem-2">2. Atributos Base e Geração de Personagem</a></li><li class="toc-h3"><a href="#cálculo-do-modificador-3">Cálculo do Modificador</a></li><li class="toc-h3"><a href="#geração-inicial-de-atributos-4">Geração Inicial de Atributos</a></li><li class="toc-h2"><a href="#3-atributos-especiais-opcionais-evolução-exclusiva-por-feitos-5">3. Atributos Especiais (Opcionais — Evolução Exclusiva por Feitos)</a></li><li class="toc-h2"><a href="#4-testes-dificuldades-e-perícias-recalibradas-6">4. Testes, Dificuldades e Perícias (Recalibradas)</a></li><li class="toc-h3"><a href="#teste-básico-7">Teste Básico</a></li><li class="toc-h3"><a href="#graduação-livre-graus-automáticos-e-teto-progressivo-por-nível-8">Graduação Livre, Graus Automáticos e Teto Progressivo por Nível</a></li><li class="toc-h3"><a href="#pontos-de-perícia-uniforme-e-equilibrado-9">Pontos de Perícia (Uniforme e Equilibrado)</a></li><li class="toc-h3"><a href="#lista-oficial-de-perícias-34-perícias-perícias-livres-ilimitadas-10">Lista Oficial de Perícias (34 Perícias + Perícias Livres Ilimitadas)</a></li><li class="toc-h2"><a href="#5-sistema-de-evolução-experiência-xp-e-níveis-1-a-30-11">5. Sistema de Evolução, Experiência (XP) e Níveis 1 a 30</a></li><li class="toc-h3"><a href="#51-como-ganhar-xp-os-5-pilares-muito-além-do-combate-12">5.1 Como Ganhar XP — Os 5 Pilares (Muito Além do Combate)</a></li><li class="toc-h3"><a href="#52-tabela-completa-de-evolução-níveis-1-a-30-13">5.2 Tabela Completa de Evolução (Níveis 1 a 30)</a></li><li class="toc-h3"><a href="#53-pontos-de-vida-por-dado-de-vida-estilo-dd-conforme-a-natureza-do-kit-14">5.3 Pontos de Vida por Dado de Vida (Estilo D&amp;D conforme a Natureza do Kit)</a></li><li class="toc-h3"><a href="#54-os-3-patamares-dinâmicos-tetos-e-troca-de-kit-15">5.4 Os 3 Patamares Dinâmicos, Tetos e Troca de Kit</a></li><li class="toc-h2"><a href="#6-combate-ágil-tático-e-mortal-16">6. Combate Ágil, Tático e Mortal</a></li><li class="toc-h3"><a href="#turno-economia-de-ações-e-iniciativa-17">Turno, Economia de Ações e Iniciativa</a></li><li class="toc-h3"><a href="#defesa-situacional-surpresa-e-condições-18">Defesa Situacional, Surpresa e Condições</a></li><li class="toc-h3"><a href="#múltiplas-ações-regra-storyteller-com-trava-de-treino-19">Múltiplas Ações (Regra Storyteller — Com Trava de Treino)</a></li><li class="toc-h3"><a href="#ações-defensivas-sacrificando-o-ataque-20">Ações Defensivas (Sacrificando o Ataque)</a></li><li class="toc-h3"><a href="#críticos-por-arma-e-o-que-multiplica-21">Críticos por Arma e O Que Multiplica</a></li><li class="toc-h3"><a href="#golpe-devastador-23-do-pv-máximo-morte-instantânea-22">Golpe Devastador (&gt; 2/3 do PV Máximo) — Morte Instantânea</a></li><li class="toc-h2"><a href="#7-procedimentos-de-mesa-moribundo-cura-manobras-e-sobrevivência-23">7. Procedimentos de Mesa: Moribundo, Cura, Manobras e Sobrevivência</a></li><li class="toc-h3"><a href="#estado-moribundo-estabilização-24">Estado Moribundo &amp; Estabilização</a></li><li class="toc-h3"><a href="#descanso-recuperação-natural-e-ferimentos-graves-25">Descanso, Recuperação Natural e Ferimentos Graves</a></li><li class="toc-h3"><a href="#manobras-táticas-e-ataque-de-oportunidade-26">Manobras Táticas e Ataque de Oportunidade</a></li><li class="toc-h3"><a href="#fome-sede-friocalor-e-exaustão-níveis-1-a-5-27">Fome, Sede, Frio/Calor e Exaustão (Níveis 1 a 5)</a></li><li class="toc-h3"><a href="#doenças-surtos-e-colaboração-médica-sistema-enxuto-28">Doenças, Surtos e Colaboração Médica (Sistema Enxuto)</a></li><li class="toc-h3"><a href="#perseguições-e-acidentes-marítimos-29">Perseguições e Acidentes Marítimos</a></li><li class="toc-h2"><a href="#8-talentos-e-manobras-níveis-pares-44-talentos-em-4-categorias-30">8. Talentos e Manobras (Níveis Pares — 44 Talentos em 4 Categorias)</a></li><li class="toc-h3"><a href="#regras-de-pré-requisitos-e-cadeias-31">Regras de Pré-Requisitos e Cadeias</a></li><li class="toc-h3"><a href="#81-talentos-marciais-e-táticos-12-talentos-32">8.1 Talentos Marciais e Táticos (12 Talentos)</a></li><li class="toc-h3"><a href="#82-talentos-de-sobrevivência-vigor-e-exploração-10-talentos-33">8.2 Talentos de Sobrevivência, Vigor e Exploração (10 Talentos)</a></li><li class="toc-h3"><a href="#83-talentos-sociais-intriga-e-liderança-11-talentos-34">8.3 Talentos Sociais, Intriga e Liderança (11 Talentos)</a></li><li class="toc-h3"><a href="#84-talentos-mentais-erudição-e-ofício-11-talentos-35">8.4 Talentos Mentais, Erudição e Ofício (11 Talentos)</a></li><li class="toc-h3"><a href="#85-mapa-rápido-das-cadeias-de-evolução-36">8.5 Mapa Rápido das Cadeias de Evolução</a></li><li class="toc-h2"><a href="#9-sistema-monetário-equipamentos-e-economia-de-alenia-37">9. Sistema Monetário, Equipamentos e Economia de Alenia</a></li><li class="toc-h3"><a href="#91-padrão-prata-equivalência-e-peso-físico-38">9.1 Padrão Prata, Equivalência e Peso Físico</a></li><li class="toc-h3"><a href="#92-cunhagens-regionais-dos-domínios-aceitas-por-peso-39">9.2 Cunhagens Regionais dos Domínios (Aceitas por Peso)</a></li><li class="toc-h3"><a href="#93-moedas-raspadas-falsificação-barganha-e-mercado-negro-40">9.3 Moedas Raspadas, Falsificação, Barganha e Mercado Negro</a></li><li class="toc-h3"><a href="#94-casas-bancárias-e-cartas-de-crédito-corallis-e-kalis-41">9.4 Casas Bancárias e Cartas de Crédito (Corallis e Kalis)</a></li><li class="toc-h3"><a href="#95-padrão-de-vida-mensal-sustento-impacto-social-42">9.5 Padrão de Vida Mensal (Sustento &amp; Impacto Social)</a></li><li class="toc-h3"><a href="#96-tabelas-de-preços-de-referência-43">9.6 Tabelas de Preços de Referência</a></li><li class="toc-h2"><a href="#10-magia-rituais-e-fé-verdadeira-calibrados-44">10. Magia, Rituais e Fé Verdadeira (Calibrados)</a></li><li class="toc-h3"><a href="#dificuldades-e-preparação-ritualística-45">Dificuldades e Preparação Ritualística</a></li></ul></div></aside><div id="sidebar-backdrop" class="sidebar-backdrop"></div>
     
     <section id="reader-stage" class="reader-stage" aria-label="Leitor em Formato de Livro">
@@ -1326,7 +1458,7 @@ tr[id] { scroll-margin-top: 84px; }
 </ul>
 
     <div class="gm-vault" data-locked="true">
-        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"ZDynC8NQzHuLPjPQBz5XfA==","i":"FuZWYRGrRb8rg3DG","c":"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"}</script>
+        <script type="application/json" class="gm-cipher">{"v":1,"it":120000,"s":"qVUIvwE/OM5XfHCfsjN1Sw==","i":"trIGq4o38o7aBamY","c":"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"}</script>
         <div class="gm-gate-box">
             <div class="gm-seal-icon">🔒</div>
             <div class="gm-gate-kicker">SELO DO MESTRE • CONTEÚDO CRIPTOGRAFADO</div>
@@ -2433,6 +2565,87 @@ tr[id] { scroll-margin-top: 84px; }
             lb.classList.add('open');
         }
     });
+
+    /* =====================================================
+       PRINT / PDF PREPARATION (IMAGES + DETAILS + OVERLAYS)
+       ===================================================== */
+    let printPrepActive = false;
+    function prepareForPrint() {
+        if (printPrepActive) return;
+        printPrepActive = true;
+        const lb = document.getElementById('atlas-lightbox');
+        if (lb) lb.classList.remove('open');
+        if (!document.body.classList.contains('sidebar-hidden')) {
+            document.body.dataset.aleniaPrintSidebarOpen = '1';
+            document.body.classList.add('sidebar-hidden');
+        }
+        document.body.classList.remove('sidebar-open-mobile');
+
+        const pageRoot = document.querySelector('.book-page') || document;
+        pageRoot.querySelectorAll('details').forEach(d => {
+            if (!d.open) {
+                d.dataset.aleniaPrintOpened = '1';
+                d.open = true;
+            }
+        });
+        pageRoot.querySelectorAll('img').forEach(img => {
+            if (img.loading === 'lazy') img.loading = 'eager';
+        });
+        window.dispatchEvent(new CustomEvent('alenia:prepare-print'));
+    }
+
+    function restoreAfterPrint() {
+        if (!printPrepActive) return;
+        printPrepActive = false;
+        const pageRoot = document.querySelector('.book-page') || document;
+        pageRoot.querySelectorAll('details[data-alenia-print-opened]').forEach(d => {
+            d.open = false;
+            delete d.dataset.aleniaPrintOpened;
+        });
+        if (document.body.dataset.aleniaPrintSidebarOpen === '1') {
+            document.body.classList.remove('sidebar-hidden');
+            delete document.body.dataset.aleniaPrintSidebarOpen;
+        }
+        window.dispatchEvent(new CustomEvent('alenia:restore-print'));
+    }
+
+    window.addEventListener('beforeprint', prepareForPrint);
+    window.addEventListener('afterprint', restoreAfterPrint);
+
+    window.aleniaPrint = async function(btn) {
+        const origLabel = btn ? btn.textContent : '';
+        try {
+            prepareForPrint();
+            const pageRoot = document.querySelector('.book-page') || document;
+            const pendingImgs = Array.from(pageRoot.querySelectorAll('img')).filter(
+                img => !img.complete || img.naturalWidth === 0
+            );
+            if (pendingImgs.length > 0) {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = 'Preparando PDF...';
+                }
+                const waitAll = Promise.all(pendingImgs.map(img => {
+                    img.loading = 'eager';
+                    if (img.decode) {
+                        return img.decode().catch(() => {});
+                    }
+                    return new Promise(res => {
+                        img.addEventListener('load', res, { once: true });
+                        img.addEventListener('error', res, { once: true });
+                    });
+                }));
+                await Promise.race([waitAll, new Promise(res => setTimeout(res, 4000))]);
+            }
+            await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = origLabel || 'Imprimir / PDF';
+            }
+        }
+        window.print();
+    };
 
     document.addEventListener('DOMContentLoaded', async () => {
         const lb = document.getElementById('atlas-lightbox');
