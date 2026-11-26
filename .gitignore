@@ -9,7 +9,12 @@ Thumbs.db
 *.rdk
 !plugins/Alenia_RPG_Ficha.rpk
 !plugins/Alenia_RPG_Ficha.rdk
+!plugins/Alenia_Casa_Nobre.rpk
+!plugins/Alenia_Casa_Nobre.rdk
+!plugins/Alenia_Token_Studio.rpk
+!plugins/Alenia_Token_Studio.rdk
 *.pdf
 mapas/*.png
 mapas/regionais/*.png
 firecast_alenia_ficha/output/
+firecast_casa_nobre/output/

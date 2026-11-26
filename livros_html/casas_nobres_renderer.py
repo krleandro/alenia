@@ -1289,6 +1289,7 @@ def _build_calculator_html() -> str:
                 <h2 class="feudo-calc-title">🏰 Construtor e Orçamento de Casa Nobre &amp; Feudo</h2>
             </div>
             <div class="feudo-presets">
+                <a class="feudo-btn primary" href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_Casa_Nobre.rpk" style="text-decoration:none;">⬇ Ficha Firecast (.rpk)</a>
                 <button id="fc-preset-tower" class="feudo-btn" type="button">Exemplo: Torre Reerguida</button>
                 <button id="fc-preset-manor" class="feudo-btn" type="button">Exemplo: Solar Baronial</button>
                 <button id="fc-reset" class="feudo-btn" type="button">↺ Zerar</button>

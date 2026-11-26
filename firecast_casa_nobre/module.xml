@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module sdkVersion="3.7b">
+    <id>br.com.alenia.casa_nobre</id>
+    <version>1.0</version>
+    <info lang="pt-BR">
+        <name>Alenia RPG — Ficha de Casa Nobre &amp; Feudo (Tomo XV)</name>
+        <description>Ficha oficial automatizada de Casas Nobres, Feudos, Fortificacoes e Cercos de Alenia RPG (Tomo XV), desenvolvida por Mestre Carlos: criacao nas 5 matrizes culturais (Aurora, Corallis, Kalis, Gaddra e Fronteiras Silvanas), Brasao clicavel, 10 Sedes Senhoriais (F01-F10, construcao nova ou reforma de ruina a 45%), 8 Defesas sem polvora (D01-D08), 8 Obras Produtivas (D09-D16), 14 Tropas, Artifices e Oficiais da Corte (G01-G14), sinergias automaticas (Senescal +10%, Aldeia, Moinho, Pedreira, Forja, Coudelaria, Mestre de Armas), giro mensal do Cofre em Prata, Eventos Sazonais (1d12) e painel de Cerco com os 4 Postos de Defesa dos PJs no chat.</description>
+        <author>Mestre Carlos</author>
+        <site>https://alenia-rpg.onrender.com/15_Casas_Nobres_e_Fortificacoes.html</site>
+        <contact>Mestre Carlos</contact>
+    </info>
+</module>
