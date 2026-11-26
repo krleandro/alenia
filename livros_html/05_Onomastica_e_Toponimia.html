@@ -1116,6 +1116,36 @@ a.codex-ref.codex-m:hover {
     border-color: #4a2e16;
     color: #fff6e0;
 }
+a.codex-ref.codex-f {
+    background: rgba(122, 31, 29, 0.11);
+    border-color: rgba(122, 31, 29, 0.38);
+    color: #6b1b19;
+}
+a.codex-ref.codex-f:hover {
+    background: #7a1f1d;
+    border-color: #531312;
+    color: #fff6e0;
+}
+a.codex-ref.codex-d {
+    background: rgba(46, 90, 68, 0.12);
+    border-color: rgba(46, 90, 68, 0.38);
+    color: #1e4431;
+}
+a.codex-ref.codex-d:hover {
+    background: #2e5a44;
+    border-color: #1d3b2c;
+    color: #f7f1e3;
+}
+a.codex-ref.codex-g {
+    background: rgba(92, 64, 40, 0.13);
+    border-color: rgba(92, 64, 40, 0.40);
+    color: #462f1b;
+}
+a.codex-ref.codex-g:hover {
+    background: #5c4028;
+    border-color: #3d2a19;
+    color: #fff6e0;
+}
 a.codex-ref.codex-tome {
     font-family: inherit;
     font-size: inherit;
@@ -1136,8 +1166,10 @@ a.codex-ref.codex-tome:hover {
     color: #4f1110;
 }
 
-/* Inside culinary tag pills keep links crisp and compact */
-.cul-tag a.codex-ref {
+/* Inside tag pills keep links crisp and compact */
+.cul-tag a.codex-ref,
+.casas-tag a.codex-ref,
+.nav-tag a.codex-ref {
     font-size: 1em;
     padding: 0 4px;
     margin: 0 1px;
@@ -1166,7 +1198,7 @@ tr[id] { scroll-margin-top: 84px; }
 </head>
 <body class="book-mode sidebar-hidden" data-book-title="Onomástica &amp; Toponímia">
     <header class="topbar"><div class="topbar-left"><button id="btn-lib-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Menu de Livros">☰ Livros</button><button id="btn-toc-toggle" class="btn-toc-toggle" type="button" title="Abrir/Fechar Sumário do Volume">📑 Sumário</button><a class="topbar-brand" href="index.html">✦ ALENIA RPG</a><span class="topbar-current">Onomástica &amp; Toponímia</span></div><nav class="topbar-nav"><a href="index.html">Estante</a><button id="btn-lock-gm" class="btn-lock" type="button" title="Trancar área do Mestre">🔒 Trancar</button><button class="btn-print" type="button" onclick="window.aleniaPrint && window.aleniaPrint(this)">Imprimir / PDF</button></nav></header>
-    <aside class="sidebar" aria-label="Navegação da Biblioteca e Sumário"><div class="sidebar-tabs"><button class="sidebar-tab active" data-tab="lib" type="button">📚 Livros</button><button class="sidebar-tab" data-tab="toc" type="button">📑 Sumário</button></div><div id="sidebar-pane-lib" class="sidebar-pane active"><div class="lib-group-label">Início</div><ul class="lib-list"><li><a class="lib-link" href="index.html"><span class="lib-num">✦</span><span>Estante Oficial</span></a></li></ul><div class="lib-group-label">Tomos do Jogador</div><ul class="lib-list"><li><a class="lib-link" href="01_Livro_de_Regras.html"><span class="lib-num">I</span><span>Livro de Regras</span></a></li><li><a class="lib-link" href="02_Livro_do_Cenario.html"><span class="lib-num">II</span><span>Livro do Cenário &amp; Atlas</span></a></li><li><a class="lib-link" href="03_Catalogo_de_Kits.html"><span class="lib-num">III</span><span>Catálogo de Kits Universais</span></a></li><li><a class="lib-link active" href="05_Onomastica_e_Toponimia.html"><span class="lib-num">V</span><span>Onomástica &amp; Toponímia</span></a></li><li><a class="lib-link" href="06_Guia_do_Jogador.html"><span class="lib-num">VI</span><span>Guia do Jogador &amp; Escudo</span></a></li><li><a class="lib-link" href="09_Catalogo_de_Equipamentos.html"><span class="lib-num">IX</span><span>Empório &amp; Ofícios</span></a></li><li><a class="lib-link" href="10_Herbario_de_Seleni.html"><span class="lib-num">X</span><span>Herbário de Seleni</span></a></li><li><a class="lib-link" href="11_Cronica_das_Terras_e_das_Mares.html"><span class="lib-num">XI</span><span>Crônica das Terras e das Marés</span></a></li><li><a class="lib-link" href="12_Cozinhas_de_Alenia.html"><span class="lib-num">XII</span><span>Cozinhas de Alenia</span></a></li><li><a class="lib-link" href="13_Grandes_Nomes_e_Feitos_de_Alenia.html"><span class="lib-num">XIII</span><span>Grandes Nomes e Feitos de Alenia</span></a></li><li><a class="lib-link" href="14_Mares_Frotas_e_Navegacao.html"><span class="lib-num">XIV</span><span>Mares, Frotas e Navegação</span></a></li></ul><div class="lib-group-label">Área Restrita do Mestre</div><ul class="lib-list"><li><a class="lib-link gm-link" href="04_Bestiario_de_Alenia.html"><span class="lib-num">IV</span><span>🔒 Bestiário &amp; Ameaças</span></a></li><li><a class="lib-link gm-link" href="07_Aventura_Inicial.html"><span class="lib-num">VII</span><span>🔒 Aventura Inicial</span></a></li><li><a class="lib-link gm-link" href="08_Acervo_Oculto_de_Sellene.html"><span class="lib-num">VIII</span><span>🔒 O Acervo Oculto de Sellene</span></a></li></ul><div class="lib-group-label">Ferramentas &amp; VTT</div><ul class="lib-list"><li><a class="lib-link" href="gerador_tokens.html"><span class="lib-num">⚔</span><span>Gerador de Tokens</span></a></li></ul><div class="lib-group-label">Volume Único</div><ul class="lib-list"><li><a class="lib-link" href="Alenia_Compendio_Completo.html"><span class="lib-num">★</span><span>Compêndio Completo</span></a></li></ul></div><div id="sidebar-pane-toc" class="sidebar-pane"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#princípio-de-flexibilidade-linguística-0">Princípio de Flexibilidade Linguística</a></li><li class="toc-h2"><a href="#parte-i-fichas-matriz-de-registro-cultural-1">Parte I — Fichas Matriz de Registro Cultural</a></li><li class="toc-h3"><a href="#1-reino-capital-de-aurora-2">1. Reino Capital de Aurora</a></li><li class="toc-h3"><a href="#2-povo-das-florestas-cidade-suspensa-subcultura-de-aurora-3">2. Povo das Florestas (Cidade Suspensa — Subcultura de Aurora)</a></li><li class="toc-h3"><a href="#3-liga-talassocrática-de-corallis-e-o-mar-dos-corais-4">3. Liga Talassocrática de Corallis (e o Mar dos Corais)</a></li><li class="toc-h3"><a href="#4-confederação-tribal-de-gaddra-5">4. Confederação Tribal de Gaddra</a></li><li class="toc-h3"><a href="#5-despotado-velado-de-kalis-e-o-mar-intransponível-6">5. Despotado Velado de Kalis (e o Mar Intransponível)</a></li><li class="toc-h2"><a href="#parte-ii-notas-de-substrato-enclaves-e-terras-limítrofes-7">Parte II — Notas de Substrato, Enclaves e Terras Limítrofes</a></li><li class="toc-h2"><a href="#parte-iii-etimologia-oficial-dos-topônimos-do-atlas-8">Parte III — Etimologia Oficial dos Topônimos do Atlas</a></li></ul></div></aside><div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+    <aside class="sidebar" aria-label="Navegação da Biblioteca e Sumário"><div class="sidebar-tabs"><button class="sidebar-tab active" data-tab="lib" type="button">📚 Livros</button><button class="sidebar-tab" data-tab="toc" type="button">📑 Sumário</button></div><div id="sidebar-pane-lib" class="sidebar-pane active"><div class="lib-group-label">Início</div><ul class="lib-list"><li><a class="lib-link" href="index.html"><span class="lib-num">✦</span><span>Estante Oficial</span></a></li></ul><div class="lib-group-label">Tomos do Jogador</div><ul class="lib-list"><li><a class="lib-link" href="01_Livro_de_Regras.html"><span class="lib-num">I</span><span>Livro de Regras</span></a></li><li><a class="lib-link" href="02_Livro_do_Cenario.html"><span class="lib-num">II</span><span>Livro do Cenário &amp; Atlas</span></a></li><li><a class="lib-link" href="03_Catalogo_de_Kits.html"><span class="lib-num">III</span><span>Catálogo de Kits Universais</span></a></li><li><a class="lib-link active" href="05_Onomastica_e_Toponimia.html"><span class="lib-num">V</span><span>Onomástica &amp; Toponímia</span></a></li><li><a class="lib-link" href="06_Guia_do_Jogador.html"><span class="lib-num">VI</span><span>Guia do Jogador &amp; Escudo</span></a></li><li><a class="lib-link" href="09_Catalogo_de_Equipamentos.html"><span class="lib-num">IX</span><span>Empório &amp; Ofícios</span></a></li><li><a class="lib-link" href="10_Herbario_de_Seleni.html"><span class="lib-num">X</span><span>Herbário de Seleni</span></a></li><li><a class="lib-link" href="11_Cronica_das_Terras_e_das_Mares.html"><span class="lib-num">XI</span><span>Crônica das Terras e das Marés</span></a></li><li><a class="lib-link" href="12_Cozinhas_de_Alenia.html"><span class="lib-num">XII</span><span>Cozinhas de Alenia</span></a></li><li><a class="lib-link" href="13_Grandes_Nomes_e_Feitos_de_Alenia.html"><span class="lib-num">XIII</span><span>Grandes Nomes e Feitos de Alenia</span></a></li><li><a class="lib-link" href="14_Mares_Frotas_e_Navegacao.html"><span class="lib-num">XIV</span><span>Mares, Frotas e Navegação</span></a></li><li><a class="lib-link" href="15_Casas_Nobres_e_Fortificacoes.html"><span class="lib-num">XV</span><span>Casas Nobres, Feudos e Fortificações</span></a></li></ul><div class="lib-group-label">Área Restrita do Mestre</div><ul class="lib-list"><li><a class="lib-link gm-link" href="04_Bestiario_de_Alenia.html"><span class="lib-num">IV</span><span>🔒 Bestiário &amp; Ameaças</span></a></li><li><a class="lib-link gm-link" href="07_Aventura_Inicial.html"><span class="lib-num">VII</span><span>🔒 Aventura Inicial</span></a></li><li><a class="lib-link gm-link" href="08_Acervo_Oculto_de_Sellene.html"><span class="lib-num">VIII</span><span>🔒 O Acervo Oculto de Sellene</span></a></li></ul><div class="lib-group-label">Ferramentas &amp; VTT</div><ul class="lib-list"><li><a class="lib-link" href="gerador_tokens.html"><span class="lib-num">⚔</span><span>Gerador de Tokens</span></a></li></ul><div class="lib-group-label">Volume Único</div><ul class="lib-list"><li><a class="lib-link" href="Alenia_Compendio_Completo.html"><span class="lib-num">★</span><span>Compêndio Completo</span></a></li></ul></div><div id="sidebar-pane-toc" class="sidebar-pane"><div class="sidebar-title">Sumário do Volume</div><ul class="toc-list"><li class="toc-h2"><a href="#princípio-de-flexibilidade-linguística-0">Princípio de Flexibilidade Linguística</a></li><li class="toc-h2"><a href="#parte-i-fichas-matriz-de-registro-cultural-1">Parte I — Fichas Matriz de Registro Cultural</a></li><li class="toc-h3"><a href="#1-reino-capital-de-aurora-2">1. Reino Capital de Aurora</a></li><li class="toc-h3"><a href="#2-povo-das-florestas-cidade-suspensa-subcultura-de-aurora-3">2. Povo das Florestas (Cidade Suspensa — Subcultura de Aurora)</a></li><li class="toc-h3"><a href="#3-liga-talassocrática-de-corallis-e-o-mar-dos-corais-4">3. Liga Talassocrática de Corallis (e o Mar dos Corais)</a></li><li class="toc-h3"><a href="#4-confederação-tribal-de-gaddra-5">4. Confederação Tribal de Gaddra</a></li><li class="toc-h3"><a href="#5-despotado-velado-de-kalis-e-o-mar-intransponível-6">5. Despotado Velado de Kalis (e o Mar Intransponível)</a></li><li class="toc-h2"><a href="#parte-ii-notas-de-substrato-enclaves-e-terras-limítrofes-7">Parte II — Notas de Substrato, Enclaves e Terras Limítrofes</a></li><li class="toc-h2"><a href="#parte-iii-etimologia-oficial-dos-topônimos-do-atlas-8">Parte III — Etimologia Oficial dos Topônimos do Atlas</a></li></ul></div></aside><div id="sidebar-backdrop" class="sidebar-backdrop"></div>
     
     <section id="reader-stage" class="reader-stage" aria-label="Leitor em Formato de Livro">
         <button class="side-turn-btn side-turn-prev btn-prev-page" type="button" title="Página Anterior (←)">‹</button>

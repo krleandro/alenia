@@ -124,6 +124,36 @@ a.codex-ref.codex-m:hover {
     border-color: #4a2e16;
     color: #fff6e0;
 }
+a.codex-ref.codex-f {
+    background: rgba(122, 31, 29, 0.11);
+    border-color: rgba(122, 31, 29, 0.38);
+    color: #6b1b19;
+}
+a.codex-ref.codex-f:hover {
+    background: #7a1f1d;
+    border-color: #531312;
+    color: #fff6e0;
+}
+a.codex-ref.codex-d {
+    background: rgba(46, 90, 68, 0.12);
+    border-color: rgba(46, 90, 68, 0.38);
+    color: #1e4431;
+}
+a.codex-ref.codex-d:hover {
+    background: #2e5a44;
+    border-color: #1d3b2c;
+    color: #f7f1e3;
+}
+a.codex-ref.codex-g {
+    background: rgba(92, 64, 40, 0.13);
+    border-color: rgba(92, 64, 40, 0.40);
+    color: #462f1b;
+}
+a.codex-ref.codex-g:hover {
+    background: #5c4028;
+    border-color: #3d2a19;
+    color: #fff6e0;
+}
 a.codex-ref.codex-tome {
     font-family: inherit;
     font-size: inherit;
@@ -144,8 +174,10 @@ a.codex-ref.codex-tome:hover {
     color: #4f1110;
 }
 
-/* Inside culinary tag pills keep links crisp and compact */
-.cul-tag a.codex-ref {
+/* Inside tag pills keep links crisp and compact */
+.cul-tag a.codex-ref,
+.casas-tag a.codex-ref,
+.nav-tag a.codex-ref {
     font-size: 1em;
     padding: 0 4px;
     margin: 0 1px;
@@ -187,6 +219,7 @@ TOMO_ROMAN_MAP = {
     "XII": ("12_Cozinhas_de_Alenia.html", "Tomo XII — Cozinhas de Alenia"),
     "XIII": ("13_Grandes_Nomes_e_Feitos_de_Alenia.html", "Tomo XIII — Grandes Nomes e Feitos de Alenia"),
     "XIV": ("14_Mares_Frotas_e_Navegacao.html", "Tomo XIV — Mares, Frotas e Navegação de Alenia"),
+    "XV": ("15_Casas_Nobres_e_Fortificacoes.html", "Tomo XV — Casas Nobres, Feudos e Fortificações"),
 }
 
 # Book index prefix inside Alenia_Compendio_Completo.html (matches id_prefix=f"t{idx+1}-")
@@ -199,6 +232,9 @@ COMPENDIUM_PREFIX = {
     "N": "t13-",
     "E": "t14-",
     "M": "t14-",
+    "F": "t15-",
+    "D": "t15-",
+    "G": "t15-",
 }
 
 # Target HTML file for each codex family
@@ -211,6 +247,9 @@ FAMILY_FILE = {
     "N": "13_Grandes_Nomes_e_Feitos_de_Alenia.html",
     "E": "14_Mares_Frotas_e_Navegacao.html",
     "M": "14_Mares_Frotas_e_Navegacao.html",
+    "F": "15_Casas_Nobres_e_Fortificacoes.html",
+    "D": "15_Casas_Nobres_e_Fortificacoes.html",
+    "G": "15_Casas_Nobres_e_Fortificacoes.html",
 }
 
 FAMILY_LABEL = {
@@ -222,12 +261,15 @@ FAMILY_LABEL = {
     "N": "Grandes Nomes de Alenia",
     "E": "Embarcação de Alenia",
     "M": "Arsenal Marítimo",
+    "F": "Fortificação Senhorial",
+    "D": "Defesa / Obra de Feudo",
+    "G": "Guarnição e Corte",
 }
 
 
 def build_codex_registry(root_dir: str) -> dict:
     """Scan canonical markdown books once to build {code: display_name} lookup tables."""
-    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}, "E": {}, "M": {}, "N_GM": set()}
+    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}, "E": {}, "M": {}, "F": {}, "D": {}, "G": {}, "N_GM": set()}
 
     # 1. Herbário H01–H64
     herb_path = os.path.join(root_dir, "10_Herbario_de_Seleni.md")
@@ -279,6 +321,17 @@ def build_codex_registry(root_dir: str) -> dict:
         for m in re.finditer(r"^###\s+(M\d{2})\s+[—–-]\s+(.+)$", txt, flags=re.M):
             reg["M"][m.group(1)] = m.group(2).strip()
 
+    # 6. Casas Nobres & Feudos F01–F10, D01–D16 & G01–G14
+    casas_path = os.path.join(root_dir, "15_Casas_Nobres_Feudos_e_Fortificacoes.md")
+    if os.path.exists(casas_path):
+        txt = open(casas_path, "r", encoding="utf-8").read()
+        for m in re.finditer(r"^###\s+(F\d{2})\s+[—–-]\s+(.+)$", txt, flags=re.M):
+            reg["F"][m.group(1)] = re.sub(r"\*+", "", m.group(2)).strip()
+        for m in re.finditer(r"^###\s+(D\d{2})\s+[—–-]\s+(.+)$", txt, flags=re.M):
+            reg["D"][m.group(1)] = re.sub(r"\*+", "", m.group(2)).strip()
+        for m in re.finditer(r"^###\s+(G\d{2})\s+[—–-]\s+(.+)$", txt, flags=re.M):
+            reg["G"][m.group(1)] = re.sub(r"\*+", "", m.group(2)).strip()
+
     return reg
 
 
@@ -292,11 +345,14 @@ _TOKEN_RE = re.compile(
     r"|N(?:0\d{2}|100)"
     r"|E(?:0[1-9]|1[0-2])"
     r"|M(?:0[1-9]|1[0-8])"
-    r"|Tomo\s+(?:XIV|XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
+    r"|F(?:0[1-9]|10)"
+    r"|D(?:0[1-9]|1[0-6])"
+    r"|G(?:0[1-9]|1[0-4])"
+    r"|Tomo\s+(?:XV|XIV|XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
     r")\b"
 )
 
-_SKIP_TAGS = {"a", "h1", "h2", "h3", "h4", "summary", "script", "style", "title", "textarea", "code", "button"}
+_SKIP_TAGS = {"a", "h1", "h2", "h3", "h4", "summary", "script", "style", "title", "textarea", "code", "button", "option", "select", "label"}
 _SKIP_CLASSES = {
     "cul-code",
     "tl-code-badge",
@@ -307,11 +363,17 @@ _SKIP_CLASSES = {
     "names-stat-pill",
     "nav-code",
     "nav-stat-pill",
+    "casas-code",
+    "casas-stat-pill",
     "idx-code",
     "book-kicker",
     "cul-kicker",
     "names-kicker",
     "nav-kicker",
+    "casas-kicker",
+    "casas-group-kicker",
+    "feudo-calc-kicker",
+    "feudo-panel-head",
     "cover-num",
 }
 _TAG_SPLIT_RE = re.compile(r"(<[^>]+>)")
