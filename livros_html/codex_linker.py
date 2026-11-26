@@ -104,6 +104,26 @@ a.codex-ref.codex-n:hover {
     border-color: #3f1532;
     color: #fff6e0;
 }
+a.codex-ref.codex-e {
+    background: rgba(27, 73, 101, 0.12);
+    border-color: rgba(27, 73, 101, 0.38);
+    color: #163b52;
+}
+a.codex-ref.codex-e:hover {
+    background: #1b4965;
+    border-color: #113044;
+    color: #f7f1e3;
+}
+a.codex-ref.codex-m {
+    background: rgba(107, 68, 35, 0.13);
+    border-color: rgba(107, 68, 35, 0.40);
+    color: #4d2e14;
+}
+a.codex-ref.codex-m:hover {
+    background: #6b4423;
+    border-color: #4a2e16;
+    color: #fff6e0;
+}
 a.codex-ref.codex-tome {
     font-family: inherit;
     font-size: inherit;
@@ -166,6 +186,7 @@ TOMO_ROMAN_MAP = {
     "XI": ("11_Cronica_das_Terras_e_das_Mares.html", "Tomo XI — Crônica das Terras e das Marés"),
     "XII": ("12_Cozinhas_de_Alenia.html", "Tomo XII — Cozinhas de Alenia"),
     "XIII": ("13_Grandes_Nomes_e_Feitos_de_Alenia.html", "Tomo XIII — Grandes Nomes e Feitos de Alenia"),
+    "XIV": ("14_Mares_Frotas_e_Navegacao.html", "Tomo XIV — Mares, Frotas e Navegação de Alenia"),
 }
 
 # Book index prefix inside Alenia_Compendio_Completo.html (matches id_prefix=f"t{idx+1}-")
@@ -176,6 +197,8 @@ COMPENDIUM_PREFIX = {
     "A": "t12-",
     "B": "t12-",
     "N": "t13-",
+    "E": "t14-",
+    "M": "t14-",
 }
 
 # Target HTML file for each codex family
@@ -186,6 +209,8 @@ FAMILY_FILE = {
     "A": "12_Cozinhas_de_Alenia.html",
     "B": "12_Cozinhas_de_Alenia.html",
     "N": "13_Grandes_Nomes_e_Feitos_de_Alenia.html",
+    "E": "14_Mares_Frotas_e_Navegacao.html",
+    "M": "14_Mares_Frotas_e_Navegacao.html",
 }
 
 FAMILY_LABEL = {
@@ -194,13 +219,15 @@ FAMILY_LABEL = {
     "A": "Fauna das Cozinhas",
     "B": "Despensa Agrícola",
     "T": "Crônica de Alenia",
-    "N": "Grandes Nomes (Mestre)",
+    "N": "Grandes Nomes de Alenia",
+    "E": "Embarcação de Alenia",
+    "M": "Arsenal Marítimo",
 }
 
 
 def build_codex_registry(root_dir: str) -> dict:
     """Scan canonical markdown books once to build {code: display_name} lookup tables."""
-    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}, "N_GM": set()}
+    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}, "E": {}, "M": {}, "N_GM": set()}
 
     # 1. Herbário H01–H64
     herb_path = os.path.join(root_dir, "10_Herbario_de_Seleni.md")
@@ -243,6 +270,15 @@ def build_codex_registry(root_dir: str) -> dict:
                 if cur_h2 == "Memórias e ameaças":
                     reg["N_GM"].add(m3.group(1))
 
+    # 5. Navegação E01–E12 & Arsenal Marítimo M01–M18
+    nav_path = os.path.join(root_dir, "14_Mares_Frotas_e_Navegacao_de_Alenia.md")
+    if os.path.exists(nav_path):
+        txt = open(nav_path, "r", encoding="utf-8").read()
+        for m in re.finditer(r"^###\s+(E\d{2})\s+[—–-]\s+(.+)$", txt, flags=re.M):
+            reg["E"][m.group(1)] = m.group(2).strip()
+        for m in re.finditer(r"^###\s+(M\d{2})\s+[—–-]\s+(.+)$", txt, flags=re.M):
+            reg["M"][m.group(1)] = m.group(2).strip()
+
     return reg
 
 
@@ -254,7 +290,9 @@ _TOKEN_RE = re.compile(
     r"|B0[1-6]"
     r"|T(?:0\d{2}|100)"
     r"|N(?:0\d{2}|100)"
-    r"|Tomo\s+(?:XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
+    r"|E(?:0[1-9]|1[0-2])"
+    r"|M(?:0[1-9]|1[0-8])"
+    r"|Tomo\s+(?:XIV|XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
     r")\b"
 )
 
@@ -267,10 +305,13 @@ _SKIP_CLASSES = {
     "chronicle-stat-pill",
     "names-code-pill",
     "names-stat-pill",
+    "nav-code",
+    "nav-stat-pill",
     "idx-code",
     "book-kicker",
     "cul-kicker",
     "names-kicker",
+    "nav-kicker",
     "cover-num",
 }
 _TAG_SPLIT_RE = re.compile(r"(<[^>]+>)")
