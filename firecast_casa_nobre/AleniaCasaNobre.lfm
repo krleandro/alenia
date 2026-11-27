@@ -3,9 +3,9 @@
     <script><![CDATA[
 
 local PLUGIN_MODULE_ID = "br.com.alenia.casa_nobre";
-local PLUGIN_VERSION = "1.0";
+local PLUGIN_VERSION = "1.1";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_Casa_Nobre.rpk";
-local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com/15_Casas_Nobres_e_Fortificacoes.html";
+local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com/17_Feudos_Regencias_e_Intrigas.html";
 
 local DialogsMod = nil;
 local InternetMod = nil;
@@ -84,6 +84,209 @@ local EVENTOS_1D12 = {
     { tit = "11 - Colheita e Feira Abundantes", ef = "Todas as obras produtivas (D09-D16) rendem +25% neste trimestre e a moral da guarnicao sobe +1." },
     { tit = "12 - Emissario de Grande Casa ou Liga", ef = "Proposta de alianca formal, casamento politico, contrato de escolta real ou compra garantida de producao (+150 PP + prestigio)." }
 };
+
+local FEUDOS_DB = {
+    LIVRE = {
+        code = "LIVRE",
+        nome = "Fronteira Independente / Sem Feudo Suserano Fixo",
+        senhor = "Autonomia local ou foral direto aberto",
+        cadeia = "Definida na mesa pelo Mestre (sem bonus/encargo regional automatico)",
+        litigio = "Livre de obrigacao faccional automatica; sujeito a cobica de vizinhos.",
+        bonus = "Regras base do Tomo XV (selecione L01 a L22 para ativar concessoes regionais do Tomo XVII)."
+    },
+    L01 = {
+        code = "L01",
+        nome = "L01 - Dominio Regio de Altavanne & Pontauria (Coroa)",
+        senhor = "Alto Rei Severor III (N003) / Regente Valora Valerion (N004) — Casa Valerion",
+        cadeia = "Apice Imperial — Vassalagem direta ao Paco de Altavanne (Sub-feudo: Pontauria, N018)",
+        litigio = "Z05: Sucessao contestada entre Valora Valerion e o Marechal Lucian Leonastis.",
+        bonus = "-10% no salario mensal de Senescal (G11) e Mestre de Armas (G12); +1 Etiqueta/Persuasao legal."
+    },
+    L02 = {
+        code = "L02",
+        nome = "L02 - Feudo de Merlinport (Aurora -> Altavanne)",
+        senhor = "Lorde Marcus Scutauria (N014) — Casa Scutauria",
+        cadeia = "Casa do PJ -> Feudo de Merlinport -> Altavanne (L01)",
+        litigio = "Z04: Corredor fluvial dos Pantanos Nebulosos, Torre de Specula e tarifas de guerra.",
+        bonus = "-20% no custo de Armazem/Cais (D14) e +15 PP/mes extras por cada D14 ativo."
+    },
+    L03 = {
+        code = "L03",
+        nome = "L03 - Feudo de Dahrma [Controla Lavroga] (Aurora -> Altavanne)",
+        senhor = "Lorde Lorian Montavalle (N012) — Casa Montavalle (Sub-vassalo: Castelao Galeran de Lavroga)",
+        cadeia = "Casa do PJ / Lavroga -> Feudo de Dahrma -> Altavanne (L01)",
+        litigio = "Z02: Dahrma controla Lavroga — tensao fiscal pelas mos de moinho e cantaria do sudoeste.",
+        bonus = "+15 PP/mes adicionais se houver Aldeia (D09) e -15% no custo de Moinhos (D10)."
+    },
+    L04 = {
+        code = "L04",
+        nome = "L04 - Feudo de Vaarsa (Aurora -> Altavanne)",
+        senhor = "Marechal Lucian Leonastis (N006) — Casa Leonastis",
+        cadeia = "Casa do PJ -> Feudo de Vaarsa -> Altavanne (L01)",
+        litigio = "Z01: Disputa o Pantano de Voernock contra Yoketsu (L05) | Z07: Passo de Rubecina.",
+        bonus = "-15% no equipamento inicial de Regulares (G02) e Infantes Pesados (G04); +1 Moral em cerco."
+    },
+    L05 = {
+        code = "L05",
+        nome = "L05 - Feudo de Yoketsu (Aurora -> Altavanne)",
+        senhor = "Senhor Feudal (Kenshu) Kenshin Tsurumaru — Casa Tsurumaru",
+        cadeia = "Casa do PJ -> Feudo de Yoketsu -> Altavanne (L01)",
+        litigio = "Z01: Disputa o Pantano de Voernock contra Vaarsa (L04) por canais, turfa e Casca-amarga (H17).",
+        bonus = "+0.5 Indice de Defesa por unidade G02/G03 e +10 PP/mes de comercio costeiro se tiver Cais (D14)."
+    },
+    L06 = {
+        code = "L06",
+        nome = "L06 - Feudo de Altrax (Aurora -> Altavanne)",
+        senhor = "Castela Aurelia d'Altrax (N016) — Casa d'Altrax",
+        cadeia = "Casa do PJ -> Feudo de Altrax -> Altavanne (L01)",
+        litigio = "Z04: Pantanos Nebulosos, Specula e sumico do emissario silvano Cadwyn (N025).",
+        bonus = "Reerguer Ruina custa 40% do preco novo (em vez de 45%) e +2 em alertas de patrulha."
+    },
+    L07 = {
+        code = "L07",
+        nome = "L07 - Feudo de Aeraneas (Aurora -> Altavanne)",
+        senhor = "Grao-Lorde Aurelian Ferraris (N015) — Casa Ferraris",
+        cadeia = "Casa do PJ -> Feudo de Aeraneas -> Altavanne (L01)",
+        litigio = "Z03: Disputa os Montes Ferraur contra as Cidades Suspensas (L08) + Greve nas minas.",
+        bonus = "Forja Senhorial (D12) pela metade do preco (750 PP) e +20 PP/mes extras com Mestre Ferreiro (G10)."
+    },
+    L08 = {
+        code = "L08",
+        nome = "L08 - Feudo das Cidades Suspensas & Vergod (Aurora -> Altavanne)",
+        senhor = "Senhora-Guardia Aerwen ferch Taldor (N024) — Conselho das Copas",
+        cadeia = "Casa do PJ -> Feudo das Cidades Suspensas -> Altavanne (L01)",
+        litigio = "Z03: Disputa os Montes Ferraur contra Aeraneas (L07) por nascentes e mineracao clandestina.",
+        bonus = "-25% no custo de Mota (F03) e Ervanario (D15); Fisico/Herbalista (G13) dobra cataplasmas."
+    },
+    L09 = {
+        code = "L09",
+        nome = "L09 - Alineus [Sede da Regencia] (Corallis -> Altavanne)",
+        senhor = "Arconte-Regente Corardo della Rocca (N021) — Casa della Rocca",
+        cadeia = "Casa do PJ -> Regente della Rocca (Alineus) -> Altavanne (L01)",
+        litigio = "Z06: Disputa de tarifas dos recifes contra Baldbella (L10) e O Ferro Velho (N026).",
+        bonus = "+15 PP/mes adicionais por Cais/Armazem (D14) e -15% em reparos navais na Liga."
+    },
+    L10 = {
+        code = "L10",
+        nome = "L10 - Baldbella (Corallis -> Regente -> Altavanne)",
+        senhor = "Sindico-Patricio Valerio Corvella — Casa Corvella",
+        cadeia = "Casa do PJ -> Baldbella -> Regente della Rocca (L09) -> Altavanne (L01)",
+        litigio = "Z06: Boicote tarifario contra Alineus e ameaca de peticao direta a Altavanne.",
+        bonus = "-30% no salario mensal de Fisico Cirurgiao (G13) e +50% teto de credito em Cera Azul."
+    },
+    L11 = {
+        code = "L11",
+        nome = "L11 - Stoneforge (Corallis -> Regente -> Altavanne)",
+        senhor = "Mestre-Barao Orso Rupefori — Casa Rupefori",
+        cadeia = "Casa do PJ -> Stoneforge -> Regente della Rocca (L09) -> Altavanne (L01)",
+        litigio = "Falta de pontas de adamante pela greve de Aeraneas empurra oficinas ao mercado negro.",
+        bonus = "-20% no custo de Balistas (D05) e Trabucos (D06) e +1 nos disparos de engenhos."
+    },
+    L12 = {
+        code = "L12",
+        nome = "L12 - Biemont & Portocala (Corallis -> Regente -> Altavanne)",
+        senhor = "Dama Lorenza Falcenzo (N086) — Casa Falcenzo",
+        cadeia = "Casa do PJ -> Biemont -> Regente della Rocca (L09) -> Altavanne (L01)",
+        litigio = "Z06: Compra de hipotecas de armadores e contatos discretos com O Ferro Velho.",
+        bonus = "+20 PP/mes adicionais se houver Estalagem (D11) ou Cais (D14); juros pela metade."
+    },
+    L13 = {
+        code = "L13",
+        nome = "L13 - Sellene & Claramar (Corallis -> Regente / Altavanne)",
+        senhor = "Arquimestre Matteo dal Pelago (N031) — Academia de Sellene",
+        cadeia = "Casa do PJ -> Sellene -> Regente della Rocca (L09) [Civil] & Altavanne (L01) [Acervo]",
+        litigio = "Vigilancia sobre o Acervo Oculto e corrida secreta pelos relatos de Thanatos.",
+        bonus = "+2 automatico em testes de Contraespionagem da Casa, Historia e Investigacao."
+    },
+    L14 = {
+        code = "L14",
+        nome = "L14 - Naasar & Bayd [Sede da Regencia] (Gaddra -> Altavanne)",
+        senhor = "Regente das Dunas Qasir Zaharid (N022) — Cla Zaharid",
+        cadeia = "Casa do PJ -> Regente Qasir Zaharid (Naasar) -> Altavanne (L01)",
+        litigio = "Z07: Assassinato do Arbitro do Sangue (N068) e risco de guerra na Rota do Sal.",
+        bonus = "-30% no custo de Cisterna Abobadada (D07) e protecao contra embargo hidrico."
+    },
+    L15 = {
+        code = "L15",
+        nome = "L15 - OX (Gaddra -> Regente -> Altavanne)",
+        senhor = "Emir Khalur al-Shams — Cla al-Shams",
+        cadeia = "Casa do PJ -> OX -> Regente Qasir Zaharid (L14) -> Altavanne (L01)",
+        litigio = "Comercio ambiguo de montarias entre compradores de Vaarsa e clas livres.",
+        bonus = "-25% no custo de Coudelaria (D16) e -5 PP/mes extras por tropa montada (G05/G06)."
+    },
+    L16 = {
+        code = "L16",
+        nome = "L16 - Qal-Zahar & Suq-Ramad (Gaddra -> Regente -> Altavanne)",
+        senhor = "Senhor Tarik ibn Sahir — Cla Sahirid",
+        cadeia = "Casa do PJ -> Qal-Zahar -> Regente Qasir Zaharid (L14) -> Altavanne (L01)",
+        litigio = "Z07: Mercadores locais lucram caso o Passo de Rubecina seja fechado.",
+        bonus = "+20 PP/mes adicionais se houver Estalagem/Feira (D11) ou Cais Costeiro (D14)."
+    },
+    L17 = {
+        code = "L17",
+        nome = "L17 - Marca de Vargheim (Gaddra -> Regente -> Altavanne)",
+        senhor = "Chefe-Vigia Halvor Sangue-Seco — Cla Sangue-Seco",
+        cadeia = "Casa do PJ -> Vargheim -> Regente Qasir Zaharid (L14) -> Altavanne (L01)",
+        litigio = "Z07: Clas da escarpa pressionam para fechar o Passo de Rubecina contra Vaarsa.",
+        bonus = "+1 Moral permanente na guarnicao da fortaleza e +2 em Intimidacao fronteirica."
+    },
+    L18 = {
+        code = "L18",
+        nome = "L18 - Cidadela de Kalgard [Regencia] (Kalis -> Altavanne)",
+        senhor = "Despota-Regente Grimrik Ulscold (N023) — Casa Ulscold",
+        cadeia = "Casa do PJ -> Despota Grimrik Ulscold (Kalgard) -> Altavanne (L01)",
+        litigio = "Z08: Tensao com mercadores do sul kalita e busca por segredos de Thanatos.",
+        bonus = "+2 automatico em Contraespionagem da Casa e -25% no salario de Mestre de Sussurros (G14)."
+    },
+    L19 = {
+        code = "L19",
+        nome = "L19 - Kragstad (Kalis -> Regente -> Altavanne)",
+        senhor = "Lorde-Vigia Torvald von Kragstad — Casa von Kragstad (N083)",
+        cadeia = "Casa do PJ -> Kragstad -> Despota Grimrik Ulscold (L18) -> Altavanne (L01)",
+        litigio = "Combate aos corsarios de Ravena e recusa de operacoes clandestinas desonrosas.",
+        bonus = "-15% no custo de Forte Costeiro (F07) e nas defesas de muralha D02 a D05."
+    },
+    L20 = {
+        code = "L20",
+        nome = "L20 - Drakenhall (Kalis -> Regente -> Altavanne)",
+        senhor = "Jarl Borhild Hrafngard (N082) — Casa Hrafngard",
+        cadeia = "Casa do PJ -> Drakenhall -> Despota Grimrik Ulscold (L18) -> Altavanne (L01)",
+        litigio = "Controle dos depositos de madeira negra naval usados como alavanca no Conselho.",
+        bonus = "-25% no custo de Serrarias/Pedreiras (D13) e +20 PP/mes com D13 ativo."
+    },
+    L21 = {
+        code = "L21",
+        nome = "L21 - Dobalbek (Kalis -> Regente -> Altavanne)",
+        senhor = "Dama-Chanceler Freydis Drakenvorn (N084) — Casa Drakenvorn",
+        cadeia = "Casa do PJ -> Dobalbek -> Despota Grimrik Ulscold (L18) -> Altavanne (L01)",
+        litigio = "Z08: Ponte financeira e maritima dividida entre comercio limpo e redes de sombra.",
+        bonus = "-15% no custo de Cais/Estaleiros (D14) e +15 PP/mes adicionais se D14 ativo."
+    },
+    L22 = {
+        code = "L22",
+        nome = "L22 - Fugong & Kalima (Kalis -> Regente -> Altavanne)",
+        senhor = "Intendente-Senhor Ragnar Skoldhavn — Casa Skoldhavn",
+        cadeia = "Casa do PJ -> Fugong -> Despota Grimrik Ulscold (L18) -> Altavanne (L01)",
+        litigio = "Z08: Oposicao mercantil silenciosa a Kalgard e contrabando com a Ilha das Safiras.",
+        bonus = "+25 PP/mes adicionais se houver Forja/Oficina (D12) ou Ervanario Alquimico (D15)."
+    }
+};
+
+local INTRIGAS_1D12 = {
+    { tit = "1 - Marco de Pedra Arrancado a Noite", ef = "Vizinho deslocou marco secular de divisa p/ tomar bosque, turfeira ou moinho (Z01 Voernock / Z03 Ferraur • Investigacao/Historia CD 16)." },
+    { tit = "2 - Comboio Retido por Vistoria", ef = "Barcacas de grao, pedra de Lavroga ou sal retidas sob pretexto legal para forcar concessao (Etiqueta/Barganha + Status CD 17)." },
+    { tit = "3 - Pupilo Nobre Desaparecido", ef = "Jovem herdeiro enviado como hospede-garantia entre duas Casas sumiu na estrada — sequestro politico ou fuga (Sobrevivencia/Intuicao CD 15)." },
+    { tit = "4 - Dois Forais com Selos Reais", ef = "Litigantes exibem cartas legitimas de reis diferentes sobre a mesma ponte ou encosta (Historia CD 18 ou apelacao ao Preboste N018)." },
+    { tit = "5 - Proposta Secreta Entre Escaloes", ef = "Enviado do Regente pede segredo contra Altavanne (ou emissario real pede vigilancia sobre o Regente) em troca de isencao de tributo." },
+    { tit = "6 - Juizo do Dia (Duelo de Campeoes)", ef = "Barao acusa vizinho de sabotagem sem prova escrita; busca-se campeao para duelo formal (Armas Brancas + Status S02+)." },
+    { tit = "7 - Casamento Politico Sabotado", ef = "Carta caluniosa (ou verdadeira!) surge na vespera de alianca matrimonial ameacando romper a Paz do Teto (Persuasao/Submundo CD 16)." },
+    { tit = "8 - Sublevacao na Sub-castelania", ef = "Canteiros ou aldeoes (como em Lavroga Z02 ou Vargheim Z07) retem a cota ate receberem escolta contra saqueadores (CD 16)." },
+    { tit = "9 - Leilao Silencioso de Hipoteca", ef = "Banqueiro de Biemont (N086) ou Dobalbek (N084) poe a venda divida vencida de um solar estrategico vizinho (500 a 1.500 PP)." },
+    { tit = "10 - Inspecao do Preboste ou Chama Branca", ef = "Juizes reais ou inquisidores exigem vistoriar paiois, masmorras e livros de pedagio (Etiqueta/Enganacao/Fe CD 16)." },
+    { tit = "11 - Sinal Naval Estrangeiro na Costa", ef = "Pescadores viram lanternas escuras ancorando numa enseada sem cais na divisa de dois feudos (Navegacao/Furtividade CD 15)." },
+    { tit = "12 - Convocacao Dupla de Estandarte", ef = "Arautos rivais de Altavanne e de um Grande Lorde batem ao portao no mesmo dia exigindo posicao formal em 72 horas!" }
+};
+
 
 local SEATS = {
     F01 = { code = "F01", nome = "F01 - Entreposto e Feitoria de Estrada", porte = "Sede Inicial (Status 1+)", cost = 1800, months = 2, maint = 25, ideal = 6, maxG = 15, hp = 180, le = 6, defSlots = 1, workSlots = 2, maxVil = 1, benef = "Sustenta Status 2 no local; abriga caravanas e mulas com seguranca contra lobos e pequenos bandos." },
@@ -240,8 +443,20 @@ end;
 local function calcularDadosFeudo()
     local seatId = tostring(sheet.sedeId or "F04");
     local seat = SEATS[seatId] or SEATS.F04;
+    local feudoId = tostring(sheet.feudoSuseranoId or "LIVRE");
+    local feudoInfo = FEUDOS_DB[feudoId] or FEUDOS_DB.LIVRE;
+    local usarBonusFeudo = (sheet.aplicarBonusFeudo ~= false) and (feudoId ~= "LIVRE");
+    local sobEmbargo = (sheet.sobEmbargoVizinho == true);
+
     local isRuin = (tostring(sheet.modoAquisicao or "ruin") == "ruin");
-    local seatCost = math.floor(seat.cost * (isRuin and 0.45 or 1.0) + 0.5);
+    local ruinFactor = (usarBonusFeudo and feudoId == "L06") and 0.40 or 0.45;
+    local seatBaseMult = isRuin and ruinFactor or 1.0;
+    if usarBonusFeudo and feudoId == "L08" and seatId == "F03" then
+        seatBaseMult = seatBaseMult * 0.75;
+    elseif usarBonusFeudo and feudoId == "L19" and seatId == "F07" then
+        seatBaseMult = seatBaseMult * 0.85;
+    end;
+    local seatCost = math.floor(seat.cost * seatBaseMult + 0.5);
 
     local qtdD13 = math.max(0, math.floor(num(sheet.qtd_D13, 0)));
     local qtdD12 = math.max(0, math.floor(num(sheet.qtd_D12, 0)));
@@ -269,7 +484,15 @@ local function calcularDadosFeudo()
         local d = DEFENSES[i];
         local q = math.max(0, math.floor(num(sheet["qtd_" .. d.id], 0)));
         defSlotsUsed = defSlotsUsed + q;
-        defBuild = defBuild + q * d.cost;
+        local dUnitCost = d.cost;
+        if usarBonusFeudo and feudoId == "L11" and (d.id == "D05" or d.id == "D06") then
+            dUnitCost = math.floor(dUnitCost * 0.80 + 0.5);
+        elseif usarBonusFeudo and feudoId == "L14" and d.id == "D07" then
+            dUnitCost = math.floor(dUnitCost * 0.70 + 0.5);
+        elseif usarBonusFeudo and feudoId == "L19" and (d.id == "D02" or d.id == "D03" or d.id == "D04" or d.id == "D05") then
+            dUnitCost = math.floor(dUnitCost * 0.85 + 0.5);
+        end;
+        defBuild = defBuild + q * dUnitCost;
         defMaint = defMaint + q * d.maint;
         extraHP = extraHP + q * d.hp;
         if q > 0 and d.reqF04 and seat.cost < 8000 then
@@ -296,11 +519,26 @@ local function calcularDadosFeudo()
         local w = WORKS[i];
         local q = math.max(0, math.floor(num(sheet["qtd_" .. w.id], 0)));
         if w.usesSlot then workSlotsUsed = workSlotsUsed + q; end;
-        workBuild = workBuild + q * w.cost;
+        local wCost = w.cost;
+        if usarBonusFeudo then
+            if feudoId == "L02" and w.id == "D14" then wCost = math.floor(wCost * 0.80 + 0.5);
+            elseif feudoId == "L03" and w.id == "D10" then wCost = math.floor(wCost * 0.85 + 0.5);
+            elseif feudoId == "L07" and w.id == "D12" then wCost = math.floor(wCost * 0.50 + 0.5);
+            elseif feudoId == "L08" and w.id == "D15" then wCost = math.floor(wCost * 0.75 + 0.5);
+            elseif feudoId == "L15" and w.id == "D16" then wCost = math.floor(wCost * 0.75 + 0.5);
+            elseif feudoId == "L20" and w.id == "D13" then wCost = math.floor(wCost * 0.75 + 0.5);
+            elseif feudoId == "L21" and w.id == "D14" then wCost = math.floor(wCost * 0.85 + 0.5);
+            end;
+        end;
+        workBuild = workBuild + q * wCost;
+        local wInc = w.income;
+        if sobEmbargo and (w.id == "D11" or w.id == "D14") then
+            wInc = math.floor(wInc * 0.75 + 0.5);
+        end;
         if w.id == "D09" then
-            rawIncome = rawIncome + effVillages * w.income;
+            rawIncome = rawIncome + effVillages * wInc;
         else
-            rawIncome = rawIncome + q * w.income;
+            rawIncome = rawIncome + q * wInc;
         end;
     end;
     if workSlotsUsed > seat.workSlots then
@@ -311,13 +549,37 @@ local function calcularDadosFeudo()
     end;
 
     local qtdD10 = math.max(0, math.floor(num(sheet.qtd_D10, 0)));
+    local qtdD11 = math.max(0, math.floor(num(sheet.qtd_D11, 0)));
+    local qtdD14 = math.max(0, math.floor(num(sheet.qtd_D14, 0)));
+    local qtdD15 = math.max(0, math.floor(num(sheet.qtd_D15, 0)));
     if effVillages > 0 and qtdD10 > 0 then
         rawIncome = rawIncome + 15 * qtdD10;
+    end;
+    if usarBonusFeudo then
+        if (feudoId == "L02" or feudoId == "L09" or feudoId == "L21") and qtdD14 > 0 then
+            rawIncome = rawIncome + 15 * qtdD14;
+        elseif feudoId == "L03" and effVillages > 0 then
+            rawIncome = rawIncome + 15;
+        elseif feudoId == "L05" and qtdD14 > 0 then
+            rawIncome = rawIncome + 10;
+        elseif feudoId == "L07" and temForjaAtiva then
+            rawIncome = rawIncome + 20;
+        elseif (feudoId == "L12" or feudoId == "L16") and (qtdD11 > 0 or qtdD14 > 0) then
+            rawIncome = rawIncome + 20;
+        elseif feudoId == "L20" and qtdD13 > 0 then
+            rawIncome = rawIncome + 20;
+        elseif feudoId == "L22" and (qtdD12 > 0 or qtdD15 > 0) then
+            rawIncome = rawIncome + 25;
+        end;
+    end;
+    if sobEmbargo then
+        table.insert(avisos, "EMBARGO VIZINHO ATIVO (-25% em D11/D14 e +20% custo de obras)!");
     end;
     local rendaExtra = num(sheet.rendaExtraManual, 0);
     local totalIncome = math.floor((rawIncome + rendaExtra) * (temGestao10 and 1.10 or 1.0) + 0.5);
 
-    local worksAndDefCost = math.floor((defBuild + workBuild) * (temPedreira and 0.85 or 1.0) + 0.5);
+    local embargoBuildMult = sobEmbargo and 1.20 or 1.0;
+    local worksAndDefCost = math.floor((defBuild + workBuild) * (temPedreira and 0.85 or 1.0) * embargoBuildMult + 0.5);
 
     local troopCount = 0;
     local hireCost = 0;
@@ -331,13 +593,30 @@ local function calcularDadosFeudo()
         if u.troop then
             troopCount = troopCount + q;
             local uHire = temForjaAtiva and math.floor(u.hire * 0.80 + 0.5) or u.hire;
+            if usarBonusFeudo and feudoId == "L04" and (u.id == "G02" or u.id == "G04") then
+                uHire = math.floor(uHire * 0.85 + 0.5);
+            end;
             hireCost = hireCost + q * uHire;
             local uWage = (u.mounted and temCoudelaria) and math.max(0, u.wage - 10) or u.wage;
+            if usarBonusFeudo and feudoId == "L15" and u.mounted then
+                uWage = math.max(0, uWage - 5);
+            end;
             troopWages = troopWages + q * uWage;
-            rawPower = rawPower + q * u.power;
+            local uPow = u.power;
+            if usarBonusFeudo and feudoId == "L05" and (u.id == "G02" or u.id == "G03") then
+                uPow = uPow + 0.5;
+            end;
+            rawPower = rawPower + q * uPow;
         else
             hireCost = hireCost + q * u.hire;
-            staffWages = staffWages + q * u.wage;
+            local sWage = u.wage;
+            if usarBonusFeudo then
+                if feudoId == "L01" and (u.id == "G11" or u.id == "G12") then sWage = math.floor(sWage * 0.90 + 0.5);
+                elseif feudoId == "L10" and u.id == "G13" then sWage = math.floor(sWage * 0.70 + 0.5);
+                elseif feudoId == "L18" and u.id == "G14" then sWage = math.floor(sWage * 0.75 + 0.5);
+                end;
+            end;
+            staffWages = staffWages + q * sWage;
         end;
     end;
 
@@ -373,10 +652,14 @@ local function calcularDadosFeudo()
     local siegeDaysMax = ((math.floor(num(sheet.qtd_D07, 0)) > 0) or (seatId == "F06")) and 60 or 30;
 
     local atraso = math.max(0, math.min(3, math.floor(num(sheet.mesesAtrasoSoldo, 0))));
-    local moralBase = (temMestreArmas and 1 or 0) + num(sheet.moralBonusExtra, 0) - (atraso >= 1 and (atraso * 2) or 0);
+    local feudoMoral = (usarBonusFeudo and (feudoId == "L04" or feudoId == "L17")) and 1 or 0;
+    local moralBase = (temMestreArmas and 1 or 0) + feudoMoral + num(sheet.moralBonusExtra, 0) - (atraso >= 1 and (atraso * 2) or 0);
 
     return {
         seat = seat,
+        feudoId = feudoId,
+        feudoInfo = feudoInfo,
+        usarBonusFeudo = usarBonusFeudo,
         isRuin = isRuin,
         seatCost = seatCost,
         worksAndDefCost = worksAndDefCost,
@@ -416,6 +699,9 @@ recalcularFeudo = function()
     sheet.culturaResumo = "Padrao: " .. cInfo.formula .. "  |  Bastardos: " .. cInfo.bastardo .. "  |  Legitimidade: " .. cInfo.legitimidade;
 
     local d = calcularDadosFeudo();
+    local fInfo = d.feudoInfo;
+    sheet.feudoCadeiaTxt = "Senhor: " .. fInfo.senhor .. "  |  Cadeia: " .. fInfo.cadeia .. "  |  Conflito: " .. fInfo.litigio;
+    sheet.feudoBonusTxt = "Concessao (" .. fInfo.code .. "): " .. fInfo.bonus;
     local s = d.seat;
 
     sheet.investimentoTotalTxt = fmtPP(d.totalInitial) .. " (" .. fmtInt(math.floor(d.totalInitial / 10 + 0.5)) .. " PO)";
@@ -452,6 +738,7 @@ recalcularFeudo = function()
     if math.floor(num(sheet.qtd_D13, 0)) > 0 then table.insert(sinList, "-15% Custo Obras/Defesas (D13)"); end;
     if math.floor(num(sheet.qtd_D12, 0)) > 0 and math.floor(num(sheet.qtd_G10, 0)) > 0 then table.insert(sinList, "-20% Equip. Inicial (D12+G10)"); end;
     if math.floor(num(sheet.qtd_D16, 0)) > 0 then table.insert(sinList, "-10 PP/mes Montados (D16)"); end;
+    if d.usarBonusFeudo then table.insert(sinList, "Carta Suserana " .. d.feudoId .. " Ativa"); end;
     if d.atraso >= 2 then table.insert(d.avisos, "ALERTA: 2+ meses de soldo atrasado causam desercao de 50%!"); end;
 
     if #d.avisos > 0 then
@@ -524,6 +811,8 @@ local function aplicarPreset(tipo)
     elseif tipo == "solar" then
         sheet.nomeCasa = "Casa Montavalle do Sul";
         sheet.culturaCasa = "aurora";
+        sheet.feudoSuseranoId = "LIVRE";
+        sheet.sobEmbargoVizinho = false;
         sheet.lemaCasa = "Raiz na Pedra, Pao na Mesa";
         sheet.statusCasa = "3";
         sheet.sedeId = "F05";
@@ -534,6 +823,27 @@ local function aplicarPreset(tipo)
         sheet.qtd_G09 = "1"; sheet.qtd_G10 = "1"; sheet.qtd_G11 = "1"; sheet.qtd_G13 = "1";
         sheet.integridadeAtual = "760";
         sheet.diasCercoRestantes = "60";
+    elseif tipo == "voernock" then
+        sheet.nomeCasa = "Casa Kawa-Tsurin";
+        sheet.culturaCasa = "aurora";
+        sheet.feudoSuseranoId = "L05";
+        sheet.aplicarBonusFeudo = true;
+        sheet.sobEmbargoVizinho = false;
+        sheet.suseranoCasa = "Kenshin Tsurumaru (Feudo de Yoketsu -> Altavanne)";
+        sheet.regiaoFeudo = "Divisa Sul do Pantano de Voernock (Z01)";
+        sheet.lemaCasa = "Neblina Acima da Lamina";
+        sheet.statusCasa = "3";
+        sheet.sedeId = "F07";
+        sheet.modoAquisicao = "ruin";
+        sheet.qtd_D01 = "1"; sheet.qtd_D04 = "1";
+        sheet.qtd_D09 = "2"; sheet.qtd_D14 = "1"; sheet.qtd_D15 = "1";
+        sheet.qtd_G01 = "4"; sheet.qtd_G02 = "4"; sheet.qtd_G03 = "6"; sheet.qtd_G11 = "1";
+        sheet.integridadeAtual = "890";
+        sheet.diasCercoRestantes = "30";
+    end;
+    if tipo == "torre" then
+        sheet.feudoSuseranoId = "LIVRE";
+        sheet.sobEmbargoVizinho = false;
     end;
     sheet._calcLock = false;
     recalcularFeudo();
@@ -577,6 +887,7 @@ local function anunciarCartaFeudo()
     local cofre = math.floor(num(sheet.cofrePP, 0));
     local sinal = (d.netMonthly >= 0) and "+" or "";
     local msg = "🏰 [CARTA DE FEUDO — " .. nome .. "]" .. ((lema ~= "") and (" (\"" .. lema .. "\")") or "") ..
+        " | Suserania: " .. d.feudoInfo.nome ..
         " | Sede: " .. d.seat.nome .. (d.isRuin and " [Ruina Reerguida]" or " [Construcao Nova]") ..
         " | Investimento: " .. fmtPP(d.totalInitial) ..
         " | Balanco Mensal: Receita +" .. fmtPP(d.totalIncome) .. ", Despesa -" .. fmtPP(d.totalExpense + d.dizimo) ..
@@ -660,12 +971,70 @@ local function rolarStatusCasa()
     rolarExpressaoChat(expr, "[" .. tostring(sheet.nomeCasa or "Casa Nobre") .. "] Teste de Status & Prestigio da Casa (Status " .. tostring(st) .. ")", 0, "", "");
 end;
 
+
+local function verFichaFeudoSuserano()
+    if sheet == nil then return; end;
+    local fk = tostring(sheet.feudoSuseranoId or "LIVRE");
+    local f = FEUDOS_DB[fk] or FEUDOS_DB.LIVRE;
+    showMessage(
+        "ATLAS FEUDAL DE ALENIA — TOMO XVII\n\n" ..
+        f.nome .. "\n\n" ..
+        "Senhor Feudal: " .. f.senhor .. "\n" ..
+        "Cadeia ate Altavanne: " .. f.cadeia .. "\n" ..
+        "Sub-feudos / Litigio Ativo: " .. f.litigio .. "\n\n" ..
+        "Concessao Regional (Tomo XV/XVII):\n" .. f.bonus
+    );
+end;
+
+local function anunciarVassalagemChat()
+    if sheet == nil then return; end;
+    local fk = tostring(sheet.feudoSuseranoId or "LIVRE");
+    local f = FEUDOS_DB[fk] or FEUDOS_DB.LIVRE;
+    local nome = tostring(sheet.nomeCasa or "Casa Nobre");
+    local emb = (sheet.sobEmbargoVizinho == true) and " | ⚠️ SOB EMBARGO VIZINHO!" or "";
+    enviarChatOuMsg(
+        "👑 [CHANCELARIA & SUSERANIA — " .. nome .. "] Dominio vinculado a " .. f.nome ..
+        " | Senhor: " .. f.senhor .. " | Cadeia: " .. f.cadeia ..
+        " | Frente Politica: " .. f.litigio .. emb
+    );
+end;
+
+local function rolarIntrigaFeudal()
+    if sheet == nil then return; end;
+    local nome = tostring(sheet.nomeCasa or "Casa Nobre");
+    local fk = tostring(sheet.feudoSuseranoId or "LIVRE");
+    local f = FEUDOS_DB[fk] or FEUDOS_DB.LIVRE;
+    local rolagem = Firecast.interpretarRolagem("1d12");
+    local titulo = "[" .. nome .. " • " .. f.code .. "] Intriga Feudal & Politicagem (1d12 — Tomo XVII)";
+    local function resolverIntriga(v)
+        local k = math.max(1, math.min(12, v));
+        local it = INTRIGAS_1D12[k];
+        sheet.ultimoEventoSazonal = "[INTRIGA " .. it.tit .. "] " .. it.ef;
+        return it;
+    end;
+    local mesa = Firecast.getMesaDe(sheet);
+    if mesa ~= nil and mesa.activeChat ~= nil then
+        mesa.activeChat:rolarDados(rolagem, titulo,
+            function(rolado)
+                if rolado == nil then return; end;
+                local it = resolverIntriga(rolado.resultado);
+                mesa.activeChat:enviarMensagem("🗡️ [INTRIGA FEUDAL: " .. it.tit .. "] " .. it.ef);
+            end);
+    else
+        rolagem:rolarLocalmente();
+        local it = resolverIntriga(rolagem.resultado);
+        showMessage(titulo .. "\n\n" .. it.tit .. "\n" .. it.ef);
+    end;
+end;
+
 local function rolarContraespionagem()
     if sheet == nil then return; end;
     local temG14 = (math.floor(num(sheet.qtd_G14, 0)) > 0);
     local bonusG14 = temG14 and 3 or 0;
+    local fk = tostring(sheet.feudoSuseranoId or "LIVRE");
+    local bonusFeudoEsp = ((sheet.aplicarBonusFeudo ~= false) and (fk == "L13" or fk == "L18")) and 2 or 0;
     local mesaBonus = (tostring(sheet.virtudeCasa or ""):find("Mesa da Anfitria") ~= nil) and 2 or 0;
-    local modBase = math.floor(num(sheet.modEspionagemCasa, 2)) + bonusG14 + mesaBonus;
+    local modBase = math.floor(num(sheet.modEspionagemCasa, 2)) + bonusG14 + bonusFeudoEsp + mesaBonus;
     local expr = (modBase >= 0) and ("1d20 + " .. tostring(modBase)) or ("1d20 - " .. tostring(math.abs(modBase)));
     rolarExpressaoChat(
         expr,
@@ -911,7 +1280,7 @@ end;
             </button>
 
             <!-- IDENTIDADE DA CASA -->
-            <label left="134" top="8" width="380" height="20" text="ALENIA RPG — CASA NOBRE, FEUDO &amp; FORTIFICACAO (TOMO XV)" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+            <label left="134" top="8" width="380" height="20" text="ALENIA RPG — CASA NOBRE, FEUDOS &amp; INTRIGAS (TOMOS XV &amp; XVII)" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
             <label left="522" top="8" width="510" height="20" field="resumoMilitarTopo" fontColor="#E5736E" fontSize="12" fontStyle="bold" horzTextAlign="trailing"/>
 
             <label left="134" top="30" width="230" height="16" text="NOME DA CASA / DINASTIA / CLA" fontColor="#A6AEBF" fontSize="11"/>
@@ -965,20 +1334,23 @@ end;
         <!-- 5 ABAS PRINCIPAIS -->
         <tabControl align="client" margins="{left=6, right=6, top=0, bottom=6}">
 
-            <!-- ABA 1: FUNDACAO, HERALDICA & SEDE (F01-F10) -->
-            <tab title="1. Casa, Heraldica &amp; Sede">
+            <!-- ABA 1: FUNDACAO, SUSERANIA, HERALDICA & SEDE (F01-F10 / L01-L22) -->
+            <tab title="1. Casa, Suserania &amp; Sede">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="790">
+                    <layout left="0" top="0" width="1056" height="966">
                         <!-- BARRA DE MODELOS PRONTOS -->
                         <rectangle left="6" top="6" width="1036" height="54" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
-                            <label left="14" top="15" width="290" height="24" text="MODELOS RAPIDOS DO SIMULADOR:" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
-                            <button left="308" top="11" width="236" height="32" text="Exemplo: Torre Reerguida (F04)" fontSize="12">
+                            <label left="14" top="15" width="232" height="24" text="MODELOS RAPIDOS:" fontColor="#D9B96A" fontSize="13" fontStyle="bold"/>
+                            <button left="248" top="11" width="194" height="32" text="Torre Specula (F04)" fontSize="12">
                                 <event name="onClick"><![CDATA[aplicarPreset("torre");]]></event>
                             </button>
-                            <button left="554" top="11" width="236" height="32" text="Exemplo: Solar Baronial (F05)" fontSize="12">
+                            <button left="448" top="11" width="194" height="32" text="Solar Baronial (F05)" fontSize="12">
                                 <event name="onClick"><![CDATA[aplicarPreset("solar");]]></event>
                             </button>
-                            <button left="800" top="11" width="226" height="32" text="Zerar Defesas, Obras e Tropas" fontSize="12">
+                            <button left="648" top="11" width="204" height="32" text="Divisa Voernock (L05)" fontSize="12">
+                                <event name="onClick"><![CDATA[aplicarPreset("voernock");]]></event>
+                            </button>
+                            <button left="858" top="11" width="168" height="32" text="Zerar Tudo" fontSize="12">
                                 <event name="onClick"><![CDATA[aplicarPreset("zerar");]]></event>
                             </button>
                         </rectangle>
@@ -1008,8 +1380,31 @@ end;
                             <label left="14" top="148" width="1008" height="28" field="culturaResumo" fontColor="#D9B96A" fontSize="12" wordWrap="true"/>
                         </rectangle>
 
+                        <!-- FEUDO SUSERANO, REGENCIA & POLITICAGEM (TOMO XVII — L01 A L22) -->
+                        <rectangle left="6" top="260" width="1036" height="164" color="#1B1E26" strokeColor="#8A2B28" strokeSize="1" xradius="6" yradius="6">
+                            <label left="14" top="8" width="540" height="22" text="FEUDO SUSERANO, REGENCIA &amp; POLITICAGEM (TOMO XVII — L01 A L22)" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
+                            <button left="562" top="6" width="142" height="26" text="Ficha do Feudo" fontSize="11">
+                                <event name="onClick"><![CDATA[verFichaFeudoSuserano();]]></event>
+                            </button>
+                            <button left="710" top="6" width="154" height="26" text="Despacho no Chat" fontSize="11">
+                                <event name="onClick"><![CDATA[anunciarVassalagemChat();]]></event>
+                            </button>
+                            <button left="870" top="6" width="152" height="26" text="Intriga 1d12" fontSize="11">
+                                <event name="onClick"><![CDATA[rolarIntrigaFeudal();]]></event>
+                            </button>
+
+                            <comboBox left="14" top="38" width="604" height="32" field="feudoSuseranoId" items="{'Fronteira Livre / Sem Feudo Suserano Fixo (Base Tomo XV)', 'L01 - Altavanne &amp; Pontauria [Coroa Imperial — Casa Valerion]', 'L02 - Feudo de Merlinport [Aurora -&gt; Altavanne | Marcus Scutauria]', 'L03 - Feudo de Dahrma + Lavroga [Aurora -&gt; Altavanne | Lorian Montavalle]', 'L04 - Feudo de Vaarsa [Aurora -&gt; Altavanne | Marechal Leonastis]', 'L05 - Feudo de Yoketsu [Aurora -&gt; Altavanne | Kenshin Tsurumaru]', 'L06 - Feudo de Altrax [Aurora -&gt; Altavanne | Aurelia d Altrax]', 'L07 - Feudo de Aeraneas [Aurora -&gt; Altavanne | Aurelian Ferraris]', 'L08 - Feudo das Cidades Suspensas [Aurora -&gt; Altavanne | Aerwen]', 'L09 - Alineus [Corallis — Sede Regente Corardo della Rocca -&gt; Altavanne]', 'L10 - Baldbella [Corallis -&gt; Regente della Rocca -&gt; Altavanne]', 'L11 - Stoneforge [Corallis -&gt; Regente della Rocca -&gt; Altavanne]', 'L12 - Biemont &amp; Portocala [Corallis -&gt; Regente della Rocca -&gt; Altavanne]', 'L13 - Sellene &amp; Claramar [Corallis -&gt; Regente / Altavanne]', 'L14 - Naasar &amp; Bayd [Gaddra — Sede Regente Qasir Zaharid -&gt; Altavanne]', 'L15 - OX [Gaddra -&gt; Regente Qasir Zaharid -&gt; Altavanne]', 'L16 - Qal-Zahar &amp; Suq-Ramad [Gaddra -&gt; Regente Qasir -&gt; Altavanne]', 'L17 - Marca de Vargheim [Gaddra -&gt; Regente Qasir -&gt; Altavanne]', 'L18 - Cidadela de Kalgard [Kalis — Sede Despota Grimrik -&gt; Altavanne]', 'L19 - Kragstad [Kalis -&gt; Despota Grimrik -&gt; Altavanne]', 'L20 - Drakenhall [Kalis -&gt; Despota Grimrik -&gt; Altavanne]', 'L21 - Dobalbek [Kalis -&gt; Despota Grimrik -&gt; Altavanne]', 'L22 - Fugong &amp; Kalima [Kalis -&gt; Despota Grimrik -&gt; Altavanne]'}" values="{'LIVRE', 'L01', 'L02', 'L03', 'L04', 'L05', 'L06', 'L07', 'L08', 'L09', 'L10', 'L11', 'L12', 'L13', 'L14', 'L15', 'L16', 'L17', 'L18', 'L19', 'L20', 'L21', 'L22'}" fontSize="12"/>
+                            <checkBox left="630" top="38" width="198" height="32" field="aplicarBonusFeudo" text="Ativar Bonus da Carta" fontColor="#7FC48C" fontSize="11"/>
+                            <checkBox left="834" top="38" width="192" height="32" field="sobEmbargoVizinho" text="Sob Embargo Vizinho" fontColor="#E5736E" fontSize="11"/>
+
+                            <rectangle left="14" top="76" width="1008" height="44" color="#14171E" strokeColor="#343A4A" strokeSize="1" xradius="4" yradius="4">
+                                <label left="8" top="2" width="992" height="40" field="feudoCadeiaTxt" fontColor="#EAE4D6" fontSize="11" vertTextAlign="center" wordWrap="true"/>
+                            </rectangle>
+                            <label left="14" top="124" width="1008" height="34" field="feudoBonusTxt" fontColor="#D9B96A" fontSize="12" vertTextAlign="center" wordWrap="true"/>
+                        </rectangle>
+
                         <!-- SEDE SENHORIAL PRINCIPAL (F01-F10) -->
-                        <rectangle left="6" top="260" width="1036" height="202" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="432" width="1036" height="202" color="#1B1E26" strokeColor="#9A7E42" strokeSize="1" xradius="6" yradius="6">
                             <label left="14" top="10" width="680" height="22" text="SEDE SENHORIAL / FORTIFICACAO PRINCIPAL (F01 A F10)" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
                             <button left="822" top="8" width="200" height="28" text="Ver Ficha Completa da Sede" fontSize="12">
                                 <event name="onClick"><![CDATA[verDetalhesCodigo(tostring(sheet.sedeId or "F04"));]]></event>
@@ -1028,7 +1423,7 @@ end;
                         </rectangle>
 
                         <!-- RAIZES DA CASA (1D8) & DESCRICAO DO BRASAO -->
-                        <rectangle left="6" top="470" width="1036" height="304" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="642" width="1036" height="304" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
                             <label left="14" top="10" width="520" height="22" text="RAIZES HISTORICAS DA CASA (1D8) &amp; BRASAO D'ARMAS" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
 
                             <label left="14" top="38" width="320" height="18" text="VIRTUDE HISTORICA (VANTAGEM INICIAL)" fontColor="#7FC48C" fontSize="12" fontStyle="bold"/>
@@ -1571,12 +1966,16 @@ end;
                             <label left="14" top="42" width="118" height="24" text="MES ATUAL #" fontColor="#A6AEBF" fontSize="12" fontStyle="bold"/>
                             <edit left="132" top="38" width="64" height="32" field="mesCampanha" type="number" horzTextAlign="center" fontColor="#D9B96A" fontSize="15" fontStyle="bold"/>
 
-                            <button left="210" top="36" width="250" height="36" text="Virar Mes e Atualizar Cofre" fontSize="13">
+                            <button left="204" top="36" width="188" height="36" text="Virar Mes no Cofre" fontSize="12">
                                 <event name="onClick"><![CDATA[virarMesFeudo();]]></event>
                             </button>
 
-                            <button left="474" top="36" width="276" height="36" text="Rolar Evento Sazonal (1d12 no Chat)" fontSize="13">
+                            <button left="400" top="36" width="178" height="36" text="Evento Sazonal (1d12)" fontSize="12">
                                 <event name="onClick"><![CDATA[rolarEventoSazonal();]]></event>
+                            </button>
+
+                            <button left="586" top="36" width="170" height="36" text="Intriga Feudal (1d12)" fontSize="12">
+                                <event name="onClick"><![CDATA[rolarIntrigaFeudal();]]></event>
                             </button>
 
                             <label left="766" top="42" width="174" height="24" text="MOD. SAB/INT ESPIAO:" fontColor="#A6AEBF" fontSize="11" fontStyle="bold"/>
@@ -1684,7 +2083,7 @@ end;
                 <scrollBox align="client">
                     <layout left="0" top="0" width="1056" height="580">
                         <rectangle left="6" top="6" width="1036" height="176" color="#1B1E26" strokeColor="#9A7E42" strokeSize="2" xradius="6" yradius="6">
-                            <label left="20" top="18" width="996" height="30" text="ALENIA RPG — FICHA DE CASA NOBRE &amp; FEUDO (TOMO XV)" fontColor="#D9B96A" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
+                            <label left="20" top="18" width="996" height="30" text="ALENIA RPG — CASA NOBRE, FEUDOS &amp; INTRIGAS (TOMOS XV &amp; XVII)" fontColor="#D9B96A" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
                             <label left="20" top="56" width="996" height="34" text="Plugin desenvolvido por Mestre Carlos" fontColor="#EAE4D6" fontSize="22" fontStyle="bold" horzTextAlign="center"/>
                             <label left="20" top="98" width="996" height="24" text="5 Matrizes Culturais • 10 Fortificacoes (F01-F10) • 16 Defesas e Obras (D01-D16) • 14 Tropas e Corte (G01-G14) • Cercos" fontColor="#A6AEBF" fontSize="13" horzTextAlign="center"/>
 
@@ -1717,14 +2116,14 @@ end;
                             <button left="168" top="194" width="330" height="36" text="Forcar Reinstalacao Direta" fontSize="14">
                                 <event name="onClick"><![CDATA[verificarEAtualizarPlugin(true);]]></event>
                             </button>
-                            <button left="538" top="194" width="330" height="36" text="Abrir Tomo XV Online" fontSize="14">
+                            <button left="538" top="194" width="330" height="36" text="Abrir Atlas Feudal (Tomo XVII)" fontSize="14">
                                 <event name="onClick"><![CDATA[abrirLinkExterno(BIBLIOTECA_URL);]]></event>
                             </button>
                         </rectangle>
 
                         <rectangle left="6" top="450" width="1036" height="114" color="#1B1E26" strokeColor="#343A4A" strokeSize="1" xradius="6" yradius="6">
-                            <label left="20" top="14" width="996" height="24" text="RECURSOS DA FICHA v1.0 (TOMO XV)" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
-                            <label left="20" top="42" width="996" height="58" text="• Calculo em tempo real no Padrao Prata (Novo 100% vs Ruina 45%), Slots de Defesa/Obra, Sinergias (Senescal +10%, Aldeia, Moinho, Pedreira, Forja, Coudelaria, Mestre de Armas), Giro Mensal automatico no Cofre, Eventos Sazonais (1d12), Disparo de Balistas/Trabucos e 4 Postos de Defesa dos PJs em Cerco." fontColor="#EAE4D6" fontSize="13" wordWrap="true"/>
+                            <label left="20" top="14" width="996" height="24" text="RECURSOS DA FICHA v1.1 (TOMOS XV &amp; XVII)" fontColor="#D9B96A" fontSize="14" fontStyle="bold"/>
+                            <label left="20" top="42" width="996" height="58" text="• Novidades v1.1 (Tomo XVII): Seletor dos 22 Feudos e Regencias Suseranas (L01-L22 — 7 Feudos de Aurora diretos a Altavanne e 14 Feudos sob os 3 Regentes) com bonus regionais de concessao, chave de Embargo Vizinho (-25% D11/D14, +20% obra), modelo pronto de Voernock (L05) e Sorteador de Intrigas Feudais (1d12) no chat!" fontColor="#EAE4D6" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
                 </scrollBox>
@@ -1733,9 +2132,9 @@ end;
     </rectangle>
 
     <!-- DATALINKS NA RAIZ DO FORM (REGRA 2 DO SDK 3.7b) -->
-    <dataLink fields="{'nomeCasa', 'lemaCasa', 'chefeCasa', 'culturaCasa', 'statusCasa', 'modSocialLider', 'origemCasa', 'suseranoCasa', 'regiaoFeudo', 'sedeId', 'modoAquisicao', 'cofrePP', 'mesCampanha', 'mesesAtrasoSoldo', 'rendaExtraManual', 'despesaExtraManual', 'pjAdminMes', 'feudoTributario', 'qtd_D01', 'qtd_D02', 'qtd_D03', 'qtd_D04', 'qtd_D05', 'qtd_D06', 'qtd_D07', 'qtd_D08', 'qtd_D09', 'qtd_D10', 'qtd_D11', 'qtd_D12', 'qtd_D13', 'qtd_D14', 'qtd_D15', 'qtd_D16', 'qtd_G01', 'qtd_G02', 'qtd_G03', 'qtd_G04', 'qtd_G05', 'qtd_G06', 'qtd_G07', 'qtd_G08', 'qtd_G09', 'qtd_G10', 'qtd_G11', 'qtd_G12', 'qtd_G13', 'qtd_G14', 'integridadeAtual', 'diasCercoRestantes', 'danoCercoEntrada', 'ataqueNoPortao', 'moralBonusExtra', 'modCercoComandante', 'modCercoEngenho', 'modCercoSortida', 'modCercoIntendente', 'modEspionagemCasa', 'virtudeCasa', 'dividaCasa', 'brasaoDescricao'}" defaultValues="{'Casa de Specula', 'Vigiamos Onde a Cinza Caiu', '', 'aurora', '2', '2', 'nova_feitos', 'Coroa de Aurora / Foral de Fronteira', 'Fronteira Norte de Aurora', 'F04', 'ruin', '500', '1', '0', '0', '0', 'false', 'false', '1', '1', '0', '0', '0', '0', '0', '0', '2', '1', '1', '0', '0', '0', '0', '0', '4', '4', '4', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '630', '30', '25', 'false', '0', '4', '5', '5', '4', '2', '4. Veio de Agua Limpa: nascente interna purissima; imune a seca sazonal e +2 contra surtos hidricos.', '2. Disputa de Divisa: o senhor vizinho reivindica o moinho ou o bosque limitrofe com um foral contraditorio.', 'Campo partido de cinza-ferro e goles, torre de prata acesa em ouro; timbre de corvo vigilante.'}"/>
+    <dataLink fields="{'nomeCasa', 'lemaCasa', 'chefeCasa', 'culturaCasa', 'statusCasa', 'modSocialLider', 'origemCasa', 'suseranoCasa', 'regiaoFeudo', 'sedeId', 'modoAquisicao', 'cofrePP', 'mesCampanha', 'mesesAtrasoSoldo', 'rendaExtraManual', 'despesaExtraManual', 'pjAdminMes', 'feudoTributario', 'feudoSuseranoId', 'aplicarBonusFeudo', 'sobEmbargoVizinho', 'qtd_D01', 'qtd_D02', 'qtd_D03', 'qtd_D04', 'qtd_D05', 'qtd_D06', 'qtd_D07', 'qtd_D08', 'qtd_D09', 'qtd_D10', 'qtd_D11', 'qtd_D12', 'qtd_D13', 'qtd_D14', 'qtd_D15', 'qtd_D16', 'qtd_G01', 'qtd_G02', 'qtd_G03', 'qtd_G04', 'qtd_G05', 'qtd_G06', 'qtd_G07', 'qtd_G08', 'qtd_G09', 'qtd_G10', 'qtd_G11', 'qtd_G12', 'qtd_G13', 'qtd_G14', 'integridadeAtual', 'diasCercoRestantes', 'danoCercoEntrada', 'ataqueNoPortao', 'moralBonusExtra', 'modCercoComandante', 'modCercoEngenho', 'modCercoSortida', 'modCercoIntendente', 'modEspionagemCasa', 'virtudeCasa', 'dividaCasa', 'brasaoDescricao'}" defaultValues="{'Casa de Specula', 'Vigiamos Onde a Cinza Caiu', '', 'aurora', '2', '2', 'nova_feitos', 'Coroa de Aurora / Foral de Fronteira', 'Fronteira Norte de Aurora', 'F04', 'ruin', '500', '1', '0', '0', '0', 'false', 'false', 'LIVRE', 'true', 'false', '1', '1', '0', '0', '0', '0', '0', '0', '2', '1', '1', '0', '0', '0', '0', '0', '4', '4', '4', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '630', '30', '25', 'false', '0', '4', '5', '5', '4', '2', '4. Veio de Agua Limpa: nascente interna purissima; imune a seca sazonal e +2 contra surtos hidricos.', '2. Disputa de Divisa: o senhor vizinho reivindica o moinho ou o bosque limitrofe com um foral contraditorio.', 'Campo partido de cinza-ferro e goles, torre de prata acesa em ouro; timbre de corvo vigilante.'}"/>
 
-    <dataLink fields="{'culturaCasa', 'sedeId', 'modoAquisicao', 'mesesAtrasoSoldo', 'rendaExtraManual', 'despesaExtraManual', 'pjAdminMes', 'feudoTributario', 'moralBonusExtra', 'qtd_D01', 'qtd_D02', 'qtd_D03', 'qtd_D04', 'qtd_D05', 'qtd_D06', 'qtd_D07', 'qtd_D08', 'qtd_D09', 'qtd_D10', 'qtd_D11', 'qtd_D12', 'qtd_D13', 'qtd_D14', 'qtd_D15', 'qtd_D16', 'qtd_G01', 'qtd_G02', 'qtd_G03', 'qtd_G04', 'qtd_G05', 'qtd_G06', 'qtd_G07', 'qtd_G08', 'qtd_G09', 'qtd_G10', 'qtd_G11', 'qtd_G12', 'qtd_G13', 'qtd_G14'}">
+    <dataLink fields="{'culturaCasa', 'sedeId', 'modoAquisicao', 'mesesAtrasoSoldo', 'rendaExtraManual', 'despesaExtraManual', 'pjAdminMes', 'feudoTributario', 'feudoSuseranoId', 'aplicarBonusFeudo', 'sobEmbargoVizinho', 'moralBonusExtra', 'qtd_D01', 'qtd_D02', 'qtd_D03', 'qtd_D04', 'qtd_D05', 'qtd_D06', 'qtd_D07', 'qtd_D08', 'qtd_D09', 'qtd_D10', 'qtd_D11', 'qtd_D12', 'qtd_D13', 'qtd_D14', 'qtd_D15', 'qtd_D16', 'qtd_G01', 'qtd_G02', 'qtd_G03', 'qtd_G04', 'qtd_G05', 'qtd_G06', 'qtd_G07', 'qtd_G08', 'qtd_G09', 'qtd_G10', 'qtd_G11', 'qtd_G12', 'qtd_G13', 'qtd_G14'}">
         <event name="onChange"><![CDATA[recalcularFeudo();]]></event>
     </dataLink>
     <dataLink fields="{'brasaoUrl'}">
