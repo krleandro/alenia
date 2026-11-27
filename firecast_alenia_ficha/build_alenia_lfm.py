@@ -1104,9 +1104,57 @@ local okDlg, DialogsMod = pcall(require, "dialogs.lua");
 if not okDlg or DialogsMod == nil then DialogsMod = Dialogs or dialogs; end;
 
 local PLUGIN_MODULE_ID = "br.com.alenia.rpg_oficial";
-local PLUGIN_VERSION = "2.6";
+local PLUGIN_VERSION = "2.7";
 local PLUGIN_RPK_URL = "https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk";
 local BIBLIOTECA_URL = "https://alenia-rpg.onrender.com";
+
+-- Progressao Oficial por Feitos dos Atributos Especiais (Graus 0 a 5 — Tomo XVI)
+local ESPECIAIS_DB = {
+    esp_status = {
+        nome = "Status",
+        graus = {
+            [0] = { curto = "0 · Plebeu / Sem Fiador", passivo = "Sem privilegios legais; revistado nos portoes.", ativo = "", req = "Base social inicial.", queda = "-" },
+            [1] = { curto = "1 · Nome Reconhecido (S01)", passivo = "Porte legal comum, palavra valida em tribunal, arquivos/guilda (Modesto 15 PP).", ativo = "Carta de Apresentacao (1x/sessao): hospedagem digna por 3 dias, audiencia com oficial local ou fianca ate 30 PP sem rolagem.", req = "Servico comprovado a Cavaleiro/Guilda, defesa publica de vila/navio ou carta de oficio.", queda = "Furto comum, calote publico ou briga covarde." },
+            [2] = { curto = "2 · Patente / Sor-Dama (S02)", passivo = "Julgamento por Pares, resgate 200-500 PP, credito Cera Azul 200 PP, sedes F01-F04 (Confortavel 45 PP).", ativo = "Palavra de Patente (1x/sessao): requisita 2-4 guardas locais em emergencia ou suspende ordem policial menor por 24h (+2 Etiqueta/Persuasao).", req = "Consagracao de Cavalaria, salvar nobre/patricio ou comandar navio/caravana em crise.", queda = "Perjurio de cavalaria, abandonar escoltados ou Letra protestada." },
+            [3] = { curto = "3 · Senhorio & Foral (S03)", passivo = "Baixa Justica, tropa propria, sem pedagios locais, credito 800 PP, concilios (Abastado 150 PP / F04-F07).", ativo = "Selo de Senhorio (1x/arco): emite Salvo-Condutos Oficiais p/ o grupo, cavalos de muda ou audiencia em 48h com Grande Lorde/Almirante.", req = "Fundar/reerguer Casa Nobre com Foral (Tomo XV), vencer cerco ou resolver crise provincial.", queda = "Perder a sede sem lutar, tiranizar aldeias livres ou falencia." },
+            [4] = { curto = "4 · Grande Nome (S04)", passivo = "Alta Justica, voz nos altos conselhos, credito 3.000 PP, intocavel por guardas menores (F08-F09).", ativo = "Convocacao de Estandartes (1x/arco): mobiliza 1 gale de guerra (E09), 20-40 soldados (G02/G03) ou embargo portuario temporario.", req = "Alterar rumo politico/militar de um dominio inteiro (evitar guerra civil, salvar Grande Casa).", queda = "Alta traicao comprovada ou ruina da provincia." },
+            [5] = { curto = "5 · Voz que Move Reinos (S05)", passivo = "Autoridade soberana/continental; cria titulos (Status 1-3) e legitima bastardos (Cidadela F10).", ativo = "Decreto Historico (1x/campanha): proclama edito, tregua geral ou convocacao continental que muda o mapa politico.", req = "Climax historico: deter ameaca existencial continental, assumir Regencia/Coroa ou selar pacto entre nacoes.", queda = "Abandonar o povo diante da catastrofe (como Aemilius IV em 356 EF)." }
+        }
+    },
+    esp_fe = {
+        nome = "Fe Verdadeira",
+        graus = {
+            [0] = { curto = "0 · Crente Comum / Cetico", passivo = "Usa apenas SAB normal contra medo e sussurros.", ativo = "", req = "Estado padrao (zero magias explosivas em qualquer grau).", queda = "-" },
+            [1] = { curto = "1 · Centelha Sincera (V01)", passivo = "+1 vs medo/pesadelos; clerigos/anciaos sinceros reconhecem sua verdade e dao abrigo.", ativo = "Prece da Lareira (1x/Descanso Longo): 10 min de prece concedem a ate 4 aliados +1 no 1o teste contra medo ou Exaustao climatica em 24h.", req = "Recusar lucro/atalho em cena por fidelidade ao preceito, cuidar de enfermos sob risco ou cumprir voto dificil.", queda = "Mentir invocando o sagrado por ganho egoista." },
+            [2] = { curto = "2 · Guardiao do Voto (V02)", passivo = "+2 vs terror, Thanatos e Simbionte II; invoca Direito de Asilo fazendo guardas hesitarem (+2).", ativo = "Vigilia de Consolacao (1x/Descanso Longo): 1h velando feridos concede +2 PV extras a ate 5 aliados OU +2 em CON contra Doencas.", req = "Sofrer ferimento, perda ou perseguicao por defender inocente/asilo ou honrar a Passagem.", queda = "Entregar suplicante sob seu asilo ou cobrar prata por socorro espiritual." },
+            [3] = { curto = "3 · Pilar Incorruptivel (V03)", passivo = "+3 vs pavor e Simbionte II-III; -3 CD extrair Simbionte; pressente profanacao/rito de sangue.", ativo = "Voz que Acalma a Turba (1x/sessao): Acao Principal desarmado (1d20+Fe+CAR/SAB CD 15) encerra panico em 9m e impoe -2 em humanos que o ataquem.", req = "Salvar desconhecidos em quarentena letal, encarar Thanatos sem fugir ou impedir massacre de maos abertas.", queda = "Insuflar linchamento de inocentes ou enriquecer usando a fe." },
+            [4] = { curto = "4 · Vaso da Vigilia (V04)", passivo = "Imune a medo mundano (+4 vs sobrenatural/Comunhao); +2 Moral de praca; conta como Local Consagrado (+2).", ativo = "Ainda Nao Chegou Minha Hora (1x/arco): protegendo outrem sem atacar, permanece consciente em 1 PV ao falhar vs Golpe Devastador ou cair a 0 PV.", req = "Oferecer a propria vida/liberdade para salvar comunidade inteira ou purificar santuario em vigilia completa.", queda = "Soberba espiritual ou cumplicidade com crueldade." },
+            [5] = { curto = "5 · Testemunha da Luz (V05)", passivo = "Incorruptivel (+5 vs possessao, pavor e Comunhao); dobra moralmente zelotes e tiranos.", ativo = "Sinal Inesquecivel (1x/campanha): realiza prodigio sutil historico (CD 28-30) sem sacrificio de sangue alheio (ex.: libertar hospedeiro Estagio III-IV).", req = "Climax espiritual: sustentar o voto no coracao de Thanatos/Incognito recusando falsa imortalidade.", queda = "Trair o voto supremo apaga o atributo para sempre." }
+        }
+    },
+    esp_submundo = {
+        nome = "Submundo",
+        graus = {
+            [0] = { curto = "0 · Forasteiro nos Becos", passivo = "Paga 3x no mercado negro e corre risco de logro.", ativo = "", req = "Vive apenas a luz da lei.", queda = "-" },
+            [1] = { curto = "1 · Conhecido nos Becos (U01)", passivo = "Le sinais de giz/girias; acha em 1d4h receptador (50%) e cirurgiao discreto.", ativo = "Porta dos Fundos (1x/sessao): esconderijo modesto por 1 noite OU descobre qual guarda aceita suborno padrao (5-15 PP).", req = "Calar sob interrogatorio da guarda, salvar parceiro da patrulha ou quitar divida dificil no cais.", queda = "Delatar esconderijo/contato a guarda ou Inquisicao." },
+            [2] = { curto = "2 · Mao de Confianca (U02)", passivo = "Agio do Mercado Negro cai p/ 2x; receptador paga 60%; falsificadores (CD 18, 25-50 PP).", ativo = "Sumir na Neblina (1x/sessao): infiltra ou retira o grupo inteiro de cidade murada sem passar pelos portoes (20 PP ou 1 favor).", req = "Furar bloqueio/alfandega com carga sensivel, eliminar delator duplo ou infiltracao limpa.", queda = "Falhar contrato pago adiantado sem devolver a prata." },
+            [3] = { curto = "3 · Nome sob o Capuz (U03)", passivo = "Menor agio negro (1,5x); Talhas Cifradas diretas; 1 esconderijo por grande porto; +2 c/ G14.", ativo = "Dossie de Sombra (1x/arco): em 24h obtem sem rolagem 1 segredo concreto sobre NPC nao-soberano OU planta pista falsa por 3 dias.", req = "Controlar rota clandestina, derrubar chefe rival/preboste corrupto ou acordo no Ferro Velho/Dobalbek.", queda = "Dar calote em Talha Cifrada de Kalis." },
+            [4] = { curto = "4 · Aranha dos Portos (U04)", passivo = "Ladroes/piratas menores evitam o grupo; venenos da Ilha das Safiras, selos CD 22, -15% estaleiro oculto.", ativo = "Bandeira de Tregua / Interdicao Negra (1x/arco): parlamento inviolavel com faccao criminosa OU bloqueia rival no mercado negro por 1 mes.", req = "Golpe clandestino que mude o equilibrio de uma cidade ou una capitaes corsarios.", queda = "Violar sangue sob Bandeira de Tregua." },
+            [5] = { curto = "5 · Lenda Sem Rosto (U05)", passivo = "Nenhum contrato de morte/sabotagem no submundo contra o grupo e aceito sem aviso previo chegar a voce.", ativo = "Noite das Portas Abertas (1x/campanha): paralisa docas de metropole, apaga arquivos reais ou resgate impossivel.", req = "Apice clandestino: controlar teia entre dominios, dobrar celula dos Ceifos ou deter segredos de coroas.", queda = "Traicao interna ou demonstracao fatal de fraqueza." }
+        }
+    },
+    esp_dom = {
+        nome = "Dom Antigo",
+        graus = {
+            [0] = { curto = "0 · Sem Ressonancia", passivo = "Humano comum sem ecos pre-Forja.", ativo = "", req = "Rarissimo — exige aval estrito do Mestre.", queda = "-" },
+            [1] = { curto = "1 · Sussurro no Sangue", passivo = "+1 em ritos antigos; sonhos raros avisam anomalias (SAB CD 14); calafrio perto de adamante bruto.", ativo = "Rito Sutil / Pressagio (com aval do Mestre, CD 15).", req = "Sobreviver a ruina de Kelgore, Mar das Cinzas ou Kit 36 (aval do Mestre).", queda = "Definido pelo Mestre." },
+            [2] = { curto = "2 · Leitor das Cinzas", passivo = "+2 em ritos; sente ecos antigos ao tocar monolitos de Kelgore ou adamante.", ativo = "Leitura Ritual de Ecos (com aval do Mestre, CD 20).", req = "Decifrar inscricao pre-Forja em campo ou pagar preco vital num rito.", queda = "Definido pelo Mestre." },
+            [3] = { curto = "3 · Voz Entre Tempos", passivo = "+3 em ritos; concentrando 1 min percebe elos do Simbionte a 9m (a rede sente de volta).", ativo = "Sentir Ressonancia da Comunhao (1x/sessao, 1 min concentracao, alcance 9m).", req = "Atravessar foco de Incognito/Thanatos mantendo a propria mente.", queda = "Definido pelo Mestre." },
+            [4] = { curto = "4 · Portador do Selo", passivo = "+4 em ritos; interage com reliquias pre-Forja carregando marca fisica permanente.", ativo = "Selar ou Silenciar Artefato Antigo (com aval do Mestre, CD 25).", req = "Dominar rito maior nas profundezas de Kelgore/Sellene/Incognito.", queda = "Definido pelo Mestre." },
+            [5] = { curto = "5 · Chave de Incognito", passivo = "+5 em ritos lendarios (CD 28-30); compreende os ecos anteriores a Era da Forja.", ativo = "Grande Rito de Separacao (climax de campanha com aval do Mestre).", req = "Climax mitico na fronteira do mundo conhecido.", queda = "Definido pelo Mestre." }
+        }
+    }
+};
 
 local _formRef = nil;
 local _ultimaCatEmporio = nil;
@@ -2158,10 +2206,76 @@ recalcularFicha = function()
         end);
     end;
 
+    -- Atualizacao automatica dos Titulos e Privilegios dos Atributos Especiais (Graus 0-5 — Tomo XVI)
+    local espCampos = {"esp_status", "esp_fe", "esp_submundo", "esp_dom"};
+    local espPartesAtivas = {};
+    for eIdx = 1, #espCampos do
+        local ef = espCampos[eIdx];
+        local gVal = math.max(0, math.min(5, math.floor(num(sheet[ef], 0))));
+        local db = ESPECIAIS_DB[ef];
+        if db ~= nil and db.graus ~= nil and db.graus[gVal] ~= nil then
+            sheet[ef .. "_titulo"] = db.graus[gVal].curto;
+            if gVal > 0 then
+                table.insert(espPartesAtivas, db.nome .. " " .. tostring(gVal) .. " (" .. db.graus[gVal].passivo .. ")");
+            end;
+        end;
+    end;
+    if #espPartesAtivas > 0 then
+        sheet.resumoEspeciaisAtivos = table.concat(espPartesAtivas, "  |  ");
+    else
+        sheet.resumoEspeciaisAtivos = "Nenhum Grau Especial ativo (0). Conquiste Feitos em campanha (Tomo XVI) para destravar Status, Fe Verdadeira ou Submundo (1 a 5).";
+    end;
+
     sheet.pluginVersaoAtual = "v" .. PLUGIN_VERSION;
     if sheet.statusAtualizacao == nil or tostring(sheet.statusAtualizacao) == "" then
         sheet.statusAtualizacao = "Clique no botao acima para checar e instalar atualizacoes automaticamente.";
     end;
+end;
+
+local function verGrausEspecial(campo)
+    if sheet == nil then return; end;
+    local db = ESPECIAIS_DB[campo];
+    if db == nil then return; end;
+    local gAtual = math.max(0, math.min(5, math.floor(num(sheet[campo], 0))));
+    local infoAtual = db.graus[gAtual] or db.graus[0];
+    local linhas = {
+        "TOMO XVI — PROGRESSAO POR FEITOS DE " .. db.nome:upper() .. " (GRAUS 0 A 5)",
+        "Grau Atual na Ficha: " .. infoAtual.curto,
+        "Passivo Atual: " .. infoAtual.passivo
+    };
+    if infoAtual.ativo ~= "" then
+        table.insert(linhas, "Uso Ativo Atual: " .. infoAtual.ativo);
+    end;
+    if gAtual < 5 then
+        local prox = db.graus[gAtual + 1];
+        table.insert(linhas, "");
+        table.insert(linhas, ">>> PROXIMO DEGRAU (" .. prox.curto .. "):");
+        table.insert(linhas, "Feitos Exigidos: " .. prox.req);
+        table.insert(linhas, "Passivo: " .. prox.passivo);
+        if prox.ativo ~= "" then table.insert(linhas, "Ativo: " .. prox.ativo); end;
+        table.insert(linhas, "Risco de Queda: " .. prox.queda);
+    end;
+    table.insert(linhas, "");
+    table.insert(linhas, "--- ESCALA COMPLETA (1 A 5) ---");
+    for g = 1, 5 do
+        local it = db.graus[g];
+        table.insert(linhas, "[" .. it.curto .. "] " .. it.passivo .. ((it.ativo ~= "") and (" | Ativo: " .. it.ativo) or ""));
+    end;
+    showMessage(table.concat(linhas, "\n"));
+end;
+
+local function usarPrivilegioEspecial(campo)
+    if sheet == nil then return; end;
+    local db = ESPECIAIS_DB[campo];
+    if db == nil then return; end;
+    local gAtual = math.max(0, math.min(5, math.floor(num(sheet[campo], 0))));
+    if gAtual <= 0 then
+        showMessage("Voce ainda possui " .. db.nome .. " 0.\nConquiste pelo menos o Grau 1 por Feitos em mesa para usar privilegios desta trilha (clique em [Graus] para ver os requisitos).");
+        return;
+    end;
+    local info = db.graus[gAtual];
+    local nomeChar = sheet.nome or "Explorador";
+    enviarChatOuMsg("[" .. nomeChar .. " — " .. info.curto .. "] Acionou privilegio de " .. db.nome .. ": " .. (info.ativo ~= "" and info.ativo or info.passivo));
 end;
 
 local function atualizarVisibilidadeRetrato()
@@ -3987,22 +4101,34 @@ def build_lfm() -> str:
     for i, (efield, elabel, ehint) in enumerate(esp_defs):
         lx = 12 + i * 204
         esp_xml_blocks.append(f'''
-            <rectangle left="{lx}" top="46" width="196" height="104" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
-                <label left="6" top="6" width="184" height="22" text="{elabel} (0-5)" fontColor="{TEXT_GOLD}" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
-                <label left="4" top="28" width="188" height="18" text="{ehint}" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="center"/>
-                <edit left="14" top="54" width="62" height="38" field="{efield}" type="number" fontColor="{TEXT_MAIN}" fontSize="20" fontStyle="bold" horzTextAlign="center"/>
-                <button left="84" top="54" width="98" height="38" text="Rolar" fontSize="14">
+            <rectangle left="{lx}" top="44" width="196" height="128" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
+                <label left="6" top="5" width="184" height="20" text="{elabel} (0-5)" fontColor="{TEXT_GOLD}" fontSize="14" fontStyle="bold" horzTextAlign="center"/>
+                <label left="4" top="25" width="188" height="20" field="{efield}_titulo" text="{ehint}" fontColor="{TEXT_GREEN}" fontSize="11" fontStyle="bold" horzTextAlign="center"/>
+                <edit left="8" top="49" width="48" height="34" field="{efield}" type="number" fontColor="{TEXT_MAIN}" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
+                <button left="60" top="49" width="66" height="34" text="Rolar" fontSize="12">
                     <event name="onClick"><![CDATA[rolarD20("Atributo Especial: {elabel}", num(sheet.{efield}, 0), "");]]></event>
+                </button>
+                <button left="130" top="49" width="58" height="34" text="Graus" fontSize="11" hint="Consultar escala 1 a 5 de Feitos, Privilegios e Quedas (Tomo XVI)">
+                    <event name="onClick"><![CDATA[verGrausEspecial("{efield}");]]></event>
+                </button>
+                <button left="8" top="89" width="180" height="30" text="Usar Privilegio no Chat" fontSize="11" hint="Anunciar uso do privilegio ativo deste grau no chat da mesa">
+                    <event name="onClick"><![CDATA[usarPrivilegioEspecial("{efield}");]]></event>
                 </button>
             </rectangle>''')
 
     esp_xml_blocks.append(f'''
-            <rectangle left="828" top="46" width="196" height="104" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
+            <rectangle left="828" top="44" width="196" height="128" color="{BG_CARD_ALT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="5" yradius="5">
                 <edit left="8" top="8" width="180" height="32" field="esp_livre_nome" textPrompt="Especial Livre" fontColor="{TEXT_GOLD}" fontSize="13" horzTextAlign="center"/>
-                <edit left="14" top="54" width="62" height="38" field="esp_livre" type="number" fontColor="{TEXT_MAIN}" fontSize="20" fontStyle="bold" horzTextAlign="center"/>
-                <button left="84" top="54" width="98" height="38" text="Rolar" fontSize="14">
+                <edit left="14" top="49" width="62" height="34" field="esp_livre" type="number" fontColor="{TEXT_MAIN}" fontSize="19" fontStyle="bold" horzTextAlign="center"/>
+                <button left="84" top="49" width="98" height="34" text="Rolar" fontSize="13">
                     <event name="onClick"><![CDATA[rolarD20("Especial: " .. (sheet.esp_livre_nome or "Livre"), num(sheet.esp_livre, 0), "");]]></event>
                 </button>
+                <button left="8" top="89" width="180" height="30" text="Abrir Tomo XVI Online" fontSize="11">
+                    <event name="onClick"><![CDATA[abrirLinkExterno("https://alenia-rpg.onrender.com/16_Feitos_de_Fe_Status_e_Submundo.html");]]></event>
+                </button>
+            </rectangle>
+            <rectangle left="12" top="178" width="1012" height="34" color="{BG_INPUT}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="4" yradius="4">
+                <label left="10" top="2" width="992" height="30" field="resumoEspeciaisAtivos" fontColor="{TEXT_GOLD}" fontSize="11" vertTextAlign="center" wordWrap="true"/>
             </rectangle>''')
 
     weapon_rows = []
@@ -4207,7 +4333,7 @@ def build_lfm() -> str:
         "0", "corallis", "modesto",
         "pacotes", init_item_id, "1", "Selecione uma categoria e um item para comprar direto para os Slots de Inventario.",
         "0", "0", "0",
-        "v2.6", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
+        "v2.7", "Clique no botao acima para checar e instalar atualizacoes automaticamente."
     ]
     for idx in range(1, 5):
         def_fields.extend([f"arma{idx}_attr", f"arma{idx}_per", f"arma{idx}_extra", f"arma{idx}_danoExtra", f"arma{idx}_margem", f"arma{idx}_mult"])
@@ -4249,7 +4375,7 @@ def build_lfm() -> str:
     <rectangle align="client" color="{BG_MAIN}">
         <!-- CABECALHO FIXO AMPLIADO + BARRA RAPIDA DE CD & DESCANSO -->
         <rectangle align="top" height="148" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" margins="{{left=6, right=6, top=6, bottom=4}}" xradius="6" yradius="6">
-            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.6" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
+            <label left="12" top="6" width="260" height="24" text="ALENIA RPG — FICHA v2.7" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
             <label left="278" top="6" width="170" height="24" field="patamarTexto" fontColor="{TEXT_CRIMSON}" fontSize="14" fontStyle="bold"/>
             <label left="452" top="6" width="320" height="24" field="kitNomeAtual" fontColor="{TEXT_MUTED}" fontSize="14"/>
             <label left="780" top="6" width="250" height="24" text="Golpe Devastador (&gt;2/3 PV):" fontColor="{TEXT_CRIMSON}" fontSize="13" horzTextAlign="trailing"/>
@@ -4315,7 +4441,7 @@ def build_lfm() -> str:
             <!-- ABA 1: PRINCIPAL & KIT -->
             <tab title="Principal &amp; Kit">
                 <scrollBox align="client">
-                    <layout left="0" top="0" width="1056" height="920">
+                    <layout left="0" top="0" width="1056" height="978">
                         <!-- ATRIBUTOS BASE -->
                         <rectangle left="6" top="6" width="1036" height="194" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="12" width="600" height="26" text="ATRIBUTOS BASE (Teto: 18 Recruta | 20 Lenda | 22 Epico)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
@@ -4325,14 +4451,14 @@ def build_lfm() -> str:
                             {"".join(attr_xml_blocks)}
                         </rectangle>
 
-                        <!-- ATRIBUTOS ESPECIAIS (FEITOS) -->
-                        <rectangle left="6" top="208" width="1036" height="164" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
-                            <label left="12" top="10" width="1010" height="26" text="ATRIBUTOS ESPECIAIS (0 a 5 — NAO SOBEM COM NIVEL, APENAS POR FEITOS)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
+                        <!-- ATRIBUTOS ESPECIAIS (FEITOS — GRAUS 1 A 5 DO TOMO XVI) -->
+                        <rectangle left="6" top="208" width="1036" height="220" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                            <label left="12" top="10" width="1010" height="26" text="ATRIBUTOS ESPECIAIS (GRAUS 0 A 5 — EVOLUCAO POR FEITOS • TOMO XVI)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             {"".join(esp_xml_blocks)}
                         </rectangle>
 
                         <!-- RETRATO DO EXPLORADOR (CLICAVEL / EDITAVEL) -->
-                        <rectangle left="6" top="380" width="214" height="296" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="436" width="214" height="296" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <label left="8" top="8" width="198" height="20" text="RETRATO DO EXPLORADOR" fontColor="{TEXT_GOLD}" fontSize="12" fontStyle="bold" horzTextAlign="center"/>
                             <rectangle left="10" top="32" width="194" height="226" color="{BG_INPUT}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="4" yradius="4">
                                 <label name="lblRetratoHint" left="8" top="86" width="178" height="52" text="Clique aqui para carregar retrato" fontColor="{TEXT_MUTED}" fontSize="12" horzTextAlign="center" vertTextAlign="center" wordWrap="true" hitTest="false"/>
@@ -4350,7 +4476,7 @@ def build_lfm() -> str:
                         </rectangle>
 
                         <!-- SELETOR & AUTOMACAO DE KITS UNIVERSAIS -->
-                        <rectangle left="228" top="380" width="814" height="296" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="228" top="436" width="814" height="296" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="10" width="790" height="26" text="KIT DE PERSONAGEM (36 OFICIOS UNIVERSAIS — DV 1d6 a 1d12)" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
                             <label left="12" top="44" width="44" height="34" text="Kit:" fontColor="{TEXT_MAIN}" fontSize="14" vertTextAlign="center"/>
                             <comboBox left="56" top="44" width="360" height="36" field="kitSelecionado" items="{xml_attr(kit_items)}" values="{xml_attr(kit_values)}" fontSize="13"/>
@@ -4385,7 +4511,7 @@ def build_lfm() -> str:
                         </rectangle>
 
                         <!-- PAINEL AUTOMATICO DE EVOLUCAO & XP -->
-                        <rectangle left="6" top="684" width="1036" height="222" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="740" width="1036" height="222" color="{BG_CARD}" strokeColor="{BORDER_GOLD}" strokeSize="1" xradius="6" yradius="6">
                             <label left="12" top="8" width="1012" height="24" text="EVOLUCAO &amp; EXPERIENCIA (XP: Exploracao, Armadilhas, Social, Contratos &amp; Combates | Niveis 1-30)" fontColor="{TEXT_GOLD}" fontSize="13" fontStyle="bold"/>
 
                             <!-- BARRA DE XP -->
@@ -4959,13 +5085,13 @@ def build_lfm() -> str:
                         </rectangle>
 
                         <!-- CARD DE NOVIDADES -->
-                        <rectangle left="6" top="450" width="1036" height="240" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
+                        <rectangle left="6" top="450" width="1036" height="256" color="{BG_CARD}" strokeColor="{BORDER_DIM}" strokeSize="1" xradius="6" yradius="6">
                             <label left="20" top="14" width="996" height="26" text="HISTORICO DE VERSOES &amp; RECURSOS DA FICHA" fontColor="{TEXT_GOLD}" fontSize="15" fontStyle="bold"/>
-                            <label left="20" top="46" width="996" height="24" text="• v2.6 — Area completa de Armaduras &amp; Escudos automatizada (catalogo, Obra-Prima/Adamante RD, Vestir/Tirar, penalidade auto Furt./Acrob., FOR 13+, Escudo Torre +2, vs Acido e equipar nos Slots)." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="74" width="996" height="24" text="• v2.5 — Retrato do Explorador corrigido (editable/autoFit nativos + Colar URL/Limpar) e atalho [Token] para abrir o Estudio Gerador de Tokens (18 molduras HD)." fontColor="{TEXT_MAIN}" fontSize="13"/>
-                            <label left="20" top="102" width="996" height="24" text="• v2.3 — Automacao de Exaustao (0-5) e das 6 Doencas de Alenia (3 slots, colaboracao Medico+Herbalista+Alquimista ate +6, rolagem de resistencia e evolucao automatica)." fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <label left="20" top="130" width="996" height="24" text="• v2.1-v2.2 — Receber Dano (RD + Golpe Devastador), Catalogo 44 Talentos, Aplicar Kit completo, Inventario em Slots com [Usar] e rolagens auto em consumiveis." fontColor="{TEXT_MUTED}" fontSize="13"/>
-                            <label left="20" top="158" width="996" height="24" text="• v1.5-v2.0 — Emporio Automatico (155 itens), Teto de Graduacao (+4..+16), Sistema Monetario Padrao Prata, Cartas de Credito, XP (Niv. 1-30), CD e dano +FOR." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="44" width="996" height="24" text="• v2.7 — Progressao completa por Feitos nos Graus 1 a 5 de Status, Fe Verdadeira, Submundo e Dom Antigo (Tomo XVI: titulos vivos, consulta de requisitos/quedas e anuncio de privilegios no chat)." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="72" width="996" height="24" text="• v2.6 — Area completa de Armaduras &amp; Escudos automatizada (catalogo, Obra-Prima/Adamante RD, Vestir/Tirar, penalidade auto Furt./Acrob., FOR 13+, Escudo Torre +2, vs Acido e equipar nos Slots)." fontColor="{TEXT_MAIN}" fontSize="13"/>
+                            <label left="20" top="100" width="996" height="24" text="• v2.5 — Retrato do Explorador corrigido (editable/autoFit nativos + Colar URL/Limpar) e atalho [Token] para abrir o Estudio Gerador de Tokens (18 molduras HD)." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="128" width="996" height="24" text="• v2.3 — Automacao de Exaustao (0-5) e das 6 Doencas de Alenia (3 slots, colaboracao Medico+Herbalista+Alquimista ate +6, rolagem de resistencia e evolucao automatica)." fontColor="{TEXT_MUTED}" fontSize="13"/>
+                            <label left="20" top="156" width="996" height="24" text="• v1.5-v2.2 — Receber Dano (RD + Golpe Devastador), 44 Talentos, Aplicar Kit completo, Inventario em Slots com [Usar], Emporio Automatico (155 itens), Padrao Prata e Teto de Graduacao." fontColor="{TEXT_MUTED}" fontSize="13"/>
                             <label left="20" top="192" width="996" height="38" text="Nota: Apos uma atualizacao, basta fechar e reabrir a janela da ficha para ativar a nova versao sem perder nenhum dado salvo." fontColor="{TEXT_GREEN}" fontSize="13" wordWrap="true"/>
                         </rectangle>
                     </layout>
@@ -5005,7 +5131,7 @@ def build_lfm() -> str:
     total_emp = sum(len(v) for v in emporio_items.values())
     total_cons = sum(1 for v in emporio_items.values() for it in v if it["tipo"] == "cons")
     total_tal = sum(len(v) for v in talentos_items.values())
-    print(f"[OK] AleniaFicha.lfm v2.6 gerado ({len(lfm)} bytes, {total_emp} itens Emporio / {total_cons} consumiveis / {total_tal} talentos / Armaduras & Escudos auto).")
+    print(f"[OK] AleniaFicha.lfm v2.7 gerado ({len(lfm)} bytes, {total_emp} itens Emporio / {total_cons} consumiveis / {total_tal} talentos / Feitos 1-5 Tomo XVI).")
 
 
 if __name__ == "__main__":

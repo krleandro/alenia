@@ -20,6 +20,7 @@ from culinaria_renderer import CULINARIA_CSS, CULINARIA_JS, render_culinaria_pag
 from grandes_nomes_renderer import GRANDES_NOMES_CSS, GRANDES_NOMES_JS, render_grandes_nomes_page
 from navegacao_renderer import NAVEGACAO_CSS, NAVEGACAO_JS, render_navegacao_page
 from casas_nobres_renderer import CASAS_NOBRES_CSS, CASAS_NOBRES_JS, render_casas_nobres_page
+from feitos_renderer import FEITOS_CSS, FEITOS_JS, render_feitos_page
 from codex_linker import CODEX_CSS, build_codex_registry, link_codex_html
 
 from cryptography.hazmat.primitives import hashes
@@ -214,6 +215,18 @@ BOOKS = [
         "epigraph": "“Qualquer aventureiro com sorte junta um saco de prata; mas erguer uma parede que continue de pé quando você estiver morto, alimentar trinta bocas no inverno e fazer dois vizinhos armados respeitarem o seu selo — isso é fundar uma Casa.”",
         "desc": "Guia senhorial completo com Simulador Interativo de Feudo: criação de Casas Nobres nas 5 culturas de Alenia, 10 fortificações ilustradas (F01–F10, obras novas ou reforma de ruínas a 45%), 16 defesas sem pólvora e obras geradoras de renda (D01–D16), 14 tropas, artífices e oficiais da corte (G01–G14), gestão mensal, cercos e Caderno do Mestre selado.",
         "cover_map": "assets/capa_15_casas_nobres_alenia.jpg",
+        "gm_only": False,
+    },
+    {
+        "src": "16_Feitos_de_Fe_Status_e_Submundo.md",
+        "out": "16_Feitos_de_Fe_Status_e_Submundo.html",
+        "num": "TOMO XVI",
+        "short": "Feitos (1–5)",
+        "title": "O Peso do Nome, do Voto e da Sombra",
+        "subtitle": "Feitos de Status, Fé Verdadeira e Submundo nos Graus 1 a 5 • Privilégios, Provações, Quedas & Inspetor de Mesa",
+        "epigraph": "“O ouro compra um cavalo, uma espada e até o silêncio de um estalajadeiro por uma noite. Mas existem três moedas neste continente que nenhum cofre cunha: o nome que faz um portão se abrir sem desembainhar o aço, a prece que não treme quando a bruma chama pelo seu morto, e o sinal riscado a giz que impede uma garganta de ser cortada no beco.”",
+        "desc": "Desenvolvimento completo por nível (Graus 1 a 5) de Status (S01–S05 nas 5 culturas), Fé Verdadeira (V01–V05 nas 5 tradições espirituais, sem magias explosivas) e Influência no Submundo (U01–U05), com Inspetor Interativo de Mesa, regras de Mancha e Queda, 30 Feitos e Provações exemplares (P01–P30) e Caderno do Mestre selado (incluindo Dom Antigo 1–5).",
+        "cover_map": "assets/capa_16_feitos_alenia.jpg",
         "gm_only": False,
     },
 ]
@@ -2554,6 +2567,7 @@ def sync_assets():
         (os.path.join(ROOT_DIR, "capas", "capa_13_grandes_nomes_alenia.jpg"), "capa_13_grandes_nomes_alenia.jpg"),
         (os.path.join(ROOT_DIR, "capas", "capa_14_navegacao_alenia.jpg"), "capa_14_navegacao_alenia.jpg"),
         (os.path.join(ROOT_DIR, "capas", "capa_15_casas_nobres_alenia.jpg"), "capa_15_casas_nobres_alenia.jpg"),
+        (os.path.join(ROOT_DIR, "capas", "capa_16_feitos_alenia.jpg"), "capa_16_feitos_alenia.jpg"),
     ]
     for fn in sorted(os.listdir(os.path.join(ROOT_DIR, "ilustracoes"))) if os.path.isdir(os.path.join(ROOT_DIR, "ilustracoes")) else []:
         if fn.lower().endswith((".jpg", ".jpeg", ".png")):
@@ -2623,6 +2637,7 @@ def rewrite_link(url: str) -> str:
         "13_Grandes_Nomes_e_Feitos_de_Alenia.md": "13_Grandes_Nomes_e_Feitos_de_Alenia.html",
         "14_Mares_Frotas_e_Navegacao_de_Alenia.md": "14_Mares_Frotas_e_Navegacao.html",
         "15_Casas_Nobres_Feudos_e_Fortificacoes.md": "15_Casas_Nobres_e_Fortificacoes.html",
+        "16_Feitos_de_Fe_Status_e_Submundo.md": "16_Feitos_de_Fe_Status_e_Submundo.html",
     }
     for k, v in mapping.items():
         if k in url:
@@ -2781,7 +2796,7 @@ def md_to_html(md_text: str, id_prefix: str = "", card_h3: bool = False, inject_
 
             codex_span = ""
             if level == 3:
-                m_codex = re.match(r"^((?:H\d{2}|C\d{2}|A\d{2}|E\d{2}|M\d{2}|F\d{2}|D\d{2}|G\d{2}|T\d{3}|N\d{3}))\s+[—–-]\s+", plain_title)
+                m_codex = re.match(r"^((?:H\d{2}|C\d{2}|A\d{2}|E\d{2}|M\d{2}|F\d{2}|D\d{2}|G\d{2}|S0[1-5]|V0[1-5]|U0[1-5]|P\d{2}|T\d{3}|N\d{3}))\s+[—–-]\s+", plain_title)
                 if m_codex:
                     short_id = f"{id_prefix}{m_codex.group(1).lower()}"
                     codex_span = f'<span id="{short_id}" class="codex-anchor" aria-hidden="true"></span>'
@@ -3011,7 +3026,7 @@ def build_topbar(active_file: str, page_title: str, has_toc: bool) -> str:
 
 
 def build_sidebar(active_file: str, toc_items, has_toc: bool) -> str:
-    romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"]
+    romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI"]
     public_items = []
     gm_items = []
     for idx, b in enumerate(BOOKS):
@@ -4632,7 +4647,7 @@ def main():
         build_cover(
             "COMPÊNDIO INTEGRAL",
             "ALENIA RPG",
-            "Regras, Cenário & Atlas, 36 Kits, Empório, Herbário, Crônica, Cozinhas, Grandes Nomes, Navegação, Casas & Feudos & Volumes Selados do Mestre",
+            "Regras, Cenário & Atlas, 36 Kits, Empório, Herbário, Crônica, Cozinhas, Grandes Nomes, Navegação, Casas & Feudos, Feitos (1–5) & Volumes Selados do Mestre",
             "“Cinco terras, um único aço. O volume definitivo para mestres e exploradores de Alenia.”",
             "assets/alenia_mapa_mundi_atualizado.jpg",
         )
@@ -4913,6 +4928,52 @@ def main():
                 f'{c_inner}'
                 f'</section>'
             )
+        elif bk["out"] == "16_Feitos_de_Fe_Status_e_Submundo.html":
+            feitos_body, feitos_toc = render_feitos_page(
+                bk,
+                md_content,
+                {
+                    "inline_md": inline_md,
+                    "md_to_html": md_to_html,
+                    "img_dim_attrs": img_dim_attrs,
+                    "make_gm_gate_block": make_gm_gate_block,
+                    "render_toc_items": render_toc_items,
+                },
+            )
+            full_doc = wrap_html_doc(
+                bk["title"],
+                bk["out"],
+                feitos_body,
+                feitos_toc,
+                force_sidebar=True,
+                enable_book_reader=False,
+                extra_css=FEITOS_CSS,
+                extra_js=FEITOS_JS,
+                body_extra_class="feitos-mode sidebar-hidden",
+            )
+            with open(os.path.join(OUT_DIR, bk["out"]), "w", encoding="utf-8") as f:
+                f.write(full_doc)
+            print(f"[OK] {bk['out']:34s} (FEITOS 1-5 + INSPETOR • {len(feitos_toc)} secoes + CADERNO AES-256)")
+
+            c_inner, c_pub_toc = render_public_doc_with_sealed_sections(
+                md_content,
+                id_prefix=f"t{idx+1}-",
+                card_h3=False,
+                inject_maps=False,
+                codex_file="Alenia_Compendio_Completo.html",
+                compendium_mode=True,
+            )
+            tome_anchor = f"tomo-{idx+1}"
+            compendium_toc.append((2, f"{bk['num']} — {bk['title']}", tome_anchor))
+            for lvl, lbl, hid in c_pub_toc:
+                if lvl == 2:
+                    compendium_toc.append((3, lbl, hid))
+            compendium_parts.append(
+                f'<section id="{tome_anchor}" class="tome-divider">'
+                f'{build_cover(bk["num"], bk["title"], bk["subtitle"], bk["epigraph"], bk["cover_map"])}'
+                f'{c_inner}'
+                f'</section>'
+            )
         else:
             body_inner, pub_toc = render_public_doc_with_sealed_sections(md_content, id_prefix="", card_h3=card_h3, inject_maps=inject_maps, codex_file=bk["out"], compendium_mode=False)
             full_doc = wrap_html_doc(bk["title"], bk["out"], cover_html + "\n" + body_inner, pub_toc, enable_book_reader=True)
@@ -4953,6 +5014,8 @@ def main():
             cta = "⚓ Abrir Manual de Navegação →"
         elif bk["out"] == "15_Casas_Nobres_e_Fortificacoes.html":
             cta = "🏰 Abrir Casas Nobres & Feudos →"
+        elif bk["out"] == "16_Feitos_de_Fe_Status_e_Submundo.html":
+            cta = "⚖ Abrir Feitos (Graus 1–5) →"
         else:
             cta = "Abrir Livro →"
         thumb = f'<img class="portal-cover" src="{bk["cover_map"]}" alt="Capa — {html.escape(bk["title"])}" decoding="async"/>' if bk["cover_map"] else ""
@@ -4989,10 +5052,10 @@ def main():
         <div class="cover-kicker">BIBLIOTECA OFICIAL • {EDITION_LABEL}</div>
         <div class="cover-rule"></div>
         <h1 class="cover-title" style="font-size:38px;">ALENIA RPG</h1>
-        <div class="cover-subtitle">15 Tomos Ilustrados • Atlas Regional • 36 Kits • Herbário • Crônica • Cozinhas • Grandes Nomes • Navegação • Casas &amp; Feudos • Estúdio de Tokens • Firecast v2.6</div>
+        <div class="cover-subtitle">16 Tomos Ilustrados • Atlas Regional • 36 Kits • Herbário • Crônica • Cozinhas • Grandes Nomes • Navegação • Casas &amp; Feudos • Feitos (1–5) • Firecast v2.7</div>
         <div class="cover-rule"></div>
         <div style="margin: 8px 0 4px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
-            <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⬇ Ficha Firecast (v2.6 .rpk)</a>
+            <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_RPG_Ficha.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#7a1f1d; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⬇ Ficha Firecast (v2.7 .rpk)</a>
             <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_Casa_Nobre.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#5c3d1e; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⬇ Ficha Casa Nobre (.rpk)</a>
             <a href="https://raw.githubusercontent.com/krleandro/alenia/main/plugins/Alenia_Token_Studio.rpk" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#1f5156; color:#f7f1e3; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⬇ Plugin Token Studio (.rpk)</a>
             <a href="gerador_tokens.html" style="display:inline-block; font-family:'Cinzel',Georgia,serif; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; text-decoration:none; background:#2b231b; color:#e6cc8a; border:1px solid #9a7b3b; padding:9px 16px; border-radius:3px; font-weight:700;">⚔ Abrir Gerador de Tokens</a>

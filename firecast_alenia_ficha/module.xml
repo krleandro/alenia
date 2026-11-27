@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module sdkVersion="3.7b">
     <id>br.com.alenia.rpg_oficial</id>
-    <version>2.6</version>
+    <version>2.7</version>
     <info lang="pt-BR">
-        <name>Alenia RPG — Ficha Oficial (d20 v2.6)</name>
-        <description>Ficha oficial automatizada do sistema Alenia RPG (Edição Revisada v2.0), desenvolvida por Mestre Carlos: Área Completa e Automatizada de Armaduras &amp; Escudos (catálogo oficial, material Comum/Obra-Prima/Adamante RD Especial, botão Vestir/Tirar, penalidade automática em Furtividade e Acrobacia, alerta FOR 13+ em Placas Completas, +2 Escudo Torre em Proteger Aliado, Defesa vs Ácido e equipar direto dos Slots), Automação de Exaustão (0–5) e 6 Doenças, Receber Dano (RD + Golpe Devastador), Retrato clicável + botão Token, Catálogo dos 44 Talentos, Aplicar Kit completo, Inventário em Slots Ilimitados com [Usar] e Empório Automático (155 itens + 5 Pacotes).</description>
+        <name>Alenia RPG — Ficha Oficial (d20 v2.7)</name>
+        <description>Ficha oficial automatizada do sistema Alenia RPG (Edição Revisada v2.0), desenvolvida por Mestre Carlos: Progressão Completa por Feitos de Status, Fé Verdadeira e Submundo nos Graus 1 a 5 (Tomo XVI — títulos automáticos, consulta de requisitos/quedas e anúncio de privilégios ativos no chat), Área Automatizada de Armaduras &amp; Escudos (Comum/Obra-Prima/Adamante RD Especial, Vestir/Tirar, penalidades automáticas), Exaustão (0–5) e 6 Doenças, Receber Dano (RD + Golpe Devastador), Retrato clicável + Token, 44 Talentos, 36 Kits e Empório Automático.</description>
         <author>Mestre Carlos</author>
         <site>https://alenia-rpg.onrender.com</site>
         <contact>Mestre Carlos</contact>

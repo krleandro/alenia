@@ -39,6 +39,7 @@ Sua cidade natal define sua cultura, sotaque e sobrenome de bastardo (se aplicá
 - **Turno**: `1 Ação Principal` + `1 Movimento (9m)` + `1 Reação/rodada` + `Ações Livres`.
 - **Evolução & XP (Níveis 1 a 30)**: ganha-se XP por **5 pilares** (*Exploração/Viagem, Armadilhas/Mistérios, Vitórias Sociais, Combates Superados sem exigir matar e Contratos/Interpretação* — tabela completa no Tomo I; `Nív. 2 = 300 XP`, `Nív. 5 = 2.500 XP`, `Nív. 11 Lenda = 17.000 XP`, `Nív. 21 Épico = 92.000 XP`).
 - **Subir de Nível**: role **`1dX + Mod(CON)`** (mín. `1 PV`) + ganhe pontos de perícia conforme o Patamar (**Recruta 1–10**: `1×`, teto Atrib. `18`, teto Grad. `+4` a `+11`; **Lenda 11–20**: `1,5×`, teto Atrib. `20`, teto Grad. `+12` a `+14`, `+1` dado individual de dano; **Épico 21–30**: `2×`, teto Atrib. `22`, teto Grad. `+15` a `+16`, `+2` dados individuais — ex.: *Montante `2d6` → `3d6` Lenda → `4d6` Épico*) + `+1` Atributo a cada **3 níveis** + `1` Talento nos **níveis pares** *(44 Talentos em 4 categorias no Tomo I)*.
+- **Atributos Especiais (`0 a 5` — Exclusivos por Feitos, Tomo XVI)**: **Status** *(1 Reconhecido → 2 `Sor`/Patente → 3 Foral/Barão → 4 Grande Nome → 5 Move Reinos)*, **Fé Verdadeira** *(1 Centelha → 2 Guardião do Voto/Asilo → 3 Pilar Incorruptível → 4 Vaso da Vigília `1 PV` → 5 Testemunha da Luz)* e **Submundo** *(1 Becos → 2 Ágio `2×`/Papéis → 3 Ágio `1,5×`/Talhas → 4 Bandeira de Trégua → 5 Lenda Sem Rosto)* sobem apenas por atos provados em campanha e caem se trair seus deveres/votos.
 
 ### Combate Especial e Manobras
 | Regra | Mecânica Exata |

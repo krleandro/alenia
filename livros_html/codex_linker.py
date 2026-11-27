@@ -154,6 +154,46 @@ a.codex-ref.codex-g:hover {
     border-color: #3d2a19;
     color: #fff6e0;
 }
+a.codex-ref.codex-s {
+    background: rgba(138, 36, 32, 0.11);
+    border-color: rgba(138, 36, 32, 0.38);
+    color: #6b1b19;
+}
+a.codex-ref.codex-s:hover {
+    background: #7a1f1d;
+    border-color: #531312;
+    color: #fff6e0;
+}
+a.codex-ref.codex-v {
+    background: rgba(138, 100, 34, 0.14);
+    border-color: rgba(138, 100, 34, 0.42);
+    color: #5a3e10;
+}
+a.codex-ref.codex-v:hover {
+    background: #7d5b24;
+    border-color: #563e17;
+    color: #fff8e6;
+}
+a.codex-ref.codex-u {
+    background: rgba(41, 56, 69, 0.13);
+    border-color: rgba(41, 56, 69, 0.42);
+    color: #1f2d38;
+}
+a.codex-ref.codex-u:hover {
+    background: #293845;
+    border-color: #19242d;
+    color: #f7f1e3;
+}
+a.codex-ref.codex-p {
+    background: rgba(90, 66, 40, 0.12);
+    border-color: rgba(90, 66, 40, 0.38);
+    color: #45311c;
+}
+a.codex-ref.codex-p:hover {
+    background: #5a4228;
+    border-color: #3d2c1a;
+    color: #fff6e0;
+}
 a.codex-ref.codex-tome {
     font-family: inherit;
     font-size: inherit;
@@ -177,6 +217,7 @@ a.codex-ref.codex-tome:hover {
 /* Inside tag pills keep links crisp and compact */
 .cul-tag a.codex-ref,
 .casas-tag a.codex-ref,
+.feitos-tag a.codex-ref,
 .nav-tag a.codex-ref {
     font-size: 1em;
     padding: 0 4px;
@@ -220,6 +261,7 @@ TOMO_ROMAN_MAP = {
     "XIII": ("13_Grandes_Nomes_e_Feitos_de_Alenia.html", "Tomo XIII — Grandes Nomes e Feitos de Alenia"),
     "XIV": ("14_Mares_Frotas_e_Navegacao.html", "Tomo XIV — Mares, Frotas e Navegação de Alenia"),
     "XV": ("15_Casas_Nobres_e_Fortificacoes.html", "Tomo XV — Casas Nobres, Feudos e Fortificações"),
+    "XVI": ("16_Feitos_de_Fe_Status_e_Submundo.html", "Tomo XVI — O Peso do Nome, do Voto e da Sombra"),
 }
 
 # Book index prefix inside Alenia_Compendio_Completo.html (matches id_prefix=f"t{idx+1}-")
@@ -235,6 +277,10 @@ COMPENDIUM_PREFIX = {
     "F": "t15-",
     "D": "t15-",
     "G": "t15-",
+    "S": "t16-",
+    "V": "t16-",
+    "U": "t16-",
+    "P": "t16-",
 }
 
 # Target HTML file for each codex family
@@ -250,6 +296,10 @@ FAMILY_FILE = {
     "F": "15_Casas_Nobres_e_Fortificacoes.html",
     "D": "15_Casas_Nobres_e_Fortificacoes.html",
     "G": "15_Casas_Nobres_e_Fortificacoes.html",
+    "S": "16_Feitos_de_Fe_Status_e_Submundo.html",
+    "V": "16_Feitos_de_Fe_Status_e_Submundo.html",
+    "U": "16_Feitos_de_Fe_Status_e_Submundo.html",
+    "P": "16_Feitos_de_Fe_Status_e_Submundo.html",
 }
 
 FAMILY_LABEL = {
@@ -264,12 +314,16 @@ FAMILY_LABEL = {
     "F": "Fortificação Senhorial",
     "D": "Defesa / Obra de Feudo",
     "G": "Guarnição e Corte",
+    "S": "Trilha de Status",
+    "V": "Trilha de Fé Verdadeira",
+    "U": "Trilha de Submundo",
+    "P": "Feito / Provação de Campanha",
 }
 
 
 def build_codex_registry(root_dir: str) -> dict:
     """Scan canonical markdown books once to build {code: display_name} lookup tables."""
-    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}, "E": {}, "M": {}, "F": {}, "D": {}, "G": {}, "N_GM": set()}
+    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}, "E": {}, "M": {}, "F": {}, "D": {}, "G": {}, "S": {}, "V": {}, "U": {}, "P": {}, "N_GM": set()}
 
     # 1. Herbário H01–H64
     herb_path = os.path.join(root_dir, "10_Herbario_de_Seleni.md")
@@ -332,6 +386,16 @@ def build_codex_registry(root_dir: str) -> dict:
         for m in re.finditer(r"^###\s+(G\d{2})\s+[—–-]\s+(.+)$", txt, flags=re.M):
             reg["G"][m.group(1)] = re.sub(r"\*+", "", m.group(2)).strip()
 
+    # 7. Feitos de Status (S01–S05), Fé Verdadeira (V01–V05), Submundo (U01–U05) & Provações (P01–P30)
+    feitos_path = os.path.join(root_dir, "16_Feitos_de_Fe_Status_e_Submundo.md")
+    if os.path.exists(feitos_path):
+        txt = open(feitos_path, "r", encoding="utf-8").read()
+        for fam in ("S", "V", "U"):
+            for m in re.finditer(rf"^###\s+({fam}0[1-5])\s+[—–-]\s+(.+)$", txt, flags=re.M):
+                reg[fam][m.group(1)] = re.sub(r"\*+", "", m.group(2)).strip()
+        for m in re.finditer(r"^###\s+(P\d{2})\s+[—–-]\s+(.+)$", txt, flags=re.M):
+            reg["P"][m.group(1)] = re.sub(r"\*+", "", m.group(2)).strip()
+
     return reg
 
 
@@ -348,7 +412,11 @@ _TOKEN_RE = re.compile(
     r"|F(?:0[1-9]|10)"
     r"|D(?:0[1-9]|1[0-6])"
     r"|G(?:0[1-9]|1[0-4])"
-    r"|Tomo\s+(?:XV|XIV|XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
+    r"|S0[1-5]"
+    r"|V0[1-5]"
+    r"|U0[1-5]"
+    r"|P(?:0[1-9]|[12][0-9]|30)"
+    r"|Tomo\s+(?:XVI|XV|XIV|XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
     r")\b"
 )
 
@@ -365,6 +433,8 @@ _SKIP_CLASSES = {
     "nav-stat-pill",
     "casas-code",
     "casas-stat-pill",
+    "feitos-code",
+    "feitos-stat-pill",
     "idx-code",
     "book-kicker",
     "cul-kicker",
@@ -372,6 +442,9 @@ _SKIP_CLASSES = {
     "nav-kicker",
     "casas-kicker",
     "casas-group-kicker",
+    "feitos-kicker",
+    "feitos-group-kicker",
+    "feitos-insp-kicker",
     "feudo-calc-kicker",
     "feudo-panel-head",
     "cover-num",

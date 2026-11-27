@@ -45,18 +45,18 @@ $$\text{Modificador} = \left\lfloor \frac{\text{Valor do Atributo} - 10}{2} \rig
 
 ## 3. Atributos Especiais (Opcionais — Evolução Exclusiva por Feitos)
 
-Nem todo personagem possui Atributos Especiais. Eles operam na escala **`0` a `5`** (`0` = não possui; `1–5` = nível de poder/peso narrativo e bônus direto somado em testes pertinentes).
+Nem todo personagem possui Atributos Especiais. Eles operam na escala **`0` a `5`** (`0` = não possui; `1–5` = nível de poder/peso narrativo, bônus direto somado em testes próprios `1d20 + Grau` e privilégios passivos/ativos desbloqueados).
 
 > [!IMPORTANT]
-> **Atributos Especiais JAMAIS sobem com pontos de nível.** Eles evoluem (ou diminuem) **exclusivamente por Feitos reais em campanha**, arbitrados pelo Mestre.
+> **Atributos Especiais JAMAIS sobem com pontos de nível nem se compram apenas com ouro.** Eles evoluem **exclusivamente por Feitos concretos jogados em mesa** (ato real + testemunho/verdade + dever assumido) — e **podem sofrer Mancha ou cair (`-1` grau)** em caso de perjúrio, falência desonrosa, quebra de voto sagrado ou delação ao submundo. Consulte o desenvolvimento completo grau a grau (`S01`–`S05`, `V01`–`V05`, `U01`–`U05` e `30` Feitos de Campanha `P01`–`P30`) no **[Tomo XVI — O Peso do Nome, do Voto e da Sombra](16_Feitos_de_Fe_Status_e_Submundo.md)**.
 
-| Atributo Especial | O que Representa | Exemplos de Feitos para Evoluir |
+| Atributo Especial | O que Representa | Síntese dos Graus `1` → `5` *(Detalhamento Completo no Tomo XVI)* |
 | :--- | :--- | :--- |
-| **Status** (`0–5`) | Linhagem nobre, patente militar, prestígio acadêmico, renome tribal ou crédito mercantil. | Salvar uma casa nobre em Altavanne, conquistar patente em Corallis, liderar caravanas em Gaddra. |
-| **Fé Verdadeira** (`0–5`) | Convicção espiritual autêntica e incorruptível (plural — válida em qualquer tradição sincera de Alenia), capaz de resistir ao horror e produzir bênçãos sutis ou presságios. | Sustentar juramentos sob sacrifício real, enfrentar horrores de Incognito sem recuar, realizar atos de devoção genuína. |
-| **Influência no Submundo** (`0–5`) | Redes de informantes, respeito entre piratas do Mar dos Corais/Ravena, contrabandistas e guildas ocultas de Kalis. | Controlar uma rota clandestina, pagar dívidas de sangue, derrubar um rival no submundo. |
-| **Dom Antigo** (`0–5`) | *(Raríssimo — exige aval do Mestre)* Sangue ancestral, visões proféticas, ecos de Incognito ou afinidade com rituais esquecidos. | Sobreviver a um rito ancestral, decifrar ruínas de Kelgore ou Incognito, pagar o preço de uma visão verdadeira. |
-| **Especial Livre** (`0–5`) | Espaço aberto na ficha para um atributo exclusivo da campanha criado pelo Mestre (ex.: *Honra do Clã*, *Dívida de Sangue*, *Segredo de Kalgard*). | Definido pelo Mestre. |
+| **Status** (`0–5`) | Linhagem nobre, patente militar, prestígio acadêmico, renome tribal ou crédito mercantil nas 5 culturas. | **`1` Nome Reconhecido** *(porte legal, fiança `30 PP`)* → **`2` Patente / `Sor`** *(julgamento por pares, crédito `200 PP`)* → **`3` Senhorio / Foral** *(praça-forte `F04–F07`, salvo-conduto, `800 PP`)* → **`4` Grande Nome** *(alta justiça, convoca tropas)* → **`5` Voz que Move Reinos** *(autoridade soberana/continental)*. |
+| **Fé Verdadeira** (`0–5`) | Convicção espiritual autêntica e incorruptível *(plural nas 5 tradições — zero "magias de clérigo" explosivas)*, capaz de resistir ao horror e sustentar votos sagrados. | **`1` Centelha Sincera** *(`+1` vs medo, Prece `+1`)* → **`2` Guardião do Voto** *(Direito de Asilo, `+2` vs Thanatos/Simbionte, Vigília curativa)* → **`3` Pilar Incorruptível** *(sente profanação, `-3 CD` extrair Simbionte, acalma turba)* → **`4` Vaso da Vigília** *(imune a medo comum, fica em `1 PV` em sacrifício `1×/arco`)* → **`5` Testemunha da Luz** *(incorruptível, Prodígio Sutil histórico)*. |
+| **Influência no Submundo** (`0–5`) | Redes de informantes, respeito entre corsários de Ravena, sucateiros do Ferro Velho, contrabandistas e cofres cifrados de Kalis. | **`1` Conhecido nos Becos** *(gírias, cirurgião discreto, abrigo `1 noite`)* → **`2` Mão de Confiança** *(ágio negro `2×`, documentos `CD 18`, rota oculta)* → **`3` Nome sob o Capuz** *(ágio `1,5×`, Talhas Cifradas diretas, `1` dossiê/arco)* → **`4` Aranha dos Portos** *(Bandeira de Trégua, Interdição Negra)* → **`5` Lenda Sem Rosto** *(aviso prévio contra contratos, operação continental)*. |
+| **Dom Antigo** (`0–5`) | *(Raríssimo — exige aval estrito do Mestre)* Sangue ancestral, visões proféticas, ecos de Kelgore/Incognito ou ressonância com adamante. | Sobreviver a um rito ancestral, decifrar ruínas pré-Forja ou pagar o preço de uma visão verdadeira *(progressão oculta de graus `1–5` no Caderno do Mestre do Tomo XVI)*. |
+| **Especial Livre** (`0–5`) | Espaço aberto na ficha para um atributo exclusivo da campanha criado pelo Mestre *(ex.: Honra do Clã, Dívida de Sangue, Segredo de Kalgard)*. | Definido pelo Mestre conforme o arco da mesa. |
 
 ---
 
