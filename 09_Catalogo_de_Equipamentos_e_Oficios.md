@@ -100,6 +100,8 @@ Este tomo reúne o catálogo completo de **equipamentos de aventura, acampamento
 | **Sal Grosso de Bayd *(Bloco 1 kg)*** | `1 PP` | `1,0 kg` | Conserva até `10 kg` de carne ou peixe caçado por `3 semanas` *(e em oásis remotos de Gaddra circula diretamente como moeda!)*. |
 | **Gancho e Corda de Açougueiro** | `6 PC` | `0,8 kg` | Permite suspender caça longe de predadores terrestres durante a noite ou pendurar provisões em galhos altos. |
 | **Aljava Impermeável *(20 Flechas)*** | `2 PP` | `0,6 kg` | Couro oleado com tampa; impede que a chuva ou umidade dos pântanos encharque as penas das flechas *(mantendo precisão intacta)*. |
+| **Lança de Contenção c/ Travessa *(Boar Spear)*** | `12 PP` | `2,8 kg` | Haste grossa de freixo com barra transversal de ferro (`1d8+FOR`, `20/×3`, 2 mãos, `3m`); preparada contra investida causa **dano dobrado**, ignora até `4` de `RD Natural` frontal e impede que feras colossais (**Tomo XVIII**) avancem pela haste! |
+| **Rede Lastrada de Caça Pesada** | `18 PP` | `6,0 kg` | Malha encerada com pesos de ferro (`6m`, operada em dupla ou engenho); prende presas Grandes (`Atletismo CD 18` para rasgar), anulando Voo e Investida. |
 
 ---
 

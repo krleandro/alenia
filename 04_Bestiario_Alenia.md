@@ -10,6 +10,7 @@
 - **Constituição Explícita**: toda criatura viva possui `CON` e modificador listados para testes de **Golpe Devastador (`> 2/3 PV`)**, venenos e manobras.
 - **Uso em Cena**: cada entrada inclui **Sinais de Presença**, **Motivação**, **Condição de Fuga** e **Interação Não-Combativa** para evitar combates mecânicos vazios.
 - **Sobre Dragões em Alenia**: propositalmente **não** existem fichas comuns de dragões neste Bestiário. Em Alenia, dragões são **eventos escatológicos** raríssimos, friamente inteligentes, impossíveis de domar e voltados à destruição de reinos *(como **A Sombra**, abatida em 356 por Severor I Valerion)* — pertencem à escala de catástrofes históricas e campanhas inteiras, jamais a encontros rotineiros.
+- **Os 12 Animais Lendários Únicos (`X01`–`X12`)**: para os doze soberanos animais singulares e irrepetíveis de Alenia (*O Cervo-de-Escória, O Velho Kragh, A Sombra-Salobra, Javali-de-Muralha, O Cão-Rei de Carniça, Águia-Quebra-Ossos, O Velho Quilha-Branca, A Imperatriz Vermelha, O Encouraçado do Recife, A Manta-Fantasma, Salamandra-de-Furna* e *Serpente-de-Âmbar*), consulte o **[Tomo XVIII — Colossos, Presságios e Caças Lendárias de Alenia](18_Animais_Lendarios_de_Alenia.md)**.
 
 ---
 

@@ -214,6 +214,16 @@ a.codex-ref.codex-z:hover {
     border-color: #4a2211;
     color: #fff6e0;
 }
+a.codex-ref.codex-x {
+    background: rgba(114, 52, 24, 0.13);
+    border-color: rgba(154, 92, 42, 0.48);
+    color: #5a2711;
+}
+a.codex-ref.codex-x:hover {
+    background: #723418;
+    border-color: #4d220e;
+    color: #fff7e6;
+}
 a.codex-ref.codex-tome {
     font-family: inherit;
     font-size: inherit;
@@ -239,6 +249,7 @@ a.codex-ref.codex-tome:hover {
 .casas-tag a.codex-ref,
 .feitos-tag a.codex-ref,
 .feudos-tag a.codex-ref,
+.lend-tag a.codex-ref,
 .nav-tag a.codex-ref {
     font-size: 1em;
     padding: 0 4px;
@@ -284,6 +295,7 @@ TOMO_ROMAN_MAP = {
     "XV": ("15_Casas_Nobres_e_Fortificacoes.html", "Tomo XV — Casas Nobres, Feudos e Fortificações"),
     "XVI": ("16_Feitos_de_Fe_Status_e_Submundo.html", "Tomo XVI — O Peso do Nome, do Voto e da Sombra"),
     "XVII": ("17_Feudos_Regencias_e_Intrigas.html", "Tomo XVII — Atlas Feudal, Regências e Intrigas"),
+    "XVIII": ("18_Animais_Lendarios_de_Alenia.html", "Tomo XVIII — Colossos, Presságios e Caças Lendárias"),
 }
 
 # Book index prefix inside Alenia_Compendio_Completo.html (matches id_prefix=f"t{idx+1}-")
@@ -305,6 +317,7 @@ COMPENDIUM_PREFIX = {
     "P": "t16-",
     "L": "t17-",
     "Z": "t17-",
+    "X": "t18-",
 }
 
 # Target HTML file for each codex family
@@ -326,6 +339,7 @@ FAMILY_FILE = {
     "P": "16_Feitos_de_Fe_Status_e_Submundo.html",
     "L": "17_Feudos_Regencias_e_Intrigas.html",
     "Z": "17_Feudos_Regencias_e_Intrigas.html",
+    "X": "18_Animais_Lendarios_de_Alenia.html",
 }
 
 FAMILY_LABEL = {
@@ -346,12 +360,13 @@ FAMILY_LABEL = {
     "P": "Feito / Provação de Campanha",
     "L": "Feudo e Senhorio de Alenia",
     "Z": "Frente de Litígio e Intriga",
+    "X": "Animal Lendário Único",
 }
 
 
 def build_codex_registry(root_dir: str) -> dict:
     """Scan canonical markdown books once to build {code: display_name} lookup tables."""
-    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}, "E": {}, "M": {}, "F": {}, "D": {}, "G": {}, "S": {}, "V": {}, "U": {}, "P": {}, "L": {}, "Z": {}, "N_GM": set()}
+    reg = {"H": {}, "C": {}, "A": {}, "B": {}, "T": {}, "N": {}, "E": {}, "M": {}, "F": {}, "D": {}, "G": {}, "S": {}, "V": {}, "U": {}, "P": {}, "L": {}, "Z": {}, "X": {}, "N_GM": set()}
 
     # 1. Herbário H01–H64
     herb_path = os.path.join(root_dir, "10_Herbario_de_Seleni.md")
@@ -429,9 +444,16 @@ def build_codex_registry(root_dir: str) -> dict:
     if os.path.exists(feudos_path):
         txt = open(feudos_path, "r", encoding="utf-8").read()
         for m in re.finditer(r"^###\s+(L\d{2})\s+[—–-]\s+(.+)$", txt, flags=re.M):
-            reg["L"][m.group(1)] = re.sub(r"\*+", "", m.group(2)).strip()
+            reg["L"][m.group(1)] = re.sub(r"\*+|`", "", m.group(2)).strip()
         for m in re.finditer(r"^###\s+(Z0[1-8])\s+[—–-]\s+(.+)$", txt, flags=re.M):
-            reg["Z"][m.group(1)] = re.sub(r"\*+", "", m.group(2)).strip()
+            reg["Z"][m.group(1)] = re.sub(r"\*+|`", "", m.group(2)).strip()
+
+    # 9. Animais Lendários Únicos (X01–X12)
+    lend_path = os.path.join(root_dir, "18_Animais_Lendarios_de_Alenia.md")
+    if os.path.exists(lend_path):
+        txt = open(lend_path, "r", encoding="utf-8").read()
+        for m in re.finditer(r"^###\s+(X(?:0[1-9]|1[0-2]))\s+[—–-]\s+(.+)$", txt, flags=re.M):
+            reg["X"][m.group(1)] = re.sub(r"\*+|`", "", m.group(2)).strip()
 
     return reg
 
@@ -455,7 +477,8 @@ _TOKEN_RE = re.compile(
     r"|P(?:0[1-9]|[12][0-9]|30)"
     r"|L(?:0[1-9]|1[0-9]|2[0-2])"
     r"|Z0[1-8]"
-    r"|Tomo\s+(?:XVII|XVI|XV|XIV|XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
+    r"|X(?:0[1-9]|1[0-2])"
+    r"|Tomo\s+(?:XVIII|XVII|XVI|XV|XIV|XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)"
     r")\b"
 )
 
@@ -476,6 +499,8 @@ _SKIP_CLASSES = {
     "feitos-stat-pill",
     "feudos-code",
     "feudos-stat-pill",
+    "lend-code",
+    "lend-stat-pill",
     "idx-code",
     "book-kicker",
     "cul-kicker",
@@ -489,6 +514,9 @@ _SKIP_CLASSES = {
     "feudos-kicker",
     "feudos-group-kicker",
     "feudos-insp-kicker",
+    "lend-kicker",
+    "lend-group-kicker",
+    "lend-insp-kicker",
     "feudo-calc-kicker",
     "feudo-panel-head",
     "cover-num",
